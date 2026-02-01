@@ -43,15 +43,16 @@ jobs:
 
       - name: generate sbom
         run: |
+          out_dir="$(mktemp -d)"
           cargo cyclonedx --format json --override-filename "sbom-${{ github.ref_name }}.cdx" --all-features
-          mkdir -p artifacts
-          mv "sbom-${{ github.ref_name }}.cdx.json" artifacts/
+          mv "sbom-${{ github.ref_name }}.cdx.json" "$out_dir/"
+          echo "SBOM_DIR=$out_dir" >> "$GITHUB_ENV"
 
       - name: upload sbom
         uses: actions/upload-artifact@v4
         with:
           name: sbom-${{ github.ref_name }}
-          path: "artifacts/sbom-${{ github.ref_name }}.cdx.json"
+          path: "${{ env.SBOM_DIR }}/sbom-${{ github.ref_name }}.cdx.json"
 
       - name: publish infrahub
         env:

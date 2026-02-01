@@ -1,0 +1,10 @@
+mutation MutationCoreNumberPoolDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreNumberPoolDelete(context: $context, data: $data) {
+    ...CoreNumberPoolDeleteFields
+  }
+}
+
+fragment CoreNumberPoolDeleteFields on CoreNumberPoolDelete {
+  ok
+  __typename
+}

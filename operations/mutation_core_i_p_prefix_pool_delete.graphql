@@ -1,0 +1,10 @@
+mutation MutationCoreIPPrefixPoolDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreIPPrefixPoolDelete(context: $context, data: $data) {
+    ...CoreIPPrefixPoolDeleteFields
+  }
+}
+
+fragment CoreIPPrefixPoolDeleteFields on CoreIPPrefixPoolDelete {
+  ok
+  __typename
+}

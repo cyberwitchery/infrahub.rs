@@ -1,0 +1,10 @@
+mutation MutationCoreNodeTriggerAttributeMatchDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreNodeTriggerAttributeMatchDelete(context: $context, data: $data) {
+    ...CoreNodeTriggerAttributeMatchDeleteFields
+  }
+}
+
+fragment CoreNodeTriggerAttributeMatchDeleteFields on CoreNodeTriggerAttributeMatchDelete {
+  ok
+  __typename
+}

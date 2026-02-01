@@ -1,0 +1,10 @@
+mutation MutationCoreRepositoryGroupDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreRepositoryGroupDelete(context: $context, data: $data) {
+    ...CoreRepositoryGroupDeleteFields
+  }
+}
+
+fragment CoreRepositoryGroupDeleteFields on CoreRepositoryGroupDelete {
+  ok
+  __typename
+}

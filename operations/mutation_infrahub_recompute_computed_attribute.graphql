@@ -1,0 +1,10 @@
+mutation MutationInfrahubRecomputeComputedAttribute($context: ContextInput, $data: InfrahubComputedAttributeRecomputeInput!) {
+  InfrahubRecomputeComputedAttribute(context: $context, data: $data) {
+    ...RecomputeComputedAttributeFields
+  }
+}
+
+fragment RecomputeComputedAttributeFields on RecomputeComputedAttribute {
+  ok
+  __typename
+}

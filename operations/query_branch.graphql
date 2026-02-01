@@ -1,0 +1,21 @@
+query QueryBranch($ids: [ID], $name: String) {
+  Branch(ids: $ids, name: $name) {
+    ...BranchFields
+  }
+}
+
+fragment BranchFields on Branch {
+  id
+  name
+  description
+  origin_branch
+  branched_from
+  status
+  graph_version
+  created_at
+  sync_with_git
+  is_default
+  is_isolated
+  has_schema_changes
+  __typename
+}

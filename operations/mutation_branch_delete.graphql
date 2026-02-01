@@ -1,0 +1,18 @@
+mutation MutationBranchDelete($context: ContextInput, $data: BranchNameInput!, $wait_until_completion: Boolean) {
+  BranchDelete(context: $context, data: $data, wait_until_completion: $wait_until_completion) {
+    ...BranchDeleteFields
+  }
+}
+
+fragment BranchDeleteFields on BranchDelete {
+  ok
+  task {
+    ...TaskInfoFields
+  }
+  __typename
+}
+
+fragment TaskInfoFields on TaskInfo {
+  id
+  __typename
+}

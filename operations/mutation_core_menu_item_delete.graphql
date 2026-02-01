@@ -1,0 +1,10 @@
+mutation MutationCoreMenuItemDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreMenuItemDelete(context: $context, data: $data) {
+    ...CoreMenuItemDeleteFields
+  }
+}
+
+fragment CoreMenuItemDeleteFields on CoreMenuItemDelete {
+  ok
+  __typename
+}

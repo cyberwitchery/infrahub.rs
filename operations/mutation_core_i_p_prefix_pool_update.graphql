@@ -1,0 +1,707 @@
+mutation MutationCoreIPPrefixPoolUpdate($context: ContextInput, $data: CoreIPPrefixPoolUpdateInput!) {
+  CoreIPPrefixPoolUpdate(context: $context, data: $data) {
+    ...CoreIPPrefixPoolUpdateFields
+  }
+}
+
+fragment BuiltinIPAddressFields on BuiltinIPAddress {
+  id
+  hfid
+  display_label
+  address {
+    ...IPHostFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ip_prefix {
+    ...NestedEdgedBuiltinIPPrefixFields
+  }
+  profiles {
+    ...NestedPaginatedCoreProfileFields
+  }
+  ip_namespace {
+    ...NestedEdgedBuiltinIPNamespaceFields
+  }
+  __typename
+}
+
+fragment BuiltinIPNamespaceFields on BuiltinIPNamespace {
+  id
+  hfid
+  display_label
+  description {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  profiles {
+    ...NestedPaginatedCoreProfileFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ip_addresses {
+    ...NestedPaginatedBuiltinIPAddressFields
+  }
+  ip_prefixes {
+    ...NestedPaginatedBuiltinIPPrefixFields
+  }
+  __typename
+}
+
+fragment BuiltinIPPrefixFields on BuiltinIPPrefix {
+  id
+  hfid
+  display_label
+  is_top_level {
+    ...CheckboxAttributeFields
+  }
+  broadcast_address {
+    ...TextAttributeFields
+  }
+  netmask {
+    ...TextAttributeFields
+  }
+  member_type {
+    ...DropdownFields
+  }
+  utilization {
+    ...NumberAttributeFields
+  }
+  hostmask {
+    ...TextAttributeFields
+  }
+  network_address {
+    ...TextAttributeFields
+  }
+  is_pool {
+    ...CheckboxAttributeFields
+  }
+  prefix {
+    ...IPNetworkFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  ip_addresses {
+    ...NestedPaginatedBuiltinIPAddressFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  profiles {
+    ...NestedPaginatedCoreProfileFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ip_namespace {
+    ...NestedEdgedBuiltinIPNamespaceFields
+  }
+  resource_pool {
+    ...NestedPaginatedCoreIPAddressPoolFields
+  }
+  parent {
+    ...NestedEdgedBuiltinIPPrefixFields
+  }
+  children {
+    ...NestedPaginatedBuiltinIPPrefixFields
+  }
+  ancestors {
+    ...NestedPaginatedBuiltinIPPrefixFields
+  }
+  descendants {
+    ...NestedPaginatedBuiltinIPPrefixFields
+  }
+  __typename
+}
+
+fragment CheckboxAttributeFields on CheckboxAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment CoreGenericAccountFields on CoreGenericAccount {
+  id
+  hfid
+  display_label
+  password {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  account_type {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  status {
+    ...DropdownFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreGroupFields on CoreGroup {
+  id
+  hfid
+  display_label
+  group_type {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  members {
+    ...NestedPaginatedCoreNodeFields
+  }
+  subscribers {
+    ...NestedPaginatedCoreNodeFields
+  }
+  parent {
+    ...NestedEdgedCoreGroupFields
+  }
+  children {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ancestors {
+    ...NestedPaginatedCoreGroupFields
+  }
+  descendants {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreIPAddressPoolFields on CoreIPAddressPool {
+  id
+  hfid
+  display_label
+  name {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  _updated_at
+  default_address_type {
+    ...TextAttributeFields
+  }
+  default_prefix_length {
+    ...NumberAttributeFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  resources {
+    ...NestedPaginatedBuiltinIPPrefixFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ip_namespace {
+    ...NestedEdgedBuiltinIPNamespaceFields
+  }
+  __typename
+}
+
+fragment CoreIPPrefixPoolFields on CoreIPPrefixPool {
+  id
+  hfid
+  display_label
+  name {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  _updated_at
+  default_prefix_length {
+    ...NumberAttributeFields
+  }
+  default_member_type {
+    ...TextAttributeFields
+  }
+  default_prefix_type {
+    ...TextAttributeFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ip_namespace {
+    ...NestedEdgedBuiltinIPNamespaceFields
+  }
+  resources {
+    ...NestedPaginatedBuiltinIPPrefixFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreIPPrefixPoolUpdateFields on CoreIPPrefixPoolUpdate {
+  ok
+  object {
+    ...CoreIPPrefixPoolFields
+  }
+  __typename
+}
+
+fragment CoreNodeFields on CoreNode {
+  id
+  hfid
+  display_label
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreProfileFields on CoreProfile {
+  id
+  hfid
+  display_label
+  profile_priority {
+    ...NumberAttributeFields
+  }
+  profile_name {
+    ...TextAttributeFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment DropdownFields on Dropdown {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  value
+  label
+  color
+  description
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment IPHostFields on IPHost {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  ip
+  hostmask
+  netmask
+  prefixlen
+  version
+  with_hostmask
+  with_netmask
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment IPNetworkFields on IPNetwork {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  broadcast_address
+  hostmask
+  netmask
+  prefixlen
+  num_addresses
+  version
+  with_hostmask
+  with_netmask
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment InfrahubNodeMetadataFields on InfrahubNodeMetadata {
+  created_at
+  created_by {
+    ...CoreGenericAccountFields
+  }
+  updated_at
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment InfrahubRelationshipMetadataFields on InfrahubRelationshipMetadata {
+  created_at
+  created_by {
+    ...CoreGenericAccountFields
+  }
+  updated_at
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment LineageOwnerFields on LineageOwner {
+  id
+  hfid
+  display_label
+  __typename
+}
+
+fragment LineageSourceFields on LineageSource {
+  id
+  hfid
+  display_label
+  __typename
+}
+
+fragment NestedEdgedBuiltinIPAddressFields on NestedEdgedBuiltinIPAddress {
+  node {
+    ...BuiltinIPAddressFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedBuiltinIPNamespaceFields on NestedEdgedBuiltinIPNamespace {
+  node {
+    ...BuiltinIPNamespaceFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedBuiltinIPPrefixFields on NestedEdgedBuiltinIPPrefix {
+  node {
+    ...BuiltinIPPrefixFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreGroupFields on NestedEdgedCoreGroup {
+  node {
+    ...CoreGroupFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreIPAddressPoolFields on NestedEdgedCoreIPAddressPool {
+  node {
+    ...CoreIPAddressPoolFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreNodeFields on NestedEdgedCoreNode {
+  node {
+    ...CoreNodeFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreProfileFields on NestedEdgedCoreProfile {
+  node {
+    ...CoreProfileFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedBuiltinIPAddressFields on NestedPaginatedBuiltinIPAddress {
+  count
+  edges {
+    ...NestedEdgedBuiltinIPAddressFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedBuiltinIPPrefixFields on NestedPaginatedBuiltinIPPrefix {
+  count
+  edges {
+    ...NestedEdgedBuiltinIPPrefixFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreGroupFields on NestedPaginatedCoreGroup {
+  count
+  edges {
+    ...NestedEdgedCoreGroupFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreIPAddressPoolFields on NestedPaginatedCoreIPAddressPool {
+  count
+  edges {
+    ...NestedEdgedCoreIPAddressPoolFields
+  }
+  permissions {
+    ...PaginatedObjectPermissionFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreNodeFields on NestedPaginatedCoreNode {
+  count
+  edges {
+    ...NestedEdgedCoreNodeFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreProfileFields on NestedPaginatedCoreProfile {
+  count
+  edges {
+    ...NestedEdgedCoreProfileFields
+  }
+  __typename
+}
+
+fragment NumberAttributeFields on NumberAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment ObjectPermissionFields on ObjectPermission {
+  kind
+  view
+  create
+  update
+  delete
+  __typename
+}
+
+fragment ObjectPermissionNodeFields on ObjectPermissionNode {
+  node {
+    ...ObjectPermissionFields
+  }
+  __typename
+}
+
+fragment PaginatedObjectPermissionFields on PaginatedObjectPermission {
+  count
+  edges {
+    ...ObjectPermissionNodeFields
+  }
+  __typename
+}
+
+fragment PermissionTypeFields on PermissionType {
+  update_value
+  __typename
+}
+
+fragment RelationshipPropertyFields on RelationshipProperty {
+  is_protected
+  updated_at
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  __typename
+}
+
+fragment TextAttributeFields on TextAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}

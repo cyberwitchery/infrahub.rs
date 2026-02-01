@@ -1,0 +1,10 @@
+mutation MutationBuiltinTagDelete($context: ContextInput, $data: DeleteInput!) {
+  BuiltinTagDelete(context: $context, data: $data) {
+    ...BuiltinTagDeleteFields
+  }
+}
+
+fragment BuiltinTagDeleteFields on BuiltinTagDelete {
+  ok
+  __typename
+}

@@ -1,0 +1,10 @@
+query QueryInfrahubIPAddressGetNextAvailable($prefix_id: String!, $prefix_length: Int) {
+  InfrahubIPAddressGetNextAvailable(prefix_id: $prefix_id, prefix_length: $prefix_length) {
+    ...IPAddressGetNextAvailableFields
+  }
+}
+
+fragment IPAddressGetNextAvailableFields on IPAddressGetNextAvailable {
+  address
+  __typename
+}

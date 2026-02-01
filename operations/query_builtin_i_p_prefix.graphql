@@ -1,0 +1,685 @@
+query QueryBuiltinIPPrefix($offset: Int, $limit: Int, $order: OrderInput, $ids: [ID], $display_label__value: String, $display_label__values: [String], $display_label__isnull: Boolean, $is_top_level__value: Boolean, $is_top_level__values: [Boolean], $is_top_level__isnull: Boolean, $is_top_level__source__id: ID, $is_top_level__owner__id: ID, $is_top_level__is_protected: Boolean, $broadcast_address__value: String, $broadcast_address__values: [String], $broadcast_address__isnull: Boolean, $broadcast_address__source__id: ID, $broadcast_address__owner__id: ID, $broadcast_address__is_protected: Boolean, $netmask__value: String, $netmask__values: [String], $netmask__isnull: Boolean, $netmask__source__id: ID, $netmask__owner__id: ID, $netmask__is_protected: Boolean, $member_type__value: String, $member_type__values: [String], $member_type__isnull: Boolean, $member_type__source__id: ID, $member_type__owner__id: ID, $member_type__is_protected: Boolean, $utilization__value: BigInt, $utilization__values: [BigInt], $utilization__isnull: Boolean, $utilization__source__id: ID, $utilization__owner__id: ID, $utilization__is_protected: Boolean, $hostmask__value: String, $hostmask__values: [String], $hostmask__isnull: Boolean, $hostmask__source__id: ID, $hostmask__owner__id: ID, $hostmask__is_protected: Boolean, $network_address__value: String, $network_address__values: [String], $network_address__isnull: Boolean, $network_address__source__id: ID, $network_address__owner__id: ID, $network_address__is_protected: Boolean, $is_pool__value: Boolean, $is_pool__values: [Boolean], $is_pool__isnull: Boolean, $is_pool__source__id: ID, $is_pool__owner__id: ID, $is_pool__is_protected: Boolean, $prefix__value: String, $prefix__values: [String], $prefix__isnull: Boolean, $prefix__source__id: ID, $prefix__owner__id: ID, $prefix__is_protected: Boolean, $description__value: String, $description__values: [String], $description__isnull: Boolean, $description__source__id: ID, $description__owner__id: ID, $description__is_protected: Boolean, $any__value: String, $any__values: [String], $any__source__id: ID, $any__owner__id: ID, $any__is_protected: Boolean, $partial_match: Boolean, $node_metadata__created_by__id: ID, $node_metadata__created_by__ids: [ID], $node_metadata__updated_by__id: ID, $node_metadata__updated_by__ids: [ID], $node_metadata__created_at: DateTime, $node_metadata__created_at__before: DateTime, $node_metadata__created_at__after: DateTime, $node_metadata__updated_at: DateTime, $node_metadata__updated_at__before: DateTime, $node_metadata__updated_at__after: DateTime, $include_available: Boolean, $kinds: [String!], $children__ids: [ID], $children__isnull: Boolean, $children__display_label__value: String, $children__display_label__values: [String], $children__display_label__isnull: Boolean, $children__is_top_level__value: Boolean, $children__is_top_level__values: [Boolean], $children__is_top_level__source__id: ID, $children__is_top_level__owner__id: ID, $children__is_top_level__is_protected: Boolean, $children__broadcast_address__value: String, $children__broadcast_address__values: [String], $children__broadcast_address__source__id: ID, $children__broadcast_address__owner__id: ID, $children__broadcast_address__is_protected: Boolean, $children__netmask__value: String, $children__netmask__values: [String], $children__netmask__source__id: ID, $children__netmask__owner__id: ID, $children__netmask__is_protected: Boolean, $children__member_type__value: String, $children__member_type__values: [String], $children__member_type__source__id: ID, $children__member_type__owner__id: ID, $children__member_type__is_protected: Boolean, $children__utilization__value: BigInt, $children__utilization__values: [BigInt], $children__utilization__source__id: ID, $children__utilization__owner__id: ID, $children__utilization__is_protected: Boolean, $children__hostmask__value: String, $children__hostmask__values: [String], $children__hostmask__source__id: ID, $children__hostmask__owner__id: ID, $children__hostmask__is_protected: Boolean, $children__network_address__value: String, $children__network_address__values: [String], $children__network_address__source__id: ID, $children__network_address__owner__id: ID, $children__network_address__is_protected: Boolean, $children__is_pool__value: Boolean, $children__is_pool__values: [Boolean], $children__is_pool__source__id: ID, $children__is_pool__owner__id: ID, $children__is_pool__is_protected: Boolean, $children__prefix__value: String, $children__prefix__values: [String], $children__prefix__source__id: ID, $children__prefix__owner__id: ID, $children__prefix__is_protected: Boolean, $children__description__value: String, $children__description__values: [String], $children__description__source__id: ID, $children__description__owner__id: ID, $children__description__is_protected: Boolean, $ip_addresses__ids: [ID], $ip_addresses__isnull: Boolean, $ip_addresses__display_label__value: String, $ip_addresses__display_label__values: [String], $ip_addresses__display_label__isnull: Boolean, $ip_addresses__address__value: String, $ip_addresses__address__values: [String], $ip_addresses__address__source__id: ID, $ip_addresses__address__owner__id: ID, $ip_addresses__address__is_protected: Boolean, $ip_addresses__description__value: String, $ip_addresses__description__values: [String], $ip_addresses__description__source__id: ID, $ip_addresses__description__owner__id: ID, $ip_addresses__description__is_protected: Boolean, $member_of_groups__ids: [ID], $member_of_groups__isnull: Boolean, $member_of_groups__display_label__value: String, $member_of_groups__display_label__values: [String], $member_of_groups__display_label__isnull: Boolean, $member_of_groups__group_type__value: String, $member_of_groups__group_type__values: [String], $member_of_groups__name__value: String, $member_of_groups__name__values: [String], $member_of_groups__label__value: String, $member_of_groups__label__values: [String], $member_of_groups__description__value: String, $member_of_groups__description__values: [String], $profiles__ids: [ID], $profiles__isnull: Boolean, $profiles__display_label__value: String, $profiles__display_label__values: [String], $profiles__display_label__isnull: Boolean, $profiles__profile_priority__value: BigInt, $profiles__profile_priority__values: [BigInt], $profiles__profile_priority__source__id: ID, $profiles__profile_priority__owner__id: ID, $profiles__profile_priority__is_protected: Boolean, $profiles__profile_name__value: String, $profiles__profile_name__values: [String], $profiles__profile_name__source__id: ID, $profiles__profile_name__owner__id: ID, $profiles__profile_name__is_protected: Boolean, $subscriber_of_groups__ids: [ID], $subscriber_of_groups__isnull: Boolean, $subscriber_of_groups__display_label__value: String, $subscriber_of_groups__display_label__values: [String], $subscriber_of_groups__display_label__isnull: Boolean, $subscriber_of_groups__group_type__value: String, $subscriber_of_groups__group_type__values: [String], $subscriber_of_groups__name__value: String, $subscriber_of_groups__name__values: [String], $subscriber_of_groups__label__value: String, $subscriber_of_groups__label__values: [String], $subscriber_of_groups__description__value: String, $subscriber_of_groups__description__values: [String], $ip_namespace__ids: [ID], $ip_namespace__isnull: Boolean, $ip_namespace__display_label__value: String, $ip_namespace__display_label__values: [String], $ip_namespace__display_label__isnull: Boolean, $ip_namespace__description__value: String, $ip_namespace__description__values: [String], $ip_namespace__description__source__id: ID, $ip_namespace__description__owner__id: ID, $ip_namespace__description__is_protected: Boolean, $ip_namespace__name__value: String, $ip_namespace__name__values: [String], $ip_namespace__name__source__id: ID, $ip_namespace__name__owner__id: ID, $ip_namespace__name__is_protected: Boolean, $resource_pool__ids: [ID], $resource_pool__isnull: Boolean, $resource_pool__display_label__value: String, $resource_pool__display_label__values: [String], $resource_pool__display_label__isnull: Boolean, $resource_pool__default_address_type__value: String, $resource_pool__default_address_type__values: [String], $resource_pool__default_address_type__source__id: ID, $resource_pool__default_address_type__owner__id: ID, $resource_pool__default_address_type__is_protected: Boolean, $resource_pool__default_prefix_length__value: BigInt, $resource_pool__default_prefix_length__values: [BigInt], $resource_pool__default_prefix_length__source__id: ID, $resource_pool__default_prefix_length__owner__id: ID, $resource_pool__default_prefix_length__is_protected: Boolean, $resource_pool__name__value: String, $resource_pool__name__values: [String], $resource_pool__name__source__id: ID, $resource_pool__name__owner__id: ID, $resource_pool__name__is_protected: Boolean, $resource_pool__description__value: String, $resource_pool__description__values: [String], $resource_pool__description__source__id: ID, $resource_pool__description__owner__id: ID, $resource_pool__description__is_protected: Boolean, $parent__ids: [ID], $parent__isnull: Boolean, $parent__display_label__value: String, $parent__display_label__values: [String], $parent__display_label__isnull: Boolean, $parent__is_top_level__value: Boolean, $parent__is_top_level__values: [Boolean], $parent__is_top_level__source__id: ID, $parent__is_top_level__owner__id: ID, $parent__is_top_level__is_protected: Boolean, $parent__broadcast_address__value: String, $parent__broadcast_address__values: [String], $parent__broadcast_address__source__id: ID, $parent__broadcast_address__owner__id: ID, $parent__broadcast_address__is_protected: Boolean, $parent__netmask__value: String, $parent__netmask__values: [String], $parent__netmask__source__id: ID, $parent__netmask__owner__id: ID, $parent__netmask__is_protected: Boolean, $parent__member_type__value: String, $parent__member_type__values: [String], $parent__member_type__source__id: ID, $parent__member_type__owner__id: ID, $parent__member_type__is_protected: Boolean, $parent__utilization__value: BigInt, $parent__utilization__values: [BigInt], $parent__utilization__source__id: ID, $parent__utilization__owner__id: ID, $parent__utilization__is_protected: Boolean, $parent__hostmask__value: String, $parent__hostmask__values: [String], $parent__hostmask__source__id: ID, $parent__hostmask__owner__id: ID, $parent__hostmask__is_protected: Boolean, $parent__network_address__value: String, $parent__network_address__values: [String], $parent__network_address__source__id: ID, $parent__network_address__owner__id: ID, $parent__network_address__is_protected: Boolean, $parent__is_pool__value: Boolean, $parent__is_pool__values: [Boolean], $parent__is_pool__source__id: ID, $parent__is_pool__owner__id: ID, $parent__is_pool__is_protected: Boolean, $parent__prefix__value: String, $parent__prefix__values: [String], $parent__prefix__source__id: ID, $parent__prefix__owner__id: ID, $parent__prefix__is_protected: Boolean, $parent__description__value: String, $parent__description__values: [String], $parent__description__source__id: ID, $parent__description__owner__id: ID, $parent__description__is_protected: Boolean) {
+  BuiltinIPPrefix(offset: $offset, limit: $limit, order: $order, ids: $ids, display_label__value: $display_label__value, display_label__values: $display_label__values, display_label__isnull: $display_label__isnull, is_top_level__value: $is_top_level__value, is_top_level__values: $is_top_level__values, is_top_level__isnull: $is_top_level__isnull, is_top_level__source__id: $is_top_level__source__id, is_top_level__owner__id: $is_top_level__owner__id, is_top_level__is_protected: $is_top_level__is_protected, broadcast_address__value: $broadcast_address__value, broadcast_address__values: $broadcast_address__values, broadcast_address__isnull: $broadcast_address__isnull, broadcast_address__source__id: $broadcast_address__source__id, broadcast_address__owner__id: $broadcast_address__owner__id, broadcast_address__is_protected: $broadcast_address__is_protected, netmask__value: $netmask__value, netmask__values: $netmask__values, netmask__isnull: $netmask__isnull, netmask__source__id: $netmask__source__id, netmask__owner__id: $netmask__owner__id, netmask__is_protected: $netmask__is_protected, member_type__value: $member_type__value, member_type__values: $member_type__values, member_type__isnull: $member_type__isnull, member_type__source__id: $member_type__source__id, member_type__owner__id: $member_type__owner__id, member_type__is_protected: $member_type__is_protected, utilization__value: $utilization__value, utilization__values: $utilization__values, utilization__isnull: $utilization__isnull, utilization__source__id: $utilization__source__id, utilization__owner__id: $utilization__owner__id, utilization__is_protected: $utilization__is_protected, hostmask__value: $hostmask__value, hostmask__values: $hostmask__values, hostmask__isnull: $hostmask__isnull, hostmask__source__id: $hostmask__source__id, hostmask__owner__id: $hostmask__owner__id, hostmask__is_protected: $hostmask__is_protected, network_address__value: $network_address__value, network_address__values: $network_address__values, network_address__isnull: $network_address__isnull, network_address__source__id: $network_address__source__id, network_address__owner__id: $network_address__owner__id, network_address__is_protected: $network_address__is_protected, is_pool__value: $is_pool__value, is_pool__values: $is_pool__values, is_pool__isnull: $is_pool__isnull, is_pool__source__id: $is_pool__source__id, is_pool__owner__id: $is_pool__owner__id, is_pool__is_protected: $is_pool__is_protected, prefix__value: $prefix__value, prefix__values: $prefix__values, prefix__isnull: $prefix__isnull, prefix__source__id: $prefix__source__id, prefix__owner__id: $prefix__owner__id, prefix__is_protected: $prefix__is_protected, description__value: $description__value, description__values: $description__values, description__isnull: $description__isnull, description__source__id: $description__source__id, description__owner__id: $description__owner__id, description__is_protected: $description__is_protected, any__value: $any__value, any__values: $any__values, any__source__id: $any__source__id, any__owner__id: $any__owner__id, any__is_protected: $any__is_protected, partial_match: $partial_match, node_metadata__created_by__id: $node_metadata__created_by__id, node_metadata__created_by__ids: $node_metadata__created_by__ids, node_metadata__updated_by__id: $node_metadata__updated_by__id, node_metadata__updated_by__ids: $node_metadata__updated_by__ids, node_metadata__created_at: $node_metadata__created_at, node_metadata__created_at__before: $node_metadata__created_at__before, node_metadata__created_at__after: $node_metadata__created_at__after, node_metadata__updated_at: $node_metadata__updated_at, node_metadata__updated_at__before: $node_metadata__updated_at__before, node_metadata__updated_at__after: $node_metadata__updated_at__after, include_available: $include_available, kinds: $kinds, children__ids: $children__ids, children__isnull: $children__isnull, children__display_label__value: $children__display_label__value, children__display_label__values: $children__display_label__values, children__display_label__isnull: $children__display_label__isnull, children__is_top_level__value: $children__is_top_level__value, children__is_top_level__values: $children__is_top_level__values, children__is_top_level__source__id: $children__is_top_level__source__id, children__is_top_level__owner__id: $children__is_top_level__owner__id, children__is_top_level__is_protected: $children__is_top_level__is_protected, children__broadcast_address__value: $children__broadcast_address__value, children__broadcast_address__values: $children__broadcast_address__values, children__broadcast_address__source__id: $children__broadcast_address__source__id, children__broadcast_address__owner__id: $children__broadcast_address__owner__id, children__broadcast_address__is_protected: $children__broadcast_address__is_protected, children__netmask__value: $children__netmask__value, children__netmask__values: $children__netmask__values, children__netmask__source__id: $children__netmask__source__id, children__netmask__owner__id: $children__netmask__owner__id, children__netmask__is_protected: $children__netmask__is_protected, children__member_type__value: $children__member_type__value, children__member_type__values: $children__member_type__values, children__member_type__source__id: $children__member_type__source__id, children__member_type__owner__id: $children__member_type__owner__id, children__member_type__is_protected: $children__member_type__is_protected, children__utilization__value: $children__utilization__value, children__utilization__values: $children__utilization__values, children__utilization__source__id: $children__utilization__source__id, children__utilization__owner__id: $children__utilization__owner__id, children__utilization__is_protected: $children__utilization__is_protected, children__hostmask__value: $children__hostmask__value, children__hostmask__values: $children__hostmask__values, children__hostmask__source__id: $children__hostmask__source__id, children__hostmask__owner__id: $children__hostmask__owner__id, children__hostmask__is_protected: $children__hostmask__is_protected, children__network_address__value: $children__network_address__value, children__network_address__values: $children__network_address__values, children__network_address__source__id: $children__network_address__source__id, children__network_address__owner__id: $children__network_address__owner__id, children__network_address__is_protected: $children__network_address__is_protected, children__is_pool__value: $children__is_pool__value, children__is_pool__values: $children__is_pool__values, children__is_pool__source__id: $children__is_pool__source__id, children__is_pool__owner__id: $children__is_pool__owner__id, children__is_pool__is_protected: $children__is_pool__is_protected, children__prefix__value: $children__prefix__value, children__prefix__values: $children__prefix__values, children__prefix__source__id: $children__prefix__source__id, children__prefix__owner__id: $children__prefix__owner__id, children__prefix__is_protected: $children__prefix__is_protected, children__description__value: $children__description__value, children__description__values: $children__description__values, children__description__source__id: $children__description__source__id, children__description__owner__id: $children__description__owner__id, children__description__is_protected: $children__description__is_protected, ip_addresses__ids: $ip_addresses__ids, ip_addresses__isnull: $ip_addresses__isnull, ip_addresses__display_label__value: $ip_addresses__display_label__value, ip_addresses__display_label__values: $ip_addresses__display_label__values, ip_addresses__display_label__isnull: $ip_addresses__display_label__isnull, ip_addresses__address__value: $ip_addresses__address__value, ip_addresses__address__values: $ip_addresses__address__values, ip_addresses__address__source__id: $ip_addresses__address__source__id, ip_addresses__address__owner__id: $ip_addresses__address__owner__id, ip_addresses__address__is_protected: $ip_addresses__address__is_protected, ip_addresses__description__value: $ip_addresses__description__value, ip_addresses__description__values: $ip_addresses__description__values, ip_addresses__description__source__id: $ip_addresses__description__source__id, ip_addresses__description__owner__id: $ip_addresses__description__owner__id, ip_addresses__description__is_protected: $ip_addresses__description__is_protected, member_of_groups__ids: $member_of_groups__ids, member_of_groups__isnull: $member_of_groups__isnull, member_of_groups__display_label__value: $member_of_groups__display_label__value, member_of_groups__display_label__values: $member_of_groups__display_label__values, member_of_groups__display_label__isnull: $member_of_groups__display_label__isnull, member_of_groups__group_type__value: $member_of_groups__group_type__value, member_of_groups__group_type__values: $member_of_groups__group_type__values, member_of_groups__name__value: $member_of_groups__name__value, member_of_groups__name__values: $member_of_groups__name__values, member_of_groups__label__value: $member_of_groups__label__value, member_of_groups__label__values: $member_of_groups__label__values, member_of_groups__description__value: $member_of_groups__description__value, member_of_groups__description__values: $member_of_groups__description__values, profiles__ids: $profiles__ids, profiles__isnull: $profiles__isnull, profiles__display_label__value: $profiles__display_label__value, profiles__display_label__values: $profiles__display_label__values, profiles__display_label__isnull: $profiles__display_label__isnull, profiles__profile_priority__value: $profiles__profile_priority__value, profiles__profile_priority__values: $profiles__profile_priority__values, profiles__profile_priority__source__id: $profiles__profile_priority__source__id, profiles__profile_priority__owner__id: $profiles__profile_priority__owner__id, profiles__profile_priority__is_protected: $profiles__profile_priority__is_protected, profiles__profile_name__value: $profiles__profile_name__value, profiles__profile_name__values: $profiles__profile_name__values, profiles__profile_name__source__id: $profiles__profile_name__source__id, profiles__profile_name__owner__id: $profiles__profile_name__owner__id, profiles__profile_name__is_protected: $profiles__profile_name__is_protected, subscriber_of_groups__ids: $subscriber_of_groups__ids, subscriber_of_groups__isnull: $subscriber_of_groups__isnull, subscriber_of_groups__display_label__value: $subscriber_of_groups__display_label__value, subscriber_of_groups__display_label__values: $subscriber_of_groups__display_label__values, subscriber_of_groups__display_label__isnull: $subscriber_of_groups__display_label__isnull, subscriber_of_groups__group_type__value: $subscriber_of_groups__group_type__value, subscriber_of_groups__group_type__values: $subscriber_of_groups__group_type__values, subscriber_of_groups__name__value: $subscriber_of_groups__name__value, subscriber_of_groups__name__values: $subscriber_of_groups__name__values, subscriber_of_groups__label__value: $subscriber_of_groups__label__value, subscriber_of_groups__label__values: $subscriber_of_groups__label__values, subscriber_of_groups__description__value: $subscriber_of_groups__description__value, subscriber_of_groups__description__values: $subscriber_of_groups__description__values, ip_namespace__ids: $ip_namespace__ids, ip_namespace__isnull: $ip_namespace__isnull, ip_namespace__display_label__value: $ip_namespace__display_label__value, ip_namespace__display_label__values: $ip_namespace__display_label__values, ip_namespace__display_label__isnull: $ip_namespace__display_label__isnull, ip_namespace__description__value: $ip_namespace__description__value, ip_namespace__description__values: $ip_namespace__description__values, ip_namespace__description__source__id: $ip_namespace__description__source__id, ip_namespace__description__owner__id: $ip_namespace__description__owner__id, ip_namespace__description__is_protected: $ip_namespace__description__is_protected, ip_namespace__name__value: $ip_namespace__name__value, ip_namespace__name__values: $ip_namespace__name__values, ip_namespace__name__source__id: $ip_namespace__name__source__id, ip_namespace__name__owner__id: $ip_namespace__name__owner__id, ip_namespace__name__is_protected: $ip_namespace__name__is_protected, resource_pool__ids: $resource_pool__ids, resource_pool__isnull: $resource_pool__isnull, resource_pool__display_label__value: $resource_pool__display_label__value, resource_pool__display_label__values: $resource_pool__display_label__values, resource_pool__display_label__isnull: $resource_pool__display_label__isnull, resource_pool__default_address_type__value: $resource_pool__default_address_type__value, resource_pool__default_address_type__values: $resource_pool__default_address_type__values, resource_pool__default_address_type__source__id: $resource_pool__default_address_type__source__id, resource_pool__default_address_type__owner__id: $resource_pool__default_address_type__owner__id, resource_pool__default_address_type__is_protected: $resource_pool__default_address_type__is_protected, resource_pool__default_prefix_length__value: $resource_pool__default_prefix_length__value, resource_pool__default_prefix_length__values: $resource_pool__default_prefix_length__values, resource_pool__default_prefix_length__source__id: $resource_pool__default_prefix_length__source__id, resource_pool__default_prefix_length__owner__id: $resource_pool__default_prefix_length__owner__id, resource_pool__default_prefix_length__is_protected: $resource_pool__default_prefix_length__is_protected, resource_pool__name__value: $resource_pool__name__value, resource_pool__name__values: $resource_pool__name__values, resource_pool__name__source__id: $resource_pool__name__source__id, resource_pool__name__owner__id: $resource_pool__name__owner__id, resource_pool__name__is_protected: $resource_pool__name__is_protected, resource_pool__description__value: $resource_pool__description__value, resource_pool__description__values: $resource_pool__description__values, resource_pool__description__source__id: $resource_pool__description__source__id, resource_pool__description__owner__id: $resource_pool__description__owner__id, resource_pool__description__is_protected: $resource_pool__description__is_protected, parent__ids: $parent__ids, parent__isnull: $parent__isnull, parent__display_label__value: $parent__display_label__value, parent__display_label__values: $parent__display_label__values, parent__display_label__isnull: $parent__display_label__isnull, parent__is_top_level__value: $parent__is_top_level__value, parent__is_top_level__values: $parent__is_top_level__values, parent__is_top_level__source__id: $parent__is_top_level__source__id, parent__is_top_level__owner__id: $parent__is_top_level__owner__id, parent__is_top_level__is_protected: $parent__is_top_level__is_protected, parent__broadcast_address__value: $parent__broadcast_address__value, parent__broadcast_address__values: $parent__broadcast_address__values, parent__broadcast_address__source__id: $parent__broadcast_address__source__id, parent__broadcast_address__owner__id: $parent__broadcast_address__owner__id, parent__broadcast_address__is_protected: $parent__broadcast_address__is_protected, parent__netmask__value: $parent__netmask__value, parent__netmask__values: $parent__netmask__values, parent__netmask__source__id: $parent__netmask__source__id, parent__netmask__owner__id: $parent__netmask__owner__id, parent__netmask__is_protected: $parent__netmask__is_protected, parent__member_type__value: $parent__member_type__value, parent__member_type__values: $parent__member_type__values, parent__member_type__source__id: $parent__member_type__source__id, parent__member_type__owner__id: $parent__member_type__owner__id, parent__member_type__is_protected: $parent__member_type__is_protected, parent__utilization__value: $parent__utilization__value, parent__utilization__values: $parent__utilization__values, parent__utilization__source__id: $parent__utilization__source__id, parent__utilization__owner__id: $parent__utilization__owner__id, parent__utilization__is_protected: $parent__utilization__is_protected, parent__hostmask__value: $parent__hostmask__value, parent__hostmask__values: $parent__hostmask__values, parent__hostmask__source__id: $parent__hostmask__source__id, parent__hostmask__owner__id: $parent__hostmask__owner__id, parent__hostmask__is_protected: $parent__hostmask__is_protected, parent__network_address__value: $parent__network_address__value, parent__network_address__values: $parent__network_address__values, parent__network_address__source__id: $parent__network_address__source__id, parent__network_address__owner__id: $parent__network_address__owner__id, parent__network_address__is_protected: $parent__network_address__is_protected, parent__is_pool__value: $parent__is_pool__value, parent__is_pool__values: $parent__is_pool__values, parent__is_pool__source__id: $parent__is_pool__source__id, parent__is_pool__owner__id: $parent__is_pool__owner__id, parent__is_pool__is_protected: $parent__is_pool__is_protected, parent__prefix__value: $parent__prefix__value, parent__prefix__values: $parent__prefix__values, parent__prefix__source__id: $parent__prefix__source__id, parent__prefix__owner__id: $parent__prefix__owner__id, parent__prefix__is_protected: $parent__prefix__is_protected, parent__description__value: $parent__description__value, parent__description__values: $parent__description__values, parent__description__source__id: $parent__description__source__id, parent__description__owner__id: $parent__description__owner__id, parent__description__is_protected: $parent__description__is_protected) {
+    ...PaginatedBuiltinIPPrefixFields
+  }
+}
+
+fragment BuiltinIPAddressFields on BuiltinIPAddress {
+  id
+  hfid
+  display_label
+  address {
+    ...IPHostFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ip_prefix {
+    ...NestedEdgedBuiltinIPPrefixFields
+  }
+  profiles {
+    ...NestedPaginatedCoreProfileFields
+  }
+  ip_namespace {
+    ...NestedEdgedBuiltinIPNamespaceFields
+  }
+  __typename
+}
+
+fragment BuiltinIPNamespaceFields on BuiltinIPNamespace {
+  id
+  hfid
+  display_label
+  description {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  profiles {
+    ...NestedPaginatedCoreProfileFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ip_addresses {
+    ...NestedPaginatedBuiltinIPAddressFields
+  }
+  ip_prefixes {
+    ...NestedPaginatedBuiltinIPPrefixFields
+  }
+  __typename
+}
+
+fragment BuiltinIPPrefixFields on BuiltinIPPrefix {
+  id
+  hfid
+  display_label
+  is_top_level {
+    ...CheckboxAttributeFields
+  }
+  broadcast_address {
+    ...TextAttributeFields
+  }
+  netmask {
+    ...TextAttributeFields
+  }
+  member_type {
+    ...DropdownFields
+  }
+  utilization {
+    ...NumberAttributeFields
+  }
+  hostmask {
+    ...TextAttributeFields
+  }
+  network_address {
+    ...TextAttributeFields
+  }
+  is_pool {
+    ...CheckboxAttributeFields
+  }
+  prefix {
+    ...IPNetworkFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  ip_addresses {
+    ...NestedPaginatedBuiltinIPAddressFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  profiles {
+    ...NestedPaginatedCoreProfileFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ip_namespace {
+    ...NestedEdgedBuiltinIPNamespaceFields
+  }
+  resource_pool {
+    ...NestedPaginatedCoreIPAddressPoolFields
+  }
+  parent {
+    ...NestedEdgedBuiltinIPPrefixFields
+  }
+  children {
+    ...NestedPaginatedBuiltinIPPrefixFields
+  }
+  ancestors {
+    ...NestedPaginatedBuiltinIPPrefixFields
+  }
+  descendants {
+    ...NestedPaginatedBuiltinIPPrefixFields
+  }
+  __typename
+}
+
+fragment CheckboxAttributeFields on CheckboxAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment CoreGenericAccountFields on CoreGenericAccount {
+  id
+  hfid
+  display_label
+  password {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  account_type {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  status {
+    ...DropdownFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreGroupFields on CoreGroup {
+  id
+  hfid
+  display_label
+  group_type {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  members {
+    ...NestedPaginatedCoreNodeFields
+  }
+  subscribers {
+    ...NestedPaginatedCoreNodeFields
+  }
+  parent {
+    ...NestedEdgedCoreGroupFields
+  }
+  children {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ancestors {
+    ...NestedPaginatedCoreGroupFields
+  }
+  descendants {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreIPAddressPoolFields on CoreIPAddressPool {
+  id
+  hfid
+  display_label
+  name {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  _updated_at
+  default_address_type {
+    ...TextAttributeFields
+  }
+  default_prefix_length {
+    ...NumberAttributeFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  resources {
+    ...NestedPaginatedBuiltinIPPrefixFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ip_namespace {
+    ...NestedEdgedBuiltinIPNamespaceFields
+  }
+  __typename
+}
+
+fragment CoreNodeFields on CoreNode {
+  id
+  hfid
+  display_label
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreProfileFields on CoreProfile {
+  id
+  hfid
+  display_label
+  profile_priority {
+    ...NumberAttributeFields
+  }
+  profile_name {
+    ...TextAttributeFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment DropdownFields on Dropdown {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  value
+  label
+  color
+  description
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment EdgedBuiltinIPPrefixFields on EdgedBuiltinIPPrefix {
+  node {
+    ...BuiltinIPPrefixFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  __typename
+}
+
+fragment IPHostFields on IPHost {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  ip
+  hostmask
+  netmask
+  prefixlen
+  version
+  with_hostmask
+  with_netmask
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment IPNetworkFields on IPNetwork {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  broadcast_address
+  hostmask
+  netmask
+  prefixlen
+  num_addresses
+  version
+  with_hostmask
+  with_netmask
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment InfrahubNodeMetadataFields on InfrahubNodeMetadata {
+  created_at
+  created_by {
+    ...CoreGenericAccountFields
+  }
+  updated_at
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment InfrahubRelationshipMetadataFields on InfrahubRelationshipMetadata {
+  created_at
+  created_by {
+    ...CoreGenericAccountFields
+  }
+  updated_at
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment LineageOwnerFields on LineageOwner {
+  id
+  hfid
+  display_label
+  __typename
+}
+
+fragment LineageSourceFields on LineageSource {
+  id
+  hfid
+  display_label
+  __typename
+}
+
+fragment NestedEdgedBuiltinIPAddressFields on NestedEdgedBuiltinIPAddress {
+  node {
+    ...BuiltinIPAddressFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedBuiltinIPNamespaceFields on NestedEdgedBuiltinIPNamespace {
+  node {
+    ...BuiltinIPNamespaceFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedBuiltinIPPrefixFields on NestedEdgedBuiltinIPPrefix {
+  node {
+    ...BuiltinIPPrefixFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreGroupFields on NestedEdgedCoreGroup {
+  node {
+    ...CoreGroupFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreIPAddressPoolFields on NestedEdgedCoreIPAddressPool {
+  node {
+    ...CoreIPAddressPoolFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreNodeFields on NestedEdgedCoreNode {
+  node {
+    ...CoreNodeFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreProfileFields on NestedEdgedCoreProfile {
+  node {
+    ...CoreProfileFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedBuiltinIPAddressFields on NestedPaginatedBuiltinIPAddress {
+  count
+  edges {
+    ...NestedEdgedBuiltinIPAddressFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedBuiltinIPPrefixFields on NestedPaginatedBuiltinIPPrefix {
+  count
+  edges {
+    ...NestedEdgedBuiltinIPPrefixFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreGroupFields on NestedPaginatedCoreGroup {
+  count
+  edges {
+    ...NestedEdgedCoreGroupFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreIPAddressPoolFields on NestedPaginatedCoreIPAddressPool {
+  count
+  edges {
+    ...NestedEdgedCoreIPAddressPoolFields
+  }
+  permissions {
+    ...PaginatedObjectPermissionFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreNodeFields on NestedPaginatedCoreNode {
+  count
+  edges {
+    ...NestedEdgedCoreNodeFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreProfileFields on NestedPaginatedCoreProfile {
+  count
+  edges {
+    ...NestedEdgedCoreProfileFields
+  }
+  __typename
+}
+
+fragment NumberAttributeFields on NumberAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment ObjectPermissionFields on ObjectPermission {
+  kind
+  view
+  create
+  update
+  delete
+  __typename
+}
+
+fragment ObjectPermissionNodeFields on ObjectPermissionNode {
+  node {
+    ...ObjectPermissionFields
+  }
+  __typename
+}
+
+fragment PaginatedBuiltinIPPrefixFields on PaginatedBuiltinIPPrefix {
+  count
+  edges {
+    ...EdgedBuiltinIPPrefixFields
+  }
+  permissions {
+    ...PaginatedObjectPermissionFields
+  }
+  __typename
+}
+
+fragment PaginatedObjectPermissionFields on PaginatedObjectPermission {
+  count
+  edges {
+    ...ObjectPermissionNodeFields
+  }
+  __typename
+}
+
+fragment PermissionTypeFields on PermissionType {
+  update_value
+  __typename
+}
+
+fragment RelationshipPropertyFields on RelationshipProperty {
+  is_protected
+  updated_at
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  __typename
+}
+
+fragment TextAttributeFields on TextAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}

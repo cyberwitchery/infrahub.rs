@@ -1,0 +1,26 @@
+mutation MutationInfrahubAccountTokenCreate($data: InfrahubAccountTokenCreateInput!) {
+  InfrahubAccountTokenCreate(data: $data) {
+    ...InfrahubAccountTokenCreateFields
+  }
+}
+
+fragment InfrahubAccountTokenCreateFields on InfrahubAccountTokenCreate {
+  ok
+  object {
+    ...InfrahubAccountTokenTypeFields
+  }
+  __typename
+}
+
+fragment InfrahubAccountTokenTypeFields on InfrahubAccountTokenType {
+  id
+  token {
+    ...ValueTypeFields
+  }
+  __typename
+}
+
+fragment ValueTypeFields on ValueType {
+  value
+  __typename
+}

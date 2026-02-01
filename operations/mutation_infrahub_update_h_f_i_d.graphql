@@ -1,0 +1,10 @@
+mutation MutationInfrahubUpdateHFID($context: ContextInput, $data: InfrahubHFIDUpdateInput!) {
+  InfrahubUpdateHFID(context: $context, data: $data) {
+    ...UpdateHFIDFields
+  }
+}
+
+fragment UpdateHFIDFields on UpdateHFID {
+  ok
+  __typename
+}

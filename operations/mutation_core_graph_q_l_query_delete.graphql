@@ -1,0 +1,10 @@
+mutation MutationCoreGraphQLQueryDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreGraphQLQueryDelete(context: $context, data: $data) {
+    ...CoreGraphQLQueryDeleteFields
+  }
+}
+
+fragment CoreGraphQLQueryDeleteFields on CoreGraphQLQueryDelete {
+  ok
+  __typename
+}

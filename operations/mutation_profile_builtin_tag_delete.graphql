@@ -1,0 +1,10 @@
+mutation MutationProfileBuiltinTagDelete($context: ContextInput, $data: DeleteInput!) {
+  ProfileBuiltinTagDelete(context: $context, data: $data) {
+    ...ProfileBuiltinTagDeleteFields
+  }
+}
+
+fragment ProfileBuiltinTagDeleteFields on ProfileBuiltinTagDelete {
+  ok
+  __typename
+}

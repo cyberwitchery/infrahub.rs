@@ -1,0 +1,29 @@
+query QueryInfrahubResourcePoolAllocated($pool_id: String!, $resource_id: String!, $limit: Int, $offset: Int) {
+  InfrahubResourcePoolAllocated(pool_id: $pool_id, resource_id: $resource_id, limit: $limit, offset: $offset) {
+    ...PoolAllocatedFields
+  }
+}
+
+fragment PoolAllocatedEdgeFields on PoolAllocatedEdge {
+  node {
+    ...PoolAllocatedNodeFields
+  }
+  __typename
+}
+
+fragment PoolAllocatedFields on PoolAllocated {
+  count
+  edges {
+    ...PoolAllocatedEdgeFields
+  }
+  __typename
+}
+
+fragment PoolAllocatedNodeFields on PoolAllocatedNode {
+  id
+  display_label
+  kind
+  branch
+  identifier
+  __typename
+}

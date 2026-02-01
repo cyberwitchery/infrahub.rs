@@ -1,0 +1,10 @@
+mutation MutationCoreNodeTriggerRuleDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreNodeTriggerRuleDelete(context: $context, data: $data) {
+    ...CoreNodeTriggerRuleDeleteFields
+  }
+}
+
+fragment CoreNodeTriggerRuleDeleteFields on CoreNodeTriggerRuleDelete {
+  ok
+  __typename
+}

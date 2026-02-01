@@ -1,0 +1,10 @@
+query QueryFieldsMappingTypeConversion($source_kind: String, $target_kind: String) {
+  FieldsMappingTypeConversion(source_kind: $source_kind, target_kind: $target_kind) {
+    ...FieldsMappingFields
+  }
+}
+
+fragment FieldsMappingFields on FieldsMapping {
+  mapping
+  __typename
+}

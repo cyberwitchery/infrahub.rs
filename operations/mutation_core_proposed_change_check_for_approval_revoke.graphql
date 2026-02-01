@@ -1,0 +1,10 @@
+mutation MutationCoreProposedChangeCheckForApprovalRevoke($data: ProposedChangeCheckForApprovalRevokeInput!) {
+  CoreProposedChangeCheckForApprovalRevoke(data: $data) {
+    ...ProposedChangeCheckForApprovalRevokeFields
+  }
+}
+
+fragment ProposedChangeCheckForApprovalRevokeFields on ProposedChangeCheckForApprovalRevoke {
+  ok
+  __typename
+}

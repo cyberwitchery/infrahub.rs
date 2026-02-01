@@ -1,0 +1,11 @@
+mutation MutationInfrahubRepositoryConnectivity($data: IdentifierInput!) {
+  InfrahubRepositoryConnectivity(data: $data) {
+    ...ValidateRepositoryConnectivityFields
+  }
+}
+
+fragment ValidateRepositoryConnectivityFields on ValidateRepositoryConnectivity {
+  ok
+  message
+  __typename
+}

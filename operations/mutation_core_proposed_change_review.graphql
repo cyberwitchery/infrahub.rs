@@ -1,0 +1,10 @@
+mutation MutationCoreProposedChangeReview($data: ProposedChangeReviewInput!) {
+  CoreProposedChangeReview(data: $data) {
+    ...ProposedChangeReviewFields
+  }
+}
+
+fragment ProposedChangeReviewFields on ProposedChangeReview {
+  ok
+  __typename
+}

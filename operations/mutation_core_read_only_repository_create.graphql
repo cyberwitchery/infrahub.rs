@@ -1,0 +1,971 @@
+mutation MutationCoreReadOnlyRepositoryCreate($context: ContextInput, $data: CoreReadOnlyRepositoryCreateInput!) {
+  CoreReadOnlyRepositoryCreate(context: $context, data: $data) {
+    ...CoreReadOnlyRepositoryCreateFields
+  }
+}
+
+fragment BuiltinTagFields on BuiltinTag {
+  id
+  hfid
+  display_label
+  _updated_at
+  description {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  profiles {
+    ...NestedPaginatedCoreProfileFields
+  }
+  __typename
+}
+
+fragment CheckboxAttributeFields on CheckboxAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment CoreCheckDefinitionFields on CoreCheckDefinition {
+  id
+  hfid
+  display_label
+  _updated_at
+  description {
+    ...TextAttributeFields
+  }
+  parameters {
+    ...JSONAttributeFields
+  }
+  class_name {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  timeout {
+    ...NumberAttributeFields
+  }
+  file_path {
+    ...TextAttributeFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  query {
+    ...NestedEdgedCoreGraphQLQueryFields
+  }
+  tags {
+    ...NestedPaginatedBuiltinTagFields
+  }
+  repository {
+    ...NestedEdgedCoreGenericRepositoryFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  targets {
+    ...NestedEdgedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreCredentialFields on CoreCredential {
+  id
+  hfid
+  display_label
+  label {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreGeneratorDefinitionFields on CoreGeneratorDefinition {
+  id
+  hfid
+  display_label
+  _updated_at
+  class_name {
+    ...TextAttributeFields
+  }
+  execute_in_proposed_change {
+    ...CheckboxAttributeFields
+  }
+  parameters {
+    ...JSONAttributeFields
+  }
+  file_path {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  convert_query_response {
+    ...CheckboxAttributeFields
+  }
+  execute_after_merge {
+    ...CheckboxAttributeFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  query {
+    ...NestedEdgedCoreGraphQLQueryFields
+  }
+  repository {
+    ...NestedEdgedCoreGenericRepositoryFields
+  }
+  targets {
+    ...NestedEdgedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreGenericAccountFields on CoreGenericAccount {
+  id
+  hfid
+  display_label
+  password {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  account_type {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  status {
+    ...DropdownFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreGenericRepositoryFields on CoreGenericRepository {
+  id
+  hfid
+  display_label
+  location {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  internal_status {
+    ...DropdownFields
+  }
+  operational_status {
+    ...DropdownFields
+  }
+  sync_status {
+    ...DropdownFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  groups_objects {
+    ...NestedPaginatedCoreRepositoryGroupFields
+  }
+  checks {
+    ...NestedPaginatedCoreCheckDefinitionFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  generators {
+    ...NestedPaginatedCoreGeneratorDefinitionFields
+  }
+  transformations {
+    ...NestedPaginatedCoreTransformationFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  queries {
+    ...NestedPaginatedCoreGraphQLQueryFields
+  }
+  credential {
+    ...NestedEdgedCoreCredentialFields
+  }
+  tags {
+    ...NestedPaginatedBuiltinTagFields
+  }
+  __typename
+}
+
+fragment CoreGraphQLQueryFields on CoreGraphQLQuery {
+  id
+  hfid
+  display_label
+  _updated_at
+  name {
+    ...TextAttributeFields
+  }
+  operations {
+    ...ListAttributeFields
+  }
+  models {
+    ...ListAttributeFields
+  }
+  variables {
+    ...JSONAttributeFields
+  }
+  height {
+    ...NumberAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  depth {
+    ...NumberAttributeFields
+  }
+  query {
+    ...TextAttributeFields
+  }
+  tags {
+    ...NestedPaginatedBuiltinTagFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  repository {
+    ...NestedEdgedCoreGenericRepositoryFields
+  }
+  __typename
+}
+
+fragment CoreGroupFields on CoreGroup {
+  id
+  hfid
+  display_label
+  group_type {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  members {
+    ...NestedPaginatedCoreNodeFields
+  }
+  subscribers {
+    ...NestedPaginatedCoreNodeFields
+  }
+  parent {
+    ...NestedEdgedCoreGroupFields
+  }
+  children {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ancestors {
+    ...NestedPaginatedCoreGroupFields
+  }
+  descendants {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreNodeFields on CoreNode {
+  id
+  hfid
+  display_label
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreProfileFields on CoreProfile {
+  id
+  hfid
+  display_label
+  profile_priority {
+    ...NumberAttributeFields
+  }
+  profile_name {
+    ...TextAttributeFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreReadOnlyRepositoryCreateFields on CoreReadOnlyRepositoryCreate {
+  ok
+  object {
+    ...CoreReadOnlyRepositoryFields
+  }
+  __typename
+}
+
+fragment CoreReadOnlyRepositoryFields on CoreReadOnlyRepository {
+  id
+  hfid
+  display_label
+  location {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  internal_status {
+    ...DropdownFields
+  }
+  operational_status {
+    ...DropdownFields
+  }
+  sync_status {
+    ...DropdownFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  _updated_at
+  ref {
+    ...TextAttributeFields
+  }
+  commit {
+    ...TextAttributeFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  groups_objects {
+    ...NestedPaginatedCoreRepositoryGroupFields
+  }
+  checks {
+    ...NestedPaginatedCoreCheckDefinitionFields
+  }
+  generators {
+    ...NestedPaginatedCoreGeneratorDefinitionFields
+  }
+  transformations {
+    ...NestedPaginatedCoreTransformationFields
+  }
+  queries {
+    ...NestedPaginatedCoreGraphQLQueryFields
+  }
+  credential {
+    ...NestedEdgedCoreCredentialFields
+  }
+  tags {
+    ...NestedPaginatedBuiltinTagFields
+  }
+  __typename
+}
+
+fragment CoreRepositoryGroupFields on CoreRepositoryGroup {
+  id
+  hfid
+  display_label
+  group_type {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  _updated_at
+  content {
+    ...DropdownFields
+  }
+  repository {
+    ...NestedEdgedCoreGenericRepositoryFields
+  }
+  members {
+    ...NestedPaginatedCoreNodeFields
+  }
+  subscribers {
+    ...NestedPaginatedCoreNodeFields
+  }
+  parent {
+    ...NestedEdgedCoreGroupFields
+  }
+  children {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ancestors {
+    ...NestedPaginatedCoreGroupFields
+  }
+  descendants {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreTransformationFields on CoreTransformation {
+  id
+  hfid
+  display_label
+  label {
+    ...TextAttributeFields
+  }
+  timeout {
+    ...NumberAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  repository {
+    ...NestedEdgedCoreGenericRepositoryFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  tags {
+    ...NestedPaginatedBuiltinTagFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  query {
+    ...NestedEdgedCoreGraphQLQueryFields
+  }
+  __typename
+}
+
+fragment DropdownFields on Dropdown {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  value
+  label
+  color
+  description
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment InfrahubNodeMetadataFields on InfrahubNodeMetadata {
+  created_at
+  created_by {
+    ...CoreGenericAccountFields
+  }
+  updated_at
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment InfrahubRelationshipMetadataFields on InfrahubRelationshipMetadata {
+  created_at
+  created_by {
+    ...CoreGenericAccountFields
+  }
+  updated_at
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment JSONAttributeFields on JSONAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment LineageOwnerFields on LineageOwner {
+  id
+  hfid
+  display_label
+  __typename
+}
+
+fragment LineageSourceFields on LineageSource {
+  id
+  hfid
+  display_label
+  __typename
+}
+
+fragment ListAttributeFields on ListAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment NestedEdgedBuiltinTagFields on NestedEdgedBuiltinTag {
+  node {
+    ...BuiltinTagFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreCheckDefinitionFields on NestedEdgedCoreCheckDefinition {
+  node {
+    ...CoreCheckDefinitionFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreCredentialFields on NestedEdgedCoreCredential {
+  node {
+    ...CoreCredentialFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreGeneratorDefinitionFields on NestedEdgedCoreGeneratorDefinition {
+  node {
+    ...CoreGeneratorDefinitionFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreGenericRepositoryFields on NestedEdgedCoreGenericRepository {
+  node {
+    ...CoreGenericRepositoryFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreGraphQLQueryFields on NestedEdgedCoreGraphQLQuery {
+  node {
+    ...CoreGraphQLQueryFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreGroupFields on NestedEdgedCoreGroup {
+  node {
+    ...CoreGroupFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreNodeFields on NestedEdgedCoreNode {
+  node {
+    ...CoreNodeFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreProfileFields on NestedEdgedCoreProfile {
+  node {
+    ...CoreProfileFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreRepositoryGroupFields on NestedEdgedCoreRepositoryGroup {
+  node {
+    ...CoreRepositoryGroupFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreTransformationFields on NestedEdgedCoreTransformation {
+  node {
+    ...CoreTransformationFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedBuiltinTagFields on NestedPaginatedBuiltinTag {
+  count
+  edges {
+    ...NestedEdgedBuiltinTagFields
+  }
+  permissions {
+    ...PaginatedObjectPermissionFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreCheckDefinitionFields on NestedPaginatedCoreCheckDefinition {
+  count
+  edges {
+    ...NestedEdgedCoreCheckDefinitionFields
+  }
+  permissions {
+    ...PaginatedObjectPermissionFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreGeneratorDefinitionFields on NestedPaginatedCoreGeneratorDefinition {
+  count
+  edges {
+    ...NestedEdgedCoreGeneratorDefinitionFields
+  }
+  permissions {
+    ...PaginatedObjectPermissionFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreGraphQLQueryFields on NestedPaginatedCoreGraphQLQuery {
+  count
+  edges {
+    ...NestedEdgedCoreGraphQLQueryFields
+  }
+  permissions {
+    ...PaginatedObjectPermissionFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreGroupFields on NestedPaginatedCoreGroup {
+  count
+  edges {
+    ...NestedEdgedCoreGroupFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreNodeFields on NestedPaginatedCoreNode {
+  count
+  edges {
+    ...NestedEdgedCoreNodeFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreProfileFields on NestedPaginatedCoreProfile {
+  count
+  edges {
+    ...NestedEdgedCoreProfileFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreRepositoryGroupFields on NestedPaginatedCoreRepositoryGroup {
+  count
+  edges {
+    ...NestedEdgedCoreRepositoryGroupFields
+  }
+  permissions {
+    ...PaginatedObjectPermissionFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreTransformationFields on NestedPaginatedCoreTransformation {
+  count
+  edges {
+    ...NestedEdgedCoreTransformationFields
+  }
+  __typename
+}
+
+fragment NumberAttributeFields on NumberAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment ObjectPermissionFields on ObjectPermission {
+  kind
+  view
+  create
+  update
+  delete
+  __typename
+}
+
+fragment ObjectPermissionNodeFields on ObjectPermissionNode {
+  node {
+    ...ObjectPermissionFields
+  }
+  __typename
+}
+
+fragment PaginatedObjectPermissionFields on PaginatedObjectPermission {
+  count
+  edges {
+    ...ObjectPermissionNodeFields
+  }
+  __typename
+}
+
+fragment PermissionTypeFields on PermissionType {
+  update_value
+  __typename
+}
+
+fragment RelationshipPropertyFields on RelationshipProperty {
+  is_protected
+  updated_at
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  __typename
+}
+
+fragment TextAttributeFields on TextAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}

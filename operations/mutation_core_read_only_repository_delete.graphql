@@ -1,0 +1,10 @@
+mutation MutationCoreReadOnlyRepositoryDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreReadOnlyRepositoryDelete(context: $context, data: $data) {
+    ...CoreReadOnlyRepositoryDeleteFields
+  }
+}
+
+fragment CoreReadOnlyRepositoryDeleteFields on CoreReadOnlyRepositoryDelete {
+  ok
+  __typename
+}

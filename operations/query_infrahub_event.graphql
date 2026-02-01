@@ -1,0 +1,44 @@
+query QueryInfrahubEvent($limit: Int, $offset: Int, $level: Int, $has_children: Boolean, $event_type: [String!], $event_type_filter: EventTypeFilter, $primary_node__ids: [String!], $related_node__ids: [String!], $parent__ids: [String!], $since: DateTime, $until: DateTime, $branches: [String!], $account__ids: [String!], $ids: [String!], $order: EventSortOrder) {
+  InfrahubEvent(limit: $limit, offset: $offset, level: $level, has_children: $has_children, event_type: $event_type, event_type_filter: $event_type_filter, primary_node__ids: $primary_node__ids, related_node__ids: $related_node__ids, parent__ids: $parent__ids, since: $since, until: $until, branches: $branches, account__ids: $account__ids, ids: $ids, order: $order) {
+    ...EventsFields
+  }
+}
+
+fragment EventNodeInterfaceFields on EventNodeInterface {
+  id
+  event
+  branch
+  account_id
+  occurred_at
+  level
+  primary_node {
+    ...RelatedNodeFields
+  }
+  related_nodes {
+    ...RelatedNodeFields
+  }
+  has_children
+  parent_id
+  __typename
+}
+
+fragment EventNodesFields on EventNodes {
+  node {
+    ...EventNodeInterfaceFields
+  }
+  __typename
+}
+
+fragment EventsFields on Events {
+  edges {
+    ...EventNodesFields
+  }
+  count
+  __typename
+}
+
+fragment RelatedNodeFields on RelatedNode {
+  id
+  kind
+  __typename
+}

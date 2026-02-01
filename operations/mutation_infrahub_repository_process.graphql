@@ -1,0 +1,18 @@
+mutation MutationInfrahubRepositoryProcess($data: IdentifierInput!) {
+  InfrahubRepositoryProcess(data: $data) {
+    ...ProcessRepositoryFields
+  }
+}
+
+fragment ProcessRepositoryFields on ProcessRepository {
+  ok
+  task {
+    ...TaskInfoFields
+  }
+  __typename
+}
+
+fragment TaskInfoFields on TaskInfo {
+  id
+  __typename
+}

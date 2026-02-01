@@ -1,0 +1,18 @@
+mutation MutationDiffUpdate($context: ContextInput, $data: DiffUpdateInput!, $wait_until_completion: Boolean) {
+  DiffUpdate(context: $context, data: $data, wait_until_completion: $wait_until_completion) {
+    ...DiffUpdateMutationFields
+  }
+}
+
+fragment DiffUpdateMutationFields on DiffUpdateMutation {
+  ok
+  task {
+    ...TaskInfoFields
+  }
+  __typename
+}
+
+fragment TaskInfoFields on TaskInfo {
+  id
+  __typename
+}

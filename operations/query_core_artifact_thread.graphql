@@ -1,0 +1,755 @@
+query QueryCoreArtifactThread($offset: Int, $limit: Int, $order: OrderInput, $ids: [ID], $artifact_id__value: String, $artifact_id__values: [String], $artifact_id__isnull: Boolean, $artifact_id__source__id: ID, $artifact_id__owner__id: ID, $artifact_id__is_protected: Boolean, $storage_id__value: String, $storage_id__values: [String], $storage_id__isnull: Boolean, $storage_id__source__id: ID, $storage_id__owner__id: ID, $storage_id__is_protected: Boolean, $line_number__value: BigInt, $line_number__values: [BigInt], $line_number__isnull: Boolean, $line_number__source__id: ID, $line_number__owner__id: ID, $line_number__is_protected: Boolean, $created_at__value: DateTime, $created_at__values: [DateTime], $created_at__isnull: Boolean, $created_at__source__id: ID, $created_at__owner__id: ID, $created_at__is_protected: Boolean, $resolved__value: Boolean, $resolved__values: [Boolean], $resolved__isnull: Boolean, $resolved__source__id: ID, $resolved__owner__id: ID, $resolved__is_protected: Boolean, $label__value: String, $label__values: [String], $label__isnull: Boolean, $label__source__id: ID, $label__owner__id: ID, $label__is_protected: Boolean, $any__value: String, $any__values: [String], $any__source__id: ID, $any__owner__id: ID, $any__is_protected: Boolean, $partial_match: Boolean, $node_metadata__created_by__id: ID, $node_metadata__created_by__ids: [ID], $node_metadata__updated_by__id: ID, $node_metadata__updated_by__ids: [ID], $node_metadata__created_at: DateTime, $node_metadata__created_at__before: DateTime, $node_metadata__created_at__after: DateTime, $node_metadata__updated_at: DateTime, $node_metadata__updated_at__before: DateTime, $node_metadata__updated_at__after: DateTime, $member_of_groups__ids: [ID], $member_of_groups__isnull: Boolean, $member_of_groups__display_label__value: String, $member_of_groups__display_label__values: [String], $member_of_groups__display_label__isnull: Boolean, $member_of_groups__group_type__value: String, $member_of_groups__group_type__values: [String], $member_of_groups__name__value: String, $member_of_groups__name__values: [String], $member_of_groups__label__value: String, $member_of_groups__label__values: [String], $member_of_groups__description__value: String, $member_of_groups__description__values: [String], $subscriber_of_groups__ids: [ID], $subscriber_of_groups__isnull: Boolean, $subscriber_of_groups__display_label__value: String, $subscriber_of_groups__display_label__values: [String], $subscriber_of_groups__display_label__isnull: Boolean, $subscriber_of_groups__group_type__value: String, $subscriber_of_groups__group_type__values: [String], $subscriber_of_groups__name__value: String, $subscriber_of_groups__name__values: [String], $subscriber_of_groups__label__value: String, $subscriber_of_groups__label__values: [String], $subscriber_of_groups__description__value: String, $subscriber_of_groups__description__values: [String], $change__ids: [ID], $change__isnull: Boolean, $change__display_label__value: String, $change__display_label__values: [String], $change__display_label__isnull: Boolean, $change__state__value: String, $change__state__values: [String], $change__state__source__id: ID, $change__state__owner__id: ID, $change__state__is_protected: Boolean, $change__name__value: String, $change__name__values: [String], $change__name__source__id: ID, $change__name__owner__id: ID, $change__name__is_protected: Boolean, $change__description__value: String, $change__description__values: [String], $change__description__source__id: ID, $change__description__owner__id: ID, $change__description__is_protected: Boolean, $change__source_branch__value: String, $change__source_branch__values: [String], $change__source_branch__source__id: ID, $change__source_branch__owner__id: ID, $change__source_branch__is_protected: Boolean, $change__total_comments__value: BigInt, $change__total_comments__values: [BigInt], $change__total_comments__source__id: ID, $change__total_comments__owner__id: ID, $change__total_comments__is_protected: Boolean, $change__destination_branch__value: String, $change__destination_branch__values: [String], $change__destination_branch__source__id: ID, $change__destination_branch__owner__id: ID, $change__destination_branch__is_protected: Boolean, $change__is_draft__value: Boolean, $change__is_draft__values: [Boolean], $change__is_draft__source__id: ID, $change__is_draft__owner__id: ID, $change__is_draft__is_protected: Boolean, $created_by__ids: [ID], $created_by__isnull: Boolean, $created_by__display_label__value: String, $created_by__display_label__values: [String], $created_by__display_label__isnull: Boolean, $created_by__password__value: String, $created_by__password__values: [String], $created_by__password__source__id: ID, $created_by__password__owner__id: ID, $created_by__password__is_protected: Boolean, $created_by__name__value: String, $created_by__name__values: [String], $created_by__name__source__id: ID, $created_by__name__owner__id: ID, $created_by__name__is_protected: Boolean, $created_by__account_type__value: String, $created_by__account_type__values: [String], $created_by__account_type__source__id: ID, $created_by__account_type__owner__id: ID, $created_by__account_type__is_protected: Boolean, $created_by__description__value: String, $created_by__description__values: [String], $created_by__description__source__id: ID, $created_by__description__owner__id: ID, $created_by__description__is_protected: Boolean, $created_by__label__value: String, $created_by__label__values: [String], $created_by__label__source__id: ID, $created_by__label__owner__id: ID, $created_by__label__is_protected: Boolean, $created_by__status__value: String, $created_by__status__values: [String], $created_by__status__source__id: ID, $created_by__status__owner__id: ID, $created_by__status__is_protected: Boolean, $comments__ids: [ID], $comments__isnull: Boolean, $comments__display_label__value: String, $comments__display_label__values: [String], $comments__display_label__isnull: Boolean, $comments__text__value: String, $comments__text__values: [String], $comments__text__source__id: ID, $comments__text__owner__id: ID, $comments__text__is_protected: Boolean, $comments__created_at__value: DateTime, $comments__created_at__values: [DateTime], $comments__created_at__source__id: ID, $comments__created_at__owner__id: ID, $comments__created_at__is_protected: Boolean) {
+  CoreArtifactThread(offset: $offset, limit: $limit, order: $order, ids: $ids, artifact_id__value: $artifact_id__value, artifact_id__values: $artifact_id__values, artifact_id__isnull: $artifact_id__isnull, artifact_id__source__id: $artifact_id__source__id, artifact_id__owner__id: $artifact_id__owner__id, artifact_id__is_protected: $artifact_id__is_protected, storage_id__value: $storage_id__value, storage_id__values: $storage_id__values, storage_id__isnull: $storage_id__isnull, storage_id__source__id: $storage_id__source__id, storage_id__owner__id: $storage_id__owner__id, storage_id__is_protected: $storage_id__is_protected, line_number__value: $line_number__value, line_number__values: $line_number__values, line_number__isnull: $line_number__isnull, line_number__source__id: $line_number__source__id, line_number__owner__id: $line_number__owner__id, line_number__is_protected: $line_number__is_protected, created_at__value: $created_at__value, created_at__values: $created_at__values, created_at__isnull: $created_at__isnull, created_at__source__id: $created_at__source__id, created_at__owner__id: $created_at__owner__id, created_at__is_protected: $created_at__is_protected, resolved__value: $resolved__value, resolved__values: $resolved__values, resolved__isnull: $resolved__isnull, resolved__source__id: $resolved__source__id, resolved__owner__id: $resolved__owner__id, resolved__is_protected: $resolved__is_protected, label__value: $label__value, label__values: $label__values, label__isnull: $label__isnull, label__source__id: $label__source__id, label__owner__id: $label__owner__id, label__is_protected: $label__is_protected, any__value: $any__value, any__values: $any__values, any__source__id: $any__source__id, any__owner__id: $any__owner__id, any__is_protected: $any__is_protected, partial_match: $partial_match, node_metadata__created_by__id: $node_metadata__created_by__id, node_metadata__created_by__ids: $node_metadata__created_by__ids, node_metadata__updated_by__id: $node_metadata__updated_by__id, node_metadata__updated_by__ids: $node_metadata__updated_by__ids, node_metadata__created_at: $node_metadata__created_at, node_metadata__created_at__before: $node_metadata__created_at__before, node_metadata__created_at__after: $node_metadata__created_at__after, node_metadata__updated_at: $node_metadata__updated_at, node_metadata__updated_at__before: $node_metadata__updated_at__before, node_metadata__updated_at__after: $node_metadata__updated_at__after, member_of_groups__ids: $member_of_groups__ids, member_of_groups__isnull: $member_of_groups__isnull, member_of_groups__display_label__value: $member_of_groups__display_label__value, member_of_groups__display_label__values: $member_of_groups__display_label__values, member_of_groups__display_label__isnull: $member_of_groups__display_label__isnull, member_of_groups__group_type__value: $member_of_groups__group_type__value, member_of_groups__group_type__values: $member_of_groups__group_type__values, member_of_groups__name__value: $member_of_groups__name__value, member_of_groups__name__values: $member_of_groups__name__values, member_of_groups__label__value: $member_of_groups__label__value, member_of_groups__label__values: $member_of_groups__label__values, member_of_groups__description__value: $member_of_groups__description__value, member_of_groups__description__values: $member_of_groups__description__values, subscriber_of_groups__ids: $subscriber_of_groups__ids, subscriber_of_groups__isnull: $subscriber_of_groups__isnull, subscriber_of_groups__display_label__value: $subscriber_of_groups__display_label__value, subscriber_of_groups__display_label__values: $subscriber_of_groups__display_label__values, subscriber_of_groups__display_label__isnull: $subscriber_of_groups__display_label__isnull, subscriber_of_groups__group_type__value: $subscriber_of_groups__group_type__value, subscriber_of_groups__group_type__values: $subscriber_of_groups__group_type__values, subscriber_of_groups__name__value: $subscriber_of_groups__name__value, subscriber_of_groups__name__values: $subscriber_of_groups__name__values, subscriber_of_groups__label__value: $subscriber_of_groups__label__value, subscriber_of_groups__label__values: $subscriber_of_groups__label__values, subscriber_of_groups__description__value: $subscriber_of_groups__description__value, subscriber_of_groups__description__values: $subscriber_of_groups__description__values, change__ids: $change__ids, change__isnull: $change__isnull, change__display_label__value: $change__display_label__value, change__display_label__values: $change__display_label__values, change__display_label__isnull: $change__display_label__isnull, change__state__value: $change__state__value, change__state__values: $change__state__values, change__state__source__id: $change__state__source__id, change__state__owner__id: $change__state__owner__id, change__state__is_protected: $change__state__is_protected, change__name__value: $change__name__value, change__name__values: $change__name__values, change__name__source__id: $change__name__source__id, change__name__owner__id: $change__name__owner__id, change__name__is_protected: $change__name__is_protected, change__description__value: $change__description__value, change__description__values: $change__description__values, change__description__source__id: $change__description__source__id, change__description__owner__id: $change__description__owner__id, change__description__is_protected: $change__description__is_protected, change__source_branch__value: $change__source_branch__value, change__source_branch__values: $change__source_branch__values, change__source_branch__source__id: $change__source_branch__source__id, change__source_branch__owner__id: $change__source_branch__owner__id, change__source_branch__is_protected: $change__source_branch__is_protected, change__total_comments__value: $change__total_comments__value, change__total_comments__values: $change__total_comments__values, change__total_comments__source__id: $change__total_comments__source__id, change__total_comments__owner__id: $change__total_comments__owner__id, change__total_comments__is_protected: $change__total_comments__is_protected, change__destination_branch__value: $change__destination_branch__value, change__destination_branch__values: $change__destination_branch__values, change__destination_branch__source__id: $change__destination_branch__source__id, change__destination_branch__owner__id: $change__destination_branch__owner__id, change__destination_branch__is_protected: $change__destination_branch__is_protected, change__is_draft__value: $change__is_draft__value, change__is_draft__values: $change__is_draft__values, change__is_draft__source__id: $change__is_draft__source__id, change__is_draft__owner__id: $change__is_draft__owner__id, change__is_draft__is_protected: $change__is_draft__is_protected, created_by__ids: $created_by__ids, created_by__isnull: $created_by__isnull, created_by__display_label__value: $created_by__display_label__value, created_by__display_label__values: $created_by__display_label__values, created_by__display_label__isnull: $created_by__display_label__isnull, created_by__password__value: $created_by__password__value, created_by__password__values: $created_by__password__values, created_by__password__source__id: $created_by__password__source__id, created_by__password__owner__id: $created_by__password__owner__id, created_by__password__is_protected: $created_by__password__is_protected, created_by__name__value: $created_by__name__value, created_by__name__values: $created_by__name__values, created_by__name__source__id: $created_by__name__source__id, created_by__name__owner__id: $created_by__name__owner__id, created_by__name__is_protected: $created_by__name__is_protected, created_by__account_type__value: $created_by__account_type__value, created_by__account_type__values: $created_by__account_type__values, created_by__account_type__source__id: $created_by__account_type__source__id, created_by__account_type__owner__id: $created_by__account_type__owner__id, created_by__account_type__is_protected: $created_by__account_type__is_protected, created_by__description__value: $created_by__description__value, created_by__description__values: $created_by__description__values, created_by__description__source__id: $created_by__description__source__id, created_by__description__owner__id: $created_by__description__owner__id, created_by__description__is_protected: $created_by__description__is_protected, created_by__label__value: $created_by__label__value, created_by__label__values: $created_by__label__values, created_by__label__source__id: $created_by__label__source__id, created_by__label__owner__id: $created_by__label__owner__id, created_by__label__is_protected: $created_by__label__is_protected, created_by__status__value: $created_by__status__value, created_by__status__values: $created_by__status__values, created_by__status__source__id: $created_by__status__source__id, created_by__status__owner__id: $created_by__status__owner__id, created_by__status__is_protected: $created_by__status__is_protected, comments__ids: $comments__ids, comments__isnull: $comments__isnull, comments__display_label__value: $comments__display_label__value, comments__display_label__values: $comments__display_label__values, comments__display_label__isnull: $comments__display_label__isnull, comments__text__value: $comments__text__value, comments__text__values: $comments__text__values, comments__text__source__id: $comments__text__source__id, comments__text__owner__id: $comments__text__owner__id, comments__text__is_protected: $comments__text__is_protected, comments__created_at__value: $comments__created_at__value, comments__created_at__values: $comments__created_at__values, comments__created_at__source__id: $comments__created_at__source__id, comments__created_at__owner__id: $comments__created_at__owner__id, comments__created_at__is_protected: $comments__created_at__is_protected) {
+    ...PaginatedCoreArtifactThreadFields
+  }
+}
+
+fragment CheckboxAttributeFields on CheckboxAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment CoreArtifactThreadFields on CoreArtifactThread {
+  id
+  hfid
+  display_label
+  created_at {
+    ...TextAttributeFields
+  }
+  resolved {
+    ...CheckboxAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  _updated_at
+  artifact_id {
+    ...TextAttributeFields
+  }
+  storage_id {
+    ...TextAttributeFields
+  }
+  line_number {
+    ...NumberAttributeFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  change {
+    ...NestedEdgedCoreProposedChangeFields
+  }
+  created_by {
+    ...NestedEdgedCoreGenericAccountFields
+  }
+  comments {
+    ...NestedPaginatedCoreThreadCommentFields
+  }
+  __typename
+}
+
+fragment CoreChangeCommentFields on CoreChangeComment {
+  id
+  hfid
+  display_label
+  text {
+    ...TextAttributeFields
+  }
+  created_at {
+    ...TextAttributeFields
+  }
+  _updated_at
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  change {
+    ...NestedEdgedCoreProposedChangeFields
+  }
+  created_by {
+    ...NestedEdgedCoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment CoreCheckFields on CoreCheck {
+  id
+  hfid
+  display_label
+  label {
+    ...TextAttributeFields
+  }
+  created_at {
+    ...TextAttributeFields
+  }
+  kind {
+    ...TextAttributeFields
+  }
+  conclusion {
+    ...TextAttributeFields
+  }
+  message {
+    ...TextAttributeFields
+  }
+  origin {
+    ...TextAttributeFields
+  }
+  severity {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  validator {
+    ...NestedEdgedCoreValidatorFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreGenericAccountFields on CoreGenericAccount {
+  id
+  hfid
+  display_label
+  password {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  account_type {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  status {
+    ...DropdownFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreGroupFields on CoreGroup {
+  id
+  hfid
+  display_label
+  group_type {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  members {
+    ...NestedPaginatedCoreNodeFields
+  }
+  subscribers {
+    ...NestedPaginatedCoreNodeFields
+  }
+  parent {
+    ...NestedEdgedCoreGroupFields
+  }
+  children {
+    ...NestedPaginatedCoreGroupFields
+  }
+  ancestors {
+    ...NestedPaginatedCoreGroupFields
+  }
+  descendants {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreNodeFields on CoreNode {
+  id
+  hfid
+  display_label
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment CoreProposedChangeFields on CoreProposedChange {
+  id
+  hfid
+  display_label
+  _updated_at
+  state {
+    ...TextAttributeFields
+  }
+  name {
+    ...TextAttributeFields
+  }
+  description {
+    ...TextAttributeFields
+  }
+  source_branch {
+    ...TextAttributeFields
+  }
+  total_comments {
+    ...NumberAttributeFields
+  }
+  destination_branch {
+    ...TextAttributeFields
+  }
+  is_draft {
+    ...CheckboxAttributeFields
+  }
+  created_by {
+    ...NestedEdgedCoreGenericAccountFields
+  }
+  reviewers {
+    ...NestedPaginatedCoreGenericAccountFields
+  }
+  approved_by {
+    ...NestedPaginatedCoreGenericAccountFields
+  }
+  validations {
+    ...NestedPaginatedCoreValidatorFields
+  }
+  comments {
+    ...NestedPaginatedCoreChangeCommentFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  threads {
+    ...NestedPaginatedCoreThreadFields
+  }
+  rejected_by {
+    ...NestedPaginatedCoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment CoreThreadCommentFields on CoreThreadComment {
+  id
+  hfid
+  display_label
+  text {
+    ...TextAttributeFields
+  }
+  created_at {
+    ...TextAttributeFields
+  }
+  _updated_at
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  thread {
+    ...NestedEdgedCoreThreadFields
+  }
+  created_by {
+    ...NestedEdgedCoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment CoreThreadFields on CoreThread {
+  id
+  hfid
+  display_label
+  created_at {
+    ...TextAttributeFields
+  }
+  resolved {
+    ...CheckboxAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  change {
+    ...NestedEdgedCoreProposedChangeFields
+  }
+  created_by {
+    ...NestedEdgedCoreGenericAccountFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  comments {
+    ...NestedPaginatedCoreThreadCommentFields
+  }
+  __typename
+}
+
+fragment CoreValidatorFields on CoreValidator {
+  id
+  hfid
+  display_label
+  started_at {
+    ...TextAttributeFields
+  }
+  completed_at {
+    ...TextAttributeFields
+  }
+  label {
+    ...TextAttributeFields
+  }
+  conclusion {
+    ...TextAttributeFields
+  }
+  state {
+    ...TextAttributeFields
+  }
+  proposed_change {
+    ...NestedEdgedCoreProposedChangeFields
+  }
+  checks {
+    ...NestedPaginatedCoreCheckFields
+  }
+  member_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  subscriber_of_groups {
+    ...NestedPaginatedCoreGroupFields
+  }
+  __typename
+}
+
+fragment DropdownFields on Dropdown {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  value
+  label
+  color
+  description
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment EdgedCoreArtifactThreadFields on EdgedCoreArtifactThread {
+  node {
+    ...CoreArtifactThreadFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  __typename
+}
+
+fragment InfrahubNodeMetadataFields on InfrahubNodeMetadata {
+  created_at
+  created_by {
+    ...CoreGenericAccountFields
+  }
+  updated_at
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment InfrahubRelationshipMetadataFields on InfrahubRelationshipMetadata {
+  created_at
+  created_by {
+    ...CoreGenericAccountFields
+  }
+  updated_at
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment LineageOwnerFields on LineageOwner {
+  id
+  hfid
+  display_label
+  __typename
+}
+
+fragment LineageSourceFields on LineageSource {
+  id
+  hfid
+  display_label
+  __typename
+}
+
+fragment NestedEdgedCoreChangeCommentFields on NestedEdgedCoreChangeComment {
+  node {
+    ...CoreChangeCommentFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreCheckFields on NestedEdgedCoreCheck {
+  node {
+    ...CoreCheckFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreGenericAccountFields on NestedEdgedCoreGenericAccount {
+  node {
+    ...CoreGenericAccountFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreGroupFields on NestedEdgedCoreGroup {
+  node {
+    ...CoreGroupFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreNodeFields on NestedEdgedCoreNode {
+  node {
+    ...CoreNodeFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreProposedChangeFields on NestedEdgedCoreProposedChange {
+  node {
+    ...CoreProposedChangeFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreThreadCommentFields on NestedEdgedCoreThreadComment {
+  node {
+    ...CoreThreadCommentFields
+  }
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreThreadFields on NestedEdgedCoreThread {
+  node {
+    ...CoreThreadFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedEdgedCoreValidatorFields on NestedEdgedCoreValidator {
+  node {
+    ...CoreValidatorFields
+  }
+  _updated_at
+  node_metadata {
+    ...InfrahubNodeMetadataFields
+  }
+  properties {
+    ...RelationshipPropertyFields
+  }
+  relationship_metadata {
+    ...InfrahubRelationshipMetadataFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreChangeCommentFields on NestedPaginatedCoreChangeComment {
+  count
+  edges {
+    ...NestedEdgedCoreChangeCommentFields
+  }
+  permissions {
+    ...PaginatedObjectPermissionFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreCheckFields on NestedPaginatedCoreCheck {
+  count
+  edges {
+    ...NestedEdgedCoreCheckFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreGenericAccountFields on NestedPaginatedCoreGenericAccount {
+  count
+  edges {
+    ...NestedEdgedCoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreGroupFields on NestedPaginatedCoreGroup {
+  count
+  edges {
+    ...NestedEdgedCoreGroupFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreNodeFields on NestedPaginatedCoreNode {
+  count
+  edges {
+    ...NestedEdgedCoreNodeFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreThreadCommentFields on NestedPaginatedCoreThreadComment {
+  count
+  edges {
+    ...NestedEdgedCoreThreadCommentFields
+  }
+  permissions {
+    ...PaginatedObjectPermissionFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreThreadFields on NestedPaginatedCoreThread {
+  count
+  edges {
+    ...NestedEdgedCoreThreadFields
+  }
+  __typename
+}
+
+fragment NestedPaginatedCoreValidatorFields on NestedPaginatedCoreValidator {
+  count
+  edges {
+    ...NestedEdgedCoreValidatorFields
+  }
+  __typename
+}
+
+fragment NumberAttributeFields on NumberAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}
+
+fragment ObjectPermissionFields on ObjectPermission {
+  kind
+  view
+  create
+  update
+  delete
+  __typename
+}
+
+fragment ObjectPermissionNodeFields on ObjectPermissionNode {
+  node {
+    ...ObjectPermissionFields
+  }
+  __typename
+}
+
+fragment PaginatedCoreArtifactThreadFields on PaginatedCoreArtifactThread {
+  count
+  edges {
+    ...EdgedCoreArtifactThreadFields
+  }
+  permissions {
+    ...PaginatedObjectPermissionFields
+  }
+  __typename
+}
+
+fragment PaginatedObjectPermissionFields on PaginatedObjectPermission {
+  count
+  edges {
+    ...ObjectPermissionNodeFields
+  }
+  __typename
+}
+
+fragment PermissionTypeFields on PermissionType {
+  update_value
+  __typename
+}
+
+fragment RelationshipPropertyFields on RelationshipProperty {
+  is_protected
+  updated_at
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  __typename
+}
+
+fragment TextAttributeFields on TextAttribute {
+  is_default
+  is_inherited
+  is_protected
+  updated_at
+  id
+  is_from_profile
+  permissions {
+    ...PermissionTypeFields
+  }
+  value
+  source {
+    ...LineageSourceFields
+  }
+  owner {
+    ...LineageOwnerFields
+  }
+  updated_by {
+    ...CoreGenericAccountFields
+  }
+  __typename
+}

@@ -1,0 +1,10 @@
+mutation MutationSchemaEnumAdd($context: ContextInput, $data: SchemaEnumInput!) {
+  SchemaEnumAdd(context: $context, data: $data) {
+    ...SchemaEnumAddFields
+  }
+}
+
+fragment SchemaEnumAddFields on SchemaEnumAdd {
+  ok
+  __typename
+}

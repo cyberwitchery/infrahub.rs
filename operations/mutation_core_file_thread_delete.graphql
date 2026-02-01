@@ -1,0 +1,10 @@
+mutation MutationCoreFileThreadDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreFileThreadDelete(context: $context, data: $data) {
+    ...CoreFileThreadDeleteFields
+  }
+}
+
+fragment CoreFileThreadDeleteFields on CoreFileThreadDelete {
+  ok
+  __typename
+}

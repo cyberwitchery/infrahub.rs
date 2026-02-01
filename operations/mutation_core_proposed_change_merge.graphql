@@ -1,0 +1,18 @@
+mutation MutationCoreProposedChangeMerge($data: ProposedChangeMergeInput!, $wait_until_completion: Boolean) {
+  CoreProposedChangeMerge(data: $data, wait_until_completion: $wait_until_completion) {
+    ...ProposedChangeMergeFields
+  }
+}
+
+fragment ProposedChangeMergeFields on ProposedChangeMerge {
+  ok
+  task {
+    ...TaskInfoFields
+  }
+  __typename
+}
+
+fragment TaskInfoFields on TaskInfo {
+  id
+  __typename
+}

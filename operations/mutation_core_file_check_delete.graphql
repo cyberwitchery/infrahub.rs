@@ -1,0 +1,10 @@
+mutation MutationCoreFileCheckDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreFileCheckDelete(context: $context, data: $data) {
+    ...CoreFileCheckDeleteFields
+  }
+}
+
+fragment CoreFileCheckDeleteFields on CoreFileCheckDelete {
+  ok
+  __typename
+}

@@ -1,0 +1,10 @@
+mutation MutationCoreProposedChangeDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreProposedChangeDelete(context: $context, data: $data) {
+    ...CoreProposedChangeDeleteFields
+  }
+}
+
+fragment CoreProposedChangeDeleteFields on CoreProposedChangeDelete {
+  ok
+  __typename
+}

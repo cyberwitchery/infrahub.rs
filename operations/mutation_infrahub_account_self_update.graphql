@@ -1,0 +1,10 @@
+mutation MutationInfrahubAccountSelfUpdate($data: InfrahubAccountUpdateSelfInput!) {
+  InfrahubAccountSelfUpdate(data: $data) {
+    ...InfrahubAccountSelfUpdateFields
+  }
+}
+
+fragment InfrahubAccountSelfUpdateFields on InfrahubAccountSelfUpdate {
+  ok
+  __typename
+}

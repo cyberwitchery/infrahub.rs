@@ -1,0 +1,10 @@
+mutation MutationInfrahubProfilesRefresh($context: ContextInput, $data: ProfilesRefreshInput!) {
+  InfrahubProfilesRefresh(context: $context, data: $data) {
+    ...InfrahubProfilesRefreshFields
+  }
+}
+
+fragment InfrahubProfilesRefreshFields on InfrahubProfilesRefresh {
+  ok
+  __typename
+}

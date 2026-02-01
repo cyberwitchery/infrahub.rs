@@ -1,0 +1,10 @@
+mutation MutationCoreSchemaValidatorDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreSchemaValidatorDelete(context: $context, data: $data) {
+    ...CoreSchemaValidatorDeleteFields
+  }
+}
+
+fragment CoreSchemaValidatorDeleteFields on CoreSchemaValidatorDelete {
+  ok
+  __typename
+}

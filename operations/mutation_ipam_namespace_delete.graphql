@@ -1,0 +1,10 @@
+mutation MutationIpamNamespaceDelete($context: ContextInput, $data: DeleteInput!) {
+  IpamNamespaceDelete(context: $context, data: $data) {
+    ...IpamNamespaceDeleteFields
+  }
+}
+
+fragment IpamNamespaceDeleteFields on IpamNamespaceDelete {
+  ok
+  __typename
+}

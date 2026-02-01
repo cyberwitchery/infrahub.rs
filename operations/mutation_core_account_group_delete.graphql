@@ -1,0 +1,10 @@
+mutation MutationCoreAccountGroupDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreAccountGroupDelete(context: $context, data: $data) {
+    ...CoreAccountGroupDeleteFields
+  }
+}
+
+fragment CoreAccountGroupDeleteFields on CoreAccountGroupDelete {
+  ok
+  __typename
+}

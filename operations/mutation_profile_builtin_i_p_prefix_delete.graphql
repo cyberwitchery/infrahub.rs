@@ -1,0 +1,10 @@
+mutation MutationProfileBuiltinIPPrefixDelete($context: ContextInput, $data: DeleteInput!) {
+  ProfileBuiltinIPPrefixDelete(context: $context, data: $data) {
+    ...ProfileBuiltinIPPrefixDeleteFields
+  }
+}
+
+fragment ProfileBuiltinIPPrefixDeleteFields on ProfileBuiltinIPPrefixDelete {
+  ok
+  __typename
+}

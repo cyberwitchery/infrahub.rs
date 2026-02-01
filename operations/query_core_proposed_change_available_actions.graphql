@@ -1,0 +1,27 @@
+query QueryCoreProposedChangeAvailableActions($proposed_change_id: String!) {
+  CoreProposedChangeAvailableActions(proposed_change_id: $proposed_change_id) {
+    ...AvailableActionsFields
+  }
+}
+
+fragment ActionAvailabilityEdgeFields on ActionAvailabilityEdge {
+  node {
+    ...ActionAvailabilityFields
+  }
+  __typename
+}
+
+fragment ActionAvailabilityFields on ActionAvailability {
+  action
+  available
+  unavailability_reason
+  __typename
+}
+
+fragment AvailableActionsFields on AvailableActions {
+  count
+  edges {
+    ...ActionAvailabilityEdgeFields
+  }
+  __typename
+}

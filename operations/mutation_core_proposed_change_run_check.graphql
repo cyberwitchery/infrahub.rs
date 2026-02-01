@@ -1,0 +1,10 @@
+mutation MutationCoreProposedChangeRunCheck($data: ProposedChangeRequestRunCheckInput!) {
+  CoreProposedChangeRunCheck(data: $data) {
+    ...ProposedChangeRequestRunCheckFields
+  }
+}
+
+fragment ProposedChangeRequestRunCheckFields on ProposedChangeRequestRunCheck {
+  ok
+  __typename
+}

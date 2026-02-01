@@ -1,0 +1,26 @@
+query QueryInfrahubSearchAnywhere($q: String!, $limit: Int, $partial_match: Boolean, $case_sensitive: Boolean) {
+  InfrahubSearchAnywhere(q: $q, limit: $limit, partial_match: $partial_match, case_sensitive: $case_sensitive) {
+    ...NodeEdgesFields
+  }
+}
+
+fragment NodeEdgeFields on NodeEdge {
+  node {
+    ...NodeFields
+  }
+  __typename
+}
+
+fragment NodeEdgesFields on NodeEdges {
+  count
+  edges {
+    ...NodeEdgeFields
+  }
+  __typename
+}
+
+fragment NodeFields on Node {
+  id
+  kind
+  __typename
+}

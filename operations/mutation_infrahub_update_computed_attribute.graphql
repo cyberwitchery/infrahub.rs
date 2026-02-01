@@ -1,0 +1,10 @@
+mutation MutationInfrahubUpdateComputedAttribute($context: ContextInput, $data: InfrahubComputedAttributeUpdateInput!) {
+  InfrahubUpdateComputedAttribute(context: $context, data: $data) {
+    ...UpdateComputedAttributeFields
+  }
+}
+
+fragment UpdateComputedAttributeFields on UpdateComputedAttribute {
+  ok
+  __typename
+}

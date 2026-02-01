@@ -1,0 +1,10 @@
+mutation MutationCoreGeneratorGroupDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreGeneratorGroupDelete(context: $context, data: $data) {
+    ...CoreGeneratorGroupDeleteFields
+  }
+}
+
+fragment CoreGeneratorGroupDeleteFields on CoreGeneratorGroupDelete {
+  ok
+  __typename
+}

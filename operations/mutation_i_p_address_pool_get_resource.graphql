@@ -1,0 +1,22 @@
+mutation MutationIPAddressPoolGetResource($data: IPAddressPoolGetResourceInput!) {
+  IPAddressPoolGetResource(data: $data) {
+    ...IPAddressPoolGetResourceFields
+  }
+}
+
+fragment IPAddressPoolGetResourceFields on IPAddressPoolGetResource {
+  ok
+  node {
+    ...PoolAllocatedNodeFields
+  }
+  __typename
+}
+
+fragment PoolAllocatedNodeFields on PoolAllocatedNode {
+  id
+  display_label
+  kind
+  branch
+  identifier
+  __typename
+}

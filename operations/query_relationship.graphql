@@ -1,0 +1,37 @@
+query QueryRelationship($ids: [String!]!, $excluded_namespaces: [String], $limit: Int, $offset: Int) {
+  Relationship(ids: $ids, excluded_namespaces: $excluded_namespaces, limit: $limit, offset: $offset) {
+    ...RelationshipsFields
+  }
+}
+
+fragment RelationshipFields on Relationship {
+  updated_by
+  updated_at
+  id
+  identifier
+  peers {
+    ...RelationshipPeerFields
+  }
+  __typename
+}
+
+fragment RelationshipNodeFields on RelationshipNode {
+  node {
+    ...RelationshipFields
+  }
+  __typename
+}
+
+fragment RelationshipPeerFields on RelationshipPeer {
+  id
+  kind
+  __typename
+}
+
+fragment RelationshipsFields on Relationships {
+  edges {
+    ...RelationshipNodeFields
+  }
+  count
+  __typename
+}

@@ -1,0 +1,10 @@
+mutation MutationSchemaDropdownRemove($context: ContextInput, $data: SchemaDropdownRemoveInput!) {
+  SchemaDropdownRemove(context: $context, data: $data) {
+    ...SchemaDropdownRemoveFields
+  }
+}
+
+fragment SchemaDropdownRemoveFields on SchemaDropdownRemove {
+  ok
+  __typename
+}

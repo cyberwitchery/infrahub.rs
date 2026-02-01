@@ -1,0 +1,10 @@
+mutation MutationCoreTransformJinja2Delete($context: ContextInput, $data: DeleteInput!) {
+  CoreTransformJinja2Delete(context: $context, data: $data) {
+    ...CoreTransformJinja2DeleteFields
+  }
+}
+
+fragment CoreTransformJinja2DeleteFields on CoreTransformJinja2Delete {
+  ok
+  __typename
+}

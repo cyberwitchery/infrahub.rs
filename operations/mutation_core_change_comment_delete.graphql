@@ -1,0 +1,10 @@
+mutation MutationCoreChangeCommentDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreChangeCommentDelete(context: $context, data: $data) {
+    ...CoreChangeCommentDeleteFields
+  }
+}
+
+fragment CoreChangeCommentDeleteFields on CoreChangeCommentDelete {
+  ok
+  __typename
+}

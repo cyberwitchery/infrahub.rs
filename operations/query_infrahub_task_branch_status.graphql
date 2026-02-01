@@ -1,0 +1,74 @@
+query QueryInfrahubTaskBranchStatus($branch: String) {
+  InfrahubTaskBranchStatus(branch: $branch) {
+    ...TasksFields
+  }
+}
+
+fragment TaskLogEdgeFields on TaskLogEdge {
+  edges {
+    ...TaskLogNodesFields
+  }
+  count
+  __typename
+}
+
+fragment TaskLogFields on TaskLog {
+  message
+  severity
+  task_id
+  timestamp
+  id
+  __typename
+}
+
+fragment TaskLogNodesFields on TaskLogNodes {
+  node {
+    ...TaskLogFields
+  }
+  __typename
+}
+
+fragment TaskNodeFields on TaskNode {
+  id
+  title
+  conclusion
+  state
+  progress
+  workflow
+  branch
+  created_at
+  updated_at
+  parameters
+  tags
+  start_time
+  related_node
+  related_node_kind
+  related_nodes {
+    ...TaskRelatedNodeFields
+  }
+  logs {
+    ...TaskLogEdgeFields
+  }
+  __typename
+}
+
+fragment TaskNodesFields on TaskNodes {
+  node {
+    ...TaskNodeFields
+  }
+  __typename
+}
+
+fragment TaskRelatedNodeFields on TaskRelatedNode {
+  id
+  kind
+  __typename
+}
+
+fragment TasksFields on Tasks {
+  edges {
+    ...TaskNodesFields
+  }
+  count
+  __typename
+}

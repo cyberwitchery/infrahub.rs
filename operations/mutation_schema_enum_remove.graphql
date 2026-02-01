@@ -1,0 +1,10 @@
+mutation MutationSchemaEnumRemove($context: ContextInput, $data: SchemaEnumInput!) {
+  SchemaEnumRemove(context: $context, data: $data) {
+    ...SchemaEnumRemoveFields
+  }
+}
+
+fragment SchemaEnumRemoveFields on SchemaEnumRemove {
+  ok
+  __typename
+}

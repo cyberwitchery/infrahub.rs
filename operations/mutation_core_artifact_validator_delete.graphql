@@ -1,0 +1,10 @@
+mutation MutationCoreArtifactValidatorDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreArtifactValidatorDelete(context: $context, data: $data) {
+    ...CoreArtifactValidatorDeleteFields
+  }
+}
+
+fragment CoreArtifactValidatorDeleteFields on CoreArtifactValidatorDelete {
+  ok
+  __typename
+}

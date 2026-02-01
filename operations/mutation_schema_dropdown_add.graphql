@@ -1,0 +1,21 @@
+mutation MutationSchemaDropdownAdd($context: ContextInput, $data: SchemaDropdownAddInput!) {
+  SchemaDropdownAdd(context: $context, data: $data) {
+    ...SchemaDropdownAddFields
+  }
+}
+
+fragment DropdownFieldsFields on DropdownFields {
+  value
+  label
+  color
+  description
+  __typename
+}
+
+fragment SchemaDropdownAddFields on SchemaDropdownAdd {
+  ok
+  object {
+    ...DropdownFieldsFields
+  }
+  __typename
+}

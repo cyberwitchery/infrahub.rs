@@ -1,0 +1,10 @@
+mutation MutationCoreArtifactDefinitionDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreArtifactDefinitionDelete(context: $context, data: $data) {
+    ...CoreArtifactDefinitionDeleteFields
+  }
+}
+
+fragment CoreArtifactDefinitionDeleteFields on CoreArtifactDefinitionDelete {
+  ok
+  __typename
+}

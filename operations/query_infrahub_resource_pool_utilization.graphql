@@ -1,0 +1,34 @@
+query QueryInfrahubResourcePoolUtilization($pool_id: String!) {
+  InfrahubResourcePoolUtilization(pool_id: $pool_id) {
+    ...PoolUtilizationFields
+  }
+}
+
+fragment IPPoolUtilizationResourceFields on IPPoolUtilizationResource {
+  id
+  display_label
+  kind
+  weight
+  utilization
+  utilization_branches
+  utilization_default_branch
+  __typename
+}
+
+fragment IPPrefixUtilizationEdgeFields on IPPrefixUtilizationEdge {
+  node {
+    ...IPPoolUtilizationResourceFields
+  }
+  __typename
+}
+
+fragment PoolUtilizationFields on PoolUtilization {
+  count
+  utilization
+  utilization_branches
+  utilization_default_branch
+  edges {
+    ...IPPrefixUtilizationEdgeFields
+  }
+  __typename
+}

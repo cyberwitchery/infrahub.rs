@@ -1,0 +1,10 @@
+mutation MutationBranchUpdate($context: ContextInput, $data: BranchUpdateInput!) {
+  BranchUpdate(context: $context, data: $data) {
+    ...BranchUpdateFields
+  }
+}
+
+fragment BranchUpdateFields on BranchUpdate {
+  ok
+  __typename
+}

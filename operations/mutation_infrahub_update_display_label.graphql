@@ -1,0 +1,10 @@
+mutation MutationInfrahubUpdateDisplayLabel($context: ContextInput, $data: InfrahubDisplayLabelUpdateInput!) {
+  InfrahubUpdateDisplayLabel(context: $context, data: $data) {
+    ...UpdateDisplayLabelFields
+  }
+}
+
+fragment UpdateDisplayLabelFields on UpdateDisplayLabel {
+  ok
+  __typename
+}

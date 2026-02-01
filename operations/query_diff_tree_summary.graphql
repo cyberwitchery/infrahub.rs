@@ -1,0 +1,20 @@
+query QueryDiffTreeSummary($name: String, $branch: String, $from_time: DateTime, $to_time: DateTime, $filters: DiffTreeQueryFilters) {
+  DiffTreeSummary(name: $name, branch: $branch, from_time: $from_time, to_time: $to_time, filters: $filters) {
+    ...DiffTreeSummaryFields
+  }
+}
+
+fragment DiffTreeSummaryFields on DiffTreeSummary {
+  num_added
+  num_updated
+  num_removed
+  num_conflicts
+  base_branch
+  diff_branch
+  from_time
+  to_time
+  num_unchanged
+  num_untracked_base_changes
+  num_untracked_diff_changes
+  __typename
+}

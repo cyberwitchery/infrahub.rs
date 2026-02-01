@@ -1,0 +1,10 @@
+mutation MutationCoreNodeTriggerRelationshipMatchDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreNodeTriggerRelationshipMatchDelete(context: $context, data: $data) {
+    ...CoreNodeTriggerRelationshipMatchDeleteFields
+  }
+}
+
+fragment CoreNodeTriggerRelationshipMatchDeleteFields on CoreNodeTriggerRelationshipMatchDelete {
+  ok
+  __typename
+}

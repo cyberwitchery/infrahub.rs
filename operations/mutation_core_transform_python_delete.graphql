@@ -1,0 +1,10 @@
+mutation MutationCoreTransformPythonDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreTransformPythonDelete(context: $context, data: $data) {
+    ...CoreTransformPythonDeleteFields
+  }
+}
+
+fragment CoreTransformPythonDeleteFields on CoreTransformPythonDelete {
+  ok
+  __typename
+}

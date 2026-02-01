@@ -1,0 +1,10 @@
+mutation MutationCoreStandardGroupDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreStandardGroupDelete(context: $context, data: $data) {
+    ...CoreStandardGroupDeleteFields
+  }
+}
+
+fragment CoreStandardGroupDeleteFields on CoreStandardGroupDelete {
+  ok
+  __typename
+}

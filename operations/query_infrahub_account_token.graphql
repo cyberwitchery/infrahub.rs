@@ -1,0 +1,27 @@
+query QueryInfrahubAccountToken($limit: Int, $offset: Int) {
+  InfrahubAccountToken(limit: $limit, offset: $offset) {
+    ...AccountTokenEdgesFields
+  }
+}
+
+fragment AccountTokenEdgeFields on AccountTokenEdge {
+  node {
+    ...AccountTokenNodeFields
+  }
+  __typename
+}
+
+fragment AccountTokenEdgesFields on AccountTokenEdges {
+  count
+  edges {
+    ...AccountTokenEdgeFields
+  }
+  __typename
+}
+
+fragment AccountTokenNodeFields on AccountTokenNode {
+  id
+  name
+  expiration
+  __typename
+}

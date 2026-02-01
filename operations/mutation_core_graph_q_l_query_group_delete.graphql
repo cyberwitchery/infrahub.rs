@@ -1,0 +1,10 @@
+mutation MutationCoreGraphQLQueryGroupDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreGraphQLQueryGroupDelete(context: $context, data: $data) {
+    ...CoreGraphQLQueryGroupDeleteFields
+  }
+}
+
+fragment CoreGraphQLQueryGroupDeleteFields on CoreGraphQLQueryGroupDelete {
+  ok
+  __typename
+}

@@ -1,0 +1,10 @@
+mutation MutationCoreCheckDefinitionDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreCheckDefinitionDelete(context: $context, data: $data) {
+    ...CoreCheckDefinitionDeleteFields
+  }
+}
+
+fragment CoreCheckDefinitionDeleteFields on CoreCheckDefinitionDelete {
+  ok
+  __typename
+}

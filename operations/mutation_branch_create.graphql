@@ -1,0 +1,37 @@
+mutation MutationBranchCreate($background_execution: Boolean, $context: ContextInput, $data: BranchCreateInput!, $wait_until_completion: Boolean) {
+  BranchCreate(background_execution: $background_execution, context: $context, data: $data, wait_until_completion: $wait_until_completion) {
+    ...BranchCreateFields
+  }
+}
+
+fragment BranchCreateFields on BranchCreate {
+  ok
+  object {
+    ...BranchFields
+  }
+  task {
+    ...TaskInfoFields
+  }
+  __typename
+}
+
+fragment BranchFields on Branch {
+  id
+  name
+  description
+  origin_branch
+  branched_from
+  status
+  graph_version
+  created_at
+  sync_with_git
+  is_default
+  is_isolated
+  has_schema_changes
+  __typename
+}
+
+fragment TaskInfoFields on TaskInfo {
+  id
+  __typename
+}

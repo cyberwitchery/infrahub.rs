@@ -1,0 +1,10 @@
+mutation MutationRelationshipAdd($context: ContextInput, $data: RelationshipNodesInput!) {
+  RelationshipAdd(context: $context, data: $data) {
+    ...RelationshipAddFields
+  }
+}
+
+fragment RelationshipAddFields on RelationshipAdd {
+  ok
+  __typename
+}

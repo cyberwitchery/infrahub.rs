@@ -1,0 +1,10 @@
+mutation MutationRelationshipRemove($context: ContextInput, $data: RelationshipNodesInput!) {
+  RelationshipRemove(context: $context, data: $data) {
+    ...RelationshipRemoveFields
+  }
+}
+
+fragment RelationshipRemoveFields on RelationshipRemove {
+  ok
+  __typename
+}

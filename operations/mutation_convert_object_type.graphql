@@ -1,0 +1,11 @@
+mutation MutationConvertObjectType($data: ConvertObjectTypeInput!) {
+  ConvertObjectType(data: $data) {
+    ...ConvertObjectTypeFields
+  }
+}
+
+fragment ConvertObjectTypeFields on ConvertObjectType {
+  ok
+  node
+  __typename
+}

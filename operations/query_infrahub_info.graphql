@@ -1,0 +1,11 @@
+query QueryInfrahubInfo {
+  InfrahubInfo {
+    ...InfoFields
+  }
+}
+
+fragment InfoFields on Info {
+  deployment_id
+  version
+  __typename
+}

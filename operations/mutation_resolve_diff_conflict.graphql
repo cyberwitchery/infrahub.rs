@@ -1,0 +1,10 @@
+mutation MutationResolveDiffConflict($context: ContextInput, $data: ResolveDiffConflictInput!) {
+  ResolveDiffConflict(context: $context, data: $data) {
+    ...ResolveDiffConflictFields
+  }
+}
+
+fragment ResolveDiffConflictFields on ResolveDiffConflict {
+  ok
+  __typename
+}

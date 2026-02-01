@@ -1,0 +1,41 @@
+query QueryInfrahubStatus {
+  InfrahubStatus {
+    ...StatusFields
+  }
+}
+
+fragment StatusFields on Status {
+  summary {
+    ...StatusSummaryFields
+  }
+  workers {
+    ...StatusWorkerEdgesFields
+  }
+  __typename
+}
+
+fragment StatusSummaryFields on StatusSummary {
+  schema_hash_synced
+  __typename
+}
+
+fragment StatusWorkerEdgeFields on StatusWorkerEdge {
+  node {
+    ...StatusWorkerFields
+  }
+  __typename
+}
+
+fragment StatusWorkerEdgesFields on StatusWorkerEdges {
+  edges {
+    ...StatusWorkerEdgeFields
+  }
+  __typename
+}
+
+fragment StatusWorkerFields on StatusWorker {
+  id
+  active
+  schema_hash
+  __typename
+}

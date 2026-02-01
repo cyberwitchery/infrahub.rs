@@ -1,0 +1,10 @@
+mutation MutationCoreStandardWebhookDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreStandardWebhookDelete(context: $context, data: $data) {
+    ...CoreStandardWebhookDeleteFields
+  }
+}
+
+fragment CoreStandardWebhookDeleteFields on CoreStandardWebhookDelete {
+  ok
+  __typename
+}

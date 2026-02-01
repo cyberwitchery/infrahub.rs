@@ -1,0 +1,10 @@
+query QueryIPPrefixGetNextAvailable($prefix_id: String!, $prefix_length: Int) {
+  IPPrefixGetNextAvailable(prefix_id: $prefix_id, prefix_length: $prefix_length) {
+    ...IPPrefixGetNextAvailableFields
+  }
+}
+
+fragment IPPrefixGetNextAvailableFields on IPPrefixGetNextAvailable {
+  prefix
+  __typename
+}

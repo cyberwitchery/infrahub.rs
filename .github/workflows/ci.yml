@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    tags-ignore:
+      - "v*"
+    branches:
+      - "**"
+    paths-ignore:
+      - "**/*.md"
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      RUSTFLAGS: "-C debuginfo=0"
+      CARGO_TARGET_DIR: target/ci
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+
+      - name: Coverage
+        run: cargo llvm-cov --workspace --all-features --ignore-filename-regex 'src/bin/infrahub-codegen.rs' --fail-under-lines 80 --lcov --output-path lcov.info
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-lcov
+          path: lcov.info

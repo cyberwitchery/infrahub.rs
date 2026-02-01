@@ -1,0 +1,10 @@
+mutation MutationCoreObjectPermissionDelete($context: ContextInput, $data: DeleteInput!) {
+  CoreObjectPermissionDelete(context: $context, data: $data) {
+    ...CoreObjectPermissionDeleteFields
+  }
+}
+
+fragment CoreObjectPermissionDeleteFields on CoreObjectPermissionDelete {
+  ok
+  __typename
+}

@@ -1,0 +1,66 @@
+query QueryInfrahubPermissions {
+  InfrahubPermissions {
+    ...AccountPermissionsEdgesFields
+  }
+}
+
+fragment AccountGlobalPermissionEdgeFields on AccountGlobalPermissionEdge {
+  node {
+    ...AccountGlobalPermissionNodeFields
+  }
+  __typename
+}
+
+fragment AccountGlobalPermissionEdgesFields on AccountGlobalPermissionEdges {
+  count
+  edges {
+    ...AccountGlobalPermissionEdgeFields
+  }
+  __typename
+}
+
+fragment AccountGlobalPermissionNodeFields on AccountGlobalPermissionNode {
+  id
+  description
+  name
+  action
+  decision
+  identifier
+  __typename
+}
+
+fragment AccountObjectPermissionEdgeFields on AccountObjectPermissionEdge {
+  node {
+    ...AccountObjectPermissionNodeFields
+  }
+  __typename
+}
+
+fragment AccountObjectPermissionEdgesFields on AccountObjectPermissionEdges {
+  count
+  edges {
+    ...AccountObjectPermissionEdgeFields
+  }
+  __typename
+}
+
+fragment AccountObjectPermissionNodeFields on AccountObjectPermissionNode {
+  id
+  description
+  namespace
+  name
+  action
+  decision
+  identifier
+  __typename
+}
+
+fragment AccountPermissionsEdgesFields on AccountPermissionsEdges {
+  global_permissions {
+    ...AccountGlobalPermissionEdgesFields
+  }
+  object_permissions {
+    ...AccountObjectPermissionEdgesFields
+  }
+  __typename
+}

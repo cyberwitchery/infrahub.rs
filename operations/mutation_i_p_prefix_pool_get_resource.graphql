@@ -1,0 +1,22 @@
+mutation MutationIPPrefixPoolGetResource($data: IPPrefixPoolGetResourceInput!) {
+  IPPrefixPoolGetResource(data: $data) {
+    ...IPPrefixPoolGetResourceFields
+  }
+}
+
+fragment IPPrefixPoolGetResourceFields on IPPrefixPoolGetResource {
+  ok
+  node {
+    ...PoolAllocatedNodeFields
+  }
+  __typename
+}
+
+fragment PoolAllocatedNodeFields on PoolAllocatedNode {
+  id
+  display_label
+  kind
+  branch
+  identifier
+  __typename
+}

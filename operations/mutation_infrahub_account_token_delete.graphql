@@ -1,0 +1,10 @@
+mutation MutationInfrahubAccountTokenDelete($data: InfrahubAccountTokenDeleteInput!) {
+  InfrahubAccountTokenDelete(data: $data) {
+    ...InfrahubAccountTokenDeleteFields
+  }
+}
+
+fragment InfrahubAccountTokenDeleteFields on InfrahubAccountTokenDelete {
+  ok
+  __typename
+}

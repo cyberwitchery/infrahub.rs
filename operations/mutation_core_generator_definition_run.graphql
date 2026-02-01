@@ -1,0 +1,18 @@
+mutation MutationCoreGeneratorDefinitionRun($context: ContextInput, $data: GeneratorDefinitionRequestRunInput!, $wait_until_completion: Boolean) {
+  CoreGeneratorDefinitionRun(context: $context, data: $data, wait_until_completion: $wait_until_completion) {
+    ...GeneratorDefinitionRequestRunFields
+  }
+}
+
+fragment GeneratorDefinitionRequestRunFields on GeneratorDefinitionRequestRun {
+  ok
+  task {
+    ...TaskInfoFields
+  }
+  __typename
+}
+
+fragment TaskInfoFields on TaskInfo {
+  id
+  __typename
+}

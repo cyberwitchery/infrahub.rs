@@ -5,6 +5,7 @@ entrypoints:
 - [examples](../examples/README.md)
 - [local infrahub](local-infrahub.md)
 - [case studies: procurement contract](case-studies/procurement-contract.md)
+- [codegen](codegen.md)
 
 how to use this repo:
 

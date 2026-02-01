@@ -1,4 +1,26 @@
 //! generate a typed infrahub client from a schema
+//!
+//! this binary produces a standalone, schema-specific crate with:
+//! - typed `types`, `inputs`, and `responses`
+//! - a full surface `generated()` client
+//! - an ergonomic `api()` layer grouped by schema namespaces
+//!
+//! ## usage
+//!
+//! ```text
+//! infrahub-codegen --schema /path/to/schema.graphql --out /tmp/infrahub-generated
+//! infrahub-codegen --url http://localhost:8000 --token $INFRAHUB_TOKEN --out /tmp/infrahub-generated
+//! ```
+//!
+//! ## options
+//!
+//! - `--schema <path>`: load schema from a file
+//! - `--url <url>`: fetch schema from a running infrahub
+//! - `--token <token>`: api token for schema fetch
+//! - `--branch <name>`: optional branch for schema fetch
+//! - `--out <path>`: output directory for the generated crate
+//! - `--crate-name <name>`: optional crate name (defaults to directory name)
+//! - `--infrahub-path <path>`: use a path dependency for `infrahub`
 
 use graphql_parser::schema::{
     parse_schema, Definition, Document, Field, InputObjectType, InputValue, Type, TypeDefinition,

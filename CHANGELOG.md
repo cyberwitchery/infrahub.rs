@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## 0.0.2 - 2026-02-08
+
 - codegen: switched CLI help to a shared manpage-style source used by both `--help` and rustdoc docs.
 - codegen: `infrahub-codegen --help` now exits successfully (`0`) instead of erroring.
 - codegen: breaking change to generated API model grouping; namespace/module grouping now uses acronym-aware identifier splitting and first-word namespace selection.

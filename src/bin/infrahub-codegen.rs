@@ -248,13 +248,13 @@ fn generate_client(args: &Args, ctx: &SchemaContext) -> Result<(), String> {
         let mut cargo = String::new();
         cargo.push_str("[package]\n");
         cargo.push_str(&format!("name = \"{}\"\n", crate_name));
-        cargo.push_str("version = \"0.0.1\"\n");
+        cargo.push_str("version = \"0.0.2\"\n");
         cargo.push_str("edition = \"2021\"\n\n");
         cargo.push_str("[dependencies]\n");
         if let Some(path) = &args.infrahub_path {
             cargo.push_str(&format!("infrahub = {{ path = \"{}\" }}\n", path));
         } else {
-            cargo.push_str("infrahub = \"0.0.1\"\n");
+            cargo.push_str("infrahub = \"0.0.2\"\n");
         }
         cargo.push_str("serde = { version = \"1\", features = [\"derive\"] }\n");
         cargo.push_str("serde_json = \"1\"\n");

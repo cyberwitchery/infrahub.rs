@@ -119,7 +119,6 @@ impl ClientConfig {
         self
     }
 
-
     /// access extra headers configured on this client
     pub fn extra_headers(&self) -> &HeaderMap {
         &self.extra_headers
@@ -168,7 +167,9 @@ impl ClientConfig {
             .map(|b| b.to_string())
             .or_else(|| self.default_branch.clone());
         let url_str = match branch {
-            Some(branch) if !branch.is_empty() => format!("{}/schema.graphql?branch={}", base, branch),
+            Some(branch) if !branch.is_empty() => {
+                format!("{}/schema.graphql?branch={}", base, branch)
+            }
             _ => format!("{}/schema.graphql", base),
         };
         Url::parse(&url_str).map_err(Error::from)
@@ -262,7 +263,10 @@ mod tests {
     #[test]
     fn test_builder_helpers() {
         let mut headers = HeaderMap::new();
-        headers.insert(HeaderName::from_static("x-test"), HeaderValue::from_static("value"));
+        headers.insert(
+            HeaderName::from_static("x-test"),
+            HeaderValue::from_static("value"),
+        );
 
         let config = ClientConfig::new("https://infrahub.example.com", "token")
             .with_default_branch("main")
@@ -270,20 +274,17 @@ mod tests {
             .with_user_agent("infrahub-test")
             .with_ssl_verification(false)
             .with_headers(headers.clone())
-            .with_header(HeaderName::from_static("x-other"), HeaderValue::from_static("other"));
+            .with_header(
+                HeaderName::from_static("x-other"),
+                HeaderValue::from_static("other"),
+            );
 
         assert_eq!(config.default_branch.as_deref(), Some("main"));
         assert_eq!(config.timeout, Duration::from_secs(5));
         assert_eq!(config.user_agent, "infrahub-test");
         assert!(!config.verify_ssl);
-        assert_eq!(
-            config.extra_headers.get("x-test").unwrap(),
-            "value"
-        );
-        assert_eq!(
-            config.extra_headers.get("x-other").unwrap(),
-            "other"
-        );
+        assert_eq!(config.extra_headers.get("x-test").unwrap(), "value");
+        assert_eq!(config.extra_headers.get("x-other").unwrap(), "other");
         assert_eq!(config.extra_headers(), &config.extra_headers);
     }
 }

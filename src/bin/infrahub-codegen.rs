@@ -5,22 +5,9 @@
 //! - a full surface `generated()` client
 //! - an ergonomic `api()` layer grouped by schema namespaces
 //!
-//! ## usage
-//!
-//! ```text
-//! infrahub-codegen --schema /path/to/schema.graphql --out /tmp/infrahub-generated
-//! infrahub-codegen --url http://localhost:8000 --token $INFRAHUB_TOKEN --out /tmp/infrahub-generated
-//! ```
-//!
-//! ## options
-//!
-//! - `--schema <path>`: load schema from a file
-//! - `--url <url>`: fetch schema from a running infrahub
-//! - `--token <token>`: api token for schema fetch
-//! - `--branch <name>`: optional branch for schema fetch
-//! - `--out <path>`: output directory for the generated crate
-//! - `--crate-name <name>`: optional crate name (defaults to directory name)
-//! - `--infrahub-path <path>`: use a path dependency for `infrahub`
+//! command help reference (kept in sync with `infrahub-codegen --help`):
+#[doc = concat!("```text\n", include_str!("infrahub-codegen-help.txt"), "\n```")]
+pub const CLI_HELP: &str = include_str!("infrahub-codegen-help.txt");
 
 use graphql_parser::schema::{
     parse_schema, Definition, Document, Field, InputObjectType, InputValue, Type, TypeDefinition,
@@ -43,11 +30,20 @@ struct Args {
     infrahub_path: Option<String>,
 }
 
+enum ParseArgsError {
+    Help,
+    Message(String),
+}
+
 fn main() {
     let args = match parse_args(std::env::args().collect()) {
         Ok(args) => args,
-        Err(err) => {
-            eprintln!("{err}");
+        Err(ParseArgsError::Help) => {
+            print!("{CLI_HELP}");
+            return;
+        }
+        Err(ParseArgsError::Message(err)) => {
+            eprintln!("{err}\n\n{CLI_HELP}");
             std::process::exit(1);
         }
     };
@@ -76,7 +72,7 @@ fn main() {
     }
 }
 
-fn parse_args(args: Vec<String>) -> Result<Args, String> {
+fn parse_args(args: Vec<String>) -> Result<Args, ParseArgsError> {
     let mut url = None;
     let mut token = None;
     let mut branch = None;
@@ -95,15 +91,18 @@ fn parse_args(args: Vec<String>) -> Result<Args, String> {
             "--out" => out_dir = iter.next().map(PathBuf::from),
             "--crate-name" => crate_name = iter.next(),
             "--infrahub-path" => infrahub_path = iter.next(),
-            "--help" | "-h" => return Err(usage()),
-            _ => return Err(format!("unknown argument: {arg}\n\n{}", usage())),
+            "--help" | "-h" => return Err(ParseArgsError::Help),
+            _ => return Err(ParseArgsError::Message(format!("unknown argument: {arg}"))),
         }
     }
 
-    let out_dir = out_dir.ok_or_else(|| format!("--out is required\n\n{}", usage()))?;
+    let out_dir =
+        out_dir.ok_or_else(|| ParseArgsError::Message("--out is required".to_string()))?;
 
     if url.is_none() && schema_path.is_none() {
-        return Err(format!("--url or --schema is required\n\n{}", usage()));
+        return Err(ParseArgsError::Message(
+            "--url or --schema is required".to_string(),
+        ));
     }
 
     Ok(Args {
@@ -115,16 +114,6 @@ fn parse_args(args: Vec<String>) -> Result<Args, String> {
         crate_name,
         infrahub_path,
     })
-}
-
-fn usage() -> String {
-    let msg = r#"usage: infrahub-codegen --out <path> [--url <url> --token <token> --branch <branch>] [--schema <path>] [--crate-name <name>] [--infrahub-path <path>]
-
-examples:
-  infrahub-codegen --url http://localhost:8000 --token $INFRAHUB_TOKEN --out /tmp/infrahub-generated
-  infrahub-codegen --schema schema/infrahub.graphql --out /tmp/infrahub-generated
-"#;
-    msg.to_string()
 }
 
 fn load_schema(args: &Args) -> Result<String, String> {
@@ -392,13 +381,10 @@ fn render_responses(ctx: &SchemaContext) -> String {
     out.push_str("use serde::{Deserialize, Serialize};\n\n");
     out.push_str("use crate::types::*;\n\n");
 
-    let query = ctx
-        .types
-        .get(&ctx.query_type)
-        .and_then(|ty| match ty {
-            TypeDefinition::Object(obj) => Some(obj),
-            _ => None,
-        });
+    let query = ctx.types.get(&ctx.query_type).and_then(|ty| match ty {
+        TypeDefinition::Object(obj) => Some(obj),
+        _ => None,
+    });
 
     if let Some(query) = query {
         for field in &query.fields {
@@ -461,14 +447,10 @@ fn render_client(ctx: &SchemaContext) -> String {
 
     out.push_str("impl<'a> GeneratedClientImpl<'a> {\n");
 
-    if let Some(query) = ctx
-        .types
-        .get(&ctx.query_type)
-        .and_then(|ty| match ty {
-            TypeDefinition::Object(obj) => Some(obj),
-            _ => None,
-        })
-    {
+    if let Some(query) = ctx.types.get(&ctx.query_type).and_then(|ty| match ty {
+        TypeDefinition::Object(obj) => Some(obj),
+        _ => None,
+    }) {
         for field in &query.fields {
             out.push_str(&render_field_method(field, ctx, false));
         }
@@ -519,7 +501,10 @@ fn render_api_mod<'a>(ctx: &SchemaContext<'a>) -> String {
             "    pub fn {}(&self) -> {}::{}<'a> {{\n",
             ns, ns, struct_name
         ));
-        out.push_str(&format!("        {}::{}::new(self.client)\n", ns, struct_name));
+        out.push_str(&format!(
+            "        {}::{}::new(self.client)\n",
+            ns, struct_name
+        ));
         out.push_str("    }\n");
     }
     out.push_str("}\n");
@@ -608,7 +593,9 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
         out.push_str("        let mut vars = serde_json::Map::new();\n");
         for arg in args {
             let rust_name = to_rust_field(&arg.name);
-            out.push_str(&format!("        if let Some(value) = &self.{rust_name} {{\n"));
+            out.push_str(&format!(
+                "        if let Some(value) = &self.{rust_name} {{\n"
+            ));
             out.push_str(&format!(
                 "            vars.insert(\"{}\".to_string(), serde_json::to_value(value).expect(\"serialize\"));\n",
                 arg.name
@@ -687,7 +674,9 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
                 model.name
             ));
             out.push_str("        filters.ids = Some(vec![id.into()]);\n");
-            out.push_str("        let mut items = self.list(Some(filters), request_branch).await?;\n");
+            out.push_str(
+                "        let mut items = self.list(Some(filters), request_branch).await?;\n",
+            );
             out.push_str("        Ok(items.pop())\n");
             out.push_str("    }\n\n");
         }
@@ -951,10 +940,7 @@ fn render_field_method(field: &Field<String>, ctx: &SchemaContext, is_mutation: 
     };
     let query = format!(
         "{} {{ {}{}{} }}",
-        op_header,
-        field.name,
-        field_args,
-        selection
+        op_header, field.name, field_args, selection
     );
 
     out.push_str(&format!("    pub async fn {}(&self{} , request_branch: Option<&str>) -> Result<GraphQlResponse<{}>> {{\n", method_name, args.signature, response_name));
@@ -1113,9 +1099,10 @@ fn base_type_name(ty: &Type<String>) -> String {
 }
 
 fn has_required_args(field: &Field<String>) -> bool {
-    field.arguments.iter().any(|arg| {
-        matches!(arg.value_type, Type::NonNullType(_)) && arg.default_value.is_none()
-    })
+    field
+        .arguments
+        .iter()
+        .any(|arg| matches!(arg.value_type, Type::NonNullType(_)) && arg.default_value.is_none())
 }
 
 fn is_optional(ty: &Type<String>) -> bool {
@@ -1225,8 +1212,7 @@ struct MethodArgs {
 fn is_rust_keyword(name: &str) -> bool {
     matches!(
         name,
-        "as"
-            | "break"
+        "as" | "break"
             | "const"
             | "continue"
             | "crate"

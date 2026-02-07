@@ -28,9 +28,8 @@ impl Client {
         let mut headers = HeaderMap::new();
         headers.insert(
             "X-INFRAHUB-KEY",
-            HeaderValue::from_str(&config.token).map_err(|err| {
-                Error::Config(format!("invalid api token header value: {err}"))
-            })?,
+            HeaderValue::from_str(&config.token)
+                .map_err(|err| Error::Config(format!("invalid api token header value: {err}")))?,
         );
         headers.extend(config.extra_headers.clone());
 
@@ -231,16 +230,11 @@ mod tests {
         let config = ClientConfig::new("http://localhost:1234", "test-token");
         let client = test_client(config);
         let response = client
-            .execute_raw_with(
-                "query { ok }",
-                None,
-                Some("main"),
-                |url, body| async move {
-                    assert_eq!(url.path(), "/graphql/main");
-                    assert_eq!(body["query"], "query { ok }");
-                    Ok((StatusCode::OK, "{\"data\": {\"ok\": true}}".to_string()))
-                },
-            )
+            .execute_raw_with("query { ok }", None, Some("main"), |url, body| async move {
+                assert_eq!(url.path(), "/graphql/main");
+                assert_eq!(body["query"], "query { ok }");
+                Ok((StatusCode::OK, "{\"data\": {\"ok\": true}}".to_string()))
+            })
             .await
             .unwrap();
 
@@ -290,12 +284,21 @@ mod tests {
         let client = test_client(config);
         let err = client
             .execute_raw_with("query { ok }", None, None, |_url, _body| async move {
-                Ok((StatusCode::INTERNAL_SERVER_ERROR, "{\"data\":null}".to_string()))
+                Ok((
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    "{\"data\":null}".to_string(),
+                ))
             })
             .await
             .unwrap_err();
 
-        assert!(matches!(err, Error::GraphQl { status: Some(500), .. }));
+        assert!(matches!(
+            err,
+            Error::GraphQl {
+                status: Some(500),
+                ..
+            }
+        ));
     }
 
     #[cfg_attr(miri, ignore)]
@@ -321,14 +324,20 @@ mod tests {
             })
             .await
             .unwrap_err();
-        assert!(matches!(err, Error::GraphQl { status: Some(404), .. }));
+        assert!(matches!(
+            err,
+            Error::GraphQl {
+                status: Some(404),
+                ..
+            }
+        ));
     }
 
     #[cfg_attr(miri, ignore)]
     #[tokio::test]
     async fn test_execute_raw_uses_default_branch() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token")
-            .with_default_branch("main");
+        let config =
+            ClientConfig::new("http://localhost:1234", "test-token").with_default_branch("main");
         let client = test_client(config);
         let response = client
             .execute_raw_with("query { ok }", None, None, |url, _body| async move {
@@ -364,21 +373,38 @@ mod tests {
     fn test_parse_graphql_response_graphql_error() {
         let text = "{\"data\": null, \"errors\": [{\"message\": \"boom\"}]}".to_string();
         let err = parse_graphql_response::<serde_json::Value>(StatusCode::OK, text).unwrap_err();
-        assert!(matches!(err, Error::GraphQl { status: Some(200), .. }));
+        assert!(matches!(
+            err,
+            Error::GraphQl {
+                status: Some(200),
+                ..
+            }
+        ));
     }
 
     #[test]
     fn test_parse_graphql_response_http_error() {
         let text = "{\"data\": null}".to_string();
-        let err = parse_graphql_response::<serde_json::Value>(StatusCode::BAD_GATEWAY, text)
-            .unwrap_err();
-        assert!(matches!(err, Error::GraphQl { status: Some(502), .. }));
+        let err =
+            parse_graphql_response::<serde_json::Value>(StatusCode::BAD_GATEWAY, text).unwrap_err();
+        assert!(matches!(
+            err,
+            Error::GraphQl {
+                status: Some(502),
+                ..
+            }
+        ));
     }
 
     #[test]
     fn test_parse_schema_response_error() {
         let err = parse_schema_response(StatusCode::NOT_FOUND, "nope".to_string()).unwrap_err();
-        assert!(matches!(err, Error::GraphQl { status: Some(404), .. }));
+        assert!(matches!(
+            err,
+            Error::GraphQl {
+                status: Some(404),
+                ..
+            }
+        ));
     }
-
 }

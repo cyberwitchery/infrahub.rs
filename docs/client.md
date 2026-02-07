@@ -184,11 +184,46 @@ usage example:
 ```rust,no_run
 use infrahub::{Client, ClientConfig};
 use infrahub_generated::ApiClient;
+use infrahub_generated::inputs::{BranchCreateInput, BranchUpdateInput};
 
 # async fn example() -> Result<(), Box<dyn std::error::Error>> {
 let client = Client::new(ClientConfig::new("http://localhost:8000", "token"))?;
-let branches = client.api().infrahub().branch().list(None, None).await?;
+let branch_api = client.api().infrahub().branch();
+
+let branches = branch_api.list(None, None).await?;
 println!("branches: {}", branches.len());
+
+if let Some(first) = branches.first() {
+    let fetched = branch_api.get_by_id(first.id.clone(), None).await?;
+    println!("fetched: {}", fetched.is_some());
+}
+
+let created = branch_api
+    .create(
+        None,
+        BranchCreateInput {
+            name: "example-doc-branch".to_string(),
+            description: None,
+            sync_with_git: None,
+        },
+        None,
+    )
+    .await?;
+
+let _updated = branch_api
+    .update(
+        None,
+        BranchUpdateInput {
+            id: created.id.clone(),
+            name: Some("example-doc-branch-renamed".to_string()),
+            description: None,
+            sync_with_git: None,
+        },
+        None,
+    )
+    .await?;
 # Ok(())
 # }
 ```
+
+see also: [`examples/generated_api.md`](../examples/generated_api.md)

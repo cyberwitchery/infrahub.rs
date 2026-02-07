@@ -1,0 +1,43 @@
+NAME
+  infrahub-codegen - generate a schema-specific Rust client for Infrahub GraphQL
+
+SYNOPSIS
+  infrahub-codegen --out <path> [--schema <path>] [--url <url> --token <token> --branch <branch>] [--crate-name <name>] [--infrahub-path <path>]
+
+DESCRIPTION
+  Generate a standalone Rust crate from an Infrahub GraphQL schema.
+  The generated crate includes:
+    - typed models (`types`, `inputs`, `responses`)
+    - full operation methods via `generated()`
+    - ergonomic namespace/grouped helpers via `api()`
+
+OPTIONS
+  --schema <path>
+      Read schema from a local .graphql file.
+
+  --url <url>
+      Fetch schema from a running Infrahub instance at <url>/schema.graphql.
+
+  --token <token>
+      API token used for schema fetch when --url is provided.
+
+  --branch <name>
+      Optional branch for schema fetch (adds ?branch=<name>).
+
+  --out <path>
+      Output directory for the generated crate. (required)
+
+  --crate-name <name>
+      Optional Cargo package name for generated Cargo.toml.
+
+  --infrahub-path <path>
+      Use a local path dependency for `infrahub` in generated Cargo.toml.
+
+  -h, --help
+      Show this help text.
+
+EXAMPLES
+  infrahub-codegen --schema schema/infrahub.graphql --out /tmp/infrahub-generated
+  infrahub-codegen --url http://localhost:8000 --token $INFRAHUB_TOKEN --out /tmp/infrahub-generated
+  infrahub-codegen --schema schema/infrahub.graphql --out /tmp/infrahub-generated --crate-name infrahub-generated
+

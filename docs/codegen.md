@@ -10,6 +10,12 @@ helpers.
 cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
 ```
 
+full CLI reference:
+
+```bash
+cargo run --bin infrahub-codegen -- --help
+```
+
 ## fetch schema from a running infrahub
 
 ```bash
@@ -50,3 +56,6 @@ println!("branches: {}", branches.len());
 # Ok(())
 # }
 ```
+
+for a full list/get/create/update walkthrough, see:
+- [`examples/generated_api.md`](../examples/generated_api.md)

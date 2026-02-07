@@ -39,8 +39,13 @@ pub enum Error {
 impl Error {
     /// true if the error looks like an auth failure
     pub fn is_auth_error(&self) -> bool {
-        matches!(self, Error::GraphQl { status: Some(401 | 403), .. })
-            || matches!(self, Error::Http(err) if err.status() == Some(reqwest::StatusCode::UNAUTHORIZED))
+        matches!(
+            self,
+            Error::GraphQl {
+                status: Some(401 | 403),
+                ..
+            }
+        ) || matches!(self, Error::Http(err) if err.status() == Some(reqwest::StatusCode::UNAUTHORIZED))
     }
 }
 

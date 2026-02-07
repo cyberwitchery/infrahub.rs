@@ -11,4 +11,4 @@ examples:
 
 - `simple_query.rs` - raw graphql query
 - `typed_query.rs` - typed graphql query with ad-hoc structs
-- `generated_api.md` - generated crate `api()` workflow (list/get/create/update)
+- `generated_api.md` - generated crate `api()` workflow (list/get/paginate, with notes on mutation helpers)

@@ -1,7 +1,7 @@
 # generated api example
 
 this example shows the ergonomic `api()` layer from a generated crate.
-it demonstrates list/get/create/update with a branch-like object.
+it demonstrates list/get/paginate on a generated model client.
 
 generate the client first:
 
@@ -23,52 +23,34 @@ example:
 ```rust,no_run
 use infrahub::{Client, ClientConfig};
 use infrahub_generated::ApiClient;
-use infrahub_generated::inputs::{BranchCreateInput, BranchUpdateInput};
 
 # async fn example() -> Result<(), Box<dyn std::error::Error>> {
 let client = Client::new(ClientConfig::new("http://localhost:8000", "token"))?;
-let branch_api = client.api().infrahub().branch();
+let repository_api = client.api().core().repository();
 
 // list
-let branches = branch_api.list(None, None).await?;
-println!("branch count: {}", branches.len());
+let repositories = repository_api.list(None, None).await?;
+println!("repository count: {}", repositories.len());
 
 // get by id
-if let Some(first) = branches.first() {
-    let fetched = branch_api.get_by_id(first.id.clone(), None).await?;
+if let Some(first) = repositories.first() {
+    let fetched = repository_api.get_by_id(first.id.clone(), None).await?;
     println!("fetched: {}", fetched.is_some());
 }
 
-// create
-let created = branch_api
-    .create(
-        None, // context
-        BranchCreateInput {
-            name: "example-doc-branch".to_string(),
-            description: None,
-            sync_with_git: None,
-        },
-        None,
-    )
-    .await?;
-
-// update
-let _updated = branch_api
-    .update(
-        None, // context
-        BranchUpdateInput {
-            id: created.id.clone(),
-            name: Some("example-doc-branch-renamed".to_string()),
-            description: None,
-            sync_with_git: None,
-        },
-        None,
-    )
-    .await?;
+// paginate (connection-style pages)
+let mut paginator = repository_api.paginate(None, None);
+while let Some(page) = paginator.next_page().await? {
+    println!("page size: {}", page.len());
+    if page.is_empty() {
+        break;
+    }
+}
 # Ok(())
 # }
 ```
 
 notes:
-- exact input field names depend on your schema snapshot.
-- if your schema uses different branch types, adapt the input structs accordingly.
+- exact namespace/model accessors depend on your schema snapshot.
+- for this repo's `schema/infrahub.graphql`, generated namespaces include `core`, `builtin`, `ipam`, `lineage`, and `profile`.
+- if your schema snapshot exposes create/update helpers in `api()`, they appear on the same model client alongside `list` and `get_by_id`.

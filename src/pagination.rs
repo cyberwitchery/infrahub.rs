@@ -4,6 +4,7 @@
 
 use crate::error::Result;
 use std::future::Future;
+use std::pin::Pin;
 
 /// a single page of connection results
 #[derive(Debug, Clone)]
@@ -28,6 +29,19 @@ where
     done: bool,
     _phantom: std::marker::PhantomData<(T, R)>,
 }
+
+/// boxed future used by [`DynPaginator`]
+pub type BoxFutureResult<'a, R> = Pin<Box<dyn Future<Output = Result<R>> + 'a>>;
+
+/// boxed fetch callback used by [`DynPaginator`]
+pub type BoxFetch<'a, C, R> = Box<dyn FnMut(Option<C>) -> BoxFutureResult<'a, R> + 'a>;
+
+/// boxed extract callback used by [`DynPaginator`]
+pub type BoxExtract<'a, T, C, R> = Box<dyn FnMut(R) -> Result<EdgePage<T, C>> + 'a>;
+
+/// type-erased paginator for ergonomic API surfaces that cannot expose closure types.
+pub type DynPaginator<'a, T, C, R> =
+    Paginator<T, C, R, BoxFetch<'a, C, R>, BoxFutureResult<'a, R>, BoxExtract<'a, T, C, R>>;
 
 impl<T, C, R, Fetch, Fut, Extract> Paginator<T, C, R, Fetch, Fut, Extract>
 where

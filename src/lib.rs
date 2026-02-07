@@ -37,4 +37,4 @@ pub use config::ClientConfig;
 pub use error::{Error, Result};
 pub use graphql::{GraphQlError, GraphQlLocation, GraphQlResponse};
 pub use operation::Operation;
-pub use pagination::{EdgePage, Paginator};
+pub use pagination::{BoxExtract, BoxFetch, BoxFutureResult, DynPaginator, EdgePage, Paginator};

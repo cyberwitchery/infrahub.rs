@@ -51,11 +51,15 @@ use infrahub_generated::ApiClient;
 
 # async fn example() -> Result<(), Box<dyn std::error::Error>> {
 let client = Client::new(ClientConfig::new("http://localhost:8000", "token"))?;
-let branches = client.api().infrahub().branch().list(None, None).await?;
-println!("branches: {}", branches.len());
+let repository_api = client.api().core().repository();
+let repositories = repository_api.list(None, None).await?;
+println!("repositories: {}", repositories.len());
+
+let mut paginator = repository_api.paginate(None, None);
+let _all = paginator.collect_all().await?;
 # Ok(())
 # }
 ```
 
-for a full list/get/create/update walkthrough, see:
+for a full generated `api()` walkthrough, see:
 - [`examples/generated_api.md`](../examples/generated_api.md)

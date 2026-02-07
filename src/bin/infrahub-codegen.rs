@@ -538,7 +538,9 @@ fn render_api_module<'a>(
     let mut out = String::new();
     out.push_str("//! generated api module\n\n");
     out.push_str("#![allow(non_snake_case, unused_imports)]\n\n");
-    out.push_str("use infrahub::{Client, Error, Result};\n");
+    out.push_str(
+        "use infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};\n",
+    );
     out.push_str("use serde_json::Value;\n\n");
     out.push_str("use crate::inputs::*;\n");
     out.push_str("use crate::responses::*;\n");
@@ -617,8 +619,11 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
 
     if let Some(query_field) = &model.query_field {
         let query_name = query_field.name.clone();
+        let response_type = format!("{}Response", to_rust_ident(&query_name));
         let vars_def = render_variable_defs(&query_field.arguments);
         let field_args = render_field_args(&query_field.arguments);
+        let has_after = query_field.arguments.iter().any(|arg| arg.name == "after");
+        let has_offset = query_field.arguments.iter().any(|arg| arg.name == "offset");
         let return_type = model
             .query_return
             .clone()
@@ -644,8 +649,8 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
             sel = selection
         ));
         out.push_str(&format!(
-            "        let response = self.client.execute::<{}Response>(query, Some(vars), request_branch).await?;\n",
-            to_rust_ident(&query_name)
+            "        let response = self.client.execute::<{}>(query, Some(vars), request_branch).await?;\n",
+            response_type
         ));
         out.push_str("        let data = response.data.ok_or_else(|| Error::Config(\"missing data\".to_string()))?;\n");
         out.push_str("        let mut items = Vec::new();\n");
@@ -662,6 +667,95 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
         out.push_str("            }\n");
         out.push_str("        }\n");
         out.push_str("        Ok(items)\n");
+        out.push_str("    }\n\n");
+
+        out.push_str(&format!(
+            "    pub fn paginate(&self, filters: Option<{filters_struct}>, request_branch: Option<&str>) -> DynPaginator<'a, {model_type}, String, ({response_type}, i64)> {{\n",
+            filters_struct = format!("{}Filters", model.name),
+            model_type = model.node_type,
+            response_type = response_type,
+        ));
+        out.push_str("        let client = self.client;\n");
+        out.push_str("        let base_filters = filters.unwrap_or_default();\n");
+        out.push_str("        let request_branch = request_branch.map(|b| b.to_string());\n");
+        out.push_str(&format!(
+            "        let query = r#\"{op} {{ {name}{args} {sel} }}\"#;\n",
+            op = op_header,
+            name = query_name,
+            args = field_args,
+            sel = selection
+        ));
+        out.push_str("        let fetch: BoxFetch<'a, String, (");
+        out.push_str(&response_type);
+        out.push_str(", i64)> = Box::new(move |cursor: Option<String>| -> BoxFutureResult<'a, (");
+        out.push_str(&response_type);
+        out.push_str(", i64)> {\n");
+        out.push_str("            let mut page_filters = base_filters.clone();\n");
+        out.push_str("            let branch = request_branch.clone();\n");
+        out.push_str("            let mut current_offset: i64 = 0;\n");
+        if has_after {
+            out.push_str("            page_filters.after = cursor.clone();\n");
+        }
+        if has_offset {
+            out.push_str("            let base_offset = page_filters.offset.unwrap_or(0);\n");
+            out.push_str("            current_offset = cursor\n");
+            out.push_str("                .as_deref()\n");
+            out.push_str("                .and_then(|c| c.parse::<i64>().ok())\n");
+            out.push_str("                .unwrap_or(base_offset);\n");
+            out.push_str("            page_filters.offset = Some(current_offset);\n");
+        }
+        out.push_str("            let vars = page_filters.to_vars();\n");
+        out.push_str("            Box::pin(async move {\n");
+        out.push_str(&format!(
+            "                let response = client.execute::<{}>(query, Some(vars), branch.as_deref()).await?;\n",
+            response_type
+        ));
+        out.push_str("                let data = response.data.ok_or_else(|| Error::Config(\"missing data\".to_string()))?;\n");
+        out.push_str("                Ok((data, current_offset))\n");
+        out.push_str("            })\n");
+        out.push_str("        });\n");
+        out.push_str("        let extract: BoxExtract<'a, ");
+        out.push_str(&model.node_type);
+        out.push_str(", String, (");
+        out.push_str(&response_type);
+        out.push_str(", i64)> = Box::new(move |(data, current_offset): (");
+        out.push_str(&response_type);
+        out.push_str(", i64)| -> Result<EdgePage<");
+        out.push_str(&model.node_type);
+        out.push_str(", String>> {\n");
+        out.push_str("            let mut items = Vec::new();\n");
+        out.push_str("            let mut next: Option<String> = None;\n");
+        out.push_str(&format!(
+            "            for edge in data.{field}.edges {{\n",
+            field = model_field
+        ));
+        out.push_str("                if let Some(node) = edge.node {\n");
+        if model.node_boxed {
+            out.push_str("                    items.push(*node);\n");
+        } else {
+            out.push_str("                    items.push(node);\n");
+        }
+        out.push_str("                }\n");
+        if has_after {
+            out.push_str(
+                "                if let Ok(cursor_value) = serde_json::to_value(&edge.cursor) {\n",
+            );
+            out.push_str("                    if let Some(cursor_str) = cursor_value.as_str() {\n");
+            out.push_str("                        next = Some(cursor_str.to_string());\n");
+            out.push_str("                    }\n");
+            out.push_str("                }\n");
+        }
+        out.push_str("            }\n");
+        if has_offset && !has_after {
+            out.push_str("            if !items.is_empty() {\n");
+            out.push_str(
+                "                next = Some((current_offset + items.len() as i64).to_string());\n",
+            );
+            out.push_str("            }\n");
+        }
+        out.push_str("            Ok(EdgePage { nodes: items, next_cursor: next })\n");
+        out.push_str("        });\n");
+        out.push_str("        infrahub::Paginator::new(fetch, extract)\n");
         out.push_str("    }\n\n");
 
         if query_field.arguments.iter().any(|arg| arg.name == "ids") {
@@ -843,20 +937,31 @@ fn collect_models<'a>(ctx: &SchemaContext<'a>) -> BTreeMap<String, ModelInfo<'a>
 }
 
 fn namespace_from_type(name: &str) -> String {
-    let mut out = String::new();
-    let mut prev_lower = false;
-    for ch in name.chars() {
-        if ch.is_uppercase() && prev_lower {
-            break;
-        }
-        out.push(ch);
-        prev_lower = ch.is_lowercase();
+    let words = split_identifier_words(name);
+    if words.is_empty() {
+        return name.to_string();
     }
-    if out.is_empty() {
-        name.to_string()
-    } else {
-        out
+
+    // Intentionally breaking from the old prefix heuristic:
+    // prefer explicit high-signal top-level namespaces, then fall back to
+    // first word for unknown domains.
+    let preferred = [
+        "Core",
+        "Builtin",
+        "Infrahub",
+        "Profile",
+        "Branch",
+        "Schema",
+        "Relationship",
+        "Lineage",
+        "IPAM",
+    ];
+    let first = words[0].as_str();
+    if preferred.contains(&first) {
+        return first.to_string();
     }
+
+    first.to_string()
 }
 
 fn model_accessor_name(model: &str, namespace: &str) -> String {
@@ -866,18 +971,52 @@ fn model_accessor_name(model: &str, namespace: &str) -> String {
 }
 
 fn to_snake(name: &str) -> String {
-    let mut out = String::new();
-    for (idx, ch) in name.chars().enumerate() {
-        if ch.is_uppercase() {
-            if idx > 0 {
-                out.push('_');
+    split_identifier_words(name)
+        .into_iter()
+        .map(|w| w.to_ascii_lowercase())
+        .collect::<Vec<_>>()
+        .join("_")
+}
+
+fn split_identifier_words(name: &str) -> Vec<String> {
+    let chars: Vec<char> = name.chars().collect();
+    if chars.is_empty() {
+        return Vec::new();
+    }
+
+    let mut words = Vec::new();
+    let mut start = 0usize;
+
+    for i in 1..chars.len() {
+        let prev = chars[i - 1];
+        let curr = chars[i];
+
+        if curr == '_' || curr == '-' {
+            if start < i {
+                words.push(chars[start..i].iter().collect::<String>());
             }
-            out.extend(ch.to_lowercase());
-        } else {
-            out.push(ch);
+            start = i + 1;
+            continue;
+        }
+
+        let next = chars.get(i + 1).copied();
+        let lower_to_upper = prev.is_ascii_lowercase() && curr.is_ascii_uppercase();
+        let acronym_to_word = prev.is_ascii_uppercase()
+            && curr.is_ascii_uppercase()
+            && next.map(|c| c.is_ascii_lowercase()).unwrap_or(false);
+
+        if lower_to_upper || acronym_to_word {
+            words.push(chars[start..i].iter().collect::<String>());
+            start = i;
         }
     }
-    out
+
+    if start < chars.len() {
+        words.push(chars[start..].iter().collect::<String>());
+    }
+
+    words.retain(|w| !w.is_empty());
+    words
 }
 
 fn node_type_for_model<'a>(model: &str, ctx: &SchemaContext<'a>) -> (String, bool) {
@@ -1250,4 +1389,36 @@ fn is_rust_keyword(name: &str) -> bool {
             | "await"
             | "dyn"
     )
+}
+
+#[cfg(test)]
+mod codegen_name_tests {
+    use super::{model_accessor_name, namespace_from_type, to_snake};
+
+    #[test]
+    fn test_namespace_from_type_prefers_first_word() {
+        assert_eq!(namespace_from_type("CoreRepository"), "Core");
+        assert_eq!(namespace_from_type("InfrahubTask"), "Infrahub");
+        assert_eq!(namespace_from_type("BuiltinIPAddress"), "Builtin");
+        assert_eq!(namespace_from_type("IPAMNamespace"), "IPAM");
+    }
+
+    #[test]
+    fn test_to_snake_handles_acronyms() {
+        assert_eq!(to_snake("IPAM"), "ipam");
+        assert_eq!(to_snake("GraphQLQuery"), "graph_ql_query");
+        assert_eq!(to_snake("IPAddressPool"), "ip_address_pool");
+    }
+
+    #[test]
+    fn test_model_accessor_name_strips_namespace() {
+        assert_eq!(
+            model_accessor_name("CoreRepository", "Core"),
+            "repository".to_string()
+        );
+        assert_eq!(
+            model_accessor_name("IPAMNamespace", "IPAM"),
+            "namespace".to_string()
+        );
+    }
 }

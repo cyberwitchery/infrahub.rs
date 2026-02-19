@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      contents: read
+      contents: write
     env:
       RUSTFLAGS: "-C debuginfo=0"
       CARGO_TARGET_DIR: target/ci
@@ -43,16 +43,28 @@ jobs:
 
       - name: generate sbom
         run: |
-          out_dir="$(mktemp -d)"
           cargo cyclonedx --format json --override-filename "sbom-${{ github.ref_name }}.cdx" --all-features
-          mv "sbom-${{ github.ref_name }}.cdx.json" "$out_dir/"
-          echo "SBOM_DIR=$out_dir" >> "$GITHUB_ENV"
+
+      - name: collect sbom files
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/infrahub-sbom
+          find /tmp -maxdepth 1 -type f -name "sbom-${{ github.ref_name }}.cdx.json" \
+            -exec mv {} /tmp/infrahub-sbom/ \;
+          find "$GITHUB_WORKSPACE" -type f -name "sbom-${{ github.ref_name }}.cdx.json" \
+            -exec mv {} /tmp/infrahub-sbom/ \;
 
       - name: upload sbom
         uses: actions/upload-artifact@v4
         with:
           name: sbom-${{ github.ref_name }}
-          path: "${{ env.SBOM_DIR }}/sbom-${{ github.ref_name }}.cdx.json"
+          path: "/tmp/infrahub-sbom/sbom-${{ github.ref_name }}.cdx.json"
+          if-no-files-found: error
+
+      - name: attach sbom to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: /tmp/infrahub-sbom/sbom-${{ github.ref_name }}.cdx.json
 
       - name: publish infrahub
         env:

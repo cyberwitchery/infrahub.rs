@@ -27,7 +27,7 @@ jobs:
       - name: Resolve pinned version
         id: pinned
         run: |
-          pinned=$(grep -oP '(?<=opsmill/infrahub:)[^\s"]+' .github/workflows/integration.yml | head -1)
+          pinned=$(grep -oP '(?<=INFRAHUB_VERSION: )[^\s]+' .github/workflows/integration.yml | head -1)
           echo "pinned=${pinned}" >> "$GITHUB_OUTPUT"
 
       - name: Open or update tracking issue on drift

@@ -1,0 +1,93 @@
+name: Integration
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - "**"
+    paths:
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "src/**"
+      - "tests/**"
+      - ".github/workflows/integration.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "src/**"
+      - "tests/**"
+      - ".github/workflows/integration.yml"
+  schedule:
+    - cron: "0 6 * * 1"
+
+jobs:
+  smoke:
+    runs-on: big
+    timeout-minutes: 30
+    env:
+      INFRAHUB_VERSION: 1.1.0
+      INFRAHUB_URL: http://localhost:8000
+      INFRAHUB_ADMIN_PASSWORD: ci-admin-password
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Download Infrahub docker compose
+        run: |
+          curl -sSfL \
+            "https://raw.githubusercontent.com/opsmill/infrahub/v${INFRAHUB_VERSION}/docker-compose.yml" \
+            -o /tmp/infrahub-compose.yml
+
+      - name: Start Infrahub
+        env:
+          INFRAHUB_IMAGE_TAG: ${{ env.INFRAHUB_VERSION }}
+          INFRAHUB_SECURITY_INITIAL_ADMIN_PASSWORD: ${{ env.INFRAHUB_ADMIN_PASSWORD }}
+        run: docker compose -f /tmp/infrahub-compose.yml up -d
+
+      - name: Wait for Infrahub readiness
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 180); do
+            if curl -fsS "${INFRAHUB_URL}/api/schema/?branch=main" >/dev/null 2>&1; then
+              echo "Infrahub is ready after ${i} checks"
+              exit 0
+            fi
+            sleep 5
+          done
+
+          echo "Infrahub failed readiness checks; dumping logs"
+          docker compose -f /tmp/infrahub-compose.yml logs --tail 200 || true
+          exit 1
+
+      - name: Create CI API token
+        id: token
+        run: |
+          set -euo pipefail
+
+          # obtain a short-lived JWT using the admin password
+          jwt=$(curl -sf "${INFRAHUB_URL}/api/auth/login" \
+            -H "Content-Type: application/json" \
+            -d "{\"username\": \"admin\", \"password\": \"${INFRAHUB_ADMIN_PASSWORD}\"}" \
+            | jq -r '.access_token')
+
+          # exchange it for a static API key via GraphQL
+          token=$(curl -sf "${INFRAHUB_URL}/graphql" \
+            -H "Authorization: Bearer ${jwt}" \
+            -H "Content-Type: application/json" \
+            -d '{"query":"mutation { CoreAccountTokenCreate(data:{name:\"ci\"}) { object { token } } }"}' \
+            | jq -r '.data.CoreAccountTokenCreate.object.token')
+
+          echo "token=${token}" >> "$GITHUB_OUTPUT"
+          echo "::add-mask::${token}"
+
+      - name: Run smoke tests
+        env:
+          INFRAHUB_TOKEN: ${{ steps.token.outputs.token }}
+        run: cargo test -p infrahub --test smoke_query

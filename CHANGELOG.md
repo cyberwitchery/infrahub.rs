@@ -2,6 +2,11 @@
 
 ## unreleased
 
+- add GitHub Actions integration workflow spinning up Infrahub via docker compose and running `smoke_query` tests
+- add weekly upstream drift detection (`upstream-check.yml`) with automatic issue creation on new upstream releases
+- add `docs/compat.md` compatibility matrix mapping client releases to tested Infrahub versions
+- fix upstream-check workflow: extract pinned version from `INFRAHUB_VERSION` env var rather than image tag pattern
+
 ## 0.1.0 - 2026-02-21
 
 - add `ClientConfig::with_http_client` to inject a prebuilt `reqwest::Client` (for proxies, custom tls, shared clients, or tracing middleware)

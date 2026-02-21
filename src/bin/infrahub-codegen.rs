@@ -482,7 +482,7 @@ fn render_api_mod<'a>(ctx: &SchemaContext<'a>) -> String {
     for ns in &namespaces {
         out.push_str(&format!("pub mod {};\n", ns));
     }
-    out.push_str("\n");
+    out.push('\n');
     out.push_str("pub struct Api<'a> {\n");
     out.push_str("    client: &'a Client,\n");
     out.push_str("}\n\n");
@@ -637,7 +637,7 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
 
         out.push_str(&format!(
             "    pub async fn list(&self, filters: Option<{filters_struct}>, request_branch: Option<&str>) -> Result<Vec<{model_type}>> {{\n",
-            filters_struct = format!("{}Filters", model.name),
+            filters_struct = format_args!("{}Filters", model.name),
             model_type = model.node_type
         ));
         out.push_str("        let vars = filters.map(|f| f.to_vars()).unwrap_or_else(|| Value::Object(serde_json::Map::new()));\n");
@@ -671,7 +671,7 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
 
         out.push_str(&format!(
             "    pub fn paginate(&self, filters: Option<{filters_struct}>, request_branch: Option<&str>) -> DynPaginator<'a, {model_type}, String, ({response_type}, i64)> {{\n",
-            filters_struct = format!("{}Filters", model.name),
+            filters_struct = format_args!("{}Filters", model.name),
             model_type = model.node_type,
             response_type = response_type,
         ));

@@ -5,6 +5,7 @@
 
 use crate::error::{Error, Result};
 use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
+use std::sync::Arc;
 use std::time::Duration;
 use url::Url;
 
@@ -37,6 +38,13 @@ pub struct ClientConfig {
 
     /// additional headers to send with every request
     pub(crate) extra_headers: HeaderMap,
+
+    /// prebuilt http client (takes precedence over http_client_builder)
+    pub(crate) http_client: Option<reqwest::Client>,
+
+    /// callback to customize the http client builder before building
+    pub(crate) http_client_builder:
+        Option<Arc<dyn Fn(reqwest::ClientBuilder) -> reqwest::ClientBuilder + Send + Sync>>,
 }
 
 impl ClientConfig {
@@ -76,6 +84,8 @@ impl ClientConfig {
             user_agent: format!("infrahub-rs/{} (Rust)", env!("CARGO_PKG_VERSION")),
             verify_ssl: true,
             extra_headers: HeaderMap::new(),
+            http_client: None,
+            http_client_builder: None,
         }
     }
 
@@ -124,6 +134,36 @@ impl ClientConfig {
         &self.extra_headers
     }
 
+    /// inject a prebuilt http client.
+    ///
+    /// when set, this client is used as-is and takes precedence over
+    /// `with_http_client_builder`. all transport configuration — auth headers,
+    /// tls, timeouts, ssl verification, user agent — comes from the prebuilt
+    /// client; the corresponding `ClientConfig` fields are ignored.
+    ///
+    /// because auth is managed by the caller, an empty token is accepted when
+    /// this option is set.
+    pub fn with_http_client(mut self, http_client: reqwest::Client) -> Self {
+        self.http_client = Some(http_client);
+        self
+    }
+
+    /// customize the http client builder before the client is created.
+    ///
+    /// the callback receives a builder that already has the auth header,
+    /// extra headers, user agent, timeout, and ssl settings applied.
+    /// use this to add proxy config, custom tls roots, or other transport
+    /// settings without reimplementing the defaults.
+    ///
+    /// ignored if `with_http_client` is also set.
+    pub fn with_http_client_builder<F>(mut self, f: F) -> Self
+    where
+        F: Fn(reqwest::ClientBuilder) -> reqwest::ClientBuilder + Send + Sync + 'static,
+    {
+        self.http_client_builder = Some(Arc::new(f));
+        self
+    }
+
     /// validate the configuration
     pub(crate) fn validate(&self) -> Result<()> {
         if !self.base_url_valid {
@@ -140,7 +180,8 @@ impl ClientConfig {
             )));
         }
 
-        if self.token.is_empty() {
+        // token is only required when the client is not managing its own transport
+        if self.http_client.is_none() && self.token.is_empty() {
             return Err(Error::Config("api token cannot be empty".to_string()));
         }
 
@@ -185,6 +226,8 @@ impl std::fmt::Debug for ClientConfig {
             .field("verify_ssl", &self.verify_ssl)
             .field("extra_headers", &self.extra_headers.len())
             .field("default_branch", &self.default_branch)
+            .field("http_client", &self.http_client.is_some())
+            .field("http_client_builder", &self.http_client_builder.is_some())
             .field("token", &"<redacted>")
             .finish()
     }
@@ -243,6 +286,11 @@ mod tests {
 
         let empty_token = ClientConfig::new("https://infrahub.example.com", "");
         assert!(empty_token.validate().is_err());
+
+        // empty token is allowed when a prebuilt client handles auth
+        let empty_token_prebuilt = ClientConfig::new("https://infrahub.example.com", "")
+            .with_http_client(reqwest::Client::new());
+        assert!(empty_token_prebuilt.validate().is_ok());
     }
 
     #[test]
@@ -286,5 +334,35 @@ mod tests {
         assert_eq!(config.extra_headers.get("x-test").unwrap(), "value");
         assert_eq!(config.extra_headers.get("x-other").unwrap(), "other");
         assert_eq!(config.extra_headers(), &config.extra_headers);
+    }
+
+    #[test]
+    fn test_with_http_client() {
+        let prebuilt = reqwest::Client::new();
+        let config = ClientConfig::new("https://infrahub.example.com", "token")
+            .with_http_client(prebuilt);
+        assert!(config.http_client.is_some());
+        assert!(config.http_client_builder.is_none());
+    }
+
+    #[test]
+    fn test_with_http_client_builder() {
+        let config = ClientConfig::new("https://infrahub.example.com", "token")
+            .with_http_client_builder(|b| b.connection_verbose(true));
+        assert!(config.http_client.is_none());
+        assert!(config.http_client_builder.is_some());
+    }
+
+    #[test]
+    fn test_debug_reflects_http_client_fields() {
+        let config = ClientConfig::new("https://infrahub.example.com", "token");
+        let debug = format!("{config:?}");
+        assert!(debug.contains("http_client: false"));
+        assert!(debug.contains("http_client_builder: false"));
+        assert!(debug.contains("\"<redacted>\""));
+
+        let config = config.with_http_client(reqwest::Client::new());
+        let debug = format!("{config:?}");
+        assert!(debug.contains("http_client: true"));
     }
 }

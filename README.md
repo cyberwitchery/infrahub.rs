@@ -8,6 +8,7 @@ rust client for the infrahub graphql api.
 - branch-aware graphql routing
 - schema fetch helper
 - pagination helper for connection queries
+- configurable http transport (prebuilt client or builder callback)
 - good errors
 - examples and smoke tests
 
@@ -23,7 +24,7 @@ add to `Cargo.toml`:
 
 ```toml
 [dependencies]
-infrahub = "0.0.2"
+infrahub = "0.1.0"
 tokio = { version = "1", features = ["full"] }
 ```
 

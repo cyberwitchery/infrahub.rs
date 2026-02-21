@@ -25,21 +25,31 @@ impl Client {
     pub fn new(config: ClientConfig) -> Result<Self> {
         config.validate()?;
 
-        let mut headers = HeaderMap::new();
-        headers.insert(
-            "X-INFRAHUB-KEY",
-            HeaderValue::from_str(&config.token)
-                .map_err(|err| Error::Config(format!("invalid api token header value: {err}")))?,
-        );
-        headers.extend(config.extra_headers.clone());
+        let http = if let Some(http) = config.http_client.clone() {
+            http
+        } else {
+            let mut headers = HeaderMap::new();
+            headers.insert(
+                "X-INFRAHUB-KEY",
+                HeaderValue::from_str(&config.token)
+                    .map_err(|err| Error::Config(format!("invalid api token header value: {err}")))?,
+            );
+            headers.extend(config.extra_headers.clone());
 
-        let builder = reqwest::Client::builder()
-            .default_headers(headers)
-            .user_agent(config.user_agent.clone())
-            .timeout(config.timeout)
-            .danger_accept_invalid_certs(!config.verify_ssl);
+            let builder = reqwest::Client::builder()
+                .default_headers(headers)
+                .user_agent(config.user_agent.clone())
+                .timeout(config.timeout)
+                .danger_accept_invalid_certs(!config.verify_ssl);
 
-        let http = builder.build()?;
+            let builder = if let Some(customize) = &config.http_client_builder {
+                customize(builder)
+            } else {
+                builder
+            };
+
+            builder.build()?
+        };
 
         Ok(Self {
             config: Arc::new(config),
@@ -406,5 +416,22 @@ mod tests {
                 ..
             }
         ));
+    }
+
+    #[test]
+    fn test_new_with_prebuilt_http_client() {
+        let prebuilt = reqwest::Client::new();
+        let config = ClientConfig::new("http://localhost:1234", "token")
+            .with_http_client(prebuilt);
+        let client = Client::new(config).expect("client with prebuilt http");
+        assert!(client.config().http_client.is_some());
+    }
+
+    #[test]
+    fn test_new_with_http_client_builder() {
+        let config = ClientConfig::new("http://localhost:1234", "token")
+            .with_http_client_builder(|b| b.connection_verbose(true));
+        let client = Client::new(config).expect("client with builder callback");
+        assert!(client.config().http_client_builder.is_some());
     }
 }

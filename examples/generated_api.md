@@ -13,7 +13,7 @@ add the generated crate as a path dependency:
 
 ```toml
 [dependencies]
-infrahub = "0.0.2"
+infrahub = "0.1.0"
 infrahub-generated = { path = "/tmp/infrahub-generated" }
 tokio = { version = "1", features = ["full"] }
 ```

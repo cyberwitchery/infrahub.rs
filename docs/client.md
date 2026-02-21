@@ -8,11 +8,12 @@ this crate provides a small, typed graphql client for infrahub.
 - schema fetch helper
 - edges/node pagination helper
 - structured errors with status and graphql details
+- configurable http transport (prebuilt client or builder callback)
 
 ## surface
 
 - `Client` - graphql client with auth and branch routing
-- `ClientConfig` - base url, token, timeouts, headers
+- `ClientConfig` - base url, token, timeouts, headers, and http transport customization
 - `Operation` - generated operation trait
 - `Paginator` - edge/connection pagination helper
 
@@ -46,7 +47,7 @@ println!("{:?}", response.data);
 
 ```toml
 [dependencies]
-infrahub = "0.0.2"
+infrahub = "0.1.0"
 tokio = { version = "1", features = ["full"] }
 ```
 
@@ -66,6 +67,66 @@ let config = ClientConfig::new("http://localhost:8000", "token")
         HeaderValue::from_static("infrahub-rs"),
     );
 ```
+
+## http transport customization
+
+two escape hatches are available when the default reqwest client is not enough
+(proxies, custom tls roots, tracing middleware, etc.).
+
+### builder callback
+
+receives the pre-configured builder (auth header, extra headers, user agent,
+timeout, and ssl settings already applied) and returns a modified builder. use
+this when you only need to add transport settings on top of the defaults — proxy
+config, additional tls roots, connection pool tuning, etc.
+
+```rust,no_run
+use infrahub::{Client, ClientConfig};
+
+let config = ClientConfig::new("http://localhost:8000", "token")
+    .with_http_client_builder(|builder| {
+        builder.proxy(reqwest::Proxy::all("http://proxy.example.com:3128").unwrap())
+    });
+
+let client = Client::new(config)?;
+# Ok::<_, Box<dyn std::error::Error>>(())
+```
+
+### prebuilt client
+
+inject a fully configured `reqwest::Client`. **all** transport configuration —
+auth headers, tls, timeouts, ssl verification, user agent — is taken from the
+prebuilt client. the `timeout`, `verify_ssl`, `user_agent`, and `extra_headers`
+fields on `ClientConfig` are ignored. use this for full control: shared clients
+across multiple services, custom connectors, or tracing middleware.
+
+when using a prebuilt client, the api token is not used for auth, so an empty
+string is accepted by `ClientConfig::new`.
+
+```rust,no_run
+use infrahub::{Client, ClientConfig};
+use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
+
+let mut headers = HeaderMap::new();
+headers.insert(
+    HeaderName::from_static("x-infrahub-key"),
+    HeaderValue::from_static("my-token"),
+);
+
+let prebuilt = reqwest::Client::builder()
+    .default_headers(headers)
+    .timeout(std::time::Duration::from_secs(60))
+    .build()?;
+
+// token is unused for auth here; pass "" or any placeholder
+let config = ClientConfig::new("http://localhost:8000", "")
+    .with_http_client(prebuilt);
+
+let client = Client::new(config)?;
+# Ok::<_, Box<dyn std::error::Error>>(())
+```
+
+`with_http_client` takes precedence over `with_http_client_builder` if both are set.
 
 ## typed queries
 
@@ -175,7 +236,7 @@ then add it as a path dependency:
 
 ```toml
 [dependencies]
-infrahub = "0.0.2"
+infrahub = "0.1.0"
 infrahub-generated = { path = "/tmp/infrahub-generated" }
 ```
 

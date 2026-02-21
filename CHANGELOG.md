@@ -2,6 +2,12 @@
 
 ## unreleased
 
+## 0.1.0 - 2026-02-21
+
+- add `ClientConfig::with_http_client` to inject a prebuilt `reqwest::Client` (for proxies, custom tls, shared clients, or tracing middleware)
+- add `ClientConfig::with_http_client_builder` to customize the builder after defaults are applied, without replacing the full client
+- relax token validation: an empty token is now accepted when `with_http_client` is set, since auth is managed by the caller
+
 ## 0.0.2 - 2026-02-08
 
 - codegen: switched CLI help to a shared manpage-style source used by both `--help` and rustdoc docs.

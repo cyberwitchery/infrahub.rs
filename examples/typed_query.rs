@@ -3,12 +3,14 @@ use serde::Deserialize;
 use std::env;
 
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 struct Data {
     #[serde(rename = "InfrahubInfo")]
     info: InfrahubInfo,
 }
 
 #[derive(Debug, Deserialize)]
+#[allow(dead_code)]
 struct InfrahubInfo {
     deployment_id: String,
     version: String,

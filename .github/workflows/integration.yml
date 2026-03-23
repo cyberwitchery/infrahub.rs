@@ -42,12 +42,14 @@ jobs:
       - name: Download Infrahub docker compose
         run: |
           curl -sSfL \
-            "https://raw.githubusercontent.com/opsmill/infrahub/v${INFRAHUB_VERSION}/docker-compose.yml" \
+            "https://raw.githubusercontent.com/opsmill/infrahub/infrahub-v${INFRAHUB_VERSION}/docker-compose.yml" \
             -o /tmp/infrahub-compose.yml
 
       - name: Start Infrahub
         env:
+          VERSION: ${{ env.INFRAHUB_VERSION }}
           INFRAHUB_IMAGE_TAG: ${{ env.INFRAHUB_VERSION }}
+          INFRAHUB_INITIAL_ADMIN_PASSWORD: ${{ env.INFRAHUB_ADMIN_PASSWORD }}
           INFRAHUB_SECURITY_INITIAL_ADMIN_PASSWORD: ${{ env.INFRAHUB_ADMIN_PASSWORD }}
         run: docker compose -f /tmp/infrahub-compose.yml up -d
 

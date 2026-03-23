@@ -21,24 +21,27 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          latest=$(gh api repos/opsmill/infrahub/releases/latest --jq '.tag_name | ltrimstr("v")')
-          echo "latest=${latest}" >> "$GITHUB_OUTPUT"
+          latest_tag=$(gh api repos/opsmill/infrahub/releases/latest --jq '.tag_name')
+          latest_version="${latest_tag#infrahub-v}"
+          echo "latest_tag=${latest_tag}" >> "$GITHUB_OUTPUT"
+          echo "latest_version=${latest_version}" >> "$GITHUB_OUTPUT"
 
       - name: Resolve pinned version
         id: pinned
         run: |
-          pinned=$(grep -oP '(?<=INFRAHUB_VERSION: )[^\s]+' .github/workflows/integration.yml | head -1)
+          pinned=$(awk '/INFRAHUB_VERSION:/{print $2; exit}' .github/workflows/integration.yml)
           echo "pinned=${pinned}" >> "$GITHUB_OUTPUT"
 
       - name: Open or update tracking issue on drift
-        if: steps.upstream.outputs.latest != steps.pinned.outputs.pinned
+        if: steps.upstream.outputs.latest_version != steps.pinned.outputs.pinned
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LATEST: ${{ steps.upstream.outputs.latest }}
+          LATEST_TAG: ${{ steps.upstream.outputs.latest_tag }}
+          LATEST_VERSION: ${{ steps.upstream.outputs.latest_version }}
           PINNED: ${{ steps.pinned.outputs.pinned }}
         run: |
-          title="upstream: Infrahub ${LATEST} released (CI pinned to ${PINNED})"
-          body="Infrahub [${LATEST}](https://github.com/opsmill/infrahub/releases/tag/v${LATEST}) has been released.\n\nThe integration CI is currently pinned to \`${PINNED}\`.\n\n**To update:**\n1. bump the image tag in \`.github/workflows/integration.yml\`\n2. run CI; fix any breakage\n3. update \`docs/compat.md\`\n4. close this issue"
+          title="upstream: Infrahub ${LATEST_VERSION} released (CI pinned to ${PINNED})"
+          body="Infrahub [${LATEST_VERSION}](https://github.com/opsmill/infrahub/releases/tag/${LATEST_TAG}) has been released.\n\nThe integration CI is currently pinned to \`${PINNED}\`.\n\n**To update:**\n1. bump the image tag in \`.github/workflows/integration.yml\`\n2. run CI; fix any breakage\n3. update \`docs/compat.md\`\n4. close this issue"
 
           existing=$(gh issue list --state open --search "upstream: Infrahub" --json number --jq '.[0].number // empty')
           if [ -n "$existing" ]; then
@@ -49,5 +52,5 @@ jobs:
           fi
 
       - name: Report up to date
-        if: steps.upstream.outputs.latest == steps.pinned.outputs.pinned
+        if: steps.upstream.outputs.latest_version == steps.pinned.outputs.pinned
         run: echo "CI is pinned to the latest Infrahub release (${{ steps.pinned.outputs.pinned }})"

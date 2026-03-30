@@ -1,3 +1,0 @@
-subscription SubscriptionQuery($name: String, $params: GenericScalar, $interval: Int) {
-  query(name: $name, params: $params, interval: $interval)
-}

@@ -201,6 +201,61 @@ impl ClientConfig {
         Url::parse(&url_str).map_err(Error::from)
     }
 
+    /// build a file download url by node id
+    pub(crate) fn file_url(&self, node_id: &str, branch: Option<&str>) -> Result<Url> {
+        let base = self.base_url.as_str().trim_end_matches('/');
+        let mut url_str = format!("{}/api/files/{}", base, node_id);
+        if let Some(branch) = branch
+            .map(|b| b.to_string())
+            .or_else(|| self.default_branch.clone())
+        {
+            if !branch.is_empty() {
+                url_str.push_str(&format!("?branch={}", branch));
+            }
+        }
+        Url::parse(&url_str).map_err(Error::from)
+    }
+
+    /// build a file download url by human-friendly id
+    pub(crate) fn file_by_hfid_url(
+        &self,
+        kind: &str,
+        hfid: &[&str],
+        branch: Option<&str>,
+    ) -> Result<Url> {
+        let base = self.base_url.as_str().trim_end_matches('/');
+        let hfid_path = hfid.join("/");
+        let mut url_str = format!("{}/api/files/by-hfid/{}/{}", base, kind, hfid_path);
+        if let Some(branch) = branch
+            .map(|b| b.to_string())
+            .or_else(|| self.default_branch.clone())
+        {
+            if !branch.is_empty() {
+                url_str.push_str(&format!("?branch={}", branch));
+            }
+        }
+        Url::parse(&url_str).map_err(Error::from)
+    }
+
+    /// build a file download url by storage id
+    pub(crate) fn file_by_storage_id_url(
+        &self,
+        storage_id: &str,
+        branch: Option<&str>,
+    ) -> Result<Url> {
+        let base = self.base_url.as_str().trim_end_matches('/');
+        let mut url_str = format!("{}/api/files/by-storage-id/{}", base, storage_id);
+        if let Some(branch) = branch
+            .map(|b| b.to_string())
+            .or_else(|| self.default_branch.clone())
+        {
+            if !branch.is_empty() {
+                url_str.push_str(&format!("?branch={}", branch));
+            }
+        }
+        Url::parse(&url_str).map_err(Error::from)
+    }
+
     /// build the schema url for a branch (or default branch if none provided)
     pub(crate) fn schema_url(&self, branch: Option<&str>) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
@@ -339,8 +394,8 @@ mod tests {
     #[test]
     fn test_with_http_client() {
         let prebuilt = reqwest::Client::new();
-        let config = ClientConfig::new("https://infrahub.example.com", "token")
-            .with_http_client(prebuilt);
+        let config =
+            ClientConfig::new("https://infrahub.example.com", "token").with_http_client(prebuilt);
         assert!(config.http_client.is_some());
         assert!(config.http_client_builder.is_none());
     }
@@ -351,6 +406,44 @@ mod tests {
             .with_http_client_builder(|b| b.connection_verbose(true));
         assert!(config.http_client.is_none());
         assert!(config.http_client_builder.is_some());
+    }
+
+    #[test]
+    fn test_file_url() {
+        let config = ClientConfig::new("https://infrahub.example.com", "token");
+        let url = config.file_url("abc-123", None).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/files/abc-123"
+        );
+
+        let url = config.file_url("abc-123", Some("dev")).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/files/abc-123?branch=dev"
+        );
+    }
+
+    #[test]
+    fn test_file_by_hfid_url() {
+        let config = ClientConfig::new("https://infrahub.example.com", "token");
+        let url = config
+            .file_by_hfid_url("MyFile", &["value1", "value2"], None)
+            .unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/files/by-hfid/MyFile/value1/value2"
+        );
+    }
+
+    #[test]
+    fn test_file_by_storage_id_url() {
+        let config = ClientConfig::new("https://infrahub.example.com", "token");
+        let url = config.file_by_storage_id_url("store-456", None).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/files/by-storage-id/store-456"
+        );
     }
 
     #[test]

@@ -1,11 +1,13 @@
 # changelog
 
-## unreleased
+## 0.2.0 - 2026-03-30
 
-- add GitHub Actions integration workflow spinning up Infrahub via docker compose and running `smoke_query` tests
-- add weekly upstream drift detection (`upstream-check.yml`) with automatic issue creation on new upstream releases
-- add `docs/compat.md` compatibility matrix mapping client releases to tested Infrahub versions
-- fix upstream-check workflow: extract pinned version from `INFRAHUB_VERSION` env var rather than image tag pattern
+- add file upload support via the GraphQL multipart request spec (`Client::execute_multipart`, `FileUpload`)
+- add file download helpers (`Client::download_file`, `download_file_by_hfid`, `download_file_by_storage_id`)
+- codegen: skip `@deprecated` fields in generated types and selection sets
+- codegen: handle `Upload` scalar type (maps to `Vec<u8>`)
+- bump tested Infrahub version from 1.1.x to 1.8.x (CI pinned to 1.8.2)
+- bump `thiserror` from 1 to 2
 
 ## 0.1.0 - 2026-02-21
 

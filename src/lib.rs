@@ -31,6 +31,7 @@ mod error;
 mod graphql;
 mod operation;
 mod pagination;
+mod upload;
 
 pub use client::Client;
 pub use config::ClientConfig;
@@ -38,3 +39,4 @@ pub use error::{Error, Result};
 pub use graphql::{GraphQlError, GraphQlLocation, GraphQlResponse};
 pub use operation::Operation;
 pub use pagination::{BoxExtract, BoxFetch, BoxFutureResult, DynPaginator, EdgePage, Paginator};
+pub use upload::FileUpload;

@@ -10,8 +10,8 @@
 pub const CLI_HELP: &str = include_str!("infrahub-codegen-help.txt");
 
 use graphql_parser::schema::{
-    parse_schema, Definition, Document, Field, InputObjectType, InputValue, Type, TypeDefinition,
-    UnionType,
+    parse_schema, Definition, Document, EnumValue, Field, InputObjectType, InputValue, Type,
+    TypeDefinition, UnionType,
 };
 use reqwest::blocking::Client as BlockingClient;
 use reqwest::header::{HeaderMap, HeaderValue};
@@ -248,13 +248,13 @@ fn generate_client(args: &Args, ctx: &SchemaContext) -> Result<(), String> {
         let mut cargo = String::new();
         cargo.push_str("[package]\n");
         cargo.push_str(&format!("name = \"{}\"\n", crate_name));
-        cargo.push_str("version = \"0.0.2\"\n");
+        cargo.push_str("version = \"0.2.0\"\n");
         cargo.push_str("edition = \"2021\"\n\n");
         cargo.push_str("[dependencies]\n");
         if let Some(path) = &args.infrahub_path {
             cargo.push_str(&format!("infrahub = {{ path = \"{}\" }}\n", path));
         } else {
-            cargo.push_str("infrahub = \"0.0.2\"\n");
+            cargo.push_str("infrahub = \"0.2.0\"\n");
         }
         cargo.push_str("serde = { version = \"1\", features = [\"derive\"] }\n");
         cargo.push_str("serde_json = \"1\"\n");
@@ -310,6 +310,9 @@ fn render_types(ctx: &SchemaContext) -> String {
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]\n");
             out.push_str(&format!("pub enum {} {{\n", enum_name));
             for value in &enum_ty.values {
+                if is_enum_value_deprecated(value) {
+                    continue;
+                }
                 let variant = to_rust_ident(&value.name);
                 out.push_str(&format!("    #[serde(rename = \"{}\")]\n", value.name));
                 out.push_str(&format!("    {},\n", variant));
@@ -326,6 +329,9 @@ fn render_types(ctx: &SchemaContext) -> String {
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
             out.push_str(&format!("pub struct {} {{\n", obj_name));
             for field in &obj.fields {
+                if is_field_deprecated(field) {
+                    continue;
+                }
                 let rust_name = to_rust_field(field.name.as_str());
                 let ty = rust_type(&field.field_type, ctx, false);
                 if rust_name != field.name {
@@ -1195,7 +1201,7 @@ fn selection_for_type(
     let mut fields = Vec::new();
     if let Some(TypeDefinition::Object(obj)) = ctx.types.get(type_name) {
         for field in &obj.fields {
-            if has_required_args(field) {
+            if has_required_args(field) || is_field_deprecated(field) {
                 continue;
             }
             let field_base = base_type_name(&field.field_type);
@@ -1248,10 +1254,26 @@ fn is_optional(ty: &Type<String>) -> bool {
     !matches!(ty, Type::NonNullType(_))
 }
 
+fn is_field_deprecated(field: &Field<String>) -> bool {
+    field.directives.iter().any(|d| d.name == "deprecated")
+}
+
+fn is_enum_value_deprecated(value: &EnumValue<String>) -> bool {
+    value.directives.iter().any(|d| d.name == "deprecated")
+}
+
 fn is_scalar_type(name: &str) -> bool {
     matches!(
         name,
-        "String" | "Int" | "Float" | "Boolean" | "ID" | "DateTime" | "BigInt" | "GenericScalar"
+        "String"
+            | "Int"
+            | "Float"
+            | "Boolean"
+            | "ID"
+            | "DateTime"
+            | "BigInt"
+            | "GenericScalar"
+            | "Upload"
     )
 }
 
@@ -1273,6 +1295,7 @@ fn rust_type_nonnull(ty: &Type<String>, ctx: &SchemaContext, input: bool, in_lis
             "Boolean" => "bool".to_string(),
             "BigInt" => "i64".to_string(),
             "GenericScalar" => "serde_json::Value".to_string(),
+            "Upload" => "Vec<u8>".to_string(),
             _ => {
                 if ctx.enums.contains(name)
                     || ctx.inputs.contains(name)
@@ -1393,7 +1416,8 @@ fn is_rust_keyword(name: &str) -> bool {
 
 #[cfg(test)]
 mod codegen_name_tests {
-    use super::{model_accessor_name, namespace_from_type, to_snake};
+    use super::*;
+    use graphql_parser::schema::parse_schema;
 
     #[test]
     fn test_namespace_from_type_prefers_first_word() {
@@ -1420,5 +1444,78 @@ mod codegen_name_tests {
             model_accessor_name("IPAMNamespace", "IPAM"),
             "namespace".to_string()
         );
+    }
+
+    #[test]
+    fn test_deprecated_fields_skipped_in_selection() {
+        let schema = r#"
+            type Query { info: Info }
+            type Info {
+                id: String
+                _updated_at: DateTime @deprecated(reason: "use node_metadata")
+                name: String
+            }
+            scalar DateTime
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let mut stack = BTreeSet::new();
+        let sel = selection_for_type("Info", &ctx, &mut stack, 0);
+        assert!(sel.contains("id"));
+        assert!(sel.contains("name"));
+        assert!(!sel.contains("_updated_at"));
+    }
+
+    #[test]
+    fn test_deprecated_fields_skipped_in_types() {
+        let schema = r#"
+            type Query { info: Info }
+            type Info {
+                id: String
+                _updated_at: DateTime @deprecated(reason: "use node_metadata")
+                name: String
+            }
+            scalar DateTime
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let types_rs = render_types(&ctx);
+        assert!(types_rs.contains("id"));
+        assert!(types_rs.contains("name"));
+        assert!(!types_rs.contains("_updated_at"));
+    }
+
+    #[test]
+    fn test_deprecated_enum_values_skipped() {
+        let schema = r#"
+            type Query { status: Status }
+            enum Status {
+                ACTIVE
+                DELETED @deprecated(reason: "no longer used")
+                PENDING
+            }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let types_rs = render_types(&ctx);
+        assert!(types_rs.contains("ACTIVE"));
+        assert!(types_rs.contains("PENDING"));
+        assert!(!types_rs.contains("DELETED"));
+    }
+
+    #[test]
+    fn test_enum_no_unknown_variant() {
+        let schema = r#"
+            type Query { status: Status }
+            enum Status {
+                ACTIVE
+                PENDING
+            }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let types_rs = render_types(&ctx);
+        assert!(!types_rs.contains("Unknown"));
+        assert!(!types_rs.contains("#[serde(other)]"));
     }
 }

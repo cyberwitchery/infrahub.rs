@@ -6,7 +6,9 @@ use crate::config::ClientConfig;
 use crate::error::{Error, Result};
 use crate::graphql::GraphQlResponse;
 use crate::operation::Operation;
+use crate::upload::FileUpload;
 use reqwest::header::{HeaderMap, HeaderValue};
+use reqwest::multipart;
 use reqwest::StatusCode;
 use serde::de::DeserializeOwned;
 use std::future::Future;
@@ -31,8 +33,9 @@ impl Client {
             let mut headers = HeaderMap::new();
             headers.insert(
                 "X-INFRAHUB-KEY",
-                HeaderValue::from_str(&config.token)
-                    .map_err(|err| Error::Config(format!("invalid api token header value: {err}")))?,
+                HeaderValue::from_str(&config.token).map_err(|err| {
+                    Error::Config(format!("invalid api token header value: {err}"))
+                })?,
             );
             headers.extend(config.extra_headers.clone());
 
@@ -113,6 +116,80 @@ impl Client {
         })
         .await
     }
+
+    /// execute a graphql mutation with file uploads per the
+    /// [graphql multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
+    ///
+    /// `files` maps variable paths (e.g. `"file"`) to [`FileUpload`] values.
+    pub async fn execute_multipart<T: DeserializeOwned>(
+        &self,
+        query: &str,
+        variables: Option<serde_json::Value>,
+        files: Vec<(&str, FileUpload)>,
+        branch: Option<&str>,
+    ) -> Result<GraphQlResponse<T>> {
+        self.execute_multipart_with(query, variables, files, branch, |url, form| async move {
+            let response = self.http.post(url).multipart(form).send().await?;
+            let status = response.status();
+            let text = response.text().await?;
+            Ok((status, text))
+        })
+        .await
+    }
+
+    /// download a file by node id
+    pub async fn download_file(&self, node_id: &str, branch: Option<&str>) -> Result<Vec<u8>> {
+        let url = self.config.file_url(node_id, branch)?;
+        let response = self.http.get(url).send().await?;
+        if !response.status().is_success() {
+            return Err(Error::GraphQl {
+                status: Some(response.status().as_u16()),
+                errors: Vec::new(),
+                body: String::new(),
+                message: format!("file download error: {}", response.status()),
+            });
+        }
+        Ok(response.bytes().await?.to_vec())
+    }
+
+    /// download a file by human-friendly id
+    pub async fn download_file_by_hfid(
+        &self,
+        kind: &str,
+        hfid: &[&str],
+        branch: Option<&str>,
+    ) -> Result<Vec<u8>> {
+        let url = self.config.file_by_hfid_url(kind, hfid, branch)?;
+        let response = self.http.get(url).send().await?;
+        if !response.status().is_success() {
+            return Err(Error::GraphQl {
+                status: Some(response.status().as_u16()),
+                errors: Vec::new(),
+                body: String::new(),
+                message: format!("file download error: {}", response.status()),
+            });
+        }
+        Ok(response.bytes().await?.to_vec())
+    }
+
+    /// download a file by internal storage id
+    pub async fn download_file_by_storage_id(
+        &self,
+        storage_id: &str,
+        branch: Option<&str>,
+    ) -> Result<Vec<u8>> {
+        let url = self.config.file_by_storage_id_url(storage_id, branch)?;
+        let response = self.http.get(url).send().await?;
+        if !response.status().is_success() {
+            return Err(Error::GraphQl {
+                status: Some(response.status().as_u16()),
+                errors: Vec::new(),
+                body: String::new(),
+                message: format!("file download error: {}", response.status()),
+            });
+        }
+        Ok(response.bytes().await?.to_vec())
+    }
 }
 
 fn parse_graphql_response<T: DeserializeOwned>(
@@ -144,6 +221,50 @@ fn parse_graphql_response<T: DeserializeOwned>(
     }
 
     Ok(parsed)
+}
+
+/// build a multipart form per the graphql multipart request spec.
+///
+/// the spec requires three named parts:
+/// - `operations`: the json body with `null` placeholders for file variables
+/// - `map`: a json object mapping part names ("0", "1", ...) to variable paths
+/// - one part per file, named "0", "1", etc.
+fn build_multipart_form(
+    query: &str,
+    variables: Option<serde_json::Value>,
+    files: Vec<(&str, FileUpload)>,
+) -> multipart::Form {
+    let mut vars = variables.unwrap_or_else(|| serde_json::json!({}));
+    let mut map = serde_json::Map::new();
+
+    for (idx, (var_path, _)) in files.iter().enumerate() {
+        if let Some(obj) = vars.as_object_mut() {
+            obj.insert(var_path.to_string(), serde_json::Value::Null);
+        }
+        map.insert(
+            idx.to_string(),
+            serde_json::json!([format!("variables.{}", var_path)]),
+        );
+    }
+
+    let operations = serde_json::json!({
+        "query": query,
+        "variables": vars,
+    });
+
+    let mut form = multipart::Form::new()
+        .text("operations", operations.to_string())
+        .text("map", serde_json::Value::Object(map).to_string());
+
+    for (idx, (_, file)) in files.into_iter().enumerate() {
+        let part = multipart::Part::bytes(file.data)
+            .file_name(file.filename)
+            .mime_str(&file.content_type)
+            .expect("valid mime type");
+        form = form.part(idx.to_string(), part);
+    }
+
+    form
 }
 
 fn parse_schema_response(status: StatusCode, text: String) -> Result<String> {
@@ -199,6 +320,24 @@ impl Client {
         });
 
         let (status, text) = send(url, body).await?;
+        parse_graphql_response(status, text)
+    }
+
+    pub(crate) async fn execute_multipart_with<T: DeserializeOwned, F, Fut>(
+        &self,
+        query: &str,
+        variables: Option<serde_json::Value>,
+        files: Vec<(&str, FileUpload)>,
+        branch: Option<&str>,
+        send: F,
+    ) -> Result<GraphQlResponse<T>>
+    where
+        F: FnOnce(Url, multipart::Form) -> Fut,
+        Fut: Future<Output = Result<(StatusCode, String)>>,
+    {
+        let url = self.config.graphql_url(branch)?;
+        let form = build_multipart_form(query, variables, files);
+        let (status, text) = send(url, form).await?;
         parse_graphql_response(status, text)
     }
 
@@ -421,8 +560,7 @@ mod tests {
     #[test]
     fn test_new_with_prebuilt_http_client() {
         let prebuilt = reqwest::Client::new();
-        let config = ClientConfig::new("http://localhost:1234", "token")
-            .with_http_client(prebuilt);
+        let config = ClientConfig::new("http://localhost:1234", "token").with_http_client(prebuilt);
         let client = Client::new(config).expect("client with prebuilt http");
         assert!(client.config().http_client.is_some());
     }
@@ -433,5 +571,30 @@ mod tests {
             .with_http_client_builder(|b| b.connection_verbose(true));
         let client = Client::new(config).expect("client with builder callback");
         assert!(client.config().http_client_builder.is_some());
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_execute_multipart_sends_form() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token");
+        let client = test_client(config);
+        let file = FileUpload::new("test.txt", "text/plain", b"hello".to_vec());
+        let response = client
+            .execute_multipart_with::<serde_json::Value, _, _>(
+                "mutation Upload($file: Upload!) { upload(file: $file) { ok } }",
+                None,
+                vec![("file", file)],
+                Some("main"),
+                |url, _form| async move {
+                    assert_eq!(url.path(), "/graphql/main");
+                    Ok((
+                        StatusCode::OK,
+                        r#"{"data": {"upload": {"ok": true}}}"#.to_string(),
+                    ))
+                },
+            )
+            .await
+            .unwrap();
+        assert!(response.data.is_some());
     }
 }

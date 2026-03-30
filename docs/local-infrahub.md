@@ -1,13 +1,15 @@
 # local infrahub quickstart
 
-this repo includes a docker compose file for local testing.
-
 ## setup
 
-from the repo root:
+from the repo root, download the upstream compose file and start infrahub:
 
 ```bash
-docker compose up -d
+curl -sSfL \
+  "https://raw.githubusercontent.com/opsmill/infrahub/infrahub-v1.8.2/docker-compose.yml" \
+  -o /tmp/infrahub-compose.yml
+
+VERSION=1.8.2 docker compose -f /tmp/infrahub-compose.yml up -d
 ```
 
 ## confirm it is running

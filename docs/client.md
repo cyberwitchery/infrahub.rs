@@ -5,6 +5,8 @@ this crate provides a small, typed graphql client for infrahub.
 ## features
 
 - graphql execution with raw and typed helpers
+- file upload via the graphql multipart request spec (`CoreFileObject` mutations)
+- file download via REST endpoints (`/api/files/`)
 - schema fetch helper
 - edges/node pagination helper
 - structured errors with status and graphql details
@@ -14,6 +16,7 @@ this crate provides a small, typed graphql client for infrahub.
 
 - `Client` - graphql client with auth and branch routing
 - `ClientConfig` - base url, token, timeouts, headers, and http transport customization
+- `FileUpload` - file upload payload for multipart mutations
 - `Operation` - generated operation trait
 - `Paginator` - edge/connection pagination helper
 
@@ -47,7 +50,7 @@ println!("{:?}", response.data);
 
 ```toml
 [dependencies]
-infrahub = "0.1.0"
+infrahub = "0.2.0"
 tokio = { version = "1", features = ["full"] }
 ```
 
@@ -174,6 +177,47 @@ println!("{:?}", response.data);
 # }
 ```
 
+## file upload
+
+upload files to `CoreFileObject` mutations using the graphql multipart request spec:
+
+```rust,no_run
+use infrahub::{Client, ClientConfig, FileUpload};
+
+# async fn example() -> Result<(), Box<dyn std::error::Error>> {
+let client = Client::new(ClientConfig::new("http://localhost:8000", "token"))?;
+let file = FileUpload::new("report.pdf", "application/pdf", std::fs::read("report.pdf")?);
+
+let response = client
+    .execute_multipart::<serde_json::Value>(
+        "mutation($data: MyFileCreateInput!, $file: Upload!) { MyFileCreate(data: $data, file: $file) { object { id } } }",
+        Some(serde_json::json!({ "data": { "name": { "value": "Q1 Report" } } })),
+        vec![("file", file)],
+        None,
+    )
+    .await?;
+println!("{:?}", response.data);
+# Ok(())
+# }
+```
+
+## file download
+
+download files by node id, human-friendly id, or storage id:
+
+```rust,no_run
+use infrahub::{Client, ClientConfig};
+
+# async fn example() -> Result<(), Box<dyn std::error::Error>> {
+let client = Client::new(ClientConfig::new("http://localhost:8000", "token"))?;
+
+let bytes = client.download_file("abc-123", None).await?;
+let bytes = client.download_file_by_hfid("MyFile", &["value1"], None).await?;
+let bytes = client.download_file_by_storage_id("store-456", None).await?;
+# Ok(())
+# }
+```
+
 ## schema fetch
 
 ```rust,no_run
@@ -236,7 +280,7 @@ then add it as a path dependency:
 
 ```toml
 [dependencies]
-infrahub = "0.1.0"
+infrahub = "0.2.0"
 infrahub-generated = { path = "/tmp/infrahub-generated" }
 ```
 

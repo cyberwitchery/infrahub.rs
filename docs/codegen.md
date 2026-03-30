@@ -39,7 +39,7 @@ INFRAHUB_TOKEN=... cargo run --bin infrahub-codegen -- \
 
 ```toml
 [dependencies]
-infrahub = "0.1.0"
+infrahub = "0.2.0"
 infrahub-generated = { path = "/tmp/infrahub-generated" }
 ```
 
@@ -60,6 +60,14 @@ let _all = paginator.collect_all().await?;
 # Ok(())
 # }
 ```
+
+## schema handling notes
+
+- **deprecated fields**: fields marked with `@deprecated` in the schema are
+  excluded from generated types and selection sets. use `execute_raw` if you
+  need to query a deprecated field explicitly.
+- **`Upload` scalar**: mapped to `Vec<u8>` in generated code. mutations that
+  accept `Upload` arguments should be called via `Client::execute_multipart`.
 
 for a full generated `api()` walkthrough, see:
 - [`examples/generated_api.md`](../examples/generated_api.md)

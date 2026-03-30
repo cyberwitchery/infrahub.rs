@@ -57,7 +57,7 @@ jobs:
         run: |
           set -euo pipefail
           for i in $(seq 1 180); do
-            if curl -fsS "${INFRAHUB_URL}/api/schema/?branch=main" >/dev/null 2>&1; then
+            if curl -fsS "${INFRAHUB_URL}/api/config" >/dev/null 2>&1; then
               echo "Infrahub is ready after ${i} checks"
               exit 0
             fi

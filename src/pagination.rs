@@ -127,6 +127,66 @@ mod tests {
 
     #[cfg_attr(miri, ignore)]
     #[tokio::test]
+    async fn test_next_page_multi_page() {
+        let pages = vec![
+            EdgePage {
+                nodes: vec![1, 2],
+                next_cursor: Some("cur1".to_string()),
+            },
+            EdgePage {
+                nodes: vec![3],
+                next_cursor: Some("cur2".to_string()),
+            },
+            EdgePage {
+                nodes: vec![4, 5],
+                next_cursor: None,
+            },
+        ];
+        let pages = Arc::new(Mutex::new(pages.into_iter()));
+
+        let pages_fetch = pages.clone();
+        let fetch = move |_cursor: Option<String>| {
+            let pages = pages_fetch.clone();
+            async move {
+                let page = pages.lock().unwrap().next().unwrap();
+                Ok(page)
+            }
+        };
+        let extract = |page: EdgePage<i32, String>| Ok(page);
+
+        let mut paginator = Paginator::new(fetch, extract);
+
+        let p1 = paginator.next_page().await.unwrap().unwrap();
+        assert_eq!(p1, vec![1, 2]);
+
+        let p2 = paginator.next_page().await.unwrap().unwrap();
+        assert_eq!(p2, vec![3]);
+
+        let p3 = paginator.next_page().await.unwrap().unwrap();
+        assert_eq!(p3, vec![4, 5]);
+
+        assert!(paginator.next_page().await.unwrap().is_none());
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_next_page_empty_first_page() {
+        let fetch = |_: Option<()>| async {
+            Ok(EdgePage::<i32, ()> {
+                nodes: vec![],
+                next_cursor: None,
+            })
+        };
+        let extract = |page: EdgePage<i32, ()>| Ok(page);
+
+        let mut paginator = Paginator::new(fetch, extract);
+        let page = paginator.next_page().await.unwrap().unwrap();
+        assert!(page.is_empty());
+        assert!(paginator.next_page().await.unwrap().is_none());
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
     async fn test_pagination_next_page_done() {
         let fetch = |_: Option<()>| async {
             Ok(EdgePage::<i32, ()> {

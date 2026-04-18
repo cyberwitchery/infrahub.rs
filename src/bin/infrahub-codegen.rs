@@ -947,27 +947,7 @@ fn namespace_from_type(name: &str) -> String {
     if words.is_empty() {
         return name.to_string();
     }
-
-    // Intentionally breaking from the old prefix heuristic:
-    // prefer explicit high-signal top-level namespaces, then fall back to
-    // first word for unknown domains.
-    let preferred = [
-        "Core",
-        "Builtin",
-        "Infrahub",
-        "Profile",
-        "Branch",
-        "Schema",
-        "Relationship",
-        "Lineage",
-        "IPAM",
-    ];
-    let first = words[0].as_str();
-    if preferred.contains(&first) {
-        return first.to_string();
-    }
-
-    first.to_string()
+    words[0].clone()
 }
 
 fn model_accessor_name(model: &str, namespace: &str) -> String {

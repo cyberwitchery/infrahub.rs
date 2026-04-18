@@ -188,15 +188,21 @@ impl ClientConfig {
         Ok(())
     }
 
+    /// resolve the effective branch: use the explicit argument if non-empty,
+    /// fall back to `default_branch`, or return `None`.
+    fn resolve_branch(&self, branch: Option<&str>) -> Option<String> {
+        branch
+            .map(|b| b.to_string())
+            .or_else(|| self.default_branch.clone())
+            .filter(|b| !b.is_empty())
+    }
+
     /// build the graphql url for a branch (or default branch if none provided)
     pub(crate) fn graphql_url(&self, branch: Option<&str>) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
-        let branch = branch
-            .map(|b| b.to_string())
-            .or_else(|| self.default_branch.clone());
-        let url_str = match branch {
-            Some(branch) if !branch.is_empty() => format!("{}/graphql/{}", base, branch),
-            _ => format!("{}/graphql", base),
+        let url_str = match self.resolve_branch(branch) {
+            Some(branch) => format!("{}/graphql/{}", base, branch),
+            None => format!("{}/graphql", base),
         };
         Url::parse(&url_str).map_err(Error::from)
     }
@@ -205,13 +211,8 @@ impl ClientConfig {
     pub(crate) fn file_url(&self, node_id: &str, branch: Option<&str>) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
         let mut url_str = format!("{}/api/files/{}", base, node_id);
-        if let Some(branch) = branch
-            .map(|b| b.to_string())
-            .or_else(|| self.default_branch.clone())
-        {
-            if !branch.is_empty() {
-                url_str.push_str(&format!("?branch={}", branch));
-            }
+        if let Some(branch) = self.resolve_branch(branch) {
+            url_str.push_str(&format!("?branch={}", branch));
         }
         Url::parse(&url_str).map_err(Error::from)
     }
@@ -226,13 +227,8 @@ impl ClientConfig {
         let base = self.base_url.as_str().trim_end_matches('/');
         let hfid_path = hfid.join("/");
         let mut url_str = format!("{}/api/files/by-hfid/{}/{}", base, kind, hfid_path);
-        if let Some(branch) = branch
-            .map(|b| b.to_string())
-            .or_else(|| self.default_branch.clone())
-        {
-            if !branch.is_empty() {
-                url_str.push_str(&format!("?branch={}", branch));
-            }
+        if let Some(branch) = self.resolve_branch(branch) {
+            url_str.push_str(&format!("?branch={}", branch));
         }
         Url::parse(&url_str).map_err(Error::from)
     }
@@ -245,13 +241,8 @@ impl ClientConfig {
     ) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
         let mut url_str = format!("{}/api/files/by-storage-id/{}", base, storage_id);
-        if let Some(branch) = branch
-            .map(|b| b.to_string())
-            .or_else(|| self.default_branch.clone())
-        {
-            if !branch.is_empty() {
-                url_str.push_str(&format!("?branch={}", branch));
-            }
+        if let Some(branch) = self.resolve_branch(branch) {
+            url_str.push_str(&format!("?branch={}", branch));
         }
         Url::parse(&url_str).map_err(Error::from)
     }
@@ -259,14 +250,9 @@ impl ClientConfig {
     /// build the schema url for a branch (or default branch if none provided)
     pub(crate) fn schema_url(&self, branch: Option<&str>) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
-        let branch = branch
-            .map(|b| b.to_string())
-            .or_else(|| self.default_branch.clone());
-        let url_str = match branch {
-            Some(branch) if !branch.is_empty() => {
-                format!("{}/schema.graphql?branch={}", base, branch)
-            }
-            _ => format!("{}/schema.graphql", base),
+        let url_str = match self.resolve_branch(branch) {
+            Some(branch) => format!("{}/schema.graphql?branch={}", base, branch),
+            None => format!("{}/schema.graphql", base),
         };
         Url::parse(&url_str).map_err(Error::from)
     }

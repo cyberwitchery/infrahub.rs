@@ -1,5 +1,9 @@
 # changelog
 
+## Unreleased
+
+- codegen: percent-encode the `--branch` query parameter in schema URLs, matching the library-side fix from 0.2.0
+
 ## 0.2.0 - 2026-03-30
 
 - add file upload support via the GraphQL multipart request spec (`Client::execute_multipart`, `FileUpload`)

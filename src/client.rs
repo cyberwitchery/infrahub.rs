@@ -140,16 +140,7 @@ impl Client {
     /// download a file by node id
     pub async fn download_file(&self, node_id: &str, branch: Option<&str>) -> Result<Vec<u8>> {
         let url = self.config.file_url(node_id, branch)?;
-        let response = self.http.get(url).send().await?;
-        if !response.status().is_success() {
-            return Err(Error::GraphQl {
-                status: Some(response.status().as_u16()),
-                errors: Vec::new(),
-                body: String::new(),
-                message: format!("file download error: {}", response.status()),
-            });
-        }
-        Ok(response.bytes().await?.to_vec())
+        self.download_bytes(url).await
     }
 
     /// download a file by human-friendly id
@@ -160,16 +151,7 @@ impl Client {
         branch: Option<&str>,
     ) -> Result<Vec<u8>> {
         let url = self.config.file_by_hfid_url(kind, hfid, branch)?;
-        let response = self.http.get(url).send().await?;
-        if !response.status().is_success() {
-            return Err(Error::GraphQl {
-                status: Some(response.status().as_u16()),
-                errors: Vec::new(),
-                body: String::new(),
-                message: format!("file download error: {}", response.status()),
-            });
-        }
-        Ok(response.bytes().await?.to_vec())
+        self.download_bytes(url).await
     }
 
     /// download a file by internal storage id
@@ -179,16 +161,18 @@ impl Client {
         branch: Option<&str>,
     ) -> Result<Vec<u8>> {
         let url = self.config.file_by_storage_id_url(storage_id, branch)?;
-        let response = self.http.get(url).send().await?;
-        if !response.status().is_success() {
-            return Err(Error::GraphQl {
-                status: Some(response.status().as_u16()),
-                errors: Vec::new(),
-                body: String::new(),
-                message: format!("file download error: {}", response.status()),
-            });
-        }
-        Ok(response.bytes().await?.to_vec())
+        self.download_bytes(url).await
+    }
+
+    /// shared download helper — GET the given url and return response bytes
+    async fn download_bytes(&self, url: Url) -> Result<Vec<u8>> {
+        self.download_bytes_with(url, |url| async move {
+            let response = self.http.get(url).send().await?;
+            let status = response.status();
+            let bytes = response.bytes().await?.to_vec();
+            Ok((status, bytes))
+        })
+        .await
     }
 }
 
@@ -339,6 +323,23 @@ impl Client {
         let form = build_multipart_form(query, variables, files);
         let (status, text) = send(url, form).await?;
         parse_graphql_response(status, text)
+    }
+
+    pub(crate) async fn download_bytes_with<F, Fut>(&self, url: Url, send: F) -> Result<Vec<u8>>
+    where
+        F: FnOnce(Url) -> Fut,
+        Fut: Future<Output = Result<(StatusCode, Vec<u8>)>>,
+    {
+        let (status, bytes) = send(url).await?;
+        if !status.is_success() {
+            return Err(Error::GraphQl {
+                status: Some(status.as_u16()),
+                errors: Vec::new(),
+                body: String::new(),
+                message: format!("file download error: {}", status),
+            });
+        }
+        Ok(bytes)
     }
 
     pub(crate) async fn fetch_schema_with<F, Fut>(
@@ -548,6 +549,43 @@ mod tests {
     #[test]
     fn test_parse_schema_response_error() {
         let err = parse_schema_response(StatusCode::NOT_FOUND, "nope".to_string()).unwrap_err();
+        assert!(matches!(
+            err,
+            Error::GraphQl {
+                status: Some(404),
+                ..
+            }
+        ));
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_download_bytes_success() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token");
+        let client = test_client(config);
+        let url = Url::parse("http://localhost:1234/api/files/abc-123").unwrap();
+        let bytes = client
+            .download_bytes_with(url, |url| async move {
+                assert!(url.path().contains("abc-123"));
+                Ok((StatusCode::OK, b"hello world".to_vec()))
+            })
+            .await
+            .unwrap();
+        assert_eq!(bytes, b"hello world");
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_download_bytes_error() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token");
+        let client = test_client(config);
+        let url = Url::parse("http://localhost:1234/api/files/bad").unwrap();
+        let err = client
+            .download_bytes_with(url, |_url| async move {
+                Ok((StatusCode::NOT_FOUND, Vec::new()))
+            })
+            .await
+            .unwrap_err();
         assert!(matches!(
             err,
             Error::GraphQl {

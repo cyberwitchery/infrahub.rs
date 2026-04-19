@@ -210,11 +210,11 @@ impl ClientConfig {
     /// build a file download url by node id
     pub(crate) fn file_url(&self, node_id: &str, branch: Option<&str>) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
-        let mut url_str = format!("{}/api/files/{}", base, node_id);
+        let mut url = Url::parse(&format!("{}/api/files/{}", base, node_id))?;
         if let Some(branch) = self.resolve_branch(branch) {
-            url_str.push_str(&format!("?branch={}", branch));
+            url.query_pairs_mut().append_pair("branch", &branch);
         }
-        Url::parse(&url_str).map_err(Error::from)
+        Ok(url)
     }
 
     /// build a file download url by human-friendly id
@@ -226,11 +226,14 @@ impl ClientConfig {
     ) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
         let hfid_path = hfid.join("/");
-        let mut url_str = format!("{}/api/files/by-hfid/{}/{}", base, kind, hfid_path);
+        let mut url = Url::parse(&format!(
+            "{}/api/files/by-hfid/{}/{}",
+            base, kind, hfid_path
+        ))?;
         if let Some(branch) = self.resolve_branch(branch) {
-            url_str.push_str(&format!("?branch={}", branch));
+            url.query_pairs_mut().append_pair("branch", &branch);
         }
-        Url::parse(&url_str).map_err(Error::from)
+        Ok(url)
     }
 
     /// build a file download url by storage id
@@ -240,21 +243,21 @@ impl ClientConfig {
         branch: Option<&str>,
     ) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
-        let mut url_str = format!("{}/api/files/by-storage-id/{}", base, storage_id);
+        let mut url = Url::parse(&format!("{}/api/files/by-storage-id/{}", base, storage_id))?;
         if let Some(branch) = self.resolve_branch(branch) {
-            url_str.push_str(&format!("?branch={}", branch));
+            url.query_pairs_mut().append_pair("branch", &branch);
         }
-        Url::parse(&url_str).map_err(Error::from)
+        Ok(url)
     }
 
     /// build the schema url for a branch (or default branch if none provided)
     pub(crate) fn schema_url(&self, branch: Option<&str>) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
-        let url_str = match self.resolve_branch(branch) {
-            Some(branch) => format!("{}/schema.graphql?branch={}", base, branch),
-            None => format!("{}/schema.graphql", base),
-        };
-        Url::parse(&url_str).map_err(Error::from)
+        let mut url = Url::parse(&format!("{}/schema.graphql", base))?;
+        if let Some(branch) = self.resolve_branch(branch) {
+            url.query_pairs_mut().append_pair("branch", &branch);
+        }
+        Ok(url)
     }
 }
 
@@ -429,6 +432,40 @@ mod tests {
         assert_eq!(
             url.as_str(),
             "https://infrahub.example.com/api/files/by-storage-id/store-456"
+        );
+    }
+
+    #[test]
+    fn test_branch_with_special_chars_is_encoded() {
+        let config = ClientConfig::new("https://infrahub.example.com", "token");
+
+        // ampersand in branch name would inject a second query param without encoding
+        let url = config.file_url("abc-123", Some("feat&evil=1")).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/files/abc-123?branch=feat%26evil%3D1"
+        );
+
+        let url = config
+            .file_by_hfid_url("MyFile", &["v1"], Some("has spaces"))
+            .unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/files/by-hfid/MyFile/v1?branch=has+spaces"
+        );
+
+        let url = config
+            .file_by_storage_id_url("store-1", Some("a=b&c=d"))
+            .unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/files/by-storage-id/store-1?branch=a%3Db%26c%3Dd"
+        );
+
+        let url = config.schema_url(Some("release/1.0&drop")).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/schema.graphql?branch=release%2F1.0%26drop"
         );
     }
 

@@ -140,16 +140,7 @@ impl Client {
     /// download a file by node id
     pub async fn download_file(&self, node_id: &str, branch: Option<&str>) -> Result<Vec<u8>> {
         let url = self.config.file_url(node_id, branch)?;
-        let response = self.http.get(url).send().await?;
-        if !response.status().is_success() {
-            return Err(Error::GraphQl {
-                status: Some(response.status().as_u16()),
-                errors: Vec::new(),
-                body: String::new(),
-                message: format!("file download error: {}", response.status()),
-            });
-        }
-        Ok(response.bytes().await?.to_vec())
+        self.download_bytes(url).await
     }
 
     /// download a file by human-friendly id
@@ -160,16 +151,7 @@ impl Client {
         branch: Option<&str>,
     ) -> Result<Vec<u8>> {
         let url = self.config.file_by_hfid_url(kind, hfid, branch)?;
-        let response = self.http.get(url).send().await?;
-        if !response.status().is_success() {
-            return Err(Error::GraphQl {
-                status: Some(response.status().as_u16()),
-                errors: Vec::new(),
-                body: String::new(),
-                message: format!("file download error: {}", response.status()),
-            });
-        }
-        Ok(response.bytes().await?.to_vec())
+        self.download_bytes(url).await
     }
 
     /// download a file by internal storage id
@@ -179,6 +161,11 @@ impl Client {
         branch: Option<&str>,
     ) -> Result<Vec<u8>> {
         let url = self.config.file_by_storage_id_url(storage_id, branch)?;
+        self.download_bytes(url).await
+    }
+
+    /// shared download helper — GET the given url and return response bytes
+    async fn download_bytes(&self, url: Url) -> Result<Vec<u8>> {
         let response = self.http.get(url).send().await?;
         if !response.status().is_success() {
             return Err(Error::GraphQl {

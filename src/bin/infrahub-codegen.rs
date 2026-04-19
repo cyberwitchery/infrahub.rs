@@ -18,6 +18,7 @@ use reqwest::header::{HeaderMap, HeaderValue};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::PathBuf;
+use url::Url;
 
 #[derive(Debug)]
 struct Args {
@@ -127,11 +128,11 @@ fn load_schema(args: &Args) -> Result<String, String> {
         .as_ref()
         .ok_or_else(|| "--url is required when --schema not provided".to_string())?;
 
-    let mut schema_url = url.trim_end_matches('/').to_string();
-    schema_url.push_str("/schema.graphql");
+    let base = url.trim_end_matches('/');
+    let mut schema_url = Url::parse(&format!("{base}/schema.graphql"))
+        .map_err(|err| format!("invalid url: {err}"))?;
     if let Some(branch) = &args.branch {
-        schema_url.push_str("?branch=");
-        schema_url.push_str(branch);
+        schema_url.query_pairs_mut().append_pair("branch", branch);
     }
 
     let mut headers = HeaderMap::new();

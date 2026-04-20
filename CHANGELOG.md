@@ -4,6 +4,7 @@
 
 - codegen: percent-encode the `--branch` query parameter in schema URLs, matching the library-side fix from 0.2.0
 - percent-encode path segments in `graphql_url`, `file_url`, `file_by_hfid_url`, and `file_by_storage_id_url` so branch names with `/` or `#` (and other special characters in node IDs, kinds, etc.) no longer produce malformed URLs
+- ci: bump pinned Infrahub version from 1.8.4 to 1.8.5
 
 ## 0.2.0 - 2026-03-30
 

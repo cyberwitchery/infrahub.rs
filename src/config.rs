@@ -200,17 +200,22 @@ impl ClientConfig {
     /// build the graphql url for a branch (or default branch if none provided)
     pub(crate) fn graphql_url(&self, branch: Option<&str>) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
-        let url_str = match self.resolve_branch(branch) {
-            Some(branch) => format!("{}/graphql/{}", base, branch),
-            None => format!("{}/graphql", base),
-        };
-        Url::parse(&url_str).map_err(Error::from)
+        let mut url = Url::parse(&format!("{}/graphql", base))?;
+        if let Some(branch) = self.resolve_branch(branch) {
+            url.path_segments_mut()
+                .expect("HTTP URL supports path segments")
+                .push(&branch);
+        }
+        Ok(url)
     }
 
     /// build a file download url by node id
     pub(crate) fn file_url(&self, node_id: &str, branch: Option<&str>) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
-        let mut url = Url::parse(&format!("{}/api/files/{}", base, node_id))?;
+        let mut url = Url::parse(&format!("{}/api/files", base))?;
+        url.path_segments_mut()
+            .expect("HTTP URL supports path segments")
+            .push(node_id);
         if let Some(branch) = self.resolve_branch(branch) {
             url.query_pairs_mut().append_pair("branch", &branch);
         }
@@ -225,11 +230,16 @@ impl ClientConfig {
         branch: Option<&str>,
     ) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
-        let hfid_path = hfid.join("/");
-        let mut url = Url::parse(&format!(
-            "{}/api/files/by-hfid/{}/{}",
-            base, kind, hfid_path
-        ))?;
+        let mut url = Url::parse(&format!("{}/api/files/by-hfid", base))?;
+        {
+            let mut segments = url
+                .path_segments_mut()
+                .expect("HTTP URL supports path segments");
+            segments.push(kind);
+            for segment in hfid {
+                segments.push(segment);
+            }
+        }
         if let Some(branch) = self.resolve_branch(branch) {
             url.query_pairs_mut().append_pair("branch", &branch);
         }
@@ -243,7 +253,10 @@ impl ClientConfig {
         branch: Option<&str>,
     ) -> Result<Url> {
         let base = self.base_url.as_str().trim_end_matches('/');
-        let mut url = Url::parse(&format!("{}/api/files/by-storage-id/{}", base, storage_id))?;
+        let mut url = Url::parse(&format!("{}/api/files/by-storage-id", base))?;
+        url.path_segments_mut()
+            .expect("HTTP URL supports path segments")
+            .push(storage_id);
         if let Some(branch) = self.resolve_branch(branch) {
             url.query_pairs_mut().append_pair("branch", &branch);
         }
@@ -466,6 +479,48 @@ mod tests {
         assert_eq!(
             url.as_str(),
             "https://infrahub.example.com/schema.graphql?branch=release%2F1.0%26drop"
+        );
+    }
+
+    #[test]
+    fn test_path_segments_with_special_chars_are_encoded() {
+        let config = ClientConfig::new("https://infrahub.example.com", "token");
+
+        // branch with slash in graphql_url path
+        let url = config.graphql_url(Some("release/1.0")).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/graphql/release%2F1.0"
+        );
+
+        // branch with hash would truncate the URL without encoding
+        let url = config.graphql_url(Some("fix#123")).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/graphql/fix%23123"
+        );
+
+        // node_id with special characters
+        let url = config.file_url("id/with#special", None).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/files/id%2Fwith%23special"
+        );
+
+        // kind and hfid with special characters
+        let url = config
+            .file_by_hfid_url("My/Kind", &["val/1", "val#2"], None)
+            .unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/files/by-hfid/My%2FKind/val%2F1/val%232"
+        );
+
+        // storage_id with special characters
+        let url = config.file_by_storage_id_url("store/id#1", None).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/files/by-storage-id/store%2Fid%231"
         );
     }
 

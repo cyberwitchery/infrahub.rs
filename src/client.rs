@@ -220,7 +220,7 @@ fn build_multipart_form(
     query: &str,
     variables: Option<serde_json::Value>,
     files: Vec<(&str, FileUpload)>,
-) -> multipart::Form {
+) -> Result<multipart::Form> {
     let mut vars = variables.unwrap_or_else(|| serde_json::json!({}));
     let mut map = serde_json::Map::new();
 
@@ -246,12 +246,11 @@ fn build_multipart_form(
     for (idx, (_, file)) in files.into_iter().enumerate() {
         let part = multipart::Part::bytes(file.data)
             .file_name(file.filename)
-            .mime_str(&file.content_type)
-            .expect("valid mime type");
+            .mime_str(&file.content_type)?;
         form = form.part(idx.to_string(), part);
     }
 
-    form
+    Ok(form)
 }
 
 fn parse_schema_response(status: StatusCode, text: String) -> Result<String> {
@@ -323,7 +322,7 @@ impl Client {
         Fut: Future<Output = Result<(StatusCode, String)>>,
     {
         let url = self.config.graphql_url(branch)?;
-        let form = build_multipart_form(query, variables, files);
+        let form = build_multipart_form(query, variables, files)?;
         let (status, text) = send(url, form).await?;
         parse_graphql_response(status, text)
     }

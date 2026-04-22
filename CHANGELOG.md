@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- add `Error::is_retryable()` for classifying transient errors (5xx, 429, timeouts, network failures) vs permanent ones (config, parse, client errors)
 - return `Result::Err` instead of panicking when a file upload has an invalid MIME content type
 - codegen: percent-encode the `--branch` query parameter in schema URLs, matching the library-side fix from 0.2.0
 - percent-encode path segments in `graphql_url`, `file_url`, `file_by_hfid_url`, and `file_by_storage_id_url` so branch names with `/` or `#` (and other special characters in node IDs, kinds, etc.) no longer produce malformed URLs

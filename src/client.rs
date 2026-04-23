@@ -559,6 +559,178 @@ mod tests {
         assert!(client.config().http_client_builder.is_some());
     }
 
+    #[test]
+    fn test_new_rejects_empty_token() {
+        let config = ClientConfig::new("http://localhost:1234", "");
+        let err = Client::new(config).err().expect("expected error");
+        assert!(matches!(err, Error::Config(_)));
+    }
+
+    #[test]
+    fn test_new_accepts_empty_token_with_prebuilt_client() {
+        let config =
+            ClientConfig::new("http://localhost:1234", "").with_http_client(reqwest::Client::new());
+        assert!(Client::new(config).is_ok());
+    }
+
+    #[test]
+    fn test_new_trailing_slash_url() {
+        let config = ClientConfig::new("http://localhost:1234/", "token");
+        let client = Client::new(config).unwrap();
+        let url = client.config().graphql_url(None).unwrap();
+        assert_eq!(url.as_str(), "http://localhost:1234/graphql");
+    }
+
+    #[test]
+    fn test_new_schemeless_url_gets_https() {
+        let config = ClientConfig::new("infrahub.example.com", "token");
+        let client = Client::new(config).unwrap();
+        assert_eq!(client.config().base_url.scheme(), "https");
+    }
+
+    #[test]
+    fn test_parse_graphql_response_malformed_json() {
+        let err = parse_graphql_response::<serde_json::Value>(
+            StatusCode::OK,
+            "not json at all".to_string(),
+        )
+        .unwrap_err();
+        assert!(matches!(err, Error::Json(_)));
+    }
+
+    #[test]
+    fn test_parse_graphql_response_error_preserves_message() {
+        let text =
+            r#"{"data": null, "errors": [{"message": "field 'name' not found on type 'Device'"}]}"#
+                .to_string();
+        let err = parse_graphql_response::<serde_json::Value>(StatusCode::OK, text).unwrap_err();
+        match err {
+            Error::GraphQl {
+                message, status, ..
+            } => {
+                assert_eq!(message, "field 'name' not found on type 'Device'");
+                assert_eq!(status, Some(200));
+            }
+            other => panic!("expected GraphQl error, got: {other:?}"),
+        }
+    }
+
+    #[test]
+    fn test_build_multipart_form_with_no_variables() {
+        let file = FileUpload::new("test.txt", "text/plain", b"hello".to_vec());
+        let form = build_multipart_form("mutation { upload }", None, vec![("file", file)]);
+        assert!(form.is_ok());
+    }
+
+    #[test]
+    fn test_build_multipart_form_multiple_files() {
+        let files = vec![
+            (
+                "avatar",
+                FileUpload::new("avatar.png", "image/png", vec![1, 2, 3]),
+            ),
+            (
+                "document",
+                FileUpload::new("doc.pdf", "application/pdf", vec![4, 5]),
+            ),
+        ];
+        let form = build_multipart_form(
+            "mutation Upload($avatar: Upload!, $document: Upload!) { upload }",
+            Some(serde_json::json!({"avatar": "placeholder", "document": "placeholder"})),
+            files,
+        );
+        assert!(form.is_ok());
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_execute_raw_none_variables_become_empty_object() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token");
+        let client = test_client(config);
+        client
+            .execute_raw_with("query { ok }", None, None, |_url, body| async move {
+                assert_eq!(body["variables"], serde_json::json!({}));
+                Ok((StatusCode::OK, r#"{"data": {"ok": true}}"#.to_string()))
+            })
+            .await
+            .unwrap();
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_execute_raw_passes_variables() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token");
+        let client = test_client(config);
+        let vars = serde_json::json!({"id": "abc-123", "name": "test"});
+        let response = client
+            .execute_raw_with(
+                "query GetDevice($id: String!) { device(id: $id) { name } }",
+                Some(vars),
+                None,
+                |_url, body| async move {
+                    assert_eq!(body["variables"]["id"], "abc-123");
+                    assert_eq!(body["variables"]["name"], "test");
+                    Ok((
+                        StatusCode::OK,
+                        r#"{"data": {"device": {"name": "test"}}}"#.to_string(),
+                    ))
+                },
+            )
+            .await
+            .unwrap();
+        assert!(response.data.is_some());
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_execute_server_error_is_retryable() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token");
+        let client = test_client(config);
+        let err = client
+            .execute_raw_with("query { ok }", None, None, |_url, _body| async move {
+                Ok((
+                    StatusCode::SERVICE_UNAVAILABLE,
+                    r#"{"data": null}"#.to_string(),
+                ))
+            })
+            .await
+            .unwrap_err();
+        assert!(err.is_retryable());
+        assert!(!err.is_auth_error());
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_execute_client_error_not_retryable() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token");
+        let client = test_client(config);
+        let err = client
+            .execute_raw_with("query { ok }", None, None, |_url, _body| async move {
+                Ok((StatusCode::BAD_REQUEST, r#"{"data": null}"#.to_string()))
+            })
+            .await
+            .unwrap_err();
+        assert!(!err.is_retryable());
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_execute_auth_error_not_retryable() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token");
+        let client = test_client(config);
+        let err = client
+            .execute_raw_with("query { ok }", None, None, |_url, _body| async move {
+                Ok((
+                    StatusCode::UNAUTHORIZED,
+                    r#"{"data": null, "errors": [{"message": "unauthorized"}]}"#.to_string(),
+                ))
+            })
+            .await
+            .unwrap_err();
+        assert!(err.is_auth_error());
+        assert!(!err.is_retryable());
+    }
+
     #[cfg_attr(miri, ignore)]
     #[tokio::test]
     async fn test_execute_multipart_sends_form() {

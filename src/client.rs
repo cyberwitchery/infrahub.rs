@@ -72,13 +72,7 @@ impl Client {
         variables: Option<serde_json::Value>,
         branch: Option<&str>,
     ) -> Result<GraphQlResponse<serde_json::Value>> {
-        self.execute_raw_with(query, variables, branch, |url, body| async move {
-            let response = self.http.post(url).json(&body).send().await?;
-            let status = response.status();
-            let text = response.text().await?;
-            Ok((status, text))
-        })
-        .await
+        self.execute(query, variables, branch).await
     }
 
     /// execute a raw graphql query and deserialize into a typed response
@@ -267,27 +261,6 @@ fn parse_schema_response(status: StatusCode, text: String) -> Result<String> {
 }
 
 impl Client {
-    pub(crate) async fn execute_raw_with<F, Fut>(
-        &self,
-        query: &str,
-        variables: Option<serde_json::Value>,
-        branch: Option<&str>,
-        send: F,
-    ) -> Result<GraphQlResponse<serde_json::Value>>
-    where
-        F: FnOnce(Url, serde_json::Value) -> Fut,
-        Fut: Future<Output = Result<(StatusCode, String)>>,
-    {
-        let url = self.config.graphql_url(branch)?;
-        let body = serde_json::json!({
-            "query": query,
-            "variables": variables.unwrap_or_else(|| serde_json::json!({})),
-        });
-
-        let (status, text) = send(url, body).await?;
-        parse_graphql_response(status, text)
-    }
-
     pub(crate) async fn execute_with<T: DeserializeOwned, F, Fut>(
         &self,
         query: &str,
@@ -365,11 +338,16 @@ mod tests {
         let config = ClientConfig::new("http://localhost:1234", "test-token");
         let client = test_client(config);
         let response = client
-            .execute_raw_with("query { ok }", None, Some("main"), |url, body| async move {
-                assert_eq!(url.path(), "/graphql/main");
-                assert_eq!(body["query"], "query { ok }");
-                Ok((StatusCode::OK, "{\"data\": {\"ok\": true}}".to_string()))
-            })
+            .execute_with::<serde_json::Value, _, _>(
+                "query { ok }",
+                None,
+                Some("main"),
+                |url, body| async move {
+                    assert_eq!(url.path(), "/graphql/main");
+                    assert_eq!(body["query"], "query { ok }");
+                    Ok((StatusCode::OK, "{\"data\": {\"ok\": true}}".to_string()))
+                },
+            )
             .await
             .unwrap();
 
@@ -382,12 +360,17 @@ mod tests {
         let config = ClientConfig::new("http://localhost:1234", "test-token");
         let client = test_client(config);
         let err = client
-            .execute_raw_with("query { ok }", None, None, |_url, _body| async move {
-                Ok((
-                    StatusCode::OK,
-                    "{\"data\": null, \"errors\": [{\"message\": \"boom\"}]}".to_string(),
-                ))
-            })
+            .execute_with::<serde_json::Value, _, _>(
+                "query { ok }",
+                None,
+                None,
+                |_url, _body| async move {
+                    Ok((
+                        StatusCode::OK,
+                        "{\"data\": null, \"errors\": [{\"message\": \"boom\"}]}".to_string(),
+                    ))
+                },
+            )
             .await;
 
         assert!(matches!(err, Err(Error::GraphQl { .. })));
@@ -418,12 +401,17 @@ mod tests {
         let config = ClientConfig::new("http://localhost:1234", "test-token");
         let client = test_client(config);
         let err = client
-            .execute_raw_with("query { ok }", None, None, |_url, _body| async move {
-                Ok((
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    "{\"data\":null}".to_string(),
-                ))
-            })
+            .execute_with::<serde_json::Value, _, _>(
+                "query { ok }",
+                None,
+                None,
+                |_url, _body| async move {
+                    Ok((
+                        StatusCode::INTERNAL_SERVER_ERROR,
+                        "{\"data\":null}".to_string(),
+                    ))
+                },
+            )
             .await
             .unwrap_err();
 
@@ -475,10 +463,15 @@ mod tests {
             ClientConfig::new("http://localhost:1234", "test-token").with_default_branch("main");
         let client = test_client(config);
         let response = client
-            .execute_raw_with("query { ok }", None, None, |url, _body| async move {
-                assert_eq!(url.path(), "/graphql/main");
-                Ok((StatusCode::OK, "{\"data\": {\"ok\": true}}".to_string()))
-            })
+            .execute_with::<serde_json::Value, _, _>(
+                "query { ok }",
+                None,
+                None,
+                |url, _body| async move {
+                    assert_eq!(url.path(), "/graphql/main");
+                    Ok((StatusCode::OK, "{\"data\": {\"ok\": true}}".to_string()))
+                },
+            )
             .await
             .unwrap();
 

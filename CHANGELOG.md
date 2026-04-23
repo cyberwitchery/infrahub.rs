@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- codegen: generated `Cargo.toml` now derives its crate version and `infrahub` dependency version from the codegen binary's own package version instead of hardcoding `0.2.0`
 - add `Error::is_retryable()` for classifying transient errors (5xx, 429, timeouts, network failures) vs permanent ones (config, parse, client errors)
 - return `Result::Err` instead of panicking when a file upload has an invalid MIME content type
 - codegen: percent-encode the `--branch` query parameter in schema URLs, matching the library-side fix from 0.2.0

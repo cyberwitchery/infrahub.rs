@@ -641,10 +641,15 @@ mod tests {
         let config = ClientConfig::new("http://localhost:1234", "test-token");
         let client = test_client(config);
         client
-            .execute_raw_with("query { ok }", None, None, |_url, body| async move {
-                assert_eq!(body["variables"], serde_json::json!({}));
-                Ok((StatusCode::OK, r#"{"data": {"ok": true}}"#.to_string()))
-            })
+            .execute_with::<serde_json::Value, _, _>(
+                "query { ok }",
+                None,
+                None,
+                |_url, body| async move {
+                    assert_eq!(body["variables"], serde_json::json!({}));
+                    Ok((StatusCode::OK, r#"{"data": {"ok": true}}"#.to_string()))
+                },
+            )
             .await
             .unwrap();
     }
@@ -656,7 +661,7 @@ mod tests {
         let client = test_client(config);
         let vars = serde_json::json!({"id": "abc-123", "name": "test"});
         let response = client
-            .execute_raw_with(
+            .execute_with::<serde_json::Value, _, _>(
                 "query GetDevice($id: String!) { device(id: $id) { name } }",
                 Some(vars),
                 None,
@@ -680,12 +685,17 @@ mod tests {
         let config = ClientConfig::new("http://localhost:1234", "test-token");
         let client = test_client(config);
         let err = client
-            .execute_raw_with("query { ok }", None, None, |_url, _body| async move {
-                Ok((
-                    StatusCode::SERVICE_UNAVAILABLE,
-                    r#"{"data": null}"#.to_string(),
-                ))
-            })
+            .execute_with::<serde_json::Value, _, _>(
+                "query { ok }",
+                None,
+                None,
+                |_url, _body| async move {
+                    Ok((
+                        StatusCode::SERVICE_UNAVAILABLE,
+                        r#"{"data": null}"#.to_string(),
+                    ))
+                },
+            )
             .await
             .unwrap_err();
         assert!(err.is_retryable());
@@ -698,9 +708,14 @@ mod tests {
         let config = ClientConfig::new("http://localhost:1234", "test-token");
         let client = test_client(config);
         let err = client
-            .execute_raw_with("query { ok }", None, None, |_url, _body| async move {
-                Ok((StatusCode::BAD_REQUEST, r#"{"data": null}"#.to_string()))
-            })
+            .execute_with::<serde_json::Value, _, _>(
+                "query { ok }",
+                None,
+                None,
+                |_url, _body| async move {
+                    Ok((StatusCode::BAD_REQUEST, r#"{"data": null}"#.to_string()))
+                },
+            )
             .await
             .unwrap_err();
         assert!(!err.is_retryable());
@@ -712,12 +727,17 @@ mod tests {
         let config = ClientConfig::new("http://localhost:1234", "test-token");
         let client = test_client(config);
         let err = client
-            .execute_raw_with("query { ok }", None, None, |_url, _body| async move {
-                Ok((
-                    StatusCode::UNAUTHORIZED,
-                    r#"{"data": null, "errors": [{"message": "unauthorized"}]}"#.to_string(),
-                ))
-            })
+            .execute_with::<serde_json::Value, _, _>(
+                "query { ok }",
+                None,
+                None,
+                |_url, _body| async move {
+                    Ok((
+                        StatusCode::UNAUTHORIZED,
+                        r#"{"data": null, "errors": [{"message": "unauthorized"}]}"#.to_string(),
+                    ))
+                },
+            )
             .await
             .unwrap_err();
         assert!(err.is_auth_error());

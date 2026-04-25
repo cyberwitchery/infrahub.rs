@@ -598,7 +598,7 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
         }
         out.push_str("}\n\n");
         out.push_str(&format!("impl {} {{\n", filters_struct));
-        out.push_str("    fn to_vars(&self) -> Value {\n");
+        out.push_str("    fn to_vars(&self) -> Result<Value> {\n");
         out.push_str("        let mut vars = serde_json::Map::new();\n");
         for arg in args {
             let rust_name = to_rust_field(&arg.name);
@@ -606,12 +606,12 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
                 "        if let Some(value) = &self.{rust_name} {{\n"
             ));
             out.push_str(&format!(
-                "            vars.insert(\"{}\".to_string(), serde_json::to_value(value).expect(\"serialize\"));\n",
+                "            vars.insert(\"{}\".to_string(), serde_json::to_value(value)?);\n",
                 arg.name
             ));
             out.push_str("        }\n");
         }
-        out.push_str("        Value::Object(vars)\n");
+        out.push_str("        Ok(Value::Object(vars))\n");
         out.push_str("    }\n");
         out.push_str("}\n\n");
     }
@@ -647,7 +647,7 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
             filters_struct = format_args!("{}Filters", model.name),
             model_type = model.node_type
         ));
-        out.push_str("        let vars = filters.map(|f| f.to_vars()).unwrap_or_else(|| Value::Object(serde_json::Map::new()));\n");
+        out.push_str("        let vars = filters.map(|f| f.to_vars()).transpose()?.unwrap_or_else(|| Value::Object(serde_json::Map::new()));\n");
         out.push_str(&format!(
             "        let query = r#\"{op} {{ {name}{args} {sel} }}\"#;\n",
             op = op_header,
@@ -711,7 +711,7 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
             out.push_str("                .unwrap_or(base_offset);\n");
             out.push_str("            page_filters.offset = Some(current_offset);\n");
         }
-        out.push_str("            let vars = page_filters.to_vars();\n");
+        out.push_str("            let vars = page_filters.to_vars()?;\n");
         out.push_str("            Box::pin(async move {\n");
         out.push_str(&format!(
             "                let response = client.execute::<{}>(query, Some(vars), branch.as_deref()).await?;\n",
@@ -1108,13 +1108,13 @@ fn render_vars_builder(args: &[InputValue<String>]) -> String {
         if is_optional(&arg.value_type) {
             out.push_str(&format!("        if let Some(value) = {} {{\n", rust_name));
             out.push_str(&format!(
-                "            vars.insert(\"{}\".to_string(), serde_json::to_value(value).expect(\"serialize\"));\n",
+                "            vars.insert(\"{}\".to_string(), serde_json::to_value(value)?);\n",
                 var_name
             ));
             out.push_str("        }\n");
         } else {
             out.push_str(&format!(
-                "        vars.insert(\"{}\".to_string(), serde_json::to_value({}).expect(\"serialize\"));\n",
+                "        vars.insert(\"{}\".to_string(), serde_json::to_value({})?);\n",
                 var_name, rust_name
             ));
         }

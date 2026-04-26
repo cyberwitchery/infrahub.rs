@@ -1,6 +1,6 @@
 # changelog
 
-## Unreleased
+## 0.2.1 - 2026-04-26
 
 - fix: non-JSON error responses (e.g. nginx 502 pages) now return `Error::GraphQl` with the HTTP status code preserved instead of a misleading `Error::Json`
 - codegen: generated `Cargo.toml` now derives its crate version and `infrahub` dependency version from the codegen binary's own package version instead of hardcoding `0.2.0`
@@ -8,6 +8,7 @@
 - return `Result::Err` instead of panicking when a file upload has an invalid MIME content type
 - codegen: percent-encode the `--branch` query parameter in schema URLs, matching the library-side fix from 0.2.0
 - percent-encode path segments in `graphql_url`, `file_url`, `file_by_hfid_url`, and `file_by_storage_id_url` so branch names with `/` or `#` (and other special characters in node IDs, kinds, etc.) no longer produce malformed URLs
+- codegen: generated request builders now return `Result::Err` on serialization failure instead of panicking via `.expect()`
 - ci: bump pinned Infrahub version from 1.8.4 to 1.8.5
 
 ## 0.2.0 - 2026-03-30

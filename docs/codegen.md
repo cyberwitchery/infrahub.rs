@@ -39,7 +39,7 @@ INFRAHUB_TOKEN=... cargo run --bin infrahub-codegen -- \
 
 ```toml
 [dependencies]
-infrahub = "0.2.0"
+infrahub = "0.2.1"
 infrahub-generated = { path = "/tmp/infrahub-generated" }
 ```
 

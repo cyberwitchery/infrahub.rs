@@ -197,10 +197,15 @@ impl ClientConfig {
             .filter(|b| !b.is_empty())
     }
 
+    /// parse a url by appending a path to the base url
+    fn base_url_with_path(&self, path: &str) -> Result<Url> {
+        let base = self.base_url.as_str().trim_end_matches('/');
+        Ok(Url::parse(&format!("{}{}", base, path))?)
+    }
+
     /// build the graphql url for a branch (or default branch if none provided)
     pub(crate) fn graphql_url(&self, branch: Option<&str>) -> Result<Url> {
-        let base = self.base_url.as_str().trim_end_matches('/');
-        let mut url = Url::parse(&format!("{}/graphql", base))?;
+        let mut url = self.base_url_with_path("/graphql")?;
         if let Some(branch) = self.resolve_branch(branch) {
             url.path_segments_mut()
                 .expect("HTTP URL supports path segments")
@@ -211,8 +216,7 @@ impl ClientConfig {
 
     /// build a file download url by node id
     pub(crate) fn file_url(&self, node_id: &str, branch: Option<&str>) -> Result<Url> {
-        let base = self.base_url.as_str().trim_end_matches('/');
-        let mut url = Url::parse(&format!("{}/api/files", base))?;
+        let mut url = self.base_url_with_path("/api/files")?;
         url.path_segments_mut()
             .expect("HTTP URL supports path segments")
             .push(node_id);
@@ -229,8 +233,7 @@ impl ClientConfig {
         hfid: &[&str],
         branch: Option<&str>,
     ) -> Result<Url> {
-        let base = self.base_url.as_str().trim_end_matches('/');
-        let mut url = Url::parse(&format!("{}/api/files/by-hfid", base))?;
+        let mut url = self.base_url_with_path("/api/files/by-hfid")?;
         {
             let mut segments = url
                 .path_segments_mut()
@@ -252,8 +255,7 @@ impl ClientConfig {
         storage_id: &str,
         branch: Option<&str>,
     ) -> Result<Url> {
-        let base = self.base_url.as_str().trim_end_matches('/');
-        let mut url = Url::parse(&format!("{}/api/files/by-storage-id", base))?;
+        let mut url = self.base_url_with_path("/api/files/by-storage-id")?;
         url.path_segments_mut()
             .expect("HTTP URL supports path segments")
             .push(storage_id);
@@ -265,8 +267,7 @@ impl ClientConfig {
 
     /// build the schema url for a branch (or default branch if none provided)
     pub(crate) fn schema_url(&self, branch: Option<&str>) -> Result<Url> {
-        let base = self.base_url.as_str().trim_end_matches('/');
-        let mut url = Url::parse(&format!("{}/schema.graphql", base))?;
+        let mut url = self.base_url_with_path("/schema.graphql")?;
         if let Some(branch) = self.resolve_branch(branch) {
             url.query_pairs_mut().append_pair("branch", &branch);
         }

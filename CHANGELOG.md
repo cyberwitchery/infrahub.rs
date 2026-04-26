@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- fix: non-JSON error responses (e.g. nginx 502 pages) now return `Error::GraphQl` with the HTTP status code preserved instead of a misleading `Error::Json`
 - codegen: generated `Cargo.toml` now derives its crate version and `infrahub` dependency version from the codegen binary's own package version instead of hardcoding `0.2.0`
 - add `Error::is_retryable()` for classifying transient errors (5xx, 429, timeouts, network failures) vs permanent ones (config, parse, client errors)
 - return `Result::Err` instead of panicking when a file upload has an invalid MIME content type

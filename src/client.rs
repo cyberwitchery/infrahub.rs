@@ -177,7 +177,20 @@ fn parse_graphql_response<T: DeserializeOwned>(
     status: StatusCode,
     text: String,
 ) -> Result<GraphQlResponse<T>> {
-    let parsed: GraphQlResponse<T> = serde_json::from_str(&text)?;
+    let parsed: GraphQlResponse<T> = match serde_json::from_str(&text) {
+        Ok(v) => v,
+        Err(json_err) => {
+            if !status.is_success() {
+                return Err(Error::GraphQl {
+                    status: Some(status.as_u16()),
+                    errors: Vec::new(),
+                    body: text,
+                    message: format!("http {status}: non-JSON response"),
+                });
+            }
+            return Err(json_err.into());
+        }
+    };
     if !parsed.errors.is_empty() {
         let message = parsed
             .errors
@@ -589,6 +602,30 @@ mod tests {
         )
         .unwrap_err();
         assert!(matches!(err, Error::Json(_)));
+    }
+
+    #[test]
+    fn test_parse_graphql_response_non_json_error_body() {
+        let html = "<html><body><h1>502 Bad Gateway</h1></body></html>".to_string();
+        let err =
+            parse_graphql_response::<serde_json::Value>(StatusCode::BAD_GATEWAY, html.clone())
+                .unwrap_err();
+        match err {
+            Error::GraphQl {
+                status,
+                body,
+                message,
+                ..
+            } => {
+                assert_eq!(status, Some(502));
+                assert_eq!(body, html);
+                assert!(
+                    message.contains("502"),
+                    "message should contain status code"
+                );
+            }
+            other => panic!("expected GraphQl error, got: {other:?}"),
+        }
     }
 
     #[test]

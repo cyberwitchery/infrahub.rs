@@ -1,5 +1,9 @@
 # changelog
 
+## Unreleased
+
+- ci: bump pinned Infrahub version from 1.8.5 to 1.9.0
+
 ## 0.2.1 - 2026-04-26
 
 - fix: non-JSON error responses (e.g. nginx 502 pages) now return `Error::GraphQl` with the HTTP status code preserved instead of a misleading `Error::Json`

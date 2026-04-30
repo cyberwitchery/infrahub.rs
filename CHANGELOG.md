@@ -3,6 +3,7 @@
 ## Unreleased
 
 - ci: bump pinned Infrahub version from 1.8.5 to 1.9.0
+- docs: update local-infrahub quickstart to v1.9.0
 
 ## 0.2.1 - 2026-04-26
 

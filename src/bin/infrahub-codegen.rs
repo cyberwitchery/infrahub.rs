@@ -431,7 +431,7 @@ fn render_responses(ctx: &SchemaContext) -> String {
 fn render_client(ctx: &SchemaContext) -> String {
     let mut out = String::new();
     out.push_str("//! generated client\n\n");
-    out.push_str("#![allow(non_snake_case, clippy::too_many_arguments)]\n\n");
+    out.push_str("#![allow(non_snake_case, clippy::too_many_arguments, clippy::field_reassign_with_default)]\n\n");
     out.push_str("use infrahub::{Client, GraphQlResponse, Result};\n");
     out.push_str("use serde_json::Value;\n\n");
     out.push_str("use crate::inputs::*;\n");
@@ -544,7 +544,7 @@ fn render_api_module<'a>(
     let struct_name = format!("{}Api", to_rust_ident(namespace));
     let mut out = String::new();
     out.push_str("//! generated api module\n\n");
-    out.push_str("#![allow(non_snake_case, unused_imports)]\n\n");
+    out.push_str("#![allow(non_snake_case, unused_imports, unused_assignments, clippy::field_reassign_with_default)]\n\n");
     out.push_str(
         "use infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};\n",
     );
@@ -711,8 +711,8 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
             out.push_str("                .unwrap_or(base_offset);\n");
             out.push_str("            page_filters.offset = Some(current_offset);\n");
         }
-        out.push_str("            let vars = page_filters.to_vars()?;\n");
         out.push_str("            Box::pin(async move {\n");
+        out.push_str("            let vars = page_filters.to_vars()?;\n");
         out.push_str(&format!(
             "                let response = client.execute::<{}>(query, Some(vars), branch.as_deref()).await?;\n",
             response_type

@@ -1,3 +1,6 @@
+[workspace]
+members = ["test-client"]
+
 [package]
 name = "infrahub"
 version = "0.2.1"

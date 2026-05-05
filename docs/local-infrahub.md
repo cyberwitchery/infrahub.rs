@@ -6,10 +6,10 @@ from the repo root, download the upstream compose file and start infrahub:
 
 ```bash
 curl -sSfL \
-  "https://raw.githubusercontent.com/opsmill/infrahub/infrahub-v1.9.0/docker-compose.yml" \
+  "https://raw.githubusercontent.com/opsmill/infrahub/infrahub-v1.9.3/docker-compose.yml" \
   -o /tmp/infrahub-compose.yml
 
-VERSION=1.9.0 docker compose -f /tmp/infrahub-compose.yml up -d
+VERSION=1.9.3 docker compose -f /tmp/infrahub-compose.yml up -d
 ```
 
 ## confirm it is running

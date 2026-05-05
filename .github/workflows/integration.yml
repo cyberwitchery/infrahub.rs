@@ -28,7 +28,7 @@ jobs:
     runs-on: big
     timeout-minutes: 30
     env:
-      INFRAHUB_VERSION: 1.8.5
+      INFRAHUB_VERSION: 1.9.0
       INFRAHUB_URL: http://localhost:8000
       INFRAHUB_ADMIN_PASSWORD: ci-admin-password
       INFRAHUB_ADMIN_TOKEN: ci-admin-token

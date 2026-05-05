@@ -269,6 +269,18 @@ pub struct CoreGeneratorInstanceResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreStaticKeyValueResponse {
+    #[serde(rename = "CoreStaticKeyValue")]
+    pub core_static_key_value: Box<PaginatedCoreStaticKeyValue>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreEnvKeyValueResponse {
+    #[serde(rename = "CoreEnvKeyValue")]
+    pub core_env_key_value: Box<PaginatedCoreEnvKeyValue>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreStandardWebhookResponse {
     #[serde(rename = "CoreStandardWebhook")]
     pub core_standard_webhook: Box<PaginatedCoreStandardWebhook>,
@@ -413,9 +425,21 @@ pub struct CoreArtifactTargetResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreFileObjectResponse {
+    #[serde(rename = "CoreFileObject")]
+    pub core_file_object: Box<PaginatedCoreFileObject>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreTaskTargetResponse {
     #[serde(rename = "CoreTaskTarget")]
     pub core_task_target: Box<PaginatedCoreTaskTarget>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreKeyValueResponse {
+    #[serde(rename = "CoreKeyValue")]
+    pub core_key_value: Box<PaginatedCoreKeyValue>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -551,6 +575,12 @@ pub struct InfrahubBranchResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InfrahubGraphQLQueryReportResponse {
+    #[serde(rename = "InfrahubGraphQLQueryReport")]
+    pub infrahub_graph_q_l_query_report: Box<GraphQLQueryReport>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct InfrahubInfoResponse {
     #[serde(rename = "InfrahubInfo")]
     pub infrahub_info: Box<Info>,
@@ -566,18 +596,6 @@ pub struct InfrahubIPAddressGetNextAvailableResponse {
 pub struct InfrahubIPPrefixGetNextAvailableResponse {
     #[serde(rename = "InfrahubIPPrefixGetNextAvailable")]
     pub infrahub_i_p_prefix_get_next_available: Box<IPPrefixGetNextAvailable>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct IPAddressGetNextAvailableResponse {
-    #[serde(rename = "IPAddressGetNextAvailable")]
-    pub i_p_address_get_next_available: Box<IPAddressGetNextAvailable>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct IPPrefixGetNextAvailableResponse {
-    #[serde(rename = "IPPrefixGetNextAvailable")]
-    pub i_p_prefix_get_next_available: Box<IPPrefixGetNextAvailable>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

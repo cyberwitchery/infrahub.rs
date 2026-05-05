@@ -330,7 +330,7 @@ fn render_types(ctx: &SchemaContext) -> String {
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
             out.push_str(&format!("pub struct {} {{\n", obj_name));
             for field in &obj.fields {
-                if is_field_deprecated(field) {
+                if should_skip_field(field) {
                     continue;
                 }
                 let rust_name = to_rust_field(field.name.as_str());
@@ -1182,7 +1182,7 @@ fn selection_for_type(
     let mut fields = Vec::new();
     if let Some(TypeDefinition::Object(obj)) = ctx.types.get(type_name) {
         for field in &obj.fields {
-            if has_required_args(field) || is_field_deprecated(field) {
+            if has_required_args(field) || should_skip_field(field) {
                 continue;
             }
             let field_base = base_type_name(&field.field_type);
@@ -1241,6 +1241,19 @@ fn is_field_deprecated(field: &Field<String>) -> bool {
 
 fn is_enum_value_deprecated(value: &EnumValue<String>) -> bool {
     value.directives.iter().any(|d| d.name == "deprecated")
+}
+
+// Fields the server advertises in introspection but cannot resolve at runtime.
+// Selecting these aborts the whole query. Tracked upstream at
+// https://github.com/opsmill/infrahub/issues/9146.
+const UNRESOLVABLE_FIELDS: &[&str] = &["is_inherited"];
+
+fn is_field_unresolvable(field: &Field<String>) -> bool {
+    UNRESOLVABLE_FIELDS.contains(&field.name.as_str())
+}
+
+fn should_skip_field(field: &Field<String>) -> bool {
+    is_field_deprecated(field) || is_field_unresolvable(field)
 }
 
 fn is_scalar_type(name: &str) -> bool {
@@ -1445,6 +1458,32 @@ mod codegen_name_tests {
         assert!(sel.contains("id"));
         assert!(sel.contains("name"));
         assert!(!sel.contains("_updated_at"));
+    }
+
+    #[test]
+    fn test_unresolvable_fields_skipped() {
+        let schema = r#"
+            type Query { tag: Tag }
+            type Tag {
+                id: String
+                name: TextAttribute
+            }
+            type TextAttribute {
+                value: String
+                is_default: Boolean
+                is_inherited: Boolean
+                is_protected: Boolean
+            }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let mut stack = BTreeSet::new();
+        let sel = selection_for_type("TextAttribute", &ctx, &mut stack, 0);
+        assert!(sel.contains("is_default"));
+        assert!(sel.contains("is_protected"));
+        assert!(!sel.contains("is_inherited"));
+        let types_rs = render_types(&ctx);
+        assert!(!types_rs.contains("is_inherited"));
     }
 
     #[test]

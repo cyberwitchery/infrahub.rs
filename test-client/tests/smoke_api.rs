@@ -199,9 +199,10 @@ async fn tag_paginate_with_limit() {
     };
 
     // paginate with limit=2 so we get multiple pages
-    let mut filters =
-        infrahub_test_client::api::builtin::BuiltinTagFilters::default();
-    filters.limit = Some(2);
+    let filters = infrahub_test_client::api::builtin::BuiltinTagFilters {
+        limit: Some(2),
+        ..Default::default()
+    };
     let all = client
         .api()
         .builtin()

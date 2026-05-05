@@ -2,8 +2,13 @@
 
 ## Unreleased
 
-- ci: bump pinned Infrahub version from 1.8.5 to 1.9.0
-- docs: update local-infrahub quickstart to v1.9.0
+- ci: bump pinned Infrahub version from 1.8.5 to 1.9.3
+- docs: update local-infrahub quickstart to v1.9.3
+- add integration smoke tests for the generated typed API layer, exercising list / get_by_id / paginate flows against a live Infrahub instance
+- add `test-client` workspace member: a pre-generated client crate from `schema/infrahub.graphql` used by integration tests
+- ci: verify generated test client stays in sync with schema; run typed API smoke tests alongside existing raw-query tests
+- schema: refresh `schema/infrahub.graphql` against Infrahub 1.9.3
+- codegen: skip `is_inherited` in generated selection sets and types. The field is still advertised by the GraphQL schema on every attribute type in 1.9.x but the server no longer resolves it, so any selection that includes it returns an error (tracked upstream at [opsmill/infrahub#9146](https://github.com/opsmill/infrahub/issues/9146))
 
 ## 0.2.1 - 2026-04-26
 

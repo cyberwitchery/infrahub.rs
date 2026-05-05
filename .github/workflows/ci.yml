@@ -25,7 +25,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt
-      - run: cargo fmt --check
+      - run: cargo fmt -p infrahub --check
 
   clippy:
     name: clippy
@@ -81,7 +81,7 @@ jobs:
           components: llvm-tools-preview
       - uses: taiki-e/install-action@cargo-llvm-cov
       - uses: Swatinem/rust-cache@v2
-      - run: cargo llvm-cov --workspace --all-features --ignore-filename-regex 'src/bin/infrahub-codegen.rs' --fail-under-lines 80 --lcov --output-path lcov.info
+      - run: cargo llvm-cov --workspace --all-features --ignore-filename-regex 'src/bin/infrahub-codegen.rs|test-client/' --fail-under-lines 80 --lcov --output-path lcov.info
 
   success:
     name: success

@@ -10,6 +10,8 @@ on:
       - "Cargo.lock"
       - "src/**"
       - "tests/**"
+      - "test-client/**"
+      - "schema/**"
       - ".github/workflows/integration.yml"
   push:
     branches:
@@ -19,6 +21,8 @@ on:
       - "Cargo.lock"
       - "src/**"
       - "tests/**"
+      - "test-client/**"
+      - "schema/**"
       - ".github/workflows/integration.yml"
   schedule:
     - cron: "0 6 * * 1"
@@ -28,7 +32,7 @@ jobs:
     runs-on: big
     timeout-minutes: 30
     env:
-      INFRAHUB_VERSION: 1.9.0
+      INFRAHUB_VERSION: 1.9.3
       INFRAHUB_URL: http://localhost:8000
       INFRAHUB_ADMIN_PASSWORD: ci-admin-password
       INFRAHUB_ADMIN_TOKEN: ci-admin-token
@@ -69,7 +73,18 @@ jobs:
           docker compose -f /tmp/infrahub-compose.yml logs --tail 200 || true
           exit 1
 
+      - name: Verify generated test client is up to date
+        run: |
+          cargo run --bin infrahub-codegen -- \
+            --schema schema/infrahub.graphql \
+            --out /tmp/test-client-check \
+            --crate-name infrahub-test-client \
+            --infrahub-path ..
+          diff -r test-client/src /tmp/test-client-check/src
+
       - name: Run smoke tests
         env:
           INFRAHUB_TOKEN: ${{ env.INFRAHUB_ADMIN_TOKEN }}
-        run: cargo test -p infrahub --test smoke_query
+        run: |
+          cargo test -p infrahub --test smoke_query
+          cargo test -p infrahub-test-client --test smoke_api -- --test-threads=1

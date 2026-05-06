@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0 - 2026-05-06
+
 - ci: bump pinned Infrahub version from 1.8.5 to 1.9.3
 - docs: update local-infrahub quickstart to v1.9.3
 - add integration smoke tests for the generated typed API layer, exercising list / get_by_id / paginate flows against a live Infrahub instance

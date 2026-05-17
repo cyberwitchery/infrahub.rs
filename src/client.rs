@@ -67,7 +67,11 @@ impl Client {
         &self.config
     }
 
-    /// execute a raw graphql query
+    /// Execute a raw GraphQL query and return the untyped JSON response.
+    ///
+    /// This method retries on transient errors (5xx, 429, timeouts, connection
+    /// errors) with exponential backoff. Callers sending mutations should be
+    /// aware that the operation may be retried on transient failures.
     pub async fn execute_raw(
         &self,
         query: &str,
@@ -77,7 +81,11 @@ impl Client {
         self.execute(query, variables, branch).await
     }
 
-    /// execute a raw graphql query and deserialize into a typed response
+    /// Execute a GraphQL query and deserialize into a typed response.
+    ///
+    /// This method retries on transient errors (5xx, 429, timeouts, connection
+    /// errors) with exponential backoff. Callers sending mutations should be
+    /// aware that the operation may be retried on transient failures.
     pub async fn execute<T: DeserializeOwned>(
         &self,
         query: &str,
@@ -102,7 +110,11 @@ impl Client {
         .await
     }
 
-    /// execute a generated operation by name
+    /// Execute a generated operation by name.
+    ///
+    /// This method retries on transient errors (5xx, 429, timeouts, connection
+    /// errors) with exponential backoff. Callers sending mutations should be
+    /// aware that the operation may be retried on transient failures.
     pub async fn execute_operation<O: Operation>(
         &self,
         variables: Option<serde_json::Value>,
@@ -883,16 +895,16 @@ mod tests {
         let delay2 = Client::retry_delay(2).as_millis();
         let delay3 = Client::retry_delay(3).as_millis();
         assert!(
-            (200..=700).contains(&delay1),
-            "attempt 1 delay {delay1}ms outside expected 200..=700"
+            (200..=250).contains(&delay1),
+            "attempt 1 delay {delay1}ms outside expected 200..=250"
         );
         assert!(
-            (400..=900).contains(&delay2),
-            "attempt 2 delay {delay2}ms outside expected 400..=900"
+            (400..=500).contains(&delay2),
+            "attempt 2 delay {delay2}ms outside expected 400..=500"
         );
         assert!(
-            (800..=1300).contains(&delay3),
-            "attempt 3 delay {delay3}ms outside expected 800..=1300"
+            (800..=1000).contains(&delay3),
+            "attempt 3 delay {delay3}ms outside expected 800..=1000"
         );
     }
 

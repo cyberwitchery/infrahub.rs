@@ -45,6 +45,9 @@ pub struct ClientConfig {
     /// callback to customize the http client builder before building
     pub(crate) http_client_builder:
         Option<Arc<dyn Fn(reqwest::ClientBuilder) -> reqwest::ClientBuilder + Send + Sync>>,
+
+    /// maximum number of retries for failed requests
+    pub(crate) max_retries: u32,
 }
 
 impl ClientConfig {
@@ -86,6 +89,7 @@ impl ClientConfig {
             extra_headers: HeaderMap::new(),
             http_client: None,
             http_client_builder: None,
+            max_retries: 3,
         }
     }
 
@@ -161,6 +165,14 @@ impl ClientConfig {
         F: Fn(reqwest::ClientBuilder) -> reqwest::ClientBuilder + Send + Sync + 'static,
     {
         self.http_client_builder = Some(Arc::new(f));
+        self
+    }
+
+    /// set the maximum number of retries for transient request failures
+    ///
+    /// default: 3. set to 0 to disable retries.
+    pub fn with_max_retries(mut self, max_retries: u32) -> Self {
+        self.max_retries = max_retries;
         self
     }
 
@@ -286,6 +298,7 @@ impl std::fmt::Debug for ClientConfig {
             .field("default_branch", &self.default_branch)
             .field("http_client", &self.http_client.is_some())
             .field("http_client_builder", &self.http_client_builder.is_some())
+            .field("max_retries", &self.max_retries)
             .field("token", &"<redacted>")
             .finish()
     }
@@ -523,6 +536,24 @@ mod tests {
             url.as_str(),
             "https://infrahub.example.com/api/files/by-storage-id/store%2Fid%231"
         );
+    }
+
+    #[test]
+    fn test_default_max_retries() {
+        let config = ClientConfig::new("https://infrahub.example.com", "token");
+        assert_eq!(config.max_retries, 3);
+    }
+
+    #[test]
+    fn test_with_max_retries() {
+        let config = ClientConfig::new("https://infrahub.example.com", "token").with_max_retries(5);
+        assert_eq!(config.max_retries, 5);
+    }
+
+    #[test]
+    fn test_with_max_retries_zero_disables() {
+        let config = ClientConfig::new("https://infrahub.example.com", "token").with_max_retries(0);
+        assert_eq!(config.max_retries, 0);
     }
 
     #[test]

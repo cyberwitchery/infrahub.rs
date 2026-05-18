@@ -18,6 +18,7 @@ use reqwest::header::{HeaderMap, HeaderValue};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::PathBuf;
+use std::time::Duration;
 use url::Url;
 
 #[derive(Debug)]
@@ -143,7 +144,10 @@ fn load_schema(args: &Args) -> Result<String, String> {
         );
     }
 
-    let client = BlockingClient::new();
+    let client = BlockingClient::builder()
+        .timeout(Duration::from_secs(30))
+        .build()
+        .map_err(|err| err.to_string())?;
     let response = client
         .get(schema_url)
         .headers(headers)

@@ -162,11 +162,13 @@ impl Client {
     async fn download_bytes(&self, url: Url) -> Result<Vec<u8>> {
         let response = self.http.get(url).send().await?;
         if !response.status().is_success() {
+            let status = response.status();
+            let body = response.text().await.unwrap_or_default();
             return Err(Error::GraphQl {
-                status: Some(response.status().as_u16()),
+                status: Some(status.as_u16()),
                 errors: Vec::new(),
-                body: String::new(),
-                message: format!("file download error: {}", response.status()),
+                body,
+                message: format!("file download error: {status}"),
             });
         }
         Ok(response.bytes().await?.to_vec())

@@ -67,11 +67,7 @@ impl Client {
         &self.config
     }
 
-    /// Execute a raw GraphQL query and return the untyped JSON response.
-    ///
-    /// This method retries on transient errors (5xx, 429, timeouts, connection
-    /// errors) with exponential backoff. Callers sending mutations should be
-    /// aware that the operation may be retried on transient failures.
+    /// execute a raw graphql query and return the untyped json response, retrying on transient errors
     pub async fn execute_raw(
         &self,
         query: &str,
@@ -81,11 +77,7 @@ impl Client {
         self.execute(query, variables, branch).await
     }
 
-    /// Execute a GraphQL query and deserialize into a typed response.
-    ///
-    /// This method retries on transient errors (5xx, 429, timeouts, connection
-    /// errors) with exponential backoff. Callers sending mutations should be
-    /// aware that the operation may be retried on transient failures.
+    /// execute a graphql query and deserialize into a typed response, retrying on transient errors
     pub async fn execute<T: DeserializeOwned>(
         &self,
         query: &str,
@@ -110,11 +102,7 @@ impl Client {
         .await
     }
 
-    /// Execute a generated operation by name.
-    ///
-    /// This method retries on transient errors (5xx, 429, timeouts, connection
-    /// errors) with exponential backoff. Callers sending mutations should be
-    /// aware that the operation may be retried on transient failures.
+    /// execute a generated operation by name, retrying on transient errors
     pub async fn execute_operation<O: Operation>(
         &self,
         variables: Option<serde_json::Value>,

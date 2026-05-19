@@ -13,6 +13,8 @@ use reqwest::StatusCode;
 use serde::de::DeserializeOwned;
 use std::future::Future;
 use std::sync::Arc;
+use std::time::Duration;
+use tokio::time::sleep;
 use url::Url;
 
 /// graphql client for infrahub
@@ -65,7 +67,7 @@ impl Client {
         &self.config
     }
 
-    /// execute a raw graphql query
+    /// execute a raw graphql query and return the untyped json response, retrying on transient errors
     pub async fn execute_raw(
         &self,
         query: &str,
@@ -75,23 +77,32 @@ impl Client {
         self.execute(query, variables, branch).await
     }
 
-    /// execute a raw graphql query and deserialize into a typed response
+    /// execute a graphql query and deserialize into a typed response, retrying on transient errors
     pub async fn execute<T: DeserializeOwned>(
         &self,
         query: &str,
         variables: Option<serde_json::Value>,
         branch: Option<&str>,
     ) -> Result<GraphQlResponse<T>> {
-        self.execute_with(query, variables, branch, |url, body| async move {
-            let response = self.http.post(url).json(&body).send().await?;
-            let status = response.status();
-            let text = response.text().await?;
-            Ok((status, text))
+        let url = self.config.graphql_url(branch)?;
+        let body = serde_json::json!({
+            "query": query,
+            "variables": variables.unwrap_or_else(|| serde_json::json!({})),
+        });
+        self.retry_loop(|| {
+            let url = url.clone();
+            let body = body.clone();
+            async move {
+                let response = self.http.post(url).json(&body).send().await?;
+                let status = response.status();
+                let text = response.text().await?;
+                parse_graphql_response(status, text)
+            }
         })
         .await
     }
 
-    /// execute a generated operation by name
+    /// execute a generated operation by name, retrying on transient errors
     pub async fn execute_operation<O: Operation>(
         &self,
         variables: Option<serde_json::Value>,
@@ -102,11 +113,15 @@ impl Client {
 
     /// fetch the graphql schema as text
     pub async fn fetch_schema(&self, branch: Option<&str>) -> Result<String> {
-        self.fetch_schema_with(branch, |url| async move {
-            let response = self.http.get(url).send().await?;
-            let status = response.status();
-            let text = response.text().await?;
-            Ok((status, text))
+        let url = self.config.schema_url(branch)?;
+        self.retry_loop(|| {
+            let url = url.clone();
+            async move {
+                let response = self.http.get(url).send().await?;
+                let status = response.status();
+                let text = response.text().await?;
+                parse_schema_response(status, text)
+            }
         })
         .await
     }
@@ -160,18 +175,72 @@ impl Client {
 
     /// shared download helper — GET the given url and return response bytes
     async fn download_bytes(&self, url: Url) -> Result<Vec<u8>> {
-        let response = self.http.get(url).send().await?;
-        if !response.status().is_success() {
-            let status = response.status();
-            let body = response.text().await.unwrap_or_default();
-            return Err(Error::GraphQl {
-                status: Some(status.as_u16()),
-                errors: Vec::new(),
-                body,
-                message: format!("file download error: {status}"),
-            });
+        self.retry_loop(|| {
+            let url = url.clone();
+            async move {
+                let response = self.http.get(url).send().await?;
+                if !response.status().is_success() {
+                    let status = response.status();
+                    let body = response.text().await.unwrap_or_default();
+                    return Err(Error::GraphQl {
+                        status: Some(status.as_u16()),
+                        errors: Vec::new(),
+                        body,
+                        message: format!("file download error: {status}"),
+                    });
+                }
+                Ok(response.bytes().await?.to_vec())
+            }
+        })
+        .await
+    }
+}
+
+impl Client {
+    async fn retry_loop<T, F, Fut>(&self, mut operation: F) -> Result<T>
+    where
+        F: FnMut() -> Fut,
+        Fut: Future<Output = Result<T>>,
+    {
+        let mut attempts = 0;
+        loop {
+            let result = operation().await;
+            match result {
+                Ok(value) => return Ok(value),
+                Err(err) => {
+                    if attempts >= self.config.max_retries || !err.is_retryable() {
+                        return Err(err);
+                    }
+                    attempts += 1;
+                    let delay = Self::retry_delay(attempts);
+                    sleep(delay).await;
+                }
+            }
         }
-        Ok(response.bytes().await?.to_vec())
+    }
+
+    fn retry_delay(attempt: u32) -> Duration {
+        if attempt == 0 {
+            return Duration::from_millis(0);
+        }
+
+        let exp = attempt.saturating_sub(1);
+        let backoff_ms = 200u64.saturating_mul(2u64.saturating_pow(exp));
+        let jitter = (backoff_ms / 4).min(500);
+        let offset = if jitter == 0 {
+            0
+        } else {
+            Self::jitter_seed(attempt) % (jitter + 1)
+        };
+        Duration::from_millis(backoff_ms.saturating_add(offset))
+    }
+
+    fn jitter_seed(attempt: u32) -> u64 {
+        let nanos = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap_or_default()
+            .subsec_nanos() as u64;
+        nanos.wrapping_mul(31).wrapping_add(attempt as u64)
     }
 }
 
@@ -276,7 +345,28 @@ fn parse_schema_response(status: StatusCode, text: String) -> Result<String> {
 }
 
 impl Client {
-    pub(crate) async fn execute_with<T: DeserializeOwned, F, Fut>(
+    pub(crate) async fn execute_multipart_with<T: DeserializeOwned, F, Fut>(
+        &self,
+        query: &str,
+        variables: Option<serde_json::Value>,
+        files: Vec<(&str, FileUpload)>,
+        branch: Option<&str>,
+        send: F,
+    ) -> Result<GraphQlResponse<T>>
+    where
+        F: FnOnce(Url, multipart::Form) -> Fut,
+        Fut: Future<Output = Result<(StatusCode, String)>>,
+    {
+        let url = self.config.graphql_url(branch)?;
+        let form = build_multipart_form(query, variables, files)?;
+        let (status, text) = send(url, form).await?;
+        parse_graphql_response(status, text)
+    }
+}
+
+#[cfg(test)]
+impl Client {
+    async fn execute_with<T: DeserializeOwned, F, Fut>(
         &self,
         query: &str,
         variables: Option<serde_json::Value>,
@@ -297,29 +387,7 @@ impl Client {
         parse_graphql_response(status, text)
     }
 
-    pub(crate) async fn execute_multipart_with<T: DeserializeOwned, F, Fut>(
-        &self,
-        query: &str,
-        variables: Option<serde_json::Value>,
-        files: Vec<(&str, FileUpload)>,
-        branch: Option<&str>,
-        send: F,
-    ) -> Result<GraphQlResponse<T>>
-    where
-        F: FnOnce(Url, multipart::Form) -> Fut,
-        Fut: Future<Output = Result<(StatusCode, String)>>,
-    {
-        let url = self.config.graphql_url(branch)?;
-        let form = build_multipart_form(query, variables, files)?;
-        let (status, text) = send(url, form).await?;
-        parse_graphql_response(status, text)
-    }
-
-    pub(crate) async fn fetch_schema_with<F, Fut>(
-        &self,
-        branch: Option<&str>,
-        send: F,
-    ) -> Result<String>
+    async fn fetch_schema_with<F, Fut>(&self, branch: Option<&str>, send: F) -> Result<String>
     where
         F: FnOnce(Url) -> Fut,
         Fut: Future<Output = Result<(StatusCode, String)>>,
@@ -806,5 +874,145 @@ mod tests {
             .await
             .unwrap();
         assert!(response.data.is_some());
+    }
+
+    #[test]
+    fn test_retry_delay_backoff() {
+        assert_eq!(Client::retry_delay(0), Duration::from_millis(0));
+        let delay1 = Client::retry_delay(1).as_millis();
+        let delay2 = Client::retry_delay(2).as_millis();
+        let delay3 = Client::retry_delay(3).as_millis();
+        assert!(
+            (200..=250).contains(&delay1),
+            "attempt 1 delay {delay1}ms outside expected 200..=250"
+        );
+        assert!(
+            (400..=500).contains(&delay2),
+            "attempt 2 delay {delay2}ms outside expected 400..=500"
+        );
+        assert!(
+            (800..=1000).contains(&delay3),
+            "attempt 3 delay {delay3}ms outside expected 800..=1000"
+        );
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_retry_loop_succeeds_after_transient_errors() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token").with_max_retries(3);
+        let client = test_client(config);
+        let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
+        let count = call_count.clone();
+        let result: Result<String> = client
+            .retry_loop(|| {
+                let count = count.clone();
+                async move {
+                    let n = count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                    if n < 2 {
+                        Err(Error::GraphQl {
+                            status: Some(503),
+                            errors: vec![],
+                            body: String::new(),
+                            message: "service unavailable".to_string(),
+                        })
+                    } else {
+                        Ok("ok".to_string())
+                    }
+                }
+            })
+            .await;
+        assert_eq!(result.unwrap(), "ok");
+        assert_eq!(
+            call_count.load(std::sync::atomic::Ordering::SeqCst),
+            3,
+            "should have been called 3 times (1 initial + 2 retries)"
+        );
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_retry_loop_gives_up_after_max_retries() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token").with_max_retries(2);
+        let client = test_client(config);
+        let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
+        let count = call_count.clone();
+        let result: Result<String> = client
+            .retry_loop(|| {
+                let count = count.clone();
+                async move {
+                    count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                    Err(Error::GraphQl {
+                        status: Some(500),
+                        errors: vec![],
+                        body: String::new(),
+                        message: "server error".to_string(),
+                    })
+                }
+            })
+            .await;
+        assert!(result.is_err());
+        assert_eq!(
+            call_count.load(std::sync::atomic::Ordering::SeqCst),
+            3,
+            "should have been called 3 times (1 initial + 2 retries)"
+        );
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_retry_loop_does_not_retry_permanent_errors() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token").with_max_retries(3);
+        let client = test_client(config);
+        let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
+        let count = call_count.clone();
+        let result: Result<String> = client
+            .retry_loop(|| {
+                let count = count.clone();
+                async move {
+                    count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                    Err(Error::GraphQl {
+                        status: Some(400),
+                        errors: vec![],
+                        body: String::new(),
+                        message: "bad request".to_string(),
+                    })
+                }
+            })
+            .await;
+        assert!(result.is_err());
+        assert_eq!(
+            call_count.load(std::sync::atomic::Ordering::SeqCst),
+            1,
+            "permanent errors should not be retried"
+        );
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_retry_loop_disabled_with_zero_retries() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token").with_max_retries(0);
+        let client = test_client(config);
+        let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
+        let count = call_count.clone();
+        let result: Result<String> = client
+            .retry_loop(|| {
+                let count = count.clone();
+                async move {
+                    count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                    Err(Error::GraphQl {
+                        status: Some(503),
+                        errors: vec![],
+                        body: String::new(),
+                        message: "service unavailable".to_string(),
+                    })
+                }
+            })
+            .await;
+        assert!(result.is_err());
+        assert_eq!(
+            call_count.load(std::sync::atomic::Ordering::SeqCst),
+            1,
+            "with max_retries=0 should only try once"
+        );
     }
 }

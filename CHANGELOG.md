@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- add retry with exponential backoff and jitter for transient HTTP errors (5xx, 429, timeouts, connection failures) using the existing `Error::is_retryable()` classifier. retries are enabled by default (`max_retries: 3`) and apply to `execute`, `fetch_schema`, and file download methods. configure via `ClientConfig::with_max_retries`; set to 0 to disable
+
 ## 0.3.0 - 2026-05-06
 
 - ci: bump pinned Infrahub version from 1.8.5 to 1.9.3

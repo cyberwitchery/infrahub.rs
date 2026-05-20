@@ -3,6 +3,7 @@
 ## Unreleased
 
 - add retry with exponential backoff and jitter for transient HTTP errors (5xx, 429, timeouts, connection failures) using the existing `Error::is_retryable()` classifier. retries are enabled by default (`max_retries: 3`) and apply to `execute`, `fetch_schema`, and file download methods. configure via `ClientConfig::with_max_retries`; set to 0 to disable
+- schema: remove `is_inherited` field from `schema/infrahub.graphql` to match Infrahub 1.9.4 (upstream fix [opsmill/infrahub#9146](https://github.com/opsmill/infrahub/issues/9146)); generated client code is unchanged since the codegen already skipped this field
 
 ## 0.3.0 - 2026-05-06
 

@@ -1247,17 +1247,8 @@ fn is_enum_value_deprecated(value: &EnumValue<String>) -> bool {
     value.directives.iter().any(|d| d.name == "deprecated")
 }
 
-// Fields the server advertises in introspection but cannot resolve at runtime.
-// Selecting these aborts the whole query. Tracked upstream at
-// https://github.com/opsmill/infrahub/issues/9146.
-const UNRESOLVABLE_FIELDS: &[&str] = &["is_inherited"];
-
-fn is_field_unresolvable(field: &Field<String>) -> bool {
-    UNRESOLVABLE_FIELDS.contains(&field.name.as_str())
-}
-
 fn should_skip_field(field: &Field<String>) -> bool {
-    is_field_deprecated(field) || is_field_unresolvable(field)
+    is_field_deprecated(field)
 }
 
 fn is_scalar_type(name: &str) -> bool {
@@ -1462,32 +1453,6 @@ mod codegen_name_tests {
         assert!(sel.contains("id"));
         assert!(sel.contains("name"));
         assert!(!sel.contains("_updated_at"));
-    }
-
-    #[test]
-    fn test_unresolvable_fields_skipped() {
-        let schema = r#"
-            type Query { tag: Tag }
-            type Tag {
-                id: String
-                name: TextAttribute
-            }
-            type TextAttribute {
-                value: String
-                is_default: Boolean
-                is_inherited: Boolean
-                is_protected: Boolean
-            }
-        "#;
-        let doc = parse_schema::<String>(schema).unwrap();
-        let ctx = SchemaContext::new(&doc);
-        let mut stack = BTreeSet::new();
-        let sel = selection_for_type("TextAttribute", &ctx, &mut stack, 0);
-        assert!(sel.contains("is_default"));
-        assert!(sel.contains("is_protected"));
-        assert!(!sel.contains("is_inherited"));
-        let types_rs = render_types(&ctx);
-        assert!(!types_rs.contains("is_inherited"));
     }
 
     #[test]

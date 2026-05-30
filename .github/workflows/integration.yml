@@ -44,6 +44,11 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Cache cargo
+        uses: kunobi-ninja/kache-action@v1
+        with:
+          cache-key-prefix: kache-smoke
+
       - name: Download Infrahub docker compose
         run: |
           curl -sSfL \

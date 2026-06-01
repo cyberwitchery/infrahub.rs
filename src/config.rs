@@ -220,7 +220,7 @@ impl ClientConfig {
         let mut url = self.base_url_with_path("/graphql")?;
         if let Some(branch) = self.resolve_branch(branch) {
             url.path_segments_mut()
-                .expect("HTTP URL supports path segments")
+                .map_err(|()| Error::Config("base URL cannot have path segments".into()))?
                 .push(&branch);
         }
         Ok(url)
@@ -230,7 +230,7 @@ impl ClientConfig {
     pub(crate) fn file_url(&self, node_id: &str, branch: Option<&str>) -> Result<Url> {
         let mut url = self.base_url_with_path("/api/files")?;
         url.path_segments_mut()
-            .expect("HTTP URL supports path segments")
+            .map_err(|()| Error::Config("base URL cannot have path segments".into()))?
             .push(node_id);
         if let Some(branch) = self.resolve_branch(branch) {
             url.query_pairs_mut().append_pair("branch", &branch);
@@ -249,7 +249,7 @@ impl ClientConfig {
         {
             let mut segments = url
                 .path_segments_mut()
-                .expect("HTTP URL supports path segments");
+                .map_err(|()| Error::Config("base URL cannot have path segments".into()))?;
             segments.push(kind);
             for segment in hfid {
                 segments.push(segment);
@@ -269,7 +269,7 @@ impl ClientConfig {
     ) -> Result<Url> {
         let mut url = self.base_url_with_path("/api/files/by-storage-id")?;
         url.path_segments_mut()
-            .expect("HTTP URL supports path segments")
+            .map_err(|()| Error::Config("base URL cannot have path segments".into()))?
             .push(storage_id);
         if let Some(branch) = self.resolve_branch(branch) {
             url.query_pairs_mut().append_pair("branch", &branch);

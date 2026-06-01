@@ -127,7 +127,8 @@ impl Client {
     }
 
     /// execute a graphql mutation with file uploads per the
-    /// [graphql multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
+    /// [graphql multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec),
+    /// retrying on transient errors.
     ///
     /// `files` maps variable paths (e.g. `"file"`) to [`FileUpload`] values.
     pub async fn execute_multipart<T: DeserializeOwned>(
@@ -137,11 +138,23 @@ impl Client {
         files: Vec<(&str, FileUpload)>,
         branch: Option<&str>,
     ) -> Result<GraphQlResponse<T>> {
-        self.execute_multipart_with(query, variables, files, branch, |url, form| async move {
-            let response = self.http.post(url).multipart(form).send().await?;
-            let status = response.status();
-            let text = response.text().await?;
-            Ok((status, text))
+        let url = self.config.graphql_url(branch)?;
+        let owned_files: Vec<(String, FileUpload)> =
+            files.into_iter().map(|(k, v)| (k.to_owned(), v)).collect();
+        self.retry_loop(|| {
+            let url = url.clone();
+            let variables = variables.clone();
+            let files_for_attempt: Vec<(&str, FileUpload)> = owned_files
+                .iter()
+                .map(|(k, v)| (k.as_str(), v.clone()))
+                .collect();
+            async move {
+                let form = build_multipart_form(query, variables, files_for_attempt)?;
+                let response = self.http.post(url).multipart(form).send().await?;
+                let status = response.status();
+                let text = response.text().await?;
+                parse_graphql_response(status, text)
+            }
         })
         .await
     }
@@ -181,7 +194,7 @@ impl Client {
                 let response = self.http.get(url).send().await?;
                 if !response.status().is_success() {
                     let status = response.status();
-                    let body = response.text().await.unwrap_or_default();
+                    let body = response.text().await?;
                     return Err(Error::GraphQl {
                         status: Some(status.as_u16()),
                         errors: Vec::new(),
@@ -238,8 +251,8 @@ impl Client {
     fn jitter_seed(attempt: u32) -> u64 {
         let nanos = std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)
-            .unwrap_or_default()
-            .subsec_nanos() as u64;
+            .map(|d| d.subsec_nanos() as u64)
+            .unwrap_or_else(|_| std::process::id() as u64);
         nanos.wrapping_mul(31).wrapping_add(attempt as u64)
     }
 }
@@ -344,8 +357,9 @@ fn parse_schema_response(status: StatusCode, text: String) -> Result<String> {
     Ok(text)
 }
 
+#[cfg(test)]
 impl Client {
-    pub(crate) async fn execute_multipart_with<T: DeserializeOwned, F, Fut>(
+    async fn execute_multipart_with<T: DeserializeOwned, F, Fut>(
         &self,
         query: &str,
         variables: Option<serde_json::Value>,
@@ -362,10 +376,7 @@ impl Client {
         let (status, text) = send(url, form).await?;
         parse_graphql_response(status, text)
     }
-}
 
-#[cfg(test)]
-impl Client {
     async fn execute_with<T: DeserializeOwned, F, Fut>(
         &self,
         query: &str,
@@ -894,6 +905,13 @@ mod tests {
             (800..=1000).contains(&delay3),
             "attempt 3 delay {delay3}ms outside expected 800..=1000"
         );
+    }
+
+    #[test]
+    fn test_jitter_seed_varies_by_attempt() {
+        let s1 = Client::jitter_seed(1);
+        let s2 = Client::jitter_seed(2);
+        assert_ne!(s1, s2, "jitter seed should differ across attempts");
     }
 
     #[cfg_attr(miri, ignore)]

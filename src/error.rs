@@ -5,6 +5,9 @@
 use crate::graphql::GraphQlError;
 use std::fmt;
 
+/// graphql response status codes considered transient and worth retrying
+const RETRYABLE_STATUSES: &[u16] = &[429, 500, 502, 503, 504];
+
 /// library result type
 pub type Result<T> = std::result::Result<T, Error>;
 
@@ -68,7 +71,7 @@ impl Error {
                 }
             }
             Error::GraphQl { status, .. } => {
-                matches!(status, Some(429 | 500 | 502 | 503 | 504))
+                status.is_some_and(|s| RETRYABLE_STATUSES.contains(&s))
             }
         }
     }

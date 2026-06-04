@@ -29,7 +29,7 @@ on:
 
 jobs:
   smoke:
-    runs-on: big
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
       INFRAHUB_VERSION: 1.9.6

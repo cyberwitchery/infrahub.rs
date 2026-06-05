@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- cap retry backoff at 30 seconds; previously the delay grew without bound at high attempt counts
 - replace `.expect()` panics in URL builder methods (`graphql_url`, `file_url`, `file_by_hfid_url`, `file_by_storage_id_url`) with `Error::Config` propagation so callers get a typed error instead of a crash on cannot-be-a-base URLs
 - fix: `execute_multipart` now retries on transient errors via the same `retry_loop` used by `execute`, `fetch_schema`, and file downloads
 - fix: jitter seed falls back to process id instead of zero when `SystemTime` is unavailable, avoiding deterministic retry timing across clients

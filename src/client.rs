@@ -17,6 +17,13 @@ use std::time::Duration;
 use tokio::time::sleep;
 use url::Url;
 
+/// base delay in milliseconds for exponential backoff (attempt 1 = 200ms)
+const RETRY_BASE_MS: u64 = 200;
+/// maximum jitter added to a single retry delay, in milliseconds
+const RETRY_MAX_JITTER_MS: u64 = 500;
+/// hard ceiling for any single retry delay (prevents unbounded growth)
+const RETRY_MAX_BACKOFF: Duration = Duration::from_secs(30);
+
 /// graphql client for infrahub
 #[derive(Clone)]
 pub struct Client {
@@ -238,14 +245,15 @@ impl Client {
         }
 
         let exp = attempt.saturating_sub(1);
-        let backoff_ms = 200u64.saturating_mul(2u64.saturating_pow(exp));
-        let jitter = (backoff_ms / 4).min(500);
+        let backoff_ms = RETRY_BASE_MS.saturating_mul(2u64.saturating_pow(exp));
+        let jitter = (backoff_ms / 4).min(RETRY_MAX_JITTER_MS);
         let offset = if jitter == 0 {
             0
         } else {
             Self::jitter_seed(attempt) % (jitter + 1)
         };
-        Duration::from_millis(backoff_ms.saturating_add(offset))
+        let delay = Duration::from_millis(backoff_ms.saturating_add(offset));
+        delay.min(RETRY_MAX_BACKOFF)
     }
 
     fn jitter_seed(attempt: u32) -> u64 {
@@ -905,6 +913,19 @@ mod tests {
             (800..=1000).contains(&delay3),
             "attempt 3 delay {delay3}ms outside expected 800..=1000"
         );
+    }
+
+    #[test]
+    fn test_retry_delay_capped_at_max() {
+        // Raw backoff at attempt 9 is ~51s, at attempt 30 is ~107 billion ms.
+        // Both exceed the 30s cap, so the delay must equal exactly RETRY_MAX_BACKOFF.
+        for attempt in [9, 15, 30] {
+            let delay = Client::retry_delay(attempt);
+            assert_eq!(
+                delay, RETRY_MAX_BACKOFF,
+                "attempt {attempt} delay {delay:?} should hit cap {RETRY_MAX_BACKOFF:?}"
+            );
+        }
     }
 
     #[test]

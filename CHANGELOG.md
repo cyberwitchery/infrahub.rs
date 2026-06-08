@@ -1,6 +1,6 @@
 # changelog
 
-## Unreleased
+## 0.4.0 - 2026-06-08
 
 - cap retry backoff at 30 seconds; previously the delay grew without bound at high attempt counts
 - replace `.expect()` panics in URL builder methods (`graphql_url`, `file_url`, `file_by_hfid_url`, `file_by_storage_id_url`) with `Error::Config` propagation so callers get a typed error instead of a crash on cannot-be-a-base URLs

@@ -1262,6 +1262,7 @@ fn is_scalar_type(name: &str) -> bool {
             | "DateTime"
             | "BigInt"
             | "GenericScalar"
+            | "FixedGenericScalar"
             | "Upload"
     )
 }
@@ -1283,7 +1284,7 @@ fn rust_type_nonnull(ty: &Type<String>, ctx: &SchemaContext, input: bool, in_lis
             "Float" => "f64".to_string(),
             "Boolean" => "bool".to_string(),
             "BigInt" => "i64".to_string(),
-            "GenericScalar" => "serde_json::Value".to_string(),
+            "GenericScalar" | "FixedGenericScalar" => "serde_json::Value".to_string(),
             "Upload" => "Vec<u8>".to_string(),
             _ => {
                 if ctx.enums.contains(name)
@@ -1506,5 +1507,26 @@ mod codegen_name_tests {
         let types_rs = render_types(&ctx);
         assert!(!types_rs.contains("Unknown"));
         assert!(!types_rs.contains("#[serde(other)]"));
+    }
+
+    #[test]
+    fn test_fixed_generic_scalar_maps_to_json_value() {
+        let schema = r#"
+            scalar FixedGenericScalar
+            type Query { pool: Pool }
+            input PoolInput { data: FixedGenericScalar }
+            type Pool { id: String }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let inputs_rs = render_inputs(&ctx);
+        assert!(
+            inputs_rs.contains("serde_json::Value"),
+            "FixedGenericScalar should map to serde_json::Value"
+        );
+        assert!(
+            !inputs_rs.contains("FixedGenericScalar"),
+            "FixedGenericScalar should not appear as a raw type name"
+        );
     }
 }

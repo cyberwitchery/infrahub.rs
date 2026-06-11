@@ -11,6 +11,7 @@
 - codegen: handle `FixedGenericScalar` scalar (new in Infrahub 1.9.7) by mapping it to `serde_json::Value`, same as `GenericScalar`
 - schema: refresh `schema/infrahub.graphql` against Infrahub 1.9.7 — adds `FixedGenericScalar` scalar, changes `data` field on pool inputs from `GenericScalar` to `FixedGenericScalar`, adds `is_externally_managed: Boolean!` to `CoreGenericAccount`/`CoreAccount`
 - test-client: regenerate from updated schema; `CoreAccount` now includes `is_externally_managed`
+- ci: skip `CoreAccount` smoke tests due to upstream Infrahub 1.9.7 `is_externally_managed_resolver` race condition; re-enable when upstream is fixed
 - add retry with exponential backoff and jitter for transient HTTP errors (5xx, 429, timeouts, connection failures) using the existing `Error::is_retryable()` classifier. retries are enabled by default (`max_retries: 3`) and apply to `execute`, `fetch_schema`, and file download methods. configure via `ClientConfig::with_max_retries`; set to 0 to disable
 - schema: remove `is_inherited` field from `schema/infrahub.graphql` to match Infrahub 1.9.4 (upstream fix [opsmill/infrahub#9146](https://github.com/opsmill/infrahub/issues/9146)); generated client code is unchanged since the codegen already skipped this field
 - codegen: remove `UNRESOLVABLE_FIELDS` skip-list and `is_inherited` special case, now that the field no longer appears in the upstream schema

@@ -515,6 +515,7 @@ pub struct CoreAccount {
     pub password: Option<Box<TextAttribute>>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub is_externally_managed: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

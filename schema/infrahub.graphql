@@ -225,6 +225,15 @@ String, Boolean, Int, Float, List or Object.
 """
 scalar GenericScalar
 
+"""
+GenericScalar with correct variable substitution in parse_literal.
+
+graphene's GenericScalar.parse_literal does not forward _variables to
+recursive calls, so $variable references inside a nested object or list
+resolve to None instead of their supplied values.
+"""
+scalar FixedGenericScalar
+
 """Attribute of type JSON"""
 type JSONAttribute implements AttributeInterface {
   is_default: Boolean
@@ -1567,6 +1576,9 @@ interface CoreGenericAccount {
   password: TextAttribute
   member_of_groups(offset: Int, limit: Int, order: OrderInput, ids: [ID], isnull: Boolean, display_label__value: String, display_label__values: [String], display_label__isnull: Boolean, label__value: String, label__values: [String], label__source__id: ID, label__owner__id: ID, label__is_protected: Boolean, group_type__value: String, group_type__values: [String], group_type__source__id: ID, group_type__owner__id: ID, group_type__is_protected: Boolean, description__value: String, description__values: [String], description__source__id: ID, description__owner__id: ID, description__is_protected: Boolean, name__value: String, name__values: [String], name__source__id: ID, name__owner__id: ID, name__is_protected: Boolean): NestedPaginatedCoreGroup!
   subscriber_of_groups(offset: Int, limit: Int, order: OrderInput, ids: [ID], isnull: Boolean, display_label__value: String, display_label__values: [String], display_label__isnull: Boolean, label__value: String, label__values: [String], label__source__id: ID, label__owner__id: ID, label__is_protected: Boolean, group_type__value: String, group_type__values: [String], group_type__source__id: ID, group_type__owner__id: ID, group_type__is_protected: Boolean, description__value: String, description__values: [String], description__source__id: ID, description__owner__id: ID, description__is_protected: Boolean, name__value: String, name__values: [String], name__source__id: ID, name__owner__id: ID, name__is_protected: Boolean): NestedPaginatedCoreGroup!
+
+  """True when the account is linked to an external identity provider (LDAP, OIDC, OAuth2). Local password changes are refused for such accounts."""
+  is_externally_managed: Boolean!
 }
 
 """A permission grants right to an account"""
@@ -3052,6 +3064,9 @@ type CoreAccount implements LineageOwner & CoreNode & CoreGenericAccount & Linea
   password: TextAttribute
   member_of_groups(offset: Int, limit: Int, order: OrderInput, ids: [ID], isnull: Boolean, display_label__value: String, display_label__values: [String], display_label__isnull: Boolean, label__value: String, label__values: [String], label__source__id: ID, label__owner__id: ID, label__is_protected: Boolean, group_type__value: String, group_type__values: [String], group_type__source__id: ID, group_type__owner__id: ID, group_type__is_protected: Boolean, description__value: String, description__values: [String], description__source__id: ID, description__owner__id: ID, description__is_protected: Boolean, name__value: String, name__values: [String], name__source__id: ID, name__owner__id: ID, name__is_protected: Boolean): NestedPaginatedCoreGroup!
   subscriber_of_groups(offset: Int, limit: Int, order: OrderInput, ids: [ID], isnull: Boolean, display_label__value: String, display_label__values: [String], display_label__isnull: Boolean, label__value: String, label__values: [String], label__source__id: ID, label__owner__id: ID, label__is_protected: Boolean, group_type__value: String, group_type__values: [String], group_type__source__id: ID, group_type__owner__id: ID, group_type__is_protected: Boolean, description__value: String, description__values: [String], description__source__id: ID, description__owner__id: ID, description__is_protected: Boolean, name__value: String, name__values: [String], name__source__id: ID, name__owner__id: ID, name__is_protected: Boolean): NestedPaginatedCoreGroup!
+
+  """True when the account is linked to an external identity provider (LDAP, OIDC, OAuth2). Local password changes are refused for such accounts."""
+  is_externally_managed: Boolean!
 }
 
 """User Account for Infrahub"""
@@ -27838,7 +27853,7 @@ input IPPrefixPoolGetResourceInput {
   prefix_type: String
 
   """Additional data to pass to the newly created prefix"""
-  data: GenericScalar
+  data: FixedGenericScalar
 }
 
 type IPAddressPoolGetResource {
@@ -27863,7 +27878,7 @@ input IPAddressPoolGetResourceInput {
   address_type: String
 
   """Additional data to pass to the newly created IP address"""
-  data: GenericScalar
+  data: FixedGenericScalar
 }
 
 type BranchCreate {

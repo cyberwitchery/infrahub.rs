@@ -917,8 +917,8 @@ mod tests {
 
     #[test]
     fn test_retry_delay_capped_at_max() {
-        // Raw backoff at attempt 9 is ~51s, at attempt 30 is ~107 billion ms.
-        // Both exceed the 30s cap, so the delay must equal exactly RETRY_MAX_BACKOFF.
+        // raw backoff at attempt 9 is ~51s, at attempt 30 is ~107 billion ms.
+        // both exceed the 30s cap, so the delay must equal exactly RETRY_MAX_BACKOFF.
         for attempt in [9, 15, 30] {
             let delay = Client::retry_delay(attempt);
             assert_eq!(

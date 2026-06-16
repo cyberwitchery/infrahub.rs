@@ -1,5 +1,9 @@
 # changelog
 
+## Unreleased
+
+- ci: bump pinned Infrahub version from 1.9.7 to 1.9.8
+
 ## 0.4.0 - 2026-06-08
 
 - cap retry backoff at 30 seconds; previously the delay grew without bound at high attempt counts

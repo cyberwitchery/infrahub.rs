@@ -154,6 +154,17 @@ fn load_schema(args: &Args) -> Result<String, String> {
         .send()
         .map_err(|err| err.to_string())?;
 
+    let status = response.status();
+    if !status.is_success() {
+        let body = response.text().unwrap_or_default();
+        let detail = if body.is_empty() {
+            String::new()
+        } else {
+            format!(": {}", body.chars().take(200).collect::<String>())
+        };
+        return Err(format!("HTTP {}{}", status, detail));
+    }
+
     response
         .text()
         .map_err(|err| format!("failed to read schema response: {err}"))

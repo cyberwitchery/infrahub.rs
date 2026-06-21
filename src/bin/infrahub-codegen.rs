@@ -1349,17 +1349,7 @@ fn to_rust_ident(name: &str) -> String {
 }
 
 fn to_rust_field(name: &str) -> String {
-    let mut out = String::new();
-    for (idx, ch) in name.chars().enumerate() {
-        if ch.is_uppercase() {
-            if idx > 0 {
-                out.push('_');
-            }
-            out.extend(ch.to_lowercase());
-        } else {
-            out.push(ch);
-        }
-    }
+    let out = to_snake(name);
 
     if is_rust_keyword(&out) {
         format!("r#{}", out)
@@ -1433,6 +1423,22 @@ mod codegen_name_tests {
         assert_eq!(to_snake("IPAM"), "ipam");
         assert_eq!(to_snake("GraphQLQuery"), "graph_ql_query");
         assert_eq!(to_snake("IPAddressPool"), "ip_address_pool");
+    }
+
+    #[test]
+    fn test_to_rust_field_handles_acronyms() {
+        assert_eq!(to_rust_field("nodeID"), "node_id");
+        assert_eq!(to_rust_field("hFID"), "h_fid");
+        assert_eq!(to_rust_field("ipAddress"), "ip_address");
+        assert_eq!(to_rust_field("nodeUUID"), "node_uuid");
+        assert_eq!(to_rust_field("simple"), "simple");
+        assert_eq!(to_rust_field("camelCase"), "camel_case");
+    }
+
+    #[test]
+    fn test_to_rust_field_keyword_escaping() {
+        assert_eq!(to_rust_field("type"), "r#type");
+        assert_eq!(to_rust_field("self"), "r#self");
     }
 
     #[test]
@@ -1518,6 +1524,43 @@ mod codegen_name_tests {
         let types_rs = render_types(&ctx);
         assert!(!types_rs.contains("Unknown"));
         assert!(!types_rs.contains("#[serde(other)]"));
+    }
+
+    #[test]
+    fn test_acronym_fields_in_generated_types() {
+        let schema = r#"
+            type Query { node: Node }
+            type Node {
+                nodeID: String
+                hFID: String
+                ipAddress: String
+                nodeUUID: String
+                simpleName: String
+            }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let types_rs = render_types(&ctx);
+        assert!(
+            types_rs.contains("pub node_id:"),
+            "nodeID should become node_id, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("pub h_fid:"),
+            "hFID should become h_fid, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("pub ip_address:"),
+            "ipAddress should become ip_address, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("pub node_uuid:"),
+            "nodeUUID should become node_uuid, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("pub simple_name:"),
+            "simpleName should become simple_name, got:\n{types_rs}"
+        );
     }
 
     #[test]

@@ -3,6 +3,7 @@
 ## Unreleased
 
 - ci: bump pinned Infrahub version from 1.9.7 to 1.9.8
+- codegen: fix `to_rust_field` to handle consecutive uppercase characters (acronyms) correctly — `nodeID` now becomes `node_id` instead of `node_i_d`, `hFID` becomes `h_fid` instead of `h_f_i_d`
 
 ## 0.4.0 - 2026-06-08
 

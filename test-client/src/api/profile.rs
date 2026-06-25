@@ -38,106 +38,106 @@ pub struct ProfileBuiltinIPAddressFilters {
     pub limit: Option<i64>,
     pub order: Option<OrderInput>,
     pub ids: Option<Vec<String>>,
-    pub display_label__value: Option<String>,
-    pub display_label__values: Option<Vec<String>>,
-    pub display_label__isnull: Option<bool>,
+    pub display_label_value: Option<String>,
+    pub display_label_values: Option<Vec<String>>,
+    pub display_label_isnull: Option<bool>,
     pub hfid: Option<Vec<String>>,
-    pub profile_name__value: Option<String>,
-    pub profile_name__values: Option<Vec<String>>,
-    pub profile_name__isnull: Option<bool>,
-    pub profile_name__source__id: Option<String>,
-    pub profile_name__owner__id: Option<String>,
-    pub profile_name__is_protected: Option<bool>,
-    pub profile_priority__value: Option<i64>,
-    pub profile_priority__values: Option<Vec<i64>>,
-    pub profile_priority__isnull: Option<bool>,
-    pub profile_priority__source__id: Option<String>,
-    pub profile_priority__owner__id: Option<String>,
-    pub profile_priority__is_protected: Option<bool>,
-    pub address__value: Option<String>,
-    pub address__values: Option<Vec<String>>,
-    pub address__isnull: Option<bool>,
-    pub address__source__id: Option<String>,
-    pub address__owner__id: Option<String>,
-    pub address__is_protected: Option<bool>,
-    pub description__value: Option<String>,
-    pub description__values: Option<Vec<String>>,
-    pub description__isnull: Option<bool>,
-    pub description__source__id: Option<String>,
-    pub description__owner__id: Option<String>,
-    pub description__is_protected: Option<bool>,
-    pub any__value: Option<String>,
-    pub any__values: Option<Vec<String>>,
-    pub any__source__id: Option<String>,
-    pub any__owner__id: Option<String>,
-    pub any__is_protected: Option<bool>,
+    pub profile_name_value: Option<String>,
+    pub profile_name_values: Option<Vec<String>>,
+    pub profile_name_isnull: Option<bool>,
+    pub profile_name_source_id: Option<String>,
+    pub profile_name_owner_id: Option<String>,
+    pub profile_name_is_protected: Option<bool>,
+    pub profile_priority_value: Option<i64>,
+    pub profile_priority_values: Option<Vec<i64>>,
+    pub profile_priority_isnull: Option<bool>,
+    pub profile_priority_source_id: Option<String>,
+    pub profile_priority_owner_id: Option<String>,
+    pub profile_priority_is_protected: Option<bool>,
+    pub address_value: Option<String>,
+    pub address_values: Option<Vec<String>>,
+    pub address_isnull: Option<bool>,
+    pub address_source_id: Option<String>,
+    pub address_owner_id: Option<String>,
+    pub address_is_protected: Option<bool>,
+    pub description_value: Option<String>,
+    pub description_values: Option<Vec<String>>,
+    pub description_isnull: Option<bool>,
+    pub description_source_id: Option<String>,
+    pub description_owner_id: Option<String>,
+    pub description_is_protected: Option<bool>,
+    pub any_value: Option<String>,
+    pub any_values: Option<Vec<String>>,
+    pub any_source_id: Option<String>,
+    pub any_owner_id: Option<String>,
+    pub any_is_protected: Option<bool>,
     pub partial_match: Option<bool>,
-    pub node_metadata__created_by__id: Option<String>,
-    pub node_metadata__created_by__ids: Option<Vec<String>>,
-    pub node_metadata__updated_by__id: Option<String>,
-    pub node_metadata__updated_by__ids: Option<Vec<String>>,
-    pub node_metadata__created_at: Option<String>,
-    pub node_metadata__created_at__before: Option<String>,
-    pub node_metadata__created_at__after: Option<String>,
-    pub node_metadata__updated_at: Option<String>,
-    pub node_metadata__updated_at__before: Option<String>,
-    pub node_metadata__updated_at__after: Option<String>,
-    pub related_nodes__ids: Option<Vec<String>>,
-    pub related_nodes__isnull: Option<bool>,
-    pub related_nodes__display_label__value: Option<String>,
-    pub related_nodes__display_label__values: Option<Vec<String>>,
-    pub related_nodes__display_label__isnull: Option<bool>,
-    pub related_nodes__address__value: Option<String>,
-    pub related_nodes__address__values: Option<Vec<String>>,
-    pub related_nodes__address__source__id: Option<String>,
-    pub related_nodes__address__owner__id: Option<String>,
-    pub related_nodes__address__is_protected: Option<bool>,
-    pub related_nodes__description__value: Option<String>,
-    pub related_nodes__description__values: Option<Vec<String>>,
-    pub related_nodes__description__source__id: Option<String>,
-    pub related_nodes__description__owner__id: Option<String>,
-    pub related_nodes__description__is_protected: Option<bool>,
-    pub ip_namespace__ids: Option<Vec<String>>,
-    pub ip_namespace__isnull: Option<bool>,
-    pub ip_namespace__display_label__value: Option<String>,
-    pub ip_namespace__display_label__values: Option<Vec<String>>,
-    pub ip_namespace__display_label__isnull: Option<bool>,
-    pub ip_namespace__description__value: Option<String>,
-    pub ip_namespace__description__values: Option<Vec<String>>,
-    pub ip_namespace__description__source__id: Option<String>,
-    pub ip_namespace__description__owner__id: Option<String>,
-    pub ip_namespace__description__is_protected: Option<bool>,
-    pub ip_namespace__name__value: Option<String>,
-    pub ip_namespace__name__values: Option<Vec<String>>,
-    pub ip_namespace__name__source__id: Option<String>,
-    pub ip_namespace__name__owner__id: Option<String>,
-    pub ip_namespace__name__is_protected: Option<bool>,
-    pub member_of_groups__ids: Option<Vec<String>>,
-    pub member_of_groups__isnull: Option<bool>,
-    pub member_of_groups__display_label__value: Option<String>,
-    pub member_of_groups__display_label__values: Option<Vec<String>>,
-    pub member_of_groups__display_label__isnull: Option<bool>,
-    pub member_of_groups__label__value: Option<String>,
-    pub member_of_groups__label__values: Option<Vec<String>>,
-    pub member_of_groups__group_type__value: Option<String>,
-    pub member_of_groups__group_type__values: Option<Vec<String>>,
-    pub member_of_groups__description__value: Option<String>,
-    pub member_of_groups__description__values: Option<Vec<String>>,
-    pub member_of_groups__name__value: Option<String>,
-    pub member_of_groups__name__values: Option<Vec<String>>,
-    pub subscriber_of_groups__ids: Option<Vec<String>>,
-    pub subscriber_of_groups__isnull: Option<bool>,
-    pub subscriber_of_groups__display_label__value: Option<String>,
-    pub subscriber_of_groups__display_label__values: Option<Vec<String>>,
-    pub subscriber_of_groups__display_label__isnull: Option<bool>,
-    pub subscriber_of_groups__label__value: Option<String>,
-    pub subscriber_of_groups__label__values: Option<Vec<String>>,
-    pub subscriber_of_groups__group_type__value: Option<String>,
-    pub subscriber_of_groups__group_type__values: Option<Vec<String>>,
-    pub subscriber_of_groups__description__value: Option<String>,
-    pub subscriber_of_groups__description__values: Option<Vec<String>>,
-    pub subscriber_of_groups__name__value: Option<String>,
-    pub subscriber_of_groups__name__values: Option<Vec<String>>,
+    pub node_metadata_created_by_id: Option<String>,
+    pub node_metadata_created_by_ids: Option<Vec<String>>,
+    pub node_metadata_updated_by_id: Option<String>,
+    pub node_metadata_updated_by_ids: Option<Vec<String>>,
+    pub node_metadata_created_at: Option<String>,
+    pub node_metadata_created_at_before: Option<String>,
+    pub node_metadata_created_at_after: Option<String>,
+    pub node_metadata_updated_at: Option<String>,
+    pub node_metadata_updated_at_before: Option<String>,
+    pub node_metadata_updated_at_after: Option<String>,
+    pub related_nodes_ids: Option<Vec<String>>,
+    pub related_nodes_isnull: Option<bool>,
+    pub related_nodes_display_label_value: Option<String>,
+    pub related_nodes_display_label_values: Option<Vec<String>>,
+    pub related_nodes_display_label_isnull: Option<bool>,
+    pub related_nodes_address_value: Option<String>,
+    pub related_nodes_address_values: Option<Vec<String>>,
+    pub related_nodes_address_source_id: Option<String>,
+    pub related_nodes_address_owner_id: Option<String>,
+    pub related_nodes_address_is_protected: Option<bool>,
+    pub related_nodes_description_value: Option<String>,
+    pub related_nodes_description_values: Option<Vec<String>>,
+    pub related_nodes_description_source_id: Option<String>,
+    pub related_nodes_description_owner_id: Option<String>,
+    pub related_nodes_description_is_protected: Option<bool>,
+    pub ip_namespace_ids: Option<Vec<String>>,
+    pub ip_namespace_isnull: Option<bool>,
+    pub ip_namespace_display_label_value: Option<String>,
+    pub ip_namespace_display_label_values: Option<Vec<String>>,
+    pub ip_namespace_display_label_isnull: Option<bool>,
+    pub ip_namespace_description_value: Option<String>,
+    pub ip_namespace_description_values: Option<Vec<String>>,
+    pub ip_namespace_description_source_id: Option<String>,
+    pub ip_namespace_description_owner_id: Option<String>,
+    pub ip_namespace_description_is_protected: Option<bool>,
+    pub ip_namespace_name_value: Option<String>,
+    pub ip_namespace_name_values: Option<Vec<String>>,
+    pub ip_namespace_name_source_id: Option<String>,
+    pub ip_namespace_name_owner_id: Option<String>,
+    pub ip_namespace_name_is_protected: Option<bool>,
+    pub member_of_groups_ids: Option<Vec<String>>,
+    pub member_of_groups_isnull: Option<bool>,
+    pub member_of_groups_display_label_value: Option<String>,
+    pub member_of_groups_display_label_values: Option<Vec<String>>,
+    pub member_of_groups_display_label_isnull: Option<bool>,
+    pub member_of_groups_label_value: Option<String>,
+    pub member_of_groups_label_values: Option<Vec<String>>,
+    pub member_of_groups_group_type_value: Option<String>,
+    pub member_of_groups_group_type_values: Option<Vec<String>>,
+    pub member_of_groups_description_value: Option<String>,
+    pub member_of_groups_description_values: Option<Vec<String>>,
+    pub member_of_groups_name_value: Option<String>,
+    pub member_of_groups_name_values: Option<Vec<String>>,
+    pub subscriber_of_groups_ids: Option<Vec<String>>,
+    pub subscriber_of_groups_isnull: Option<bool>,
+    pub subscriber_of_groups_display_label_value: Option<String>,
+    pub subscriber_of_groups_display_label_values: Option<Vec<String>>,
+    pub subscriber_of_groups_display_label_isnull: Option<bool>,
+    pub subscriber_of_groups_label_value: Option<String>,
+    pub subscriber_of_groups_label_values: Option<Vec<String>>,
+    pub subscriber_of_groups_group_type_value: Option<String>,
+    pub subscriber_of_groups_group_type_values: Option<Vec<String>>,
+    pub subscriber_of_groups_description_value: Option<String>,
+    pub subscriber_of_groups_description_values: Option<Vec<String>>,
+    pub subscriber_of_groups_name_value: Option<String>,
+    pub subscriber_of_groups_name_values: Option<Vec<String>>,
 }
 
 impl ProfileBuiltinIPAddressFilters {
@@ -155,304 +155,304 @@ impl ProfileBuiltinIPAddressFilters {
         if let Some(value) = &self.ids {
             vars.insert("ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__value {
+        if let Some(value) = &self.display_label_value {
             vars.insert("display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__values {
+        if let Some(value) = &self.display_label_values {
             vars.insert("display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__isnull {
+        if let Some(value) = &self.display_label_isnull {
             vars.insert("display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.hfid {
             vars.insert("hfid".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__value {
+        if let Some(value) = &self.profile_name_value {
             vars.insert("profile_name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__values {
+        if let Some(value) = &self.profile_name_values {
             vars.insert("profile_name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__isnull {
+        if let Some(value) = &self.profile_name_isnull {
             vars.insert("profile_name__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__source__id {
+        if let Some(value) = &self.profile_name_source_id {
             vars.insert("profile_name__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__owner__id {
+        if let Some(value) = &self.profile_name_owner_id {
             vars.insert("profile_name__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__is_protected {
+        if let Some(value) = &self.profile_name_is_protected {
             vars.insert("profile_name__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__value {
+        if let Some(value) = &self.profile_priority_value {
             vars.insert("profile_priority__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__values {
+        if let Some(value) = &self.profile_priority_values {
             vars.insert("profile_priority__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__isnull {
+        if let Some(value) = &self.profile_priority_isnull {
             vars.insert("profile_priority__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__source__id {
+        if let Some(value) = &self.profile_priority_source_id {
             vars.insert("profile_priority__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__owner__id {
+        if let Some(value) = &self.profile_priority_owner_id {
             vars.insert("profile_priority__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__is_protected {
+        if let Some(value) = &self.profile_priority_is_protected {
             vars.insert("profile_priority__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.address__value {
+        if let Some(value) = &self.address_value {
             vars.insert("address__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.address__values {
+        if let Some(value) = &self.address_values {
             vars.insert("address__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.address__isnull {
+        if let Some(value) = &self.address_isnull {
             vars.insert("address__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.address__source__id {
+        if let Some(value) = &self.address_source_id {
             vars.insert("address__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.address__owner__id {
+        if let Some(value) = &self.address_owner_id {
             vars.insert("address__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.address__is_protected {
+        if let Some(value) = &self.address_is_protected {
             vars.insert("address__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__value {
+        if let Some(value) = &self.description_value {
             vars.insert("description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__values {
+        if let Some(value) = &self.description_values {
             vars.insert("description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__isnull {
+        if let Some(value) = &self.description_isnull {
             vars.insert("description__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__source__id {
+        if let Some(value) = &self.description_source_id {
             vars.insert("description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__owner__id {
+        if let Some(value) = &self.description_owner_id {
             vars.insert("description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__is_protected {
+        if let Some(value) = &self.description_is_protected {
             vars.insert("description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__value {
+        if let Some(value) = &self.any_value {
             vars.insert("any__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__values {
+        if let Some(value) = &self.any_values {
             vars.insert("any__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__source__id {
+        if let Some(value) = &self.any_source_id {
             vars.insert("any__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__owner__id {
+        if let Some(value) = &self.any_owner_id {
             vars.insert("any__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__is_protected {
+        if let Some(value) = &self.any_is_protected {
             vars.insert("any__is_protected".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.partial_match {
             vars.insert("partial_match".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__id {
+        if let Some(value) = &self.node_metadata_created_by_id {
             vars.insert("node_metadata__created_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__ids {
+        if let Some(value) = &self.node_metadata_created_by_ids {
             vars.insert("node_metadata__created_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__id {
+        if let Some(value) = &self.node_metadata_updated_by_id {
             vars.insert("node_metadata__updated_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__ids {
+        if let Some(value) = &self.node_metadata_updated_by_ids {
             vars.insert("node_metadata__updated_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at {
+        if let Some(value) = &self.node_metadata_created_at {
             vars.insert("node_metadata__created_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__before {
+        if let Some(value) = &self.node_metadata_created_at_before {
             vars.insert("node_metadata__created_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__after {
+        if let Some(value) = &self.node_metadata_created_at_after {
             vars.insert("node_metadata__created_at__after".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at {
+        if let Some(value) = &self.node_metadata_updated_at {
             vars.insert("node_metadata__updated_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__before {
+        if let Some(value) = &self.node_metadata_updated_at_before {
             vars.insert("node_metadata__updated_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__after {
+        if let Some(value) = &self.node_metadata_updated_at_after {
             vars.insert("node_metadata__updated_at__after".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__ids {
+        if let Some(value) = &self.related_nodes_ids {
             vars.insert("related_nodes__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__isnull {
+        if let Some(value) = &self.related_nodes_isnull {
             vars.insert("related_nodes__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__value {
+        if let Some(value) = &self.related_nodes_display_label_value {
             vars.insert("related_nodes__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__values {
+        if let Some(value) = &self.related_nodes_display_label_values {
             vars.insert("related_nodes__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__isnull {
+        if let Some(value) = &self.related_nodes_display_label_isnull {
             vars.insert("related_nodes__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__address__value {
+        if let Some(value) = &self.related_nodes_address_value {
             vars.insert("related_nodes__address__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__address__values {
+        if let Some(value) = &self.related_nodes_address_values {
             vars.insert("related_nodes__address__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__address__source__id {
+        if let Some(value) = &self.related_nodes_address_source_id {
             vars.insert("related_nodes__address__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__address__owner__id {
+        if let Some(value) = &self.related_nodes_address_owner_id {
             vars.insert("related_nodes__address__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__address__is_protected {
+        if let Some(value) = &self.related_nodes_address_is_protected {
             vars.insert("related_nodes__address__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__value {
+        if let Some(value) = &self.related_nodes_description_value {
             vars.insert("related_nodes__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__values {
+        if let Some(value) = &self.related_nodes_description_values {
             vars.insert("related_nodes__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__source__id {
+        if let Some(value) = &self.related_nodes_description_source_id {
             vars.insert("related_nodes__description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__owner__id {
+        if let Some(value) = &self.related_nodes_description_owner_id {
             vars.insert("related_nodes__description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__is_protected {
+        if let Some(value) = &self.related_nodes_description_is_protected {
             vars.insert("related_nodes__description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__ids {
+        if let Some(value) = &self.ip_namespace_ids {
             vars.insert("ip_namespace__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__isnull {
+        if let Some(value) = &self.ip_namespace_isnull {
             vars.insert("ip_namespace__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__display_label__value {
+        if let Some(value) = &self.ip_namespace_display_label_value {
             vars.insert("ip_namespace__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__display_label__values {
+        if let Some(value) = &self.ip_namespace_display_label_values {
             vars.insert("ip_namespace__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__display_label__isnull {
+        if let Some(value) = &self.ip_namespace_display_label_isnull {
             vars.insert("ip_namespace__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__description__value {
+        if let Some(value) = &self.ip_namespace_description_value {
             vars.insert("ip_namespace__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__description__values {
+        if let Some(value) = &self.ip_namespace_description_values {
             vars.insert("ip_namespace__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__description__source__id {
+        if let Some(value) = &self.ip_namespace_description_source_id {
             vars.insert("ip_namespace__description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__description__owner__id {
+        if let Some(value) = &self.ip_namespace_description_owner_id {
             vars.insert("ip_namespace__description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__description__is_protected {
+        if let Some(value) = &self.ip_namespace_description_is_protected {
             vars.insert("ip_namespace__description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__name__value {
+        if let Some(value) = &self.ip_namespace_name_value {
             vars.insert("ip_namespace__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__name__values {
+        if let Some(value) = &self.ip_namespace_name_values {
             vars.insert("ip_namespace__name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__name__source__id {
+        if let Some(value) = &self.ip_namespace_name_source_id {
             vars.insert("ip_namespace__name__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__name__owner__id {
+        if let Some(value) = &self.ip_namespace_name_owner_id {
             vars.insert("ip_namespace__name__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__name__is_protected {
+        if let Some(value) = &self.ip_namespace_name_is_protected {
             vars.insert("ip_namespace__name__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__ids {
+        if let Some(value) = &self.member_of_groups_ids {
             vars.insert("member_of_groups__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__isnull {
+        if let Some(value) = &self.member_of_groups_isnull {
             vars.insert("member_of_groups__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__value {
+        if let Some(value) = &self.member_of_groups_display_label_value {
             vars.insert("member_of_groups__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__values {
+        if let Some(value) = &self.member_of_groups_display_label_values {
             vars.insert("member_of_groups__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__isnull {
+        if let Some(value) = &self.member_of_groups_display_label_isnull {
             vars.insert("member_of_groups__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__label__value {
+        if let Some(value) = &self.member_of_groups_label_value {
             vars.insert("member_of_groups__label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__label__values {
+        if let Some(value) = &self.member_of_groups_label_values {
             vars.insert("member_of_groups__label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__group_type__value {
+        if let Some(value) = &self.member_of_groups_group_type_value {
             vars.insert("member_of_groups__group_type__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__group_type__values {
+        if let Some(value) = &self.member_of_groups_group_type_values {
             vars.insert("member_of_groups__group_type__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__description__value {
+        if let Some(value) = &self.member_of_groups_description_value {
             vars.insert("member_of_groups__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__description__values {
+        if let Some(value) = &self.member_of_groups_description_values {
             vars.insert("member_of_groups__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__name__value {
+        if let Some(value) = &self.member_of_groups_name_value {
             vars.insert("member_of_groups__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__name__values {
+        if let Some(value) = &self.member_of_groups_name_values {
             vars.insert("member_of_groups__name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__ids {
+        if let Some(value) = &self.subscriber_of_groups_ids {
             vars.insert("subscriber_of_groups__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__isnull {
+        if let Some(value) = &self.subscriber_of_groups_isnull {
             vars.insert("subscriber_of_groups__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__value {
+        if let Some(value) = &self.subscriber_of_groups_display_label_value {
             vars.insert("subscriber_of_groups__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__values {
+        if let Some(value) = &self.subscriber_of_groups_display_label_values {
             vars.insert("subscriber_of_groups__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__isnull {
+        if let Some(value) = &self.subscriber_of_groups_display_label_isnull {
             vars.insert("subscriber_of_groups__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__label__value {
+        if let Some(value) = &self.subscriber_of_groups_label_value {
             vars.insert("subscriber_of_groups__label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__label__values {
+        if let Some(value) = &self.subscriber_of_groups_label_values {
             vars.insert("subscriber_of_groups__label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__group_type__value {
+        if let Some(value) = &self.subscriber_of_groups_group_type_value {
             vars.insert("subscriber_of_groups__group_type__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__group_type__values {
+        if let Some(value) = &self.subscriber_of_groups_group_type_values {
             vars.insert("subscriber_of_groups__group_type__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__description__value {
+        if let Some(value) = &self.subscriber_of_groups_description_value {
             vars.insert("subscriber_of_groups__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__description__values {
+        if let Some(value) = &self.subscriber_of_groups_description_values {
             vars.insert("subscriber_of_groups__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__name__value {
+        if let Some(value) = &self.subscriber_of_groups_name_value {
             vars.insert("subscriber_of_groups__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__name__values {
+        if let Some(value) = &self.subscriber_of_groups_name_values {
             vars.insert("subscriber_of_groups__name__values".to_string(), serde_json::to_value(value)?);
         }
         Ok(Value::Object(vars))
@@ -474,7 +474,7 @@ impl<'a> ProfileBuiltinIPAddressClient<'a> {
         let response = self.client.execute::<ProfileBuiltinIPAddressResponse>(query, Some(vars), request_branch).await?;
         let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
         let mut items = Vec::new();
-        for edge in data.profile_builtin_i_p_address.edges {
+        for edge in data.profile_builtin_ip_address.edges {
             if let Some(node) = edge.node {
                 items.push(*node);
             }
@@ -507,7 +507,7 @@ impl<'a> ProfileBuiltinIPAddressClient<'a> {
         let extract: BoxExtract<'a, ProfileBuiltinIPAddress, String, (ProfileBuiltinIPAddressResponse, i64)> = Box::new(move |(data, current_offset): (ProfileBuiltinIPAddressResponse, i64)| -> Result<EdgePage<ProfileBuiltinIPAddress, String>> {
             let mut items = Vec::new();
             let mut next: Option<String> = None;
-            for edge in data.profile_builtin_i_p_address.edges {
+            for edge in data.profile_builtin_ip_address.edges {
                 if let Some(node) = edge.node {
                     items.push(*node);
                 }
@@ -535,158 +535,158 @@ pub struct ProfileBuiltinIPPrefixFilters {
     pub limit: Option<i64>,
     pub order: Option<OrderInput>,
     pub ids: Option<Vec<String>>,
-    pub display_label__value: Option<String>,
-    pub display_label__values: Option<Vec<String>>,
-    pub display_label__isnull: Option<bool>,
+    pub display_label_value: Option<String>,
+    pub display_label_values: Option<Vec<String>>,
+    pub display_label_isnull: Option<bool>,
     pub hfid: Option<Vec<String>>,
-    pub profile_name__value: Option<String>,
-    pub profile_name__values: Option<Vec<String>>,
-    pub profile_name__isnull: Option<bool>,
-    pub profile_name__source__id: Option<String>,
-    pub profile_name__owner__id: Option<String>,
-    pub profile_name__is_protected: Option<bool>,
-    pub profile_priority__value: Option<i64>,
-    pub profile_priority__values: Option<Vec<i64>>,
-    pub profile_priority__isnull: Option<bool>,
-    pub profile_priority__source__id: Option<String>,
-    pub profile_priority__owner__id: Option<String>,
-    pub profile_priority__is_protected: Option<bool>,
-    pub is_pool__value: Option<bool>,
-    pub is_pool__values: Option<Vec<bool>>,
-    pub is_pool__isnull: Option<bool>,
-    pub is_pool__source__id: Option<String>,
-    pub is_pool__owner__id: Option<String>,
-    pub is_pool__is_protected: Option<bool>,
-    pub member_type__value: Option<String>,
-    pub member_type__values: Option<Vec<String>>,
-    pub member_type__isnull: Option<bool>,
-    pub member_type__source__id: Option<String>,
-    pub member_type__owner__id: Option<String>,
-    pub member_type__is_protected: Option<bool>,
-    pub prefix__value: Option<String>,
-    pub prefix__values: Option<Vec<String>>,
-    pub prefix__isnull: Option<bool>,
-    pub prefix__source__id: Option<String>,
-    pub prefix__owner__id: Option<String>,
-    pub prefix__is_protected: Option<bool>,
-    pub description__value: Option<String>,
-    pub description__values: Option<Vec<String>>,
-    pub description__isnull: Option<bool>,
-    pub description__source__id: Option<String>,
-    pub description__owner__id: Option<String>,
-    pub description__is_protected: Option<bool>,
-    pub any__value: Option<String>,
-    pub any__values: Option<Vec<String>>,
-    pub any__source__id: Option<String>,
-    pub any__owner__id: Option<String>,
-    pub any__is_protected: Option<bool>,
+    pub profile_name_value: Option<String>,
+    pub profile_name_values: Option<Vec<String>>,
+    pub profile_name_isnull: Option<bool>,
+    pub profile_name_source_id: Option<String>,
+    pub profile_name_owner_id: Option<String>,
+    pub profile_name_is_protected: Option<bool>,
+    pub profile_priority_value: Option<i64>,
+    pub profile_priority_values: Option<Vec<i64>>,
+    pub profile_priority_isnull: Option<bool>,
+    pub profile_priority_source_id: Option<String>,
+    pub profile_priority_owner_id: Option<String>,
+    pub profile_priority_is_protected: Option<bool>,
+    pub is_pool_value: Option<bool>,
+    pub is_pool_values: Option<Vec<bool>>,
+    pub is_pool_isnull: Option<bool>,
+    pub is_pool_source_id: Option<String>,
+    pub is_pool_owner_id: Option<String>,
+    pub is_pool_is_protected: Option<bool>,
+    pub member_type_value: Option<String>,
+    pub member_type_values: Option<Vec<String>>,
+    pub member_type_isnull: Option<bool>,
+    pub member_type_source_id: Option<String>,
+    pub member_type_owner_id: Option<String>,
+    pub member_type_is_protected: Option<bool>,
+    pub prefix_value: Option<String>,
+    pub prefix_values: Option<Vec<String>>,
+    pub prefix_isnull: Option<bool>,
+    pub prefix_source_id: Option<String>,
+    pub prefix_owner_id: Option<String>,
+    pub prefix_is_protected: Option<bool>,
+    pub description_value: Option<String>,
+    pub description_values: Option<Vec<String>>,
+    pub description_isnull: Option<bool>,
+    pub description_source_id: Option<String>,
+    pub description_owner_id: Option<String>,
+    pub description_is_protected: Option<bool>,
+    pub any_value: Option<String>,
+    pub any_values: Option<Vec<String>>,
+    pub any_source_id: Option<String>,
+    pub any_owner_id: Option<String>,
+    pub any_is_protected: Option<bool>,
     pub partial_match: Option<bool>,
-    pub node_metadata__created_by__id: Option<String>,
-    pub node_metadata__created_by__ids: Option<Vec<String>>,
-    pub node_metadata__updated_by__id: Option<String>,
-    pub node_metadata__updated_by__ids: Option<Vec<String>>,
-    pub node_metadata__created_at: Option<String>,
-    pub node_metadata__created_at__before: Option<String>,
-    pub node_metadata__created_at__after: Option<String>,
-    pub node_metadata__updated_at: Option<String>,
-    pub node_metadata__updated_at__before: Option<String>,
-    pub node_metadata__updated_at__after: Option<String>,
-    pub related_nodes__ids: Option<Vec<String>>,
-    pub related_nodes__isnull: Option<bool>,
-    pub related_nodes__display_label__value: Option<String>,
-    pub related_nodes__display_label__values: Option<Vec<String>>,
-    pub related_nodes__display_label__isnull: Option<bool>,
-    pub related_nodes__netmask__value: Option<String>,
-    pub related_nodes__netmask__values: Option<Vec<String>>,
-    pub related_nodes__netmask__source__id: Option<String>,
-    pub related_nodes__netmask__owner__id: Option<String>,
-    pub related_nodes__netmask__is_protected: Option<bool>,
-    pub related_nodes__hostmask__value: Option<String>,
-    pub related_nodes__hostmask__values: Option<Vec<String>>,
-    pub related_nodes__hostmask__source__id: Option<String>,
-    pub related_nodes__hostmask__owner__id: Option<String>,
-    pub related_nodes__hostmask__is_protected: Option<bool>,
-    pub related_nodes__is_top_level__value: Option<bool>,
-    pub related_nodes__is_top_level__values: Option<Vec<bool>>,
-    pub related_nodes__is_top_level__source__id: Option<String>,
-    pub related_nodes__is_top_level__owner__id: Option<String>,
-    pub related_nodes__is_top_level__is_protected: Option<bool>,
-    pub related_nodes__utilization__value: Option<i64>,
-    pub related_nodes__utilization__values: Option<Vec<i64>>,
-    pub related_nodes__utilization__source__id: Option<String>,
-    pub related_nodes__utilization__owner__id: Option<String>,
-    pub related_nodes__utilization__is_protected: Option<bool>,
-    pub related_nodes__is_pool__value: Option<bool>,
-    pub related_nodes__is_pool__values: Option<Vec<bool>>,
-    pub related_nodes__is_pool__source__id: Option<String>,
-    pub related_nodes__is_pool__owner__id: Option<String>,
-    pub related_nodes__is_pool__is_protected: Option<bool>,
-    pub related_nodes__broadcast_address__value: Option<String>,
-    pub related_nodes__broadcast_address__values: Option<Vec<String>>,
-    pub related_nodes__broadcast_address__source__id: Option<String>,
-    pub related_nodes__broadcast_address__owner__id: Option<String>,
-    pub related_nodes__broadcast_address__is_protected: Option<bool>,
-    pub related_nodes__member_type__value: Option<String>,
-    pub related_nodes__member_type__values: Option<Vec<String>>,
-    pub related_nodes__member_type__source__id: Option<String>,
-    pub related_nodes__member_type__owner__id: Option<String>,
-    pub related_nodes__member_type__is_protected: Option<bool>,
-    pub related_nodes__network_address__value: Option<String>,
-    pub related_nodes__network_address__values: Option<Vec<String>>,
-    pub related_nodes__network_address__source__id: Option<String>,
-    pub related_nodes__network_address__owner__id: Option<String>,
-    pub related_nodes__network_address__is_protected: Option<bool>,
-    pub related_nodes__prefix__value: Option<String>,
-    pub related_nodes__prefix__values: Option<Vec<String>>,
-    pub related_nodes__prefix__source__id: Option<String>,
-    pub related_nodes__prefix__owner__id: Option<String>,
-    pub related_nodes__prefix__is_protected: Option<bool>,
-    pub related_nodes__description__value: Option<String>,
-    pub related_nodes__description__values: Option<Vec<String>>,
-    pub related_nodes__description__source__id: Option<String>,
-    pub related_nodes__description__owner__id: Option<String>,
-    pub related_nodes__description__is_protected: Option<bool>,
-    pub ip_namespace__ids: Option<Vec<String>>,
-    pub ip_namespace__isnull: Option<bool>,
-    pub ip_namespace__display_label__value: Option<String>,
-    pub ip_namespace__display_label__values: Option<Vec<String>>,
-    pub ip_namespace__display_label__isnull: Option<bool>,
-    pub ip_namespace__description__value: Option<String>,
-    pub ip_namespace__description__values: Option<Vec<String>>,
-    pub ip_namespace__description__source__id: Option<String>,
-    pub ip_namespace__description__owner__id: Option<String>,
-    pub ip_namespace__description__is_protected: Option<bool>,
-    pub ip_namespace__name__value: Option<String>,
-    pub ip_namespace__name__values: Option<Vec<String>>,
-    pub ip_namespace__name__source__id: Option<String>,
-    pub ip_namespace__name__owner__id: Option<String>,
-    pub ip_namespace__name__is_protected: Option<bool>,
-    pub member_of_groups__ids: Option<Vec<String>>,
-    pub member_of_groups__isnull: Option<bool>,
-    pub member_of_groups__display_label__value: Option<String>,
-    pub member_of_groups__display_label__values: Option<Vec<String>>,
-    pub member_of_groups__display_label__isnull: Option<bool>,
-    pub member_of_groups__label__value: Option<String>,
-    pub member_of_groups__label__values: Option<Vec<String>>,
-    pub member_of_groups__group_type__value: Option<String>,
-    pub member_of_groups__group_type__values: Option<Vec<String>>,
-    pub member_of_groups__description__value: Option<String>,
-    pub member_of_groups__description__values: Option<Vec<String>>,
-    pub member_of_groups__name__value: Option<String>,
-    pub member_of_groups__name__values: Option<Vec<String>>,
-    pub subscriber_of_groups__ids: Option<Vec<String>>,
-    pub subscriber_of_groups__isnull: Option<bool>,
-    pub subscriber_of_groups__display_label__value: Option<String>,
-    pub subscriber_of_groups__display_label__values: Option<Vec<String>>,
-    pub subscriber_of_groups__display_label__isnull: Option<bool>,
-    pub subscriber_of_groups__label__value: Option<String>,
-    pub subscriber_of_groups__label__values: Option<Vec<String>>,
-    pub subscriber_of_groups__group_type__value: Option<String>,
-    pub subscriber_of_groups__group_type__values: Option<Vec<String>>,
-    pub subscriber_of_groups__description__value: Option<String>,
-    pub subscriber_of_groups__description__values: Option<Vec<String>>,
-    pub subscriber_of_groups__name__value: Option<String>,
-    pub subscriber_of_groups__name__values: Option<Vec<String>>,
+    pub node_metadata_created_by_id: Option<String>,
+    pub node_metadata_created_by_ids: Option<Vec<String>>,
+    pub node_metadata_updated_by_id: Option<String>,
+    pub node_metadata_updated_by_ids: Option<Vec<String>>,
+    pub node_metadata_created_at: Option<String>,
+    pub node_metadata_created_at_before: Option<String>,
+    pub node_metadata_created_at_after: Option<String>,
+    pub node_metadata_updated_at: Option<String>,
+    pub node_metadata_updated_at_before: Option<String>,
+    pub node_metadata_updated_at_after: Option<String>,
+    pub related_nodes_ids: Option<Vec<String>>,
+    pub related_nodes_isnull: Option<bool>,
+    pub related_nodes_display_label_value: Option<String>,
+    pub related_nodes_display_label_values: Option<Vec<String>>,
+    pub related_nodes_display_label_isnull: Option<bool>,
+    pub related_nodes_netmask_value: Option<String>,
+    pub related_nodes_netmask_values: Option<Vec<String>>,
+    pub related_nodes_netmask_source_id: Option<String>,
+    pub related_nodes_netmask_owner_id: Option<String>,
+    pub related_nodes_netmask_is_protected: Option<bool>,
+    pub related_nodes_hostmask_value: Option<String>,
+    pub related_nodes_hostmask_values: Option<Vec<String>>,
+    pub related_nodes_hostmask_source_id: Option<String>,
+    pub related_nodes_hostmask_owner_id: Option<String>,
+    pub related_nodes_hostmask_is_protected: Option<bool>,
+    pub related_nodes_is_top_level_value: Option<bool>,
+    pub related_nodes_is_top_level_values: Option<Vec<bool>>,
+    pub related_nodes_is_top_level_source_id: Option<String>,
+    pub related_nodes_is_top_level_owner_id: Option<String>,
+    pub related_nodes_is_top_level_is_protected: Option<bool>,
+    pub related_nodes_utilization_value: Option<i64>,
+    pub related_nodes_utilization_values: Option<Vec<i64>>,
+    pub related_nodes_utilization_source_id: Option<String>,
+    pub related_nodes_utilization_owner_id: Option<String>,
+    pub related_nodes_utilization_is_protected: Option<bool>,
+    pub related_nodes_is_pool_value: Option<bool>,
+    pub related_nodes_is_pool_values: Option<Vec<bool>>,
+    pub related_nodes_is_pool_source_id: Option<String>,
+    pub related_nodes_is_pool_owner_id: Option<String>,
+    pub related_nodes_is_pool_is_protected: Option<bool>,
+    pub related_nodes_broadcast_address_value: Option<String>,
+    pub related_nodes_broadcast_address_values: Option<Vec<String>>,
+    pub related_nodes_broadcast_address_source_id: Option<String>,
+    pub related_nodes_broadcast_address_owner_id: Option<String>,
+    pub related_nodes_broadcast_address_is_protected: Option<bool>,
+    pub related_nodes_member_type_value: Option<String>,
+    pub related_nodes_member_type_values: Option<Vec<String>>,
+    pub related_nodes_member_type_source_id: Option<String>,
+    pub related_nodes_member_type_owner_id: Option<String>,
+    pub related_nodes_member_type_is_protected: Option<bool>,
+    pub related_nodes_network_address_value: Option<String>,
+    pub related_nodes_network_address_values: Option<Vec<String>>,
+    pub related_nodes_network_address_source_id: Option<String>,
+    pub related_nodes_network_address_owner_id: Option<String>,
+    pub related_nodes_network_address_is_protected: Option<bool>,
+    pub related_nodes_prefix_value: Option<String>,
+    pub related_nodes_prefix_values: Option<Vec<String>>,
+    pub related_nodes_prefix_source_id: Option<String>,
+    pub related_nodes_prefix_owner_id: Option<String>,
+    pub related_nodes_prefix_is_protected: Option<bool>,
+    pub related_nodes_description_value: Option<String>,
+    pub related_nodes_description_values: Option<Vec<String>>,
+    pub related_nodes_description_source_id: Option<String>,
+    pub related_nodes_description_owner_id: Option<String>,
+    pub related_nodes_description_is_protected: Option<bool>,
+    pub ip_namespace_ids: Option<Vec<String>>,
+    pub ip_namespace_isnull: Option<bool>,
+    pub ip_namespace_display_label_value: Option<String>,
+    pub ip_namespace_display_label_values: Option<Vec<String>>,
+    pub ip_namespace_display_label_isnull: Option<bool>,
+    pub ip_namespace_description_value: Option<String>,
+    pub ip_namespace_description_values: Option<Vec<String>>,
+    pub ip_namespace_description_source_id: Option<String>,
+    pub ip_namespace_description_owner_id: Option<String>,
+    pub ip_namespace_description_is_protected: Option<bool>,
+    pub ip_namespace_name_value: Option<String>,
+    pub ip_namespace_name_values: Option<Vec<String>>,
+    pub ip_namespace_name_source_id: Option<String>,
+    pub ip_namespace_name_owner_id: Option<String>,
+    pub ip_namespace_name_is_protected: Option<bool>,
+    pub member_of_groups_ids: Option<Vec<String>>,
+    pub member_of_groups_isnull: Option<bool>,
+    pub member_of_groups_display_label_value: Option<String>,
+    pub member_of_groups_display_label_values: Option<Vec<String>>,
+    pub member_of_groups_display_label_isnull: Option<bool>,
+    pub member_of_groups_label_value: Option<String>,
+    pub member_of_groups_label_values: Option<Vec<String>>,
+    pub member_of_groups_group_type_value: Option<String>,
+    pub member_of_groups_group_type_values: Option<Vec<String>>,
+    pub member_of_groups_description_value: Option<String>,
+    pub member_of_groups_description_values: Option<Vec<String>>,
+    pub member_of_groups_name_value: Option<String>,
+    pub member_of_groups_name_values: Option<Vec<String>>,
+    pub subscriber_of_groups_ids: Option<Vec<String>>,
+    pub subscriber_of_groups_isnull: Option<bool>,
+    pub subscriber_of_groups_display_label_value: Option<String>,
+    pub subscriber_of_groups_display_label_values: Option<Vec<String>>,
+    pub subscriber_of_groups_display_label_isnull: Option<bool>,
+    pub subscriber_of_groups_label_value: Option<String>,
+    pub subscriber_of_groups_label_values: Option<Vec<String>>,
+    pub subscriber_of_groups_group_type_value: Option<String>,
+    pub subscriber_of_groups_group_type_values: Option<Vec<String>>,
+    pub subscriber_of_groups_description_value: Option<String>,
+    pub subscriber_of_groups_description_values: Option<Vec<String>>,
+    pub subscriber_of_groups_name_value: Option<String>,
+    pub subscriber_of_groups_name_values: Option<Vec<String>>,
 }
 
 impl ProfileBuiltinIPPrefixFilters {
@@ -704,460 +704,460 @@ impl ProfileBuiltinIPPrefixFilters {
         if let Some(value) = &self.ids {
             vars.insert("ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__value {
+        if let Some(value) = &self.display_label_value {
             vars.insert("display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__values {
+        if let Some(value) = &self.display_label_values {
             vars.insert("display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__isnull {
+        if let Some(value) = &self.display_label_isnull {
             vars.insert("display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.hfid {
             vars.insert("hfid".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__value {
+        if let Some(value) = &self.profile_name_value {
             vars.insert("profile_name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__values {
+        if let Some(value) = &self.profile_name_values {
             vars.insert("profile_name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__isnull {
+        if let Some(value) = &self.profile_name_isnull {
             vars.insert("profile_name__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__source__id {
+        if let Some(value) = &self.profile_name_source_id {
             vars.insert("profile_name__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__owner__id {
+        if let Some(value) = &self.profile_name_owner_id {
             vars.insert("profile_name__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__is_protected {
+        if let Some(value) = &self.profile_name_is_protected {
             vars.insert("profile_name__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__value {
+        if let Some(value) = &self.profile_priority_value {
             vars.insert("profile_priority__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__values {
+        if let Some(value) = &self.profile_priority_values {
             vars.insert("profile_priority__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__isnull {
+        if let Some(value) = &self.profile_priority_isnull {
             vars.insert("profile_priority__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__source__id {
+        if let Some(value) = &self.profile_priority_source_id {
             vars.insert("profile_priority__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__owner__id {
+        if let Some(value) = &self.profile_priority_owner_id {
             vars.insert("profile_priority__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__is_protected {
+        if let Some(value) = &self.profile_priority_is_protected {
             vars.insert("profile_priority__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.is_pool__value {
+        if let Some(value) = &self.is_pool_value {
             vars.insert("is_pool__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.is_pool__values {
+        if let Some(value) = &self.is_pool_values {
             vars.insert("is_pool__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.is_pool__isnull {
+        if let Some(value) = &self.is_pool_isnull {
             vars.insert("is_pool__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.is_pool__source__id {
+        if let Some(value) = &self.is_pool_source_id {
             vars.insert("is_pool__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.is_pool__owner__id {
+        if let Some(value) = &self.is_pool_owner_id {
             vars.insert("is_pool__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.is_pool__is_protected {
+        if let Some(value) = &self.is_pool_is_protected {
             vars.insert("is_pool__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_type__value {
+        if let Some(value) = &self.member_type_value {
             vars.insert("member_type__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_type__values {
+        if let Some(value) = &self.member_type_values {
             vars.insert("member_type__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_type__isnull {
+        if let Some(value) = &self.member_type_isnull {
             vars.insert("member_type__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_type__source__id {
+        if let Some(value) = &self.member_type_source_id {
             vars.insert("member_type__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_type__owner__id {
+        if let Some(value) = &self.member_type_owner_id {
             vars.insert("member_type__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_type__is_protected {
+        if let Some(value) = &self.member_type_is_protected {
             vars.insert("member_type__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.prefix__value {
+        if let Some(value) = &self.prefix_value {
             vars.insert("prefix__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.prefix__values {
+        if let Some(value) = &self.prefix_values {
             vars.insert("prefix__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.prefix__isnull {
+        if let Some(value) = &self.prefix_isnull {
             vars.insert("prefix__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.prefix__source__id {
+        if let Some(value) = &self.prefix_source_id {
             vars.insert("prefix__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.prefix__owner__id {
+        if let Some(value) = &self.prefix_owner_id {
             vars.insert("prefix__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.prefix__is_protected {
+        if let Some(value) = &self.prefix_is_protected {
             vars.insert("prefix__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__value {
+        if let Some(value) = &self.description_value {
             vars.insert("description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__values {
+        if let Some(value) = &self.description_values {
             vars.insert("description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__isnull {
+        if let Some(value) = &self.description_isnull {
             vars.insert("description__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__source__id {
+        if let Some(value) = &self.description_source_id {
             vars.insert("description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__owner__id {
+        if let Some(value) = &self.description_owner_id {
             vars.insert("description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__is_protected {
+        if let Some(value) = &self.description_is_protected {
             vars.insert("description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__value {
+        if let Some(value) = &self.any_value {
             vars.insert("any__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__values {
+        if let Some(value) = &self.any_values {
             vars.insert("any__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__source__id {
+        if let Some(value) = &self.any_source_id {
             vars.insert("any__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__owner__id {
+        if let Some(value) = &self.any_owner_id {
             vars.insert("any__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__is_protected {
+        if let Some(value) = &self.any_is_protected {
             vars.insert("any__is_protected".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.partial_match {
             vars.insert("partial_match".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__id {
+        if let Some(value) = &self.node_metadata_created_by_id {
             vars.insert("node_metadata__created_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__ids {
+        if let Some(value) = &self.node_metadata_created_by_ids {
             vars.insert("node_metadata__created_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__id {
+        if let Some(value) = &self.node_metadata_updated_by_id {
             vars.insert("node_metadata__updated_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__ids {
+        if let Some(value) = &self.node_metadata_updated_by_ids {
             vars.insert("node_metadata__updated_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at {
+        if let Some(value) = &self.node_metadata_created_at {
             vars.insert("node_metadata__created_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__before {
+        if let Some(value) = &self.node_metadata_created_at_before {
             vars.insert("node_metadata__created_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__after {
+        if let Some(value) = &self.node_metadata_created_at_after {
             vars.insert("node_metadata__created_at__after".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at {
+        if let Some(value) = &self.node_metadata_updated_at {
             vars.insert("node_metadata__updated_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__before {
+        if let Some(value) = &self.node_metadata_updated_at_before {
             vars.insert("node_metadata__updated_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__after {
+        if let Some(value) = &self.node_metadata_updated_at_after {
             vars.insert("node_metadata__updated_at__after".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__ids {
+        if let Some(value) = &self.related_nodes_ids {
             vars.insert("related_nodes__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__isnull {
+        if let Some(value) = &self.related_nodes_isnull {
             vars.insert("related_nodes__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__value {
+        if let Some(value) = &self.related_nodes_display_label_value {
             vars.insert("related_nodes__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__values {
+        if let Some(value) = &self.related_nodes_display_label_values {
             vars.insert("related_nodes__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__isnull {
+        if let Some(value) = &self.related_nodes_display_label_isnull {
             vars.insert("related_nodes__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__netmask__value {
+        if let Some(value) = &self.related_nodes_netmask_value {
             vars.insert("related_nodes__netmask__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__netmask__values {
+        if let Some(value) = &self.related_nodes_netmask_values {
             vars.insert("related_nodes__netmask__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__netmask__source__id {
+        if let Some(value) = &self.related_nodes_netmask_source_id {
             vars.insert("related_nodes__netmask__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__netmask__owner__id {
+        if let Some(value) = &self.related_nodes_netmask_owner_id {
             vars.insert("related_nodes__netmask__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__netmask__is_protected {
+        if let Some(value) = &self.related_nodes_netmask_is_protected {
             vars.insert("related_nodes__netmask__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__hostmask__value {
+        if let Some(value) = &self.related_nodes_hostmask_value {
             vars.insert("related_nodes__hostmask__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__hostmask__values {
+        if let Some(value) = &self.related_nodes_hostmask_values {
             vars.insert("related_nodes__hostmask__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__hostmask__source__id {
+        if let Some(value) = &self.related_nodes_hostmask_source_id {
             vars.insert("related_nodes__hostmask__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__hostmask__owner__id {
+        if let Some(value) = &self.related_nodes_hostmask_owner_id {
             vars.insert("related_nodes__hostmask__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__hostmask__is_protected {
+        if let Some(value) = &self.related_nodes_hostmask_is_protected {
             vars.insert("related_nodes__hostmask__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__is_top_level__value {
+        if let Some(value) = &self.related_nodes_is_top_level_value {
             vars.insert("related_nodes__is_top_level__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__is_top_level__values {
+        if let Some(value) = &self.related_nodes_is_top_level_values {
             vars.insert("related_nodes__is_top_level__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__is_top_level__source__id {
+        if let Some(value) = &self.related_nodes_is_top_level_source_id {
             vars.insert("related_nodes__is_top_level__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__is_top_level__owner__id {
+        if let Some(value) = &self.related_nodes_is_top_level_owner_id {
             vars.insert("related_nodes__is_top_level__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__is_top_level__is_protected {
+        if let Some(value) = &self.related_nodes_is_top_level_is_protected {
             vars.insert("related_nodes__is_top_level__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__utilization__value {
+        if let Some(value) = &self.related_nodes_utilization_value {
             vars.insert("related_nodes__utilization__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__utilization__values {
+        if let Some(value) = &self.related_nodes_utilization_values {
             vars.insert("related_nodes__utilization__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__utilization__source__id {
+        if let Some(value) = &self.related_nodes_utilization_source_id {
             vars.insert("related_nodes__utilization__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__utilization__owner__id {
+        if let Some(value) = &self.related_nodes_utilization_owner_id {
             vars.insert("related_nodes__utilization__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__utilization__is_protected {
+        if let Some(value) = &self.related_nodes_utilization_is_protected {
             vars.insert("related_nodes__utilization__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__is_pool__value {
+        if let Some(value) = &self.related_nodes_is_pool_value {
             vars.insert("related_nodes__is_pool__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__is_pool__values {
+        if let Some(value) = &self.related_nodes_is_pool_values {
             vars.insert("related_nodes__is_pool__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__is_pool__source__id {
+        if let Some(value) = &self.related_nodes_is_pool_source_id {
             vars.insert("related_nodes__is_pool__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__is_pool__owner__id {
+        if let Some(value) = &self.related_nodes_is_pool_owner_id {
             vars.insert("related_nodes__is_pool__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__is_pool__is_protected {
+        if let Some(value) = &self.related_nodes_is_pool_is_protected {
             vars.insert("related_nodes__is_pool__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__broadcast_address__value {
+        if let Some(value) = &self.related_nodes_broadcast_address_value {
             vars.insert("related_nodes__broadcast_address__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__broadcast_address__values {
+        if let Some(value) = &self.related_nodes_broadcast_address_values {
             vars.insert("related_nodes__broadcast_address__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__broadcast_address__source__id {
+        if let Some(value) = &self.related_nodes_broadcast_address_source_id {
             vars.insert("related_nodes__broadcast_address__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__broadcast_address__owner__id {
+        if let Some(value) = &self.related_nodes_broadcast_address_owner_id {
             vars.insert("related_nodes__broadcast_address__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__broadcast_address__is_protected {
+        if let Some(value) = &self.related_nodes_broadcast_address_is_protected {
             vars.insert("related_nodes__broadcast_address__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__member_type__value {
+        if let Some(value) = &self.related_nodes_member_type_value {
             vars.insert("related_nodes__member_type__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__member_type__values {
+        if let Some(value) = &self.related_nodes_member_type_values {
             vars.insert("related_nodes__member_type__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__member_type__source__id {
+        if let Some(value) = &self.related_nodes_member_type_source_id {
             vars.insert("related_nodes__member_type__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__member_type__owner__id {
+        if let Some(value) = &self.related_nodes_member_type_owner_id {
             vars.insert("related_nodes__member_type__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__member_type__is_protected {
+        if let Some(value) = &self.related_nodes_member_type_is_protected {
             vars.insert("related_nodes__member_type__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__network_address__value {
+        if let Some(value) = &self.related_nodes_network_address_value {
             vars.insert("related_nodes__network_address__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__network_address__values {
+        if let Some(value) = &self.related_nodes_network_address_values {
             vars.insert("related_nodes__network_address__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__network_address__source__id {
+        if let Some(value) = &self.related_nodes_network_address_source_id {
             vars.insert("related_nodes__network_address__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__network_address__owner__id {
+        if let Some(value) = &self.related_nodes_network_address_owner_id {
             vars.insert("related_nodes__network_address__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__network_address__is_protected {
+        if let Some(value) = &self.related_nodes_network_address_is_protected {
             vars.insert("related_nodes__network_address__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__prefix__value {
+        if let Some(value) = &self.related_nodes_prefix_value {
             vars.insert("related_nodes__prefix__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__prefix__values {
+        if let Some(value) = &self.related_nodes_prefix_values {
             vars.insert("related_nodes__prefix__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__prefix__source__id {
+        if let Some(value) = &self.related_nodes_prefix_source_id {
             vars.insert("related_nodes__prefix__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__prefix__owner__id {
+        if let Some(value) = &self.related_nodes_prefix_owner_id {
             vars.insert("related_nodes__prefix__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__prefix__is_protected {
+        if let Some(value) = &self.related_nodes_prefix_is_protected {
             vars.insert("related_nodes__prefix__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__value {
+        if let Some(value) = &self.related_nodes_description_value {
             vars.insert("related_nodes__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__values {
+        if let Some(value) = &self.related_nodes_description_values {
             vars.insert("related_nodes__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__source__id {
+        if let Some(value) = &self.related_nodes_description_source_id {
             vars.insert("related_nodes__description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__owner__id {
+        if let Some(value) = &self.related_nodes_description_owner_id {
             vars.insert("related_nodes__description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__is_protected {
+        if let Some(value) = &self.related_nodes_description_is_protected {
             vars.insert("related_nodes__description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__ids {
+        if let Some(value) = &self.ip_namespace_ids {
             vars.insert("ip_namespace__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__isnull {
+        if let Some(value) = &self.ip_namespace_isnull {
             vars.insert("ip_namespace__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__display_label__value {
+        if let Some(value) = &self.ip_namespace_display_label_value {
             vars.insert("ip_namespace__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__display_label__values {
+        if let Some(value) = &self.ip_namespace_display_label_values {
             vars.insert("ip_namespace__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__display_label__isnull {
+        if let Some(value) = &self.ip_namespace_display_label_isnull {
             vars.insert("ip_namespace__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__description__value {
+        if let Some(value) = &self.ip_namespace_description_value {
             vars.insert("ip_namespace__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__description__values {
+        if let Some(value) = &self.ip_namespace_description_values {
             vars.insert("ip_namespace__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__description__source__id {
+        if let Some(value) = &self.ip_namespace_description_source_id {
             vars.insert("ip_namespace__description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__description__owner__id {
+        if let Some(value) = &self.ip_namespace_description_owner_id {
             vars.insert("ip_namespace__description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__description__is_protected {
+        if let Some(value) = &self.ip_namespace_description_is_protected {
             vars.insert("ip_namespace__description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__name__value {
+        if let Some(value) = &self.ip_namespace_name_value {
             vars.insert("ip_namespace__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__name__values {
+        if let Some(value) = &self.ip_namespace_name_values {
             vars.insert("ip_namespace__name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__name__source__id {
+        if let Some(value) = &self.ip_namespace_name_source_id {
             vars.insert("ip_namespace__name__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__name__owner__id {
+        if let Some(value) = &self.ip_namespace_name_owner_id {
             vars.insert("ip_namespace__name__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_namespace__name__is_protected {
+        if let Some(value) = &self.ip_namespace_name_is_protected {
             vars.insert("ip_namespace__name__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__ids {
+        if let Some(value) = &self.member_of_groups_ids {
             vars.insert("member_of_groups__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__isnull {
+        if let Some(value) = &self.member_of_groups_isnull {
             vars.insert("member_of_groups__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__value {
+        if let Some(value) = &self.member_of_groups_display_label_value {
             vars.insert("member_of_groups__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__values {
+        if let Some(value) = &self.member_of_groups_display_label_values {
             vars.insert("member_of_groups__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__isnull {
+        if let Some(value) = &self.member_of_groups_display_label_isnull {
             vars.insert("member_of_groups__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__label__value {
+        if let Some(value) = &self.member_of_groups_label_value {
             vars.insert("member_of_groups__label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__label__values {
+        if let Some(value) = &self.member_of_groups_label_values {
             vars.insert("member_of_groups__label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__group_type__value {
+        if let Some(value) = &self.member_of_groups_group_type_value {
             vars.insert("member_of_groups__group_type__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__group_type__values {
+        if let Some(value) = &self.member_of_groups_group_type_values {
             vars.insert("member_of_groups__group_type__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__description__value {
+        if let Some(value) = &self.member_of_groups_description_value {
             vars.insert("member_of_groups__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__description__values {
+        if let Some(value) = &self.member_of_groups_description_values {
             vars.insert("member_of_groups__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__name__value {
+        if let Some(value) = &self.member_of_groups_name_value {
             vars.insert("member_of_groups__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__name__values {
+        if let Some(value) = &self.member_of_groups_name_values {
             vars.insert("member_of_groups__name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__ids {
+        if let Some(value) = &self.subscriber_of_groups_ids {
             vars.insert("subscriber_of_groups__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__isnull {
+        if let Some(value) = &self.subscriber_of_groups_isnull {
             vars.insert("subscriber_of_groups__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__value {
+        if let Some(value) = &self.subscriber_of_groups_display_label_value {
             vars.insert("subscriber_of_groups__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__values {
+        if let Some(value) = &self.subscriber_of_groups_display_label_values {
             vars.insert("subscriber_of_groups__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__isnull {
+        if let Some(value) = &self.subscriber_of_groups_display_label_isnull {
             vars.insert("subscriber_of_groups__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__label__value {
+        if let Some(value) = &self.subscriber_of_groups_label_value {
             vars.insert("subscriber_of_groups__label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__label__values {
+        if let Some(value) = &self.subscriber_of_groups_label_values {
             vars.insert("subscriber_of_groups__label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__group_type__value {
+        if let Some(value) = &self.subscriber_of_groups_group_type_value {
             vars.insert("subscriber_of_groups__group_type__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__group_type__values {
+        if let Some(value) = &self.subscriber_of_groups_group_type_values {
             vars.insert("subscriber_of_groups__group_type__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__description__value {
+        if let Some(value) = &self.subscriber_of_groups_description_value {
             vars.insert("subscriber_of_groups__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__description__values {
+        if let Some(value) = &self.subscriber_of_groups_description_values {
             vars.insert("subscriber_of_groups__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__name__value {
+        if let Some(value) = &self.subscriber_of_groups_name_value {
             vars.insert("subscriber_of_groups__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__name__values {
+        if let Some(value) = &self.subscriber_of_groups_name_values {
             vars.insert("subscriber_of_groups__name__values".to_string(), serde_json::to_value(value)?);
         }
         Ok(Value::Object(vars))
@@ -1179,7 +1179,7 @@ impl<'a> ProfileBuiltinIPPrefixClient<'a> {
         let response = self.client.execute::<ProfileBuiltinIPPrefixResponse>(query, Some(vars), request_branch).await?;
         let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
         let mut items = Vec::new();
-        for edge in data.profile_builtin_i_p_prefix.edges {
+        for edge in data.profile_builtin_ip_prefix.edges {
             if let Some(node) = edge.node {
                 items.push(*node);
             }
@@ -1212,7 +1212,7 @@ impl<'a> ProfileBuiltinIPPrefixClient<'a> {
         let extract: BoxExtract<'a, ProfileBuiltinIPPrefix, String, (ProfileBuiltinIPPrefixResponse, i64)> = Box::new(move |(data, current_offset): (ProfileBuiltinIPPrefixResponse, i64)| -> Result<EdgePage<ProfileBuiltinIPPrefix, String>> {
             let mut items = Vec::new();
             let mut next: Option<String> = None;
-            for edge in data.profile_builtin_i_p_prefix.edges {
+            for edge in data.profile_builtin_ip_prefix.edges {
                 if let Some(node) = edge.node {
                     items.push(*node);
                 }
@@ -1240,85 +1240,85 @@ pub struct ProfileBuiltinTagFilters {
     pub limit: Option<i64>,
     pub order: Option<OrderInput>,
     pub ids: Option<Vec<String>>,
-    pub display_label__value: Option<String>,
-    pub display_label__values: Option<Vec<String>>,
-    pub display_label__isnull: Option<bool>,
+    pub display_label_value: Option<String>,
+    pub display_label_values: Option<Vec<String>>,
+    pub display_label_isnull: Option<bool>,
     pub hfid: Option<Vec<String>>,
-    pub profile_name__value: Option<String>,
-    pub profile_name__values: Option<Vec<String>>,
-    pub profile_name__isnull: Option<bool>,
-    pub profile_name__source__id: Option<String>,
-    pub profile_name__owner__id: Option<String>,
-    pub profile_name__is_protected: Option<bool>,
-    pub profile_priority__value: Option<i64>,
-    pub profile_priority__values: Option<Vec<i64>>,
-    pub profile_priority__isnull: Option<bool>,
-    pub profile_priority__source__id: Option<String>,
-    pub profile_priority__owner__id: Option<String>,
-    pub profile_priority__is_protected: Option<bool>,
-    pub description__value: Option<String>,
-    pub description__values: Option<Vec<String>>,
-    pub description__isnull: Option<bool>,
-    pub description__source__id: Option<String>,
-    pub description__owner__id: Option<String>,
-    pub description__is_protected: Option<bool>,
-    pub any__value: Option<String>,
-    pub any__values: Option<Vec<String>>,
-    pub any__source__id: Option<String>,
-    pub any__owner__id: Option<String>,
-    pub any__is_protected: Option<bool>,
+    pub profile_name_value: Option<String>,
+    pub profile_name_values: Option<Vec<String>>,
+    pub profile_name_isnull: Option<bool>,
+    pub profile_name_source_id: Option<String>,
+    pub profile_name_owner_id: Option<String>,
+    pub profile_name_is_protected: Option<bool>,
+    pub profile_priority_value: Option<i64>,
+    pub profile_priority_values: Option<Vec<i64>>,
+    pub profile_priority_isnull: Option<bool>,
+    pub profile_priority_source_id: Option<String>,
+    pub profile_priority_owner_id: Option<String>,
+    pub profile_priority_is_protected: Option<bool>,
+    pub description_value: Option<String>,
+    pub description_values: Option<Vec<String>>,
+    pub description_isnull: Option<bool>,
+    pub description_source_id: Option<String>,
+    pub description_owner_id: Option<String>,
+    pub description_is_protected: Option<bool>,
+    pub any_value: Option<String>,
+    pub any_values: Option<Vec<String>>,
+    pub any_source_id: Option<String>,
+    pub any_owner_id: Option<String>,
+    pub any_is_protected: Option<bool>,
     pub partial_match: Option<bool>,
-    pub node_metadata__created_by__id: Option<String>,
-    pub node_metadata__created_by__ids: Option<Vec<String>>,
-    pub node_metadata__updated_by__id: Option<String>,
-    pub node_metadata__updated_by__ids: Option<Vec<String>>,
-    pub node_metadata__created_at: Option<String>,
-    pub node_metadata__created_at__before: Option<String>,
-    pub node_metadata__created_at__after: Option<String>,
-    pub node_metadata__updated_at: Option<String>,
-    pub node_metadata__updated_at__before: Option<String>,
-    pub node_metadata__updated_at__after: Option<String>,
-    pub related_nodes__ids: Option<Vec<String>>,
-    pub related_nodes__isnull: Option<bool>,
-    pub related_nodes__display_label__value: Option<String>,
-    pub related_nodes__display_label__values: Option<Vec<String>>,
-    pub related_nodes__display_label__isnull: Option<bool>,
-    pub related_nodes__name__value: Option<String>,
-    pub related_nodes__name__values: Option<Vec<String>>,
-    pub related_nodes__name__source__id: Option<String>,
-    pub related_nodes__name__owner__id: Option<String>,
-    pub related_nodes__name__is_protected: Option<bool>,
-    pub related_nodes__description__value: Option<String>,
-    pub related_nodes__description__values: Option<Vec<String>>,
-    pub related_nodes__description__source__id: Option<String>,
-    pub related_nodes__description__owner__id: Option<String>,
-    pub related_nodes__description__is_protected: Option<bool>,
-    pub member_of_groups__ids: Option<Vec<String>>,
-    pub member_of_groups__isnull: Option<bool>,
-    pub member_of_groups__display_label__value: Option<String>,
-    pub member_of_groups__display_label__values: Option<Vec<String>>,
-    pub member_of_groups__display_label__isnull: Option<bool>,
-    pub member_of_groups__label__value: Option<String>,
-    pub member_of_groups__label__values: Option<Vec<String>>,
-    pub member_of_groups__group_type__value: Option<String>,
-    pub member_of_groups__group_type__values: Option<Vec<String>>,
-    pub member_of_groups__description__value: Option<String>,
-    pub member_of_groups__description__values: Option<Vec<String>>,
-    pub member_of_groups__name__value: Option<String>,
-    pub member_of_groups__name__values: Option<Vec<String>>,
-    pub subscriber_of_groups__ids: Option<Vec<String>>,
-    pub subscriber_of_groups__isnull: Option<bool>,
-    pub subscriber_of_groups__display_label__value: Option<String>,
-    pub subscriber_of_groups__display_label__values: Option<Vec<String>>,
-    pub subscriber_of_groups__display_label__isnull: Option<bool>,
-    pub subscriber_of_groups__label__value: Option<String>,
-    pub subscriber_of_groups__label__values: Option<Vec<String>>,
-    pub subscriber_of_groups__group_type__value: Option<String>,
-    pub subscriber_of_groups__group_type__values: Option<Vec<String>>,
-    pub subscriber_of_groups__description__value: Option<String>,
-    pub subscriber_of_groups__description__values: Option<Vec<String>>,
-    pub subscriber_of_groups__name__value: Option<String>,
-    pub subscriber_of_groups__name__values: Option<Vec<String>>,
+    pub node_metadata_created_by_id: Option<String>,
+    pub node_metadata_created_by_ids: Option<Vec<String>>,
+    pub node_metadata_updated_by_id: Option<String>,
+    pub node_metadata_updated_by_ids: Option<Vec<String>>,
+    pub node_metadata_created_at: Option<String>,
+    pub node_metadata_created_at_before: Option<String>,
+    pub node_metadata_created_at_after: Option<String>,
+    pub node_metadata_updated_at: Option<String>,
+    pub node_metadata_updated_at_before: Option<String>,
+    pub node_metadata_updated_at_after: Option<String>,
+    pub related_nodes_ids: Option<Vec<String>>,
+    pub related_nodes_isnull: Option<bool>,
+    pub related_nodes_display_label_value: Option<String>,
+    pub related_nodes_display_label_values: Option<Vec<String>>,
+    pub related_nodes_display_label_isnull: Option<bool>,
+    pub related_nodes_name_value: Option<String>,
+    pub related_nodes_name_values: Option<Vec<String>>,
+    pub related_nodes_name_source_id: Option<String>,
+    pub related_nodes_name_owner_id: Option<String>,
+    pub related_nodes_name_is_protected: Option<bool>,
+    pub related_nodes_description_value: Option<String>,
+    pub related_nodes_description_values: Option<Vec<String>>,
+    pub related_nodes_description_source_id: Option<String>,
+    pub related_nodes_description_owner_id: Option<String>,
+    pub related_nodes_description_is_protected: Option<bool>,
+    pub member_of_groups_ids: Option<Vec<String>>,
+    pub member_of_groups_isnull: Option<bool>,
+    pub member_of_groups_display_label_value: Option<String>,
+    pub member_of_groups_display_label_values: Option<Vec<String>>,
+    pub member_of_groups_display_label_isnull: Option<bool>,
+    pub member_of_groups_label_value: Option<String>,
+    pub member_of_groups_label_values: Option<Vec<String>>,
+    pub member_of_groups_group_type_value: Option<String>,
+    pub member_of_groups_group_type_values: Option<Vec<String>>,
+    pub member_of_groups_description_value: Option<String>,
+    pub member_of_groups_description_values: Option<Vec<String>>,
+    pub member_of_groups_name_value: Option<String>,
+    pub member_of_groups_name_values: Option<Vec<String>>,
+    pub subscriber_of_groups_ids: Option<Vec<String>>,
+    pub subscriber_of_groups_isnull: Option<bool>,
+    pub subscriber_of_groups_display_label_value: Option<String>,
+    pub subscriber_of_groups_display_label_values: Option<Vec<String>>,
+    pub subscriber_of_groups_display_label_isnull: Option<bool>,
+    pub subscriber_of_groups_label_value: Option<String>,
+    pub subscriber_of_groups_label_values: Option<Vec<String>>,
+    pub subscriber_of_groups_group_type_value: Option<String>,
+    pub subscriber_of_groups_group_type_values: Option<Vec<String>>,
+    pub subscriber_of_groups_description_value: Option<String>,
+    pub subscriber_of_groups_description_values: Option<Vec<String>>,
+    pub subscriber_of_groups_name_value: Option<String>,
+    pub subscriber_of_groups_name_values: Option<Vec<String>>,
 }
 
 impl ProfileBuiltinTagFilters {
@@ -1336,241 +1336,241 @@ impl ProfileBuiltinTagFilters {
         if let Some(value) = &self.ids {
             vars.insert("ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__value {
+        if let Some(value) = &self.display_label_value {
             vars.insert("display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__values {
+        if let Some(value) = &self.display_label_values {
             vars.insert("display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__isnull {
+        if let Some(value) = &self.display_label_isnull {
             vars.insert("display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.hfid {
             vars.insert("hfid".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__value {
+        if let Some(value) = &self.profile_name_value {
             vars.insert("profile_name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__values {
+        if let Some(value) = &self.profile_name_values {
             vars.insert("profile_name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__isnull {
+        if let Some(value) = &self.profile_name_isnull {
             vars.insert("profile_name__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__source__id {
+        if let Some(value) = &self.profile_name_source_id {
             vars.insert("profile_name__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__owner__id {
+        if let Some(value) = &self.profile_name_owner_id {
             vars.insert("profile_name__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__is_protected {
+        if let Some(value) = &self.profile_name_is_protected {
             vars.insert("profile_name__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__value {
+        if let Some(value) = &self.profile_priority_value {
             vars.insert("profile_priority__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__values {
+        if let Some(value) = &self.profile_priority_values {
             vars.insert("profile_priority__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__isnull {
+        if let Some(value) = &self.profile_priority_isnull {
             vars.insert("profile_priority__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__source__id {
+        if let Some(value) = &self.profile_priority_source_id {
             vars.insert("profile_priority__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__owner__id {
+        if let Some(value) = &self.profile_priority_owner_id {
             vars.insert("profile_priority__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__is_protected {
+        if let Some(value) = &self.profile_priority_is_protected {
             vars.insert("profile_priority__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__value {
+        if let Some(value) = &self.description_value {
             vars.insert("description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__values {
+        if let Some(value) = &self.description_values {
             vars.insert("description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__isnull {
+        if let Some(value) = &self.description_isnull {
             vars.insert("description__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__source__id {
+        if let Some(value) = &self.description_source_id {
             vars.insert("description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__owner__id {
+        if let Some(value) = &self.description_owner_id {
             vars.insert("description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__is_protected {
+        if let Some(value) = &self.description_is_protected {
             vars.insert("description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__value {
+        if let Some(value) = &self.any_value {
             vars.insert("any__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__values {
+        if let Some(value) = &self.any_values {
             vars.insert("any__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__source__id {
+        if let Some(value) = &self.any_source_id {
             vars.insert("any__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__owner__id {
+        if let Some(value) = &self.any_owner_id {
             vars.insert("any__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__is_protected {
+        if let Some(value) = &self.any_is_protected {
             vars.insert("any__is_protected".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.partial_match {
             vars.insert("partial_match".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__id {
+        if let Some(value) = &self.node_metadata_created_by_id {
             vars.insert("node_metadata__created_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__ids {
+        if let Some(value) = &self.node_metadata_created_by_ids {
             vars.insert("node_metadata__created_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__id {
+        if let Some(value) = &self.node_metadata_updated_by_id {
             vars.insert("node_metadata__updated_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__ids {
+        if let Some(value) = &self.node_metadata_updated_by_ids {
             vars.insert("node_metadata__updated_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at {
+        if let Some(value) = &self.node_metadata_created_at {
             vars.insert("node_metadata__created_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__before {
+        if let Some(value) = &self.node_metadata_created_at_before {
             vars.insert("node_metadata__created_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__after {
+        if let Some(value) = &self.node_metadata_created_at_after {
             vars.insert("node_metadata__created_at__after".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at {
+        if let Some(value) = &self.node_metadata_updated_at {
             vars.insert("node_metadata__updated_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__before {
+        if let Some(value) = &self.node_metadata_updated_at_before {
             vars.insert("node_metadata__updated_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__after {
+        if let Some(value) = &self.node_metadata_updated_at_after {
             vars.insert("node_metadata__updated_at__after".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__ids {
+        if let Some(value) = &self.related_nodes_ids {
             vars.insert("related_nodes__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__isnull {
+        if let Some(value) = &self.related_nodes_isnull {
             vars.insert("related_nodes__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__value {
+        if let Some(value) = &self.related_nodes_display_label_value {
             vars.insert("related_nodes__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__values {
+        if let Some(value) = &self.related_nodes_display_label_values {
             vars.insert("related_nodes__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__isnull {
+        if let Some(value) = &self.related_nodes_display_label_isnull {
             vars.insert("related_nodes__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__name__value {
+        if let Some(value) = &self.related_nodes_name_value {
             vars.insert("related_nodes__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__name__values {
+        if let Some(value) = &self.related_nodes_name_values {
             vars.insert("related_nodes__name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__name__source__id {
+        if let Some(value) = &self.related_nodes_name_source_id {
             vars.insert("related_nodes__name__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__name__owner__id {
+        if let Some(value) = &self.related_nodes_name_owner_id {
             vars.insert("related_nodes__name__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__name__is_protected {
+        if let Some(value) = &self.related_nodes_name_is_protected {
             vars.insert("related_nodes__name__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__value {
+        if let Some(value) = &self.related_nodes_description_value {
             vars.insert("related_nodes__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__values {
+        if let Some(value) = &self.related_nodes_description_values {
             vars.insert("related_nodes__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__source__id {
+        if let Some(value) = &self.related_nodes_description_source_id {
             vars.insert("related_nodes__description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__owner__id {
+        if let Some(value) = &self.related_nodes_description_owner_id {
             vars.insert("related_nodes__description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__is_protected {
+        if let Some(value) = &self.related_nodes_description_is_protected {
             vars.insert("related_nodes__description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__ids {
+        if let Some(value) = &self.member_of_groups_ids {
             vars.insert("member_of_groups__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__isnull {
+        if let Some(value) = &self.member_of_groups_isnull {
             vars.insert("member_of_groups__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__value {
+        if let Some(value) = &self.member_of_groups_display_label_value {
             vars.insert("member_of_groups__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__values {
+        if let Some(value) = &self.member_of_groups_display_label_values {
             vars.insert("member_of_groups__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__isnull {
+        if let Some(value) = &self.member_of_groups_display_label_isnull {
             vars.insert("member_of_groups__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__label__value {
+        if let Some(value) = &self.member_of_groups_label_value {
             vars.insert("member_of_groups__label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__label__values {
+        if let Some(value) = &self.member_of_groups_label_values {
             vars.insert("member_of_groups__label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__group_type__value {
+        if let Some(value) = &self.member_of_groups_group_type_value {
             vars.insert("member_of_groups__group_type__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__group_type__values {
+        if let Some(value) = &self.member_of_groups_group_type_values {
             vars.insert("member_of_groups__group_type__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__description__value {
+        if let Some(value) = &self.member_of_groups_description_value {
             vars.insert("member_of_groups__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__description__values {
+        if let Some(value) = &self.member_of_groups_description_values {
             vars.insert("member_of_groups__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__name__value {
+        if let Some(value) = &self.member_of_groups_name_value {
             vars.insert("member_of_groups__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__name__values {
+        if let Some(value) = &self.member_of_groups_name_values {
             vars.insert("member_of_groups__name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__ids {
+        if let Some(value) = &self.subscriber_of_groups_ids {
             vars.insert("subscriber_of_groups__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__isnull {
+        if let Some(value) = &self.subscriber_of_groups_isnull {
             vars.insert("subscriber_of_groups__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__value {
+        if let Some(value) = &self.subscriber_of_groups_display_label_value {
             vars.insert("subscriber_of_groups__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__values {
+        if let Some(value) = &self.subscriber_of_groups_display_label_values {
             vars.insert("subscriber_of_groups__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__isnull {
+        if let Some(value) = &self.subscriber_of_groups_display_label_isnull {
             vars.insert("subscriber_of_groups__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__label__value {
+        if let Some(value) = &self.subscriber_of_groups_label_value {
             vars.insert("subscriber_of_groups__label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__label__values {
+        if let Some(value) = &self.subscriber_of_groups_label_values {
             vars.insert("subscriber_of_groups__label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__group_type__value {
+        if let Some(value) = &self.subscriber_of_groups_group_type_value {
             vars.insert("subscriber_of_groups__group_type__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__group_type__values {
+        if let Some(value) = &self.subscriber_of_groups_group_type_values {
             vars.insert("subscriber_of_groups__group_type__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__description__value {
+        if let Some(value) = &self.subscriber_of_groups_description_value {
             vars.insert("subscriber_of_groups__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__description__values {
+        if let Some(value) = &self.subscriber_of_groups_description_values {
             vars.insert("subscriber_of_groups__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__name__value {
+        if let Some(value) = &self.subscriber_of_groups_name_value {
             vars.insert("subscriber_of_groups__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__name__values {
+        if let Some(value) = &self.subscriber_of_groups_name_values {
             vars.insert("subscriber_of_groups__name__values".to_string(), serde_json::to_value(value)?);
         }
         Ok(Value::Object(vars))
@@ -1653,160 +1653,160 @@ pub struct ProfileIpamNamespaceFilters {
     pub limit: Option<i64>,
     pub order: Option<OrderInput>,
     pub ids: Option<Vec<String>>,
-    pub display_label__value: Option<String>,
-    pub display_label__values: Option<Vec<String>>,
-    pub display_label__isnull: Option<bool>,
+    pub display_label_value: Option<String>,
+    pub display_label_values: Option<Vec<String>>,
+    pub display_label_isnull: Option<bool>,
     pub hfid: Option<Vec<String>>,
-    pub profile_name__value: Option<String>,
-    pub profile_name__values: Option<Vec<String>>,
-    pub profile_name__isnull: Option<bool>,
-    pub profile_name__source__id: Option<String>,
-    pub profile_name__owner__id: Option<String>,
-    pub profile_name__is_protected: Option<bool>,
-    pub profile_priority__value: Option<i64>,
-    pub profile_priority__values: Option<Vec<i64>>,
-    pub profile_priority__isnull: Option<bool>,
-    pub profile_priority__source__id: Option<String>,
-    pub profile_priority__owner__id: Option<String>,
-    pub profile_priority__is_protected: Option<bool>,
-    pub description__value: Option<String>,
-    pub description__values: Option<Vec<String>>,
-    pub description__isnull: Option<bool>,
-    pub description__source__id: Option<String>,
-    pub description__owner__id: Option<String>,
-    pub description__is_protected: Option<bool>,
-    pub any__value: Option<String>,
-    pub any__values: Option<Vec<String>>,
-    pub any__source__id: Option<String>,
-    pub any__owner__id: Option<String>,
-    pub any__is_protected: Option<bool>,
+    pub profile_name_value: Option<String>,
+    pub profile_name_values: Option<Vec<String>>,
+    pub profile_name_isnull: Option<bool>,
+    pub profile_name_source_id: Option<String>,
+    pub profile_name_owner_id: Option<String>,
+    pub profile_name_is_protected: Option<bool>,
+    pub profile_priority_value: Option<i64>,
+    pub profile_priority_values: Option<Vec<i64>>,
+    pub profile_priority_isnull: Option<bool>,
+    pub profile_priority_source_id: Option<String>,
+    pub profile_priority_owner_id: Option<String>,
+    pub profile_priority_is_protected: Option<bool>,
+    pub description_value: Option<String>,
+    pub description_values: Option<Vec<String>>,
+    pub description_isnull: Option<bool>,
+    pub description_source_id: Option<String>,
+    pub description_owner_id: Option<String>,
+    pub description_is_protected: Option<bool>,
+    pub any_value: Option<String>,
+    pub any_values: Option<Vec<String>>,
+    pub any_source_id: Option<String>,
+    pub any_owner_id: Option<String>,
+    pub any_is_protected: Option<bool>,
     pub partial_match: Option<bool>,
-    pub node_metadata__created_by__id: Option<String>,
-    pub node_metadata__created_by__ids: Option<Vec<String>>,
-    pub node_metadata__updated_by__id: Option<String>,
-    pub node_metadata__updated_by__ids: Option<Vec<String>>,
-    pub node_metadata__created_at: Option<String>,
-    pub node_metadata__created_at__before: Option<String>,
-    pub node_metadata__created_at__after: Option<String>,
-    pub node_metadata__updated_at: Option<String>,
-    pub node_metadata__updated_at__before: Option<String>,
-    pub node_metadata__updated_at__after: Option<String>,
-    pub related_nodes__ids: Option<Vec<String>>,
-    pub related_nodes__isnull: Option<bool>,
-    pub related_nodes__display_label__value: Option<String>,
-    pub related_nodes__display_label__values: Option<Vec<String>>,
-    pub related_nodes__display_label__isnull: Option<bool>,
-    pub related_nodes__default__value: Option<bool>,
-    pub related_nodes__default__values: Option<Vec<bool>>,
-    pub related_nodes__default__source__id: Option<String>,
-    pub related_nodes__default__owner__id: Option<String>,
-    pub related_nodes__default__is_protected: Option<bool>,
-    pub related_nodes__description__value: Option<String>,
-    pub related_nodes__description__values: Option<Vec<String>>,
-    pub related_nodes__description__source__id: Option<String>,
-    pub related_nodes__description__owner__id: Option<String>,
-    pub related_nodes__description__is_protected: Option<bool>,
-    pub related_nodes__name__value: Option<String>,
-    pub related_nodes__name__values: Option<Vec<String>>,
-    pub related_nodes__name__source__id: Option<String>,
-    pub related_nodes__name__owner__id: Option<String>,
-    pub related_nodes__name__is_protected: Option<bool>,
-    pub ip_prefixes__ids: Option<Vec<String>>,
-    pub ip_prefixes__isnull: Option<bool>,
-    pub ip_prefixes__display_label__value: Option<String>,
-    pub ip_prefixes__display_label__values: Option<Vec<String>>,
-    pub ip_prefixes__display_label__isnull: Option<bool>,
-    pub ip_prefixes__netmask__value: Option<String>,
-    pub ip_prefixes__netmask__values: Option<Vec<String>>,
-    pub ip_prefixes__netmask__source__id: Option<String>,
-    pub ip_prefixes__netmask__owner__id: Option<String>,
-    pub ip_prefixes__netmask__is_protected: Option<bool>,
-    pub ip_prefixes__hostmask__value: Option<String>,
-    pub ip_prefixes__hostmask__values: Option<Vec<String>>,
-    pub ip_prefixes__hostmask__source__id: Option<String>,
-    pub ip_prefixes__hostmask__owner__id: Option<String>,
-    pub ip_prefixes__hostmask__is_protected: Option<bool>,
-    pub ip_prefixes__is_top_level__value: Option<bool>,
-    pub ip_prefixes__is_top_level__values: Option<Vec<bool>>,
-    pub ip_prefixes__is_top_level__source__id: Option<String>,
-    pub ip_prefixes__is_top_level__owner__id: Option<String>,
-    pub ip_prefixes__is_top_level__is_protected: Option<bool>,
-    pub ip_prefixes__utilization__value: Option<i64>,
-    pub ip_prefixes__utilization__values: Option<Vec<i64>>,
-    pub ip_prefixes__utilization__source__id: Option<String>,
-    pub ip_prefixes__utilization__owner__id: Option<String>,
-    pub ip_prefixes__utilization__is_protected: Option<bool>,
-    pub ip_prefixes__is_pool__value: Option<bool>,
-    pub ip_prefixes__is_pool__values: Option<Vec<bool>>,
-    pub ip_prefixes__is_pool__source__id: Option<String>,
-    pub ip_prefixes__is_pool__owner__id: Option<String>,
-    pub ip_prefixes__is_pool__is_protected: Option<bool>,
-    pub ip_prefixes__broadcast_address__value: Option<String>,
-    pub ip_prefixes__broadcast_address__values: Option<Vec<String>>,
-    pub ip_prefixes__broadcast_address__source__id: Option<String>,
-    pub ip_prefixes__broadcast_address__owner__id: Option<String>,
-    pub ip_prefixes__broadcast_address__is_protected: Option<bool>,
-    pub ip_prefixes__member_type__value: Option<String>,
-    pub ip_prefixes__member_type__values: Option<Vec<String>>,
-    pub ip_prefixes__member_type__source__id: Option<String>,
-    pub ip_prefixes__member_type__owner__id: Option<String>,
-    pub ip_prefixes__member_type__is_protected: Option<bool>,
-    pub ip_prefixes__network_address__value: Option<String>,
-    pub ip_prefixes__network_address__values: Option<Vec<String>>,
-    pub ip_prefixes__network_address__source__id: Option<String>,
-    pub ip_prefixes__network_address__owner__id: Option<String>,
-    pub ip_prefixes__network_address__is_protected: Option<bool>,
-    pub ip_prefixes__prefix__value: Option<String>,
-    pub ip_prefixes__prefix__values: Option<Vec<String>>,
-    pub ip_prefixes__prefix__source__id: Option<String>,
-    pub ip_prefixes__prefix__owner__id: Option<String>,
-    pub ip_prefixes__prefix__is_protected: Option<bool>,
-    pub ip_prefixes__description__value: Option<String>,
-    pub ip_prefixes__description__values: Option<Vec<String>>,
-    pub ip_prefixes__description__source__id: Option<String>,
-    pub ip_prefixes__description__owner__id: Option<String>,
-    pub ip_prefixes__description__is_protected: Option<bool>,
-    pub ip_addresses__ids: Option<Vec<String>>,
-    pub ip_addresses__isnull: Option<bool>,
-    pub ip_addresses__display_label__value: Option<String>,
-    pub ip_addresses__display_label__values: Option<Vec<String>>,
-    pub ip_addresses__display_label__isnull: Option<bool>,
-    pub ip_addresses__address__value: Option<String>,
-    pub ip_addresses__address__values: Option<Vec<String>>,
-    pub ip_addresses__address__source__id: Option<String>,
-    pub ip_addresses__address__owner__id: Option<String>,
-    pub ip_addresses__address__is_protected: Option<bool>,
-    pub ip_addresses__description__value: Option<String>,
-    pub ip_addresses__description__values: Option<Vec<String>>,
-    pub ip_addresses__description__source__id: Option<String>,
-    pub ip_addresses__description__owner__id: Option<String>,
-    pub ip_addresses__description__is_protected: Option<bool>,
-    pub member_of_groups__ids: Option<Vec<String>>,
-    pub member_of_groups__isnull: Option<bool>,
-    pub member_of_groups__display_label__value: Option<String>,
-    pub member_of_groups__display_label__values: Option<Vec<String>>,
-    pub member_of_groups__display_label__isnull: Option<bool>,
-    pub member_of_groups__label__value: Option<String>,
-    pub member_of_groups__label__values: Option<Vec<String>>,
-    pub member_of_groups__group_type__value: Option<String>,
-    pub member_of_groups__group_type__values: Option<Vec<String>>,
-    pub member_of_groups__description__value: Option<String>,
-    pub member_of_groups__description__values: Option<Vec<String>>,
-    pub member_of_groups__name__value: Option<String>,
-    pub member_of_groups__name__values: Option<Vec<String>>,
-    pub subscriber_of_groups__ids: Option<Vec<String>>,
-    pub subscriber_of_groups__isnull: Option<bool>,
-    pub subscriber_of_groups__display_label__value: Option<String>,
-    pub subscriber_of_groups__display_label__values: Option<Vec<String>>,
-    pub subscriber_of_groups__display_label__isnull: Option<bool>,
-    pub subscriber_of_groups__label__value: Option<String>,
-    pub subscriber_of_groups__label__values: Option<Vec<String>>,
-    pub subscriber_of_groups__group_type__value: Option<String>,
-    pub subscriber_of_groups__group_type__values: Option<Vec<String>>,
-    pub subscriber_of_groups__description__value: Option<String>,
-    pub subscriber_of_groups__description__values: Option<Vec<String>>,
-    pub subscriber_of_groups__name__value: Option<String>,
-    pub subscriber_of_groups__name__values: Option<Vec<String>>,
+    pub node_metadata_created_by_id: Option<String>,
+    pub node_metadata_created_by_ids: Option<Vec<String>>,
+    pub node_metadata_updated_by_id: Option<String>,
+    pub node_metadata_updated_by_ids: Option<Vec<String>>,
+    pub node_metadata_created_at: Option<String>,
+    pub node_metadata_created_at_before: Option<String>,
+    pub node_metadata_created_at_after: Option<String>,
+    pub node_metadata_updated_at: Option<String>,
+    pub node_metadata_updated_at_before: Option<String>,
+    pub node_metadata_updated_at_after: Option<String>,
+    pub related_nodes_ids: Option<Vec<String>>,
+    pub related_nodes_isnull: Option<bool>,
+    pub related_nodes_display_label_value: Option<String>,
+    pub related_nodes_display_label_values: Option<Vec<String>>,
+    pub related_nodes_display_label_isnull: Option<bool>,
+    pub related_nodes_default_value: Option<bool>,
+    pub related_nodes_default_values: Option<Vec<bool>>,
+    pub related_nodes_default_source_id: Option<String>,
+    pub related_nodes_default_owner_id: Option<String>,
+    pub related_nodes_default_is_protected: Option<bool>,
+    pub related_nodes_description_value: Option<String>,
+    pub related_nodes_description_values: Option<Vec<String>>,
+    pub related_nodes_description_source_id: Option<String>,
+    pub related_nodes_description_owner_id: Option<String>,
+    pub related_nodes_description_is_protected: Option<bool>,
+    pub related_nodes_name_value: Option<String>,
+    pub related_nodes_name_values: Option<Vec<String>>,
+    pub related_nodes_name_source_id: Option<String>,
+    pub related_nodes_name_owner_id: Option<String>,
+    pub related_nodes_name_is_protected: Option<bool>,
+    pub ip_prefixes_ids: Option<Vec<String>>,
+    pub ip_prefixes_isnull: Option<bool>,
+    pub ip_prefixes_display_label_value: Option<String>,
+    pub ip_prefixes_display_label_values: Option<Vec<String>>,
+    pub ip_prefixes_display_label_isnull: Option<bool>,
+    pub ip_prefixes_netmask_value: Option<String>,
+    pub ip_prefixes_netmask_values: Option<Vec<String>>,
+    pub ip_prefixes_netmask_source_id: Option<String>,
+    pub ip_prefixes_netmask_owner_id: Option<String>,
+    pub ip_prefixes_netmask_is_protected: Option<bool>,
+    pub ip_prefixes_hostmask_value: Option<String>,
+    pub ip_prefixes_hostmask_values: Option<Vec<String>>,
+    pub ip_prefixes_hostmask_source_id: Option<String>,
+    pub ip_prefixes_hostmask_owner_id: Option<String>,
+    pub ip_prefixes_hostmask_is_protected: Option<bool>,
+    pub ip_prefixes_is_top_level_value: Option<bool>,
+    pub ip_prefixes_is_top_level_values: Option<Vec<bool>>,
+    pub ip_prefixes_is_top_level_source_id: Option<String>,
+    pub ip_prefixes_is_top_level_owner_id: Option<String>,
+    pub ip_prefixes_is_top_level_is_protected: Option<bool>,
+    pub ip_prefixes_utilization_value: Option<i64>,
+    pub ip_prefixes_utilization_values: Option<Vec<i64>>,
+    pub ip_prefixes_utilization_source_id: Option<String>,
+    pub ip_prefixes_utilization_owner_id: Option<String>,
+    pub ip_prefixes_utilization_is_protected: Option<bool>,
+    pub ip_prefixes_is_pool_value: Option<bool>,
+    pub ip_prefixes_is_pool_values: Option<Vec<bool>>,
+    pub ip_prefixes_is_pool_source_id: Option<String>,
+    pub ip_prefixes_is_pool_owner_id: Option<String>,
+    pub ip_prefixes_is_pool_is_protected: Option<bool>,
+    pub ip_prefixes_broadcast_address_value: Option<String>,
+    pub ip_prefixes_broadcast_address_values: Option<Vec<String>>,
+    pub ip_prefixes_broadcast_address_source_id: Option<String>,
+    pub ip_prefixes_broadcast_address_owner_id: Option<String>,
+    pub ip_prefixes_broadcast_address_is_protected: Option<bool>,
+    pub ip_prefixes_member_type_value: Option<String>,
+    pub ip_prefixes_member_type_values: Option<Vec<String>>,
+    pub ip_prefixes_member_type_source_id: Option<String>,
+    pub ip_prefixes_member_type_owner_id: Option<String>,
+    pub ip_prefixes_member_type_is_protected: Option<bool>,
+    pub ip_prefixes_network_address_value: Option<String>,
+    pub ip_prefixes_network_address_values: Option<Vec<String>>,
+    pub ip_prefixes_network_address_source_id: Option<String>,
+    pub ip_prefixes_network_address_owner_id: Option<String>,
+    pub ip_prefixes_network_address_is_protected: Option<bool>,
+    pub ip_prefixes_prefix_value: Option<String>,
+    pub ip_prefixes_prefix_values: Option<Vec<String>>,
+    pub ip_prefixes_prefix_source_id: Option<String>,
+    pub ip_prefixes_prefix_owner_id: Option<String>,
+    pub ip_prefixes_prefix_is_protected: Option<bool>,
+    pub ip_prefixes_description_value: Option<String>,
+    pub ip_prefixes_description_values: Option<Vec<String>>,
+    pub ip_prefixes_description_source_id: Option<String>,
+    pub ip_prefixes_description_owner_id: Option<String>,
+    pub ip_prefixes_description_is_protected: Option<bool>,
+    pub ip_addresses_ids: Option<Vec<String>>,
+    pub ip_addresses_isnull: Option<bool>,
+    pub ip_addresses_display_label_value: Option<String>,
+    pub ip_addresses_display_label_values: Option<Vec<String>>,
+    pub ip_addresses_display_label_isnull: Option<bool>,
+    pub ip_addresses_address_value: Option<String>,
+    pub ip_addresses_address_values: Option<Vec<String>>,
+    pub ip_addresses_address_source_id: Option<String>,
+    pub ip_addresses_address_owner_id: Option<String>,
+    pub ip_addresses_address_is_protected: Option<bool>,
+    pub ip_addresses_description_value: Option<String>,
+    pub ip_addresses_description_values: Option<Vec<String>>,
+    pub ip_addresses_description_source_id: Option<String>,
+    pub ip_addresses_description_owner_id: Option<String>,
+    pub ip_addresses_description_is_protected: Option<bool>,
+    pub member_of_groups_ids: Option<Vec<String>>,
+    pub member_of_groups_isnull: Option<bool>,
+    pub member_of_groups_display_label_value: Option<String>,
+    pub member_of_groups_display_label_values: Option<Vec<String>>,
+    pub member_of_groups_display_label_isnull: Option<bool>,
+    pub member_of_groups_label_value: Option<String>,
+    pub member_of_groups_label_values: Option<Vec<String>>,
+    pub member_of_groups_group_type_value: Option<String>,
+    pub member_of_groups_group_type_values: Option<Vec<String>>,
+    pub member_of_groups_description_value: Option<String>,
+    pub member_of_groups_description_values: Option<Vec<String>>,
+    pub member_of_groups_name_value: Option<String>,
+    pub member_of_groups_name_values: Option<Vec<String>>,
+    pub subscriber_of_groups_ids: Option<Vec<String>>,
+    pub subscriber_of_groups_isnull: Option<bool>,
+    pub subscriber_of_groups_display_label_value: Option<String>,
+    pub subscriber_of_groups_display_label_values: Option<Vec<String>>,
+    pub subscriber_of_groups_display_label_isnull: Option<bool>,
+    pub subscriber_of_groups_label_value: Option<String>,
+    pub subscriber_of_groups_label_values: Option<Vec<String>>,
+    pub subscriber_of_groups_group_type_value: Option<String>,
+    pub subscriber_of_groups_group_type_values: Option<Vec<String>>,
+    pub subscriber_of_groups_description_value: Option<String>,
+    pub subscriber_of_groups_description_values: Option<Vec<String>>,
+    pub subscriber_of_groups_name_value: Option<String>,
+    pub subscriber_of_groups_name_values: Option<Vec<String>>,
 }
 
 impl ProfileIpamNamespaceFilters {
@@ -1824,466 +1824,466 @@ impl ProfileIpamNamespaceFilters {
         if let Some(value) = &self.ids {
             vars.insert("ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__value {
+        if let Some(value) = &self.display_label_value {
             vars.insert("display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__values {
+        if let Some(value) = &self.display_label_values {
             vars.insert("display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.display_label__isnull {
+        if let Some(value) = &self.display_label_isnull {
             vars.insert("display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.hfid {
             vars.insert("hfid".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__value {
+        if let Some(value) = &self.profile_name_value {
             vars.insert("profile_name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__values {
+        if let Some(value) = &self.profile_name_values {
             vars.insert("profile_name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__isnull {
+        if let Some(value) = &self.profile_name_isnull {
             vars.insert("profile_name__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__source__id {
+        if let Some(value) = &self.profile_name_source_id {
             vars.insert("profile_name__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__owner__id {
+        if let Some(value) = &self.profile_name_owner_id {
             vars.insert("profile_name__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_name__is_protected {
+        if let Some(value) = &self.profile_name_is_protected {
             vars.insert("profile_name__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__value {
+        if let Some(value) = &self.profile_priority_value {
             vars.insert("profile_priority__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__values {
+        if let Some(value) = &self.profile_priority_values {
             vars.insert("profile_priority__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__isnull {
+        if let Some(value) = &self.profile_priority_isnull {
             vars.insert("profile_priority__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__source__id {
+        if let Some(value) = &self.profile_priority_source_id {
             vars.insert("profile_priority__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__owner__id {
+        if let Some(value) = &self.profile_priority_owner_id {
             vars.insert("profile_priority__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.profile_priority__is_protected {
+        if let Some(value) = &self.profile_priority_is_protected {
             vars.insert("profile_priority__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__value {
+        if let Some(value) = &self.description_value {
             vars.insert("description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__values {
+        if let Some(value) = &self.description_values {
             vars.insert("description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__isnull {
+        if let Some(value) = &self.description_isnull {
             vars.insert("description__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__source__id {
+        if let Some(value) = &self.description_source_id {
             vars.insert("description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__owner__id {
+        if let Some(value) = &self.description_owner_id {
             vars.insert("description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.description__is_protected {
+        if let Some(value) = &self.description_is_protected {
             vars.insert("description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__value {
+        if let Some(value) = &self.any_value {
             vars.insert("any__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__values {
+        if let Some(value) = &self.any_values {
             vars.insert("any__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__source__id {
+        if let Some(value) = &self.any_source_id {
             vars.insert("any__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__owner__id {
+        if let Some(value) = &self.any_owner_id {
             vars.insert("any__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__is_protected {
+        if let Some(value) = &self.any_is_protected {
             vars.insert("any__is_protected".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.partial_match {
             vars.insert("partial_match".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__id {
+        if let Some(value) = &self.node_metadata_created_by_id {
             vars.insert("node_metadata__created_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__ids {
+        if let Some(value) = &self.node_metadata_created_by_ids {
             vars.insert("node_metadata__created_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__id {
+        if let Some(value) = &self.node_metadata_updated_by_id {
             vars.insert("node_metadata__updated_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__ids {
+        if let Some(value) = &self.node_metadata_updated_by_ids {
             vars.insert("node_metadata__updated_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at {
+        if let Some(value) = &self.node_metadata_created_at {
             vars.insert("node_metadata__created_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__before {
+        if let Some(value) = &self.node_metadata_created_at_before {
             vars.insert("node_metadata__created_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__after {
+        if let Some(value) = &self.node_metadata_created_at_after {
             vars.insert("node_metadata__created_at__after".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at {
+        if let Some(value) = &self.node_metadata_updated_at {
             vars.insert("node_metadata__updated_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__before {
+        if let Some(value) = &self.node_metadata_updated_at_before {
             vars.insert("node_metadata__updated_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__after {
+        if let Some(value) = &self.node_metadata_updated_at_after {
             vars.insert("node_metadata__updated_at__after".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__ids {
+        if let Some(value) = &self.related_nodes_ids {
             vars.insert("related_nodes__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__isnull {
+        if let Some(value) = &self.related_nodes_isnull {
             vars.insert("related_nodes__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__value {
+        if let Some(value) = &self.related_nodes_display_label_value {
             vars.insert("related_nodes__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__values {
+        if let Some(value) = &self.related_nodes_display_label_values {
             vars.insert("related_nodes__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__display_label__isnull {
+        if let Some(value) = &self.related_nodes_display_label_isnull {
             vars.insert("related_nodes__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__default__value {
+        if let Some(value) = &self.related_nodes_default_value {
             vars.insert("related_nodes__default__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__default__values {
+        if let Some(value) = &self.related_nodes_default_values {
             vars.insert("related_nodes__default__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__default__source__id {
+        if let Some(value) = &self.related_nodes_default_source_id {
             vars.insert("related_nodes__default__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__default__owner__id {
+        if let Some(value) = &self.related_nodes_default_owner_id {
             vars.insert("related_nodes__default__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__default__is_protected {
+        if let Some(value) = &self.related_nodes_default_is_protected {
             vars.insert("related_nodes__default__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__value {
+        if let Some(value) = &self.related_nodes_description_value {
             vars.insert("related_nodes__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__values {
+        if let Some(value) = &self.related_nodes_description_values {
             vars.insert("related_nodes__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__source__id {
+        if let Some(value) = &self.related_nodes_description_source_id {
             vars.insert("related_nodes__description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__owner__id {
+        if let Some(value) = &self.related_nodes_description_owner_id {
             vars.insert("related_nodes__description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__description__is_protected {
+        if let Some(value) = &self.related_nodes_description_is_protected {
             vars.insert("related_nodes__description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__name__value {
+        if let Some(value) = &self.related_nodes_name_value {
             vars.insert("related_nodes__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__name__values {
+        if let Some(value) = &self.related_nodes_name_values {
             vars.insert("related_nodes__name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__name__source__id {
+        if let Some(value) = &self.related_nodes_name_source_id {
             vars.insert("related_nodes__name__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__name__owner__id {
+        if let Some(value) = &self.related_nodes_name_owner_id {
             vars.insert("related_nodes__name__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.related_nodes__name__is_protected {
+        if let Some(value) = &self.related_nodes_name_is_protected {
             vars.insert("related_nodes__name__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__ids {
+        if let Some(value) = &self.ip_prefixes_ids {
             vars.insert("ip_prefixes__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__isnull {
+        if let Some(value) = &self.ip_prefixes_isnull {
             vars.insert("ip_prefixes__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__display_label__value {
+        if let Some(value) = &self.ip_prefixes_display_label_value {
             vars.insert("ip_prefixes__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__display_label__values {
+        if let Some(value) = &self.ip_prefixes_display_label_values {
             vars.insert("ip_prefixes__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__display_label__isnull {
+        if let Some(value) = &self.ip_prefixes_display_label_isnull {
             vars.insert("ip_prefixes__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__netmask__value {
+        if let Some(value) = &self.ip_prefixes_netmask_value {
             vars.insert("ip_prefixes__netmask__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__netmask__values {
+        if let Some(value) = &self.ip_prefixes_netmask_values {
             vars.insert("ip_prefixes__netmask__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__netmask__source__id {
+        if let Some(value) = &self.ip_prefixes_netmask_source_id {
             vars.insert("ip_prefixes__netmask__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__netmask__owner__id {
+        if let Some(value) = &self.ip_prefixes_netmask_owner_id {
             vars.insert("ip_prefixes__netmask__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__netmask__is_protected {
+        if let Some(value) = &self.ip_prefixes_netmask_is_protected {
             vars.insert("ip_prefixes__netmask__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__hostmask__value {
+        if let Some(value) = &self.ip_prefixes_hostmask_value {
             vars.insert("ip_prefixes__hostmask__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__hostmask__values {
+        if let Some(value) = &self.ip_prefixes_hostmask_values {
             vars.insert("ip_prefixes__hostmask__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__hostmask__source__id {
+        if let Some(value) = &self.ip_prefixes_hostmask_source_id {
             vars.insert("ip_prefixes__hostmask__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__hostmask__owner__id {
+        if let Some(value) = &self.ip_prefixes_hostmask_owner_id {
             vars.insert("ip_prefixes__hostmask__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__hostmask__is_protected {
+        if let Some(value) = &self.ip_prefixes_hostmask_is_protected {
             vars.insert("ip_prefixes__hostmask__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__is_top_level__value {
+        if let Some(value) = &self.ip_prefixes_is_top_level_value {
             vars.insert("ip_prefixes__is_top_level__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__is_top_level__values {
+        if let Some(value) = &self.ip_prefixes_is_top_level_values {
             vars.insert("ip_prefixes__is_top_level__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__is_top_level__source__id {
+        if let Some(value) = &self.ip_prefixes_is_top_level_source_id {
             vars.insert("ip_prefixes__is_top_level__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__is_top_level__owner__id {
+        if let Some(value) = &self.ip_prefixes_is_top_level_owner_id {
             vars.insert("ip_prefixes__is_top_level__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__is_top_level__is_protected {
+        if let Some(value) = &self.ip_prefixes_is_top_level_is_protected {
             vars.insert("ip_prefixes__is_top_level__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__utilization__value {
+        if let Some(value) = &self.ip_prefixes_utilization_value {
             vars.insert("ip_prefixes__utilization__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__utilization__values {
+        if let Some(value) = &self.ip_prefixes_utilization_values {
             vars.insert("ip_prefixes__utilization__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__utilization__source__id {
+        if let Some(value) = &self.ip_prefixes_utilization_source_id {
             vars.insert("ip_prefixes__utilization__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__utilization__owner__id {
+        if let Some(value) = &self.ip_prefixes_utilization_owner_id {
             vars.insert("ip_prefixes__utilization__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__utilization__is_protected {
+        if let Some(value) = &self.ip_prefixes_utilization_is_protected {
             vars.insert("ip_prefixes__utilization__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__is_pool__value {
+        if let Some(value) = &self.ip_prefixes_is_pool_value {
             vars.insert("ip_prefixes__is_pool__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__is_pool__values {
+        if let Some(value) = &self.ip_prefixes_is_pool_values {
             vars.insert("ip_prefixes__is_pool__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__is_pool__source__id {
+        if let Some(value) = &self.ip_prefixes_is_pool_source_id {
             vars.insert("ip_prefixes__is_pool__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__is_pool__owner__id {
+        if let Some(value) = &self.ip_prefixes_is_pool_owner_id {
             vars.insert("ip_prefixes__is_pool__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__is_pool__is_protected {
+        if let Some(value) = &self.ip_prefixes_is_pool_is_protected {
             vars.insert("ip_prefixes__is_pool__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__broadcast_address__value {
+        if let Some(value) = &self.ip_prefixes_broadcast_address_value {
             vars.insert("ip_prefixes__broadcast_address__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__broadcast_address__values {
+        if let Some(value) = &self.ip_prefixes_broadcast_address_values {
             vars.insert("ip_prefixes__broadcast_address__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__broadcast_address__source__id {
+        if let Some(value) = &self.ip_prefixes_broadcast_address_source_id {
             vars.insert("ip_prefixes__broadcast_address__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__broadcast_address__owner__id {
+        if let Some(value) = &self.ip_prefixes_broadcast_address_owner_id {
             vars.insert("ip_prefixes__broadcast_address__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__broadcast_address__is_protected {
+        if let Some(value) = &self.ip_prefixes_broadcast_address_is_protected {
             vars.insert("ip_prefixes__broadcast_address__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__member_type__value {
+        if let Some(value) = &self.ip_prefixes_member_type_value {
             vars.insert("ip_prefixes__member_type__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__member_type__values {
+        if let Some(value) = &self.ip_prefixes_member_type_values {
             vars.insert("ip_prefixes__member_type__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__member_type__source__id {
+        if let Some(value) = &self.ip_prefixes_member_type_source_id {
             vars.insert("ip_prefixes__member_type__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__member_type__owner__id {
+        if let Some(value) = &self.ip_prefixes_member_type_owner_id {
             vars.insert("ip_prefixes__member_type__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__member_type__is_protected {
+        if let Some(value) = &self.ip_prefixes_member_type_is_protected {
             vars.insert("ip_prefixes__member_type__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__network_address__value {
+        if let Some(value) = &self.ip_prefixes_network_address_value {
             vars.insert("ip_prefixes__network_address__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__network_address__values {
+        if let Some(value) = &self.ip_prefixes_network_address_values {
             vars.insert("ip_prefixes__network_address__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__network_address__source__id {
+        if let Some(value) = &self.ip_prefixes_network_address_source_id {
             vars.insert("ip_prefixes__network_address__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__network_address__owner__id {
+        if let Some(value) = &self.ip_prefixes_network_address_owner_id {
             vars.insert("ip_prefixes__network_address__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__network_address__is_protected {
+        if let Some(value) = &self.ip_prefixes_network_address_is_protected {
             vars.insert("ip_prefixes__network_address__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__prefix__value {
+        if let Some(value) = &self.ip_prefixes_prefix_value {
             vars.insert("ip_prefixes__prefix__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__prefix__values {
+        if let Some(value) = &self.ip_prefixes_prefix_values {
             vars.insert("ip_prefixes__prefix__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__prefix__source__id {
+        if let Some(value) = &self.ip_prefixes_prefix_source_id {
             vars.insert("ip_prefixes__prefix__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__prefix__owner__id {
+        if let Some(value) = &self.ip_prefixes_prefix_owner_id {
             vars.insert("ip_prefixes__prefix__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__prefix__is_protected {
+        if let Some(value) = &self.ip_prefixes_prefix_is_protected {
             vars.insert("ip_prefixes__prefix__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__description__value {
+        if let Some(value) = &self.ip_prefixes_description_value {
             vars.insert("ip_prefixes__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__description__values {
+        if let Some(value) = &self.ip_prefixes_description_values {
             vars.insert("ip_prefixes__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__description__source__id {
+        if let Some(value) = &self.ip_prefixes_description_source_id {
             vars.insert("ip_prefixes__description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__description__owner__id {
+        if let Some(value) = &self.ip_prefixes_description_owner_id {
             vars.insert("ip_prefixes__description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_prefixes__description__is_protected {
+        if let Some(value) = &self.ip_prefixes_description_is_protected {
             vars.insert("ip_prefixes__description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__ids {
+        if let Some(value) = &self.ip_addresses_ids {
             vars.insert("ip_addresses__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__isnull {
+        if let Some(value) = &self.ip_addresses_isnull {
             vars.insert("ip_addresses__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__display_label__value {
+        if let Some(value) = &self.ip_addresses_display_label_value {
             vars.insert("ip_addresses__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__display_label__values {
+        if let Some(value) = &self.ip_addresses_display_label_values {
             vars.insert("ip_addresses__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__display_label__isnull {
+        if let Some(value) = &self.ip_addresses_display_label_isnull {
             vars.insert("ip_addresses__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__address__value {
+        if let Some(value) = &self.ip_addresses_address_value {
             vars.insert("ip_addresses__address__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__address__values {
+        if let Some(value) = &self.ip_addresses_address_values {
             vars.insert("ip_addresses__address__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__address__source__id {
+        if let Some(value) = &self.ip_addresses_address_source_id {
             vars.insert("ip_addresses__address__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__address__owner__id {
+        if let Some(value) = &self.ip_addresses_address_owner_id {
             vars.insert("ip_addresses__address__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__address__is_protected {
+        if let Some(value) = &self.ip_addresses_address_is_protected {
             vars.insert("ip_addresses__address__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__description__value {
+        if let Some(value) = &self.ip_addresses_description_value {
             vars.insert("ip_addresses__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__description__values {
+        if let Some(value) = &self.ip_addresses_description_values {
             vars.insert("ip_addresses__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__description__source__id {
+        if let Some(value) = &self.ip_addresses_description_source_id {
             vars.insert("ip_addresses__description__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__description__owner__id {
+        if let Some(value) = &self.ip_addresses_description_owner_id {
             vars.insert("ip_addresses__description__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.ip_addresses__description__is_protected {
+        if let Some(value) = &self.ip_addresses_description_is_protected {
             vars.insert("ip_addresses__description__is_protected".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__ids {
+        if let Some(value) = &self.member_of_groups_ids {
             vars.insert("member_of_groups__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__isnull {
+        if let Some(value) = &self.member_of_groups_isnull {
             vars.insert("member_of_groups__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__value {
+        if let Some(value) = &self.member_of_groups_display_label_value {
             vars.insert("member_of_groups__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__values {
+        if let Some(value) = &self.member_of_groups_display_label_values {
             vars.insert("member_of_groups__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__display_label__isnull {
+        if let Some(value) = &self.member_of_groups_display_label_isnull {
             vars.insert("member_of_groups__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__label__value {
+        if let Some(value) = &self.member_of_groups_label_value {
             vars.insert("member_of_groups__label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__label__values {
+        if let Some(value) = &self.member_of_groups_label_values {
             vars.insert("member_of_groups__label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__group_type__value {
+        if let Some(value) = &self.member_of_groups_group_type_value {
             vars.insert("member_of_groups__group_type__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__group_type__values {
+        if let Some(value) = &self.member_of_groups_group_type_values {
             vars.insert("member_of_groups__group_type__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__description__value {
+        if let Some(value) = &self.member_of_groups_description_value {
             vars.insert("member_of_groups__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__description__values {
+        if let Some(value) = &self.member_of_groups_description_values {
             vars.insert("member_of_groups__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__name__value {
+        if let Some(value) = &self.member_of_groups_name_value {
             vars.insert("member_of_groups__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.member_of_groups__name__values {
+        if let Some(value) = &self.member_of_groups_name_values {
             vars.insert("member_of_groups__name__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__ids {
+        if let Some(value) = &self.subscriber_of_groups_ids {
             vars.insert("subscriber_of_groups__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__isnull {
+        if let Some(value) = &self.subscriber_of_groups_isnull {
             vars.insert("subscriber_of_groups__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__value {
+        if let Some(value) = &self.subscriber_of_groups_display_label_value {
             vars.insert("subscriber_of_groups__display_label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__values {
+        if let Some(value) = &self.subscriber_of_groups_display_label_values {
             vars.insert("subscriber_of_groups__display_label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__display_label__isnull {
+        if let Some(value) = &self.subscriber_of_groups_display_label_isnull {
             vars.insert("subscriber_of_groups__display_label__isnull".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__label__value {
+        if let Some(value) = &self.subscriber_of_groups_label_value {
             vars.insert("subscriber_of_groups__label__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__label__values {
+        if let Some(value) = &self.subscriber_of_groups_label_values {
             vars.insert("subscriber_of_groups__label__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__group_type__value {
+        if let Some(value) = &self.subscriber_of_groups_group_type_value {
             vars.insert("subscriber_of_groups__group_type__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__group_type__values {
+        if let Some(value) = &self.subscriber_of_groups_group_type_values {
             vars.insert("subscriber_of_groups__group_type__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__description__value {
+        if let Some(value) = &self.subscriber_of_groups_description_value {
             vars.insert("subscriber_of_groups__description__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__description__values {
+        if let Some(value) = &self.subscriber_of_groups_description_values {
             vars.insert("subscriber_of_groups__description__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__name__value {
+        if let Some(value) = &self.subscriber_of_groups_name_value {
             vars.insert("subscriber_of_groups__name__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.subscriber_of_groups__name__values {
+        if let Some(value) = &self.subscriber_of_groups_name_values {
             vars.insert("subscriber_of_groups__name__values".to_string(), serde_json::to_value(value)?);
         }
         Ok(Value::Object(vars))

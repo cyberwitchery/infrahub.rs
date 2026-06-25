@@ -4110,13 +4110,13 @@ pub struct Mutation {
     #[serde(rename = "CoreReadOnlyRepositoryDelete")]
     pub core_read_only_repository_delete: Option<Box<CoreReadOnlyRepositoryDelete>>,
     #[serde(rename = "CoreTransformJinja2Create")]
-    pub core_transform_jinja2create: Option<Box<CoreTransformJinja2Create>>,
+    pub core_transform_jinja2_create: Option<Box<CoreTransformJinja2Create>>,
     #[serde(rename = "CoreTransformJinja2Update")]
-    pub core_transform_jinja2update: Option<Box<CoreTransformJinja2Update>>,
+    pub core_transform_jinja2_update: Option<Box<CoreTransformJinja2Update>>,
     #[serde(rename = "CoreTransformJinja2Upsert")]
-    pub core_transform_jinja2upsert: Option<Box<CoreTransformJinja2Upsert>>,
+    pub core_transform_jinja2_upsert: Option<Box<CoreTransformJinja2Upsert>>,
     #[serde(rename = "CoreTransformJinja2Delete")]
-    pub core_transform_jinja2delete: Option<Box<CoreTransformJinja2Delete>>,
+    pub core_transform_jinja2_delete: Option<Box<CoreTransformJinja2Delete>>,
     #[serde(rename = "CoreDataCheckCreate")]
     pub core_data_check_create: Option<Box<CoreDataCheckCreate>>,
     #[serde(rename = "CoreDataCheckUpdate")]

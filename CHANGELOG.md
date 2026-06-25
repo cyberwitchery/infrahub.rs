@@ -4,6 +4,7 @@
 
 - ci: bump pinned Infrahub version from 1.9.7 to 1.9.8
 - codegen: fix `to_rust_field` to handle consecutive uppercase characters (acronyms) correctly — `nodeID` now becomes `node_id` instead of `node_i_d`, `hFID` becomes `h_fid` instead of `h_f_i_d`
+- codegen: filter field names with consecutive underscores (e.g. `display_label__value`) now collapse to a single underscore in the Rust struct field (e.g. `display_label_value`). wire compatibility is preserved — `serde` and query variables still use the original GraphQL names
 
 ## 0.4.0 - 2026-06-08
 

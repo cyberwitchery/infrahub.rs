@@ -1006,8 +1006,9 @@ fn split_identifier_words(name: &str) -> Vec<String> {
         let acronym_to_word = prev.is_ascii_uppercase()
             && curr.is_ascii_uppercase()
             && next.map(|c| c.is_ascii_lowercase()).unwrap_or(false);
+        let digit_to_alpha = prev.is_ascii_digit() && curr.is_ascii_alphabetic();
 
-        if lower_to_upper || acronym_to_word {
+        if lower_to_upper || acronym_to_word || digit_to_alpha {
             words.push(chars[start..i].iter().collect::<String>());
             start = i;
         }
@@ -1423,6 +1424,21 @@ mod codegen_name_tests {
         assert_eq!(to_snake("IPAM"), "ipam");
         assert_eq!(to_snake("GraphQLQuery"), "graph_ql_query");
         assert_eq!(to_snake("IPAddressPool"), "ip_address_pool");
+    }
+
+    #[test]
+    fn test_to_snake_handles_digit_to_alpha_boundary() {
+        assert_eq!(
+            to_snake("CoreTransformJinja2Create"),
+            "core_transform_jinja2_create"
+        );
+        assert_eq!(
+            to_snake("CoreTransformJinja2Update"),
+            "core_transform_jinja2_update"
+        );
+        assert_eq!(to_snake("Http2Client"), "http2_client");
+        assert_eq!(to_snake("V2Api"), "v2_api");
+        assert_eq!(to_snake("route53Zone"), "route53_zone");
     }
 
     #[test]

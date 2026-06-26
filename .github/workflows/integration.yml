@@ -85,7 +85,12 @@ jobs:
             --out /tmp/test-client-check \
             --crate-name infrahub-test-client \
             --infrahub-path ..
-          diff -r test-client/src /tmp/test-client-check/src
+          # Normalize formatting on both sides so the diff catches
+          # semantic changes but ignores line-wrapping differences.
+          cp -r test-client/src /tmp/test-client-committed
+          find /tmp/test-client-committed -name '*.rs' -exec rustfmt {} +
+          find /tmp/test-client-check/src -name '*.rs' -exec rustfmt {} +
+          diff -r /tmp/test-client-committed /tmp/test-client-check/src
 
       - name: Run smoke tests
         env:

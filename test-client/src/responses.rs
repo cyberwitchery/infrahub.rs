@@ -35,7 +35,7 @@ pub struct CoreGeneratorAwareGroupResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CoreGraphQLQueryGroupResponse {
+pub struct CoreGraphQlQueryGroupResponse {
     #[serde(rename = "CoreGraphQLQueryGroup")]
     pub core_graph_ql_query_group: Box<PaginatedCoreGraphQLQueryGroup>,
 }
@@ -239,7 +239,7 @@ pub struct CoreTransformPythonResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CoreGraphQLQueryResponse {
+pub struct CoreGraphQlQueryResponse {
     #[serde(rename = "CoreGraphQLQuery")]
     pub core_graph_ql_query: Box<PaginatedCoreGraphQLQuery>,
 }
@@ -299,13 +299,13 @@ pub struct IpamNamespaceResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CoreIPPrefixPoolResponse {
+pub struct CoreIpPrefixPoolResponse {
     #[serde(rename = "CoreIPPrefixPool")]
     pub core_ip_prefix_pool: Box<PaginatedCoreIPPrefixPool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CoreIPAddressPoolResponse {
+pub struct CoreIpAddressPoolResponse {
     #[serde(rename = "CoreIPAddressPool")]
     pub core_ip_address_pool: Box<PaginatedCoreIPAddressPool>,
 }
@@ -455,19 +455,19 @@ pub struct CoreGenericRepositoryResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BuiltinIPNamespaceResponse {
+pub struct BuiltinIpNamespaceResponse {
     #[serde(rename = "BuiltinIPNamespace")]
     pub builtin_ip_namespace: Box<PaginatedBuiltinIPNamespace>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BuiltinIPPrefixResponse {
+pub struct BuiltinIpPrefixResponse {
     #[serde(rename = "BuiltinIPPrefix")]
     pub builtin_ip_prefix: Box<PaginatedBuiltinIPPrefix>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct BuiltinIPAddressResponse {
+pub struct BuiltinIpAddressResponse {
     #[serde(rename = "BuiltinIPAddress")]
     pub builtin_ip_address: Box<PaginatedBuiltinIPAddress>,
 }
@@ -539,13 +539,13 @@ pub struct ProfileIpamNamespaceResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ProfileBuiltinIPPrefixResponse {
+pub struct ProfileBuiltinIpPrefixResponse {
     #[serde(rename = "ProfileBuiltinIPPrefix")]
     pub profile_builtin_ip_prefix: Box<PaginatedProfileBuiltinIPPrefix>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct ProfileBuiltinIPAddressResponse {
+pub struct ProfileBuiltinIpAddressResponse {
     #[serde(rename = "ProfileBuiltinIPAddress")]
     pub profile_builtin_ip_address: Box<PaginatedProfileBuiltinIPAddress>,
 }
@@ -575,7 +575,7 @@ pub struct InfrahubBranchResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct InfrahubGraphQLQueryReportResponse {
+pub struct InfrahubGraphQlQueryReportResponse {
     #[serde(rename = "InfrahubGraphQLQueryReport")]
     pub infrahub_graph_ql_query_report: Box<GraphQLQueryReport>,
 }
@@ -587,13 +587,13 @@ pub struct InfrahubInfoResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct InfrahubIPAddressGetNextAvailableResponse {
+pub struct InfrahubIpAddressGetNextAvailableResponse {
     #[serde(rename = "InfrahubIPAddressGetNextAvailable")]
     pub infrahub_ip_address_get_next_available: Box<IPAddressGetNextAvailable>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct InfrahubIPPrefixGetNextAvailableResponse {
+pub struct InfrahubIpPrefixGetNextAvailableResponse {
     #[serde(rename = "InfrahubIPPrefixGetNextAvailable")]
     pub infrahub_ip_prefix_get_next_available: Box<IPPrefixGetNextAvailable>,
 }
@@ -669,4 +669,3 @@ pub struct InfrahubEventResponse {
     #[serde(rename = "InfrahubEvent")]
     pub infrahub_event: Box<Events>,
 }
-

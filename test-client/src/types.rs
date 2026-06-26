@@ -5,127 +5,127 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum BranchRelativePermissionDecision {
     #[serde(rename = "DENY")]
-    DENY,
+    Deny,
     #[serde(rename = "ALLOW")]
-    ALLOW,
+    Allow,
     #[serde(rename = "ALLOW_DEFAULT")]
-    ALLOWDEFAULT,
+    AllowDefault,
     #[serde(rename = "ALLOW_OTHER")]
-    ALLOWOTHER,
+    AllowOther,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum BranchStatus {
     #[serde(rename = "OPEN")]
-    OPEN,
+    Open,
     #[serde(rename = "NEED_REBASE")]
-    NEEDREBASE,
+    NeedRebase,
     #[serde(rename = "NEED_UPGRADE_REBASE")]
-    NEEDUPGRADEREBASE,
+    NeedUpgradeRebase,
     #[serde(rename = "DELETING")]
-    DELETING,
+    Deleting,
     #[serde(rename = "MERGING")]
-    MERGING,
+    Merging,
     #[serde(rename = "MERGED")]
-    MERGED,
+    Merged,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum CheckType {
     #[serde(rename = "ARTIFACT")]
-    ARTIFACT,
+    Artifact,
     #[serde(rename = "DATA")]
-    DATA,
+    Data,
     #[serde(rename = "GENERATOR")]
-    GENERATOR,
+    Generator,
     #[serde(rename = "REPOSITORY")]
-    REPOSITORY,
+    Repository,
     #[serde(rename = "SCHEMA")]
-    SCHEMA,
+    Schema,
     #[serde(rename = "TEST")]
-    TEST,
+    Test,
     #[serde(rename = "USER")]
-    USER,
+    User,
     #[serde(rename = "ALL")]
-    ALL,
+    All,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum ConflictSelection {
     #[serde(rename = "BASE_BRANCH")]
-    BASEBRANCH,
+    BaseBranch,
     #[serde(rename = "DIFF_BRANCH")]
-    DIFFBRANCH,
+    DiffBranch,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum DiffAction {
     #[serde(rename = "ADDED")]
-    ADDED,
+    Added,
     #[serde(rename = "REMOVED")]
-    REMOVED,
+    Removed,
     #[serde(rename = "UPDATED")]
-    UPDATED,
+    Updated,
     #[serde(rename = "UNCHANGED")]
-    UNCHANGED,
+    Unchanged,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum EventSortOrder {
     #[serde(rename = "ASC")]
-    ASC,
+    Asc,
     #[serde(rename = "DESC")]
-    DESC,
+    Desc,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum OrderDirection {
     #[serde(rename = "ASC")]
-    ASC,
+    Asc,
     #[serde(rename = "DESC")]
-    DESC,
+    Desc,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum ProposedChangeApprovalDecision {
     #[serde(rename = "APPROVE")]
-    APPROVE,
+    Approve,
     #[serde(rename = "CANCEL_APPROVE")]
-    CANCELAPPROVE,
+    CancelApprove,
     #[serde(rename = "REJECT")]
-    REJECT,
+    Reject,
     #[serde(rename = "CANCEL_REJECT")]
-    CANCELREJECT,
+    CancelReject,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum RelationshipCardinality {
     #[serde(rename = "ONE")]
-    ONE,
+    One,
     #[serde(rename = "MANY")]
-    MANY,
+    Many,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum StateType {
     #[serde(rename = "SCHEDULED")]
-    SCHEDULED,
+    Scheduled,
     #[serde(rename = "PENDING")]
-    PENDING,
+    Pending,
     #[serde(rename = "RUNNING")]
-    RUNNING,
+    Running,
     #[serde(rename = "COMPLETED")]
-    COMPLETED,
+    Completed,
     #[serde(rename = "FAILED")]
-    FAILED,
+    Failed,
     #[serde(rename = "CANCELLED")]
-    CANCELLED,
+    Cancelled,
     #[serde(rename = "CRASHED")]
-    CRASHED,
+    Crashed,
     #[serde(rename = "PAUSED")]
-    PAUSED,
+    Paused,
     #[serde(rename = "CANCELLING")]
-    CANCELLING,
+    Cancelling,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -4022,13 +4022,17 @@ pub struct Mutation {
     #[serde(rename = "CoreNodeTriggerAttributeMatchDelete")]
     pub core_node_trigger_attribute_match_delete: Option<Box<CoreNodeTriggerAttributeMatchDelete>>,
     #[serde(rename = "CoreNodeTriggerRelationshipMatchCreate")]
-    pub core_node_trigger_relationship_match_create: Option<Box<CoreNodeTriggerRelationshipMatchCreate>>,
+    pub core_node_trigger_relationship_match_create:
+        Option<Box<CoreNodeTriggerRelationshipMatchCreate>>,
     #[serde(rename = "CoreNodeTriggerRelationshipMatchUpdate")]
-    pub core_node_trigger_relationship_match_update: Option<Box<CoreNodeTriggerRelationshipMatchUpdate>>,
+    pub core_node_trigger_relationship_match_update:
+        Option<Box<CoreNodeTriggerRelationshipMatchUpdate>>,
     #[serde(rename = "CoreNodeTriggerRelationshipMatchUpsert")]
-    pub core_node_trigger_relationship_match_upsert: Option<Box<CoreNodeTriggerRelationshipMatchUpsert>>,
+    pub core_node_trigger_relationship_match_upsert:
+        Option<Box<CoreNodeTriggerRelationshipMatchUpsert>>,
     #[serde(rename = "CoreNodeTriggerRelationshipMatchDelete")]
-    pub core_node_trigger_relationship_match_delete: Option<Box<CoreNodeTriggerRelationshipMatchDelete>>,
+    pub core_node_trigger_relationship_match_delete:
+        Option<Box<CoreNodeTriggerRelationshipMatchDelete>>,
     #[serde(rename = "CorePasswordCredentialCreate")]
     pub core_password_credential_create: Option<Box<CorePasswordCredentialCreate>>,
     #[serde(rename = "CorePasswordCredentialUpdate")]
@@ -4486,7 +4490,8 @@ pub struct Mutation {
     #[serde(rename = "DiffUpdate")]
     pub diff_update: Option<Box<DiffUpdateMutation>>,
     #[serde(rename = "InfrahubReadOnlyRepositoryImportLastCommit")]
-    pub infrahub_read_only_repository_import_last_commit: Option<Box<ReadOnlyRepositoryImportLastCommit>>,
+    pub infrahub_read_only_repository_import_last_commit:
+        Option<Box<ReadOnlyRepositoryImportLastCommit>>,
     #[serde(rename = "InfrahubRepositoryProcess")]
     pub infrahub_repository_process: Option<Box<ProcessRepository>>,
     #[serde(rename = "InfrahubRepositoryConnectivity")]
@@ -4516,7 +4521,8 @@ pub struct Mutation {
     #[serde(rename = "ConvertObjectType")]
     pub convert_object_type: Option<Box<ConvertObjectType>>,
     #[serde(rename = "CoreProposedChangeCheckForApprovalRevoke")]
-    pub core_proposed_change_check_for_approval_revoke: Option<Box<ProposedChangeCheckForApprovalRevoke>>,
+    pub core_proposed_change_check_for_approval_revoke:
+        Option<Box<ProposedChangeCheckForApprovalRevoke>>,
     #[serde(rename = "InfrahubProfilesRefresh")]
     pub infrahub_profiles_refresh: Option<Box<InfrahubProfilesRefresh>>,
 }
@@ -7222,4 +7228,3 @@ pub struct ValidateRepositoryConnectivity {
 pub struct ValueType {
     pub value: String,
 }
-

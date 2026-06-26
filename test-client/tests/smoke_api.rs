@@ -82,7 +82,10 @@ async fn account_list_returns_admin() {
         .await
         .expect("list accounts");
 
-    assert!(!accounts.is_empty(), "fresh infrahub should have >=1 account");
+    assert!(
+        !accounts.is_empty(),
+        "fresh infrahub should have >=1 account"
+    );
 
     let admin = accounts
         .iter()

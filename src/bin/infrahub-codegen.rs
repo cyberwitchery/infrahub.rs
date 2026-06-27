@@ -1328,22 +1328,16 @@ fn format_gql_type(ty: &Type<String>) -> String {
     }
 }
 
-const KNOWN_ACRONYMS: &[&str] = &[
-    "API", "CLI", "DNS", "GRPC", "HFID", "HTML", "HTTP", "HTTPS", "ID", "IP", "JSON", "LDAP",
-    "OIDC", "QL", "REST", "RPC", "SDK", "SQL", "SSH", "SSL", "TCP", "TLS", "UDP", "URI", "URL",
-    "UUID", "XML",
-];
-
-fn is_known_acronym(word: &str) -> bool {
-    word.chars().all(|c| !c.is_ascii_lowercase()) && KNOWN_ACRONYMS.contains(&word)
-}
-
 fn to_rust_ident(name: &str) -> String {
-    let out: String = split_identifier_words(name)
+    let words = split_identifier_words(name);
+    let all_upper = words
+        .iter()
+        .all(|w| w.chars().all(|c| !c.is_ascii_lowercase()));
+    let out: String = words
         .into_iter()
         .map(|w| {
-            if is_known_acronym(&w) {
-                return w.clone();
+            if !all_upper && w.chars().all(|c| !c.is_ascii_lowercase()) {
+                return w;
             }
             let mut chars = w.chars();
             match chars.next() {
@@ -1486,7 +1480,7 @@ mod codegen_name_tests {
     }
 
     #[test]
-    fn test_to_rust_ident_preserves_known_acronyms() {
+    fn test_to_rust_ident_preserves_uppercase_clusters() {
         assert_eq!(to_rust_ident("BuiltinIPAddress"), "BuiltinIPAddress");
         assert_eq!(to_rust_ident("CoreGraphQLQuery"), "CoreGraphQLQuery");
         assert_eq!(to_rust_ident("CoreIPAddressPool"), "CoreIPAddressPool");

@@ -4022,17 +4022,13 @@ pub struct Mutation {
     #[serde(rename = "CoreNodeTriggerAttributeMatchDelete")]
     pub core_node_trigger_attribute_match_delete: Option<Box<CoreNodeTriggerAttributeMatchDelete>>,
     #[serde(rename = "CoreNodeTriggerRelationshipMatchCreate")]
-    pub core_node_trigger_relationship_match_create:
-        Option<Box<CoreNodeTriggerRelationshipMatchCreate>>,
+    pub core_node_trigger_relationship_match_create: Option<Box<CoreNodeTriggerRelationshipMatchCreate>>,
     #[serde(rename = "CoreNodeTriggerRelationshipMatchUpdate")]
-    pub core_node_trigger_relationship_match_update:
-        Option<Box<CoreNodeTriggerRelationshipMatchUpdate>>,
+    pub core_node_trigger_relationship_match_update: Option<Box<CoreNodeTriggerRelationshipMatchUpdate>>,
     #[serde(rename = "CoreNodeTriggerRelationshipMatchUpsert")]
-    pub core_node_trigger_relationship_match_upsert:
-        Option<Box<CoreNodeTriggerRelationshipMatchUpsert>>,
+    pub core_node_trigger_relationship_match_upsert: Option<Box<CoreNodeTriggerRelationshipMatchUpsert>>,
     #[serde(rename = "CoreNodeTriggerRelationshipMatchDelete")]
-    pub core_node_trigger_relationship_match_delete:
-        Option<Box<CoreNodeTriggerRelationshipMatchDelete>>,
+    pub core_node_trigger_relationship_match_delete: Option<Box<CoreNodeTriggerRelationshipMatchDelete>>,
     #[serde(rename = "CorePasswordCredentialCreate")]
     pub core_password_credential_create: Option<Box<CorePasswordCredentialCreate>>,
     #[serde(rename = "CorePasswordCredentialUpdate")]
@@ -4490,8 +4486,7 @@ pub struct Mutation {
     #[serde(rename = "DiffUpdate")]
     pub diff_update: Option<Box<DiffUpdateMutation>>,
     #[serde(rename = "InfrahubReadOnlyRepositoryImportLastCommit")]
-    pub infrahub_read_only_repository_import_last_commit:
-        Option<Box<ReadOnlyRepositoryImportLastCommit>>,
+    pub infrahub_read_only_repository_import_last_commit: Option<Box<ReadOnlyRepositoryImportLastCommit>>,
     #[serde(rename = "InfrahubRepositoryProcess")]
     pub infrahub_repository_process: Option<Box<ProcessRepository>>,
     #[serde(rename = "InfrahubRepositoryConnectivity")]
@@ -4521,8 +4516,7 @@ pub struct Mutation {
     #[serde(rename = "ConvertObjectType")]
     pub convert_object_type: Option<Box<ConvertObjectType>>,
     #[serde(rename = "CoreProposedChangeCheckForApprovalRevoke")]
-    pub core_proposed_change_check_for_approval_revoke:
-        Option<Box<ProposedChangeCheckForApprovalRevoke>>,
+    pub core_proposed_change_check_for_approval_revoke: Option<Box<ProposedChangeCheckForApprovalRevoke>>,
     #[serde(rename = "InfrahubProfilesRefresh")]
     pub infrahub_profiles_refresh: Option<Box<InfrahubProfilesRefresh>>,
 }
@@ -7228,3 +7222,4 @@ pub struct ValidateRepositoryConnectivity {
 pub struct ValueType {
     pub value: String,
 }
+

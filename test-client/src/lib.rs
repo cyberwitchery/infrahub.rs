@@ -6,5 +6,5 @@ pub mod inputs;
 pub mod responses;
 pub mod types;
 
-pub use api::{Api, ApiClient};
 pub use client::GeneratedClient;
+pub use api::{Api, ApiClient};

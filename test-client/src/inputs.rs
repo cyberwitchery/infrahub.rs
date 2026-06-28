@@ -3342,9 +3342,12 @@ pub struct RelatedIPAddressNodeInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub from_pool: Option<IPAddressPoolInput>,
-    pub _relation__is_protected: Option<bool>,
-    pub _relation__owner: Option<String>,
-    pub _relation__source: Option<String>,
+    #[serde(rename = "_relation__is_protected")]
+    pub _relation_is_protected: Option<bool>,
+    #[serde(rename = "_relation__owner")]
+    pub _relation_owner: Option<String>,
+    #[serde(rename = "_relation__source")]
+    pub _relation_source: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3352,9 +3355,12 @@ pub struct RelatedIPPrefixNodeInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub from_pool: Option<IPPrefixPoolInput>,
-    pub _relation__is_protected: Option<bool>,
-    pub _relation__owner: Option<String>,
-    pub _relation__source: Option<String>,
+    #[serde(rename = "_relation__is_protected")]
+    pub _relation_is_protected: Option<bool>,
+    #[serde(rename = "_relation__owner")]
+    pub _relation_owner: Option<String>,
+    #[serde(rename = "_relation__source")]
+    pub _relation_source: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3363,9 +3369,12 @@ pub struct RelatedNodeInput {
     pub hfid: Option<Vec<String>>,
     pub kind: Option<String>,
     pub from_pool: Option<GenericPoolInput>,
-    pub _relation__is_protected: Option<bool>,
-    pub _relation__owner: Option<String>,
-    pub _relation__source: Option<String>,
+    #[serde(rename = "_relation__is_protected")]
+    pub _relation_is_protected: Option<bool>,
+    #[serde(rename = "_relation__owner")]
+    pub _relation_owner: Option<String>,
+    #[serde(rename = "_relation__source")]
+    pub _relation_source: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

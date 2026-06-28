@@ -32,22 +32,22 @@ pub struct LineageOwnerFilters {
     pub limit: Option<i64>,
     pub order: Option<OrderInput>,
     pub ids: Option<Vec<String>>,
-    pub any__value: Option<String>,
-    pub any__values: Option<Vec<String>>,
-    pub any__source__id: Option<String>,
-    pub any__owner__id: Option<String>,
-    pub any__is_protected: Option<bool>,
+    pub any_value: Option<String>,
+    pub any_values: Option<Vec<String>>,
+    pub any_source_id: Option<String>,
+    pub any_owner_id: Option<String>,
+    pub any_is_protected: Option<bool>,
     pub partial_match: Option<bool>,
-    pub node_metadata__created_by__id: Option<String>,
-    pub node_metadata__created_by__ids: Option<Vec<String>>,
-    pub node_metadata__updated_by__id: Option<String>,
-    pub node_metadata__updated_by__ids: Option<Vec<String>>,
-    pub node_metadata__created_at: Option<String>,
-    pub node_metadata__created_at__before: Option<String>,
-    pub node_metadata__created_at__after: Option<String>,
-    pub node_metadata__updated_at: Option<String>,
-    pub node_metadata__updated_at__before: Option<String>,
-    pub node_metadata__updated_at__after: Option<String>,
+    pub node_metadata_created_by_id: Option<String>,
+    pub node_metadata_created_by_ids: Option<Vec<String>>,
+    pub node_metadata_updated_by_id: Option<String>,
+    pub node_metadata_updated_by_ids: Option<Vec<String>>,
+    pub node_metadata_created_at: Option<String>,
+    pub node_metadata_created_at_before: Option<String>,
+    pub node_metadata_created_at_after: Option<String>,
+    pub node_metadata_updated_at: Option<String>,
+    pub node_metadata_updated_at_before: Option<String>,
+    pub node_metadata_updated_at_after: Option<String>,
 }
 
 impl LineageOwnerFilters {
@@ -65,52 +65,52 @@ impl LineageOwnerFilters {
         if let Some(value) = &self.ids {
             vars.insert("ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__value {
+        if let Some(value) = &self.any_value {
             vars.insert("any__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__values {
+        if let Some(value) = &self.any_values {
             vars.insert("any__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__source__id {
+        if let Some(value) = &self.any_source_id {
             vars.insert("any__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__owner__id {
+        if let Some(value) = &self.any_owner_id {
             vars.insert("any__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__is_protected {
+        if let Some(value) = &self.any_is_protected {
             vars.insert("any__is_protected".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.partial_match {
             vars.insert("partial_match".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__id {
+        if let Some(value) = &self.node_metadata_created_by_id {
             vars.insert("node_metadata__created_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__ids {
+        if let Some(value) = &self.node_metadata_created_by_ids {
             vars.insert("node_metadata__created_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__id {
+        if let Some(value) = &self.node_metadata_updated_by_id {
             vars.insert("node_metadata__updated_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__ids {
+        if let Some(value) = &self.node_metadata_updated_by_ids {
             vars.insert("node_metadata__updated_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at {
+        if let Some(value) = &self.node_metadata_created_at {
             vars.insert("node_metadata__created_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__before {
+        if let Some(value) = &self.node_metadata_created_at_before {
             vars.insert("node_metadata__created_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__after {
+        if let Some(value) = &self.node_metadata_created_at_after {
             vars.insert("node_metadata__created_at__after".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at {
+        if let Some(value) = &self.node_metadata_updated_at {
             vars.insert("node_metadata__updated_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__before {
+        if let Some(value) = &self.node_metadata_updated_at_before {
             vars.insert("node_metadata__updated_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__after {
+        if let Some(value) = &self.node_metadata_updated_at_after {
             vars.insert("node_metadata__updated_at__after".to_string(), serde_json::to_value(value)?);
         }
         Ok(Value::Object(vars))
@@ -193,22 +193,22 @@ pub struct LineageSourceFilters {
     pub limit: Option<i64>,
     pub order: Option<OrderInput>,
     pub ids: Option<Vec<String>>,
-    pub any__value: Option<String>,
-    pub any__values: Option<Vec<String>>,
-    pub any__source__id: Option<String>,
-    pub any__owner__id: Option<String>,
-    pub any__is_protected: Option<bool>,
+    pub any_value: Option<String>,
+    pub any_values: Option<Vec<String>>,
+    pub any_source_id: Option<String>,
+    pub any_owner_id: Option<String>,
+    pub any_is_protected: Option<bool>,
     pub partial_match: Option<bool>,
-    pub node_metadata__created_by__id: Option<String>,
-    pub node_metadata__created_by__ids: Option<Vec<String>>,
-    pub node_metadata__updated_by__id: Option<String>,
-    pub node_metadata__updated_by__ids: Option<Vec<String>>,
-    pub node_metadata__created_at: Option<String>,
-    pub node_metadata__created_at__before: Option<String>,
-    pub node_metadata__created_at__after: Option<String>,
-    pub node_metadata__updated_at: Option<String>,
-    pub node_metadata__updated_at__before: Option<String>,
-    pub node_metadata__updated_at__after: Option<String>,
+    pub node_metadata_created_by_id: Option<String>,
+    pub node_metadata_created_by_ids: Option<Vec<String>>,
+    pub node_metadata_updated_by_id: Option<String>,
+    pub node_metadata_updated_by_ids: Option<Vec<String>>,
+    pub node_metadata_created_at: Option<String>,
+    pub node_metadata_created_at_before: Option<String>,
+    pub node_metadata_created_at_after: Option<String>,
+    pub node_metadata_updated_at: Option<String>,
+    pub node_metadata_updated_at_before: Option<String>,
+    pub node_metadata_updated_at_after: Option<String>,
 }
 
 impl LineageSourceFilters {
@@ -226,52 +226,52 @@ impl LineageSourceFilters {
         if let Some(value) = &self.ids {
             vars.insert("ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__value {
+        if let Some(value) = &self.any_value {
             vars.insert("any__value".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__values {
+        if let Some(value) = &self.any_values {
             vars.insert("any__values".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__source__id {
+        if let Some(value) = &self.any_source_id {
             vars.insert("any__source__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__owner__id {
+        if let Some(value) = &self.any_owner_id {
             vars.insert("any__owner__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.any__is_protected {
+        if let Some(value) = &self.any_is_protected {
             vars.insert("any__is_protected".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.partial_match {
             vars.insert("partial_match".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__id {
+        if let Some(value) = &self.node_metadata_created_by_id {
             vars.insert("node_metadata__created_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_by__ids {
+        if let Some(value) = &self.node_metadata_created_by_ids {
             vars.insert("node_metadata__created_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__id {
+        if let Some(value) = &self.node_metadata_updated_by_id {
             vars.insert("node_metadata__updated_by__id".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_by__ids {
+        if let Some(value) = &self.node_metadata_updated_by_ids {
             vars.insert("node_metadata__updated_by__ids".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at {
+        if let Some(value) = &self.node_metadata_created_at {
             vars.insert("node_metadata__created_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__before {
+        if let Some(value) = &self.node_metadata_created_at_before {
             vars.insert("node_metadata__created_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__created_at__after {
+        if let Some(value) = &self.node_metadata_created_at_after {
             vars.insert("node_metadata__created_at__after".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at {
+        if let Some(value) = &self.node_metadata_updated_at {
             vars.insert("node_metadata__updated_at".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__before {
+        if let Some(value) = &self.node_metadata_updated_at_before {
             vars.insert("node_metadata__updated_at__before".to_string(), serde_json::to_value(value)?);
         }
-        if let Some(value) = &self.node_metadata__updated_at__after {
+        if let Some(value) = &self.node_metadata_updated_at_after {
             vars.insert("node_metadata__updated_at__after".to_string(), serde_json::to_value(value)?);
         }
         Ok(Value::Object(vars))

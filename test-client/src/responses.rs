@@ -37,7 +37,7 @@ pub struct CoreGeneratorAwareGroupResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGraphQLQueryGroupResponse {
     #[serde(rename = "CoreGraphQLQueryGroup")]
-    pub core_graph_q_l_query_group: Box<PaginatedCoreGraphQLQueryGroup>,
+    pub core_graph_ql_query_group: Box<PaginatedCoreGraphQLQueryGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -241,7 +241,7 @@ pub struct CoreTransformPythonResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGraphQLQueryResponse {
     #[serde(rename = "CoreGraphQLQuery")]
-    pub core_graph_q_l_query: Box<PaginatedCoreGraphQLQuery>,
+    pub core_graph_ql_query: Box<PaginatedCoreGraphQLQuery>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -301,13 +301,13 @@ pub struct IpamNamespaceResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreIPPrefixPoolResponse {
     #[serde(rename = "CoreIPPrefixPool")]
-    pub core_i_p_prefix_pool: Box<PaginatedCoreIPPrefixPool>,
+    pub core_ip_prefix_pool: Box<PaginatedCoreIPPrefixPool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreIPAddressPoolResponse {
     #[serde(rename = "CoreIPAddressPool")]
-    pub core_i_p_address_pool: Box<PaginatedCoreIPAddressPool>,
+    pub core_ip_address_pool: Box<PaginatedCoreIPAddressPool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -457,19 +457,19 @@ pub struct CoreGenericRepositoryResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BuiltinIPNamespaceResponse {
     #[serde(rename = "BuiltinIPNamespace")]
-    pub builtin_i_p_namespace: Box<PaginatedBuiltinIPNamespace>,
+    pub builtin_ip_namespace: Box<PaginatedBuiltinIPNamespace>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BuiltinIPPrefixResponse {
     #[serde(rename = "BuiltinIPPrefix")]
-    pub builtin_i_p_prefix: Box<PaginatedBuiltinIPPrefix>,
+    pub builtin_ip_prefix: Box<PaginatedBuiltinIPPrefix>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BuiltinIPAddressResponse {
     #[serde(rename = "BuiltinIPAddress")]
-    pub builtin_i_p_address: Box<PaginatedBuiltinIPAddress>,
+    pub builtin_ip_address: Box<PaginatedBuiltinIPAddress>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -541,13 +541,13 @@ pub struct ProfileIpamNamespaceResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ProfileBuiltinIPPrefixResponse {
     #[serde(rename = "ProfileBuiltinIPPrefix")]
-    pub profile_builtin_i_p_prefix: Box<PaginatedProfileBuiltinIPPrefix>,
+    pub profile_builtin_ip_prefix: Box<PaginatedProfileBuiltinIPPrefix>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ProfileBuiltinIPAddressResponse {
     #[serde(rename = "ProfileBuiltinIPAddress")]
-    pub profile_builtin_i_p_address: Box<PaginatedProfileBuiltinIPAddress>,
+    pub profile_builtin_ip_address: Box<PaginatedProfileBuiltinIPAddress>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -577,7 +577,7 @@ pub struct InfrahubBranchResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct InfrahubGraphQLQueryReportResponse {
     #[serde(rename = "InfrahubGraphQLQueryReport")]
-    pub infrahub_graph_q_l_query_report: Box<GraphQLQueryReport>,
+    pub infrahub_graph_ql_query_report: Box<GraphQLQueryReport>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -589,13 +589,13 @@ pub struct InfrahubInfoResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct InfrahubIPAddressGetNextAvailableResponse {
     #[serde(rename = "InfrahubIPAddressGetNextAvailable")]
-    pub infrahub_i_p_address_get_next_available: Box<IPAddressGetNextAvailable>,
+    pub infrahub_ip_address_get_next_available: Box<IPAddressGetNextAvailable>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct InfrahubIPPrefixGetNextAvailableResponse {
     #[serde(rename = "InfrahubIPPrefixGetNextAvailable")]
-    pub infrahub_i_p_prefix_get_next_available: Box<IPPrefixGetNextAvailable>,
+    pub infrahub_ip_prefix_get_next_available: Box<IPPrefixGetNextAvailable>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

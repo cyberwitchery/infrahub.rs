@@ -1006,8 +1006,9 @@ fn split_identifier_words(name: &str) -> Vec<String> {
         let acronym_to_word = prev.is_ascii_uppercase()
             && curr.is_ascii_uppercase()
             && next.map(|c| c.is_ascii_lowercase()).unwrap_or(false);
+        let digit_to_alpha = prev.is_ascii_digit() && curr.is_ascii_alphabetic();
 
-        if lower_to_upper || acronym_to_word {
+        if lower_to_upper || acronym_to_word || digit_to_alpha {
             words.push(chars[start..i].iter().collect::<String>());
             start = i;
         }
@@ -1328,20 +1329,27 @@ fn format_gql_type(ty: &Type<String>) -> String {
 }
 
 fn to_rust_ident(name: &str) -> String {
-    let mut out = String::new();
-    let mut upper = true;
-    for ch in name.chars() {
-        if ch == '_' || ch == '-' {
-            upper = true;
-            continue;
-        }
-        if upper {
-            out.extend(ch.to_uppercase());
-            upper = false;
-        } else {
-            out.push(ch);
-        }
-    }
+    let words = split_identifier_words(name);
+    let all_upper = words
+        .iter()
+        .all(|w| w.chars().all(|c| !c.is_ascii_lowercase()));
+    let out: String = words
+        .into_iter()
+        .map(|w| {
+            if !all_upper && w.chars().all(|c| !c.is_ascii_lowercase()) {
+                return w;
+            }
+            let mut chars = w.chars();
+            match chars.next() {
+                None => String::new(),
+                Some(c) => {
+                    let upper: String = c.to_uppercase().collect();
+                    let lower: String = chars.map(|c| c.to_ascii_lowercase()).collect();
+                    format!("{}{}", upper, lower)
+                }
+            }
+        })
+        .collect();
     match out.as_str() {
         "Self" | "Type" | "Box" | "Result" => format!("{}Type", out),
         _ => out,
@@ -1349,17 +1357,7 @@ fn to_rust_ident(name: &str) -> String {
 }
 
 fn to_rust_field(name: &str) -> String {
-    let mut out = String::new();
-    for (idx, ch) in name.chars().enumerate() {
-        if ch.is_uppercase() {
-            if idx > 0 {
-                out.push('_');
-            }
-            out.extend(ch.to_lowercase());
-        } else {
-            out.push(ch);
-        }
-    }
+    let out = to_snake(name);
 
     if is_rust_keyword(&out) {
         format!("r#{}", out)
@@ -1436,6 +1434,85 @@ mod codegen_name_tests {
     }
 
     #[test]
+    fn test_to_snake_handles_digit_to_alpha_boundary() {
+        assert_eq!(
+            to_snake("CoreTransformJinja2Create"),
+            "core_transform_jinja2_create"
+        );
+        assert_eq!(
+            to_snake("CoreTransformJinja2Update"),
+            "core_transform_jinja2_update"
+        );
+        assert_eq!(to_snake("Http2Client"), "http2_client");
+        assert_eq!(to_snake("V2Api"), "v2_api");
+        assert_eq!(to_snake("route53Zone"), "route53_zone");
+    }
+
+    #[test]
+    fn test_to_rust_field_handles_acronyms() {
+        assert_eq!(to_rust_field("nodeID"), "node_id");
+        assert_eq!(to_rust_field("hFID"), "h_fid");
+        assert_eq!(to_rust_field("ipAddress"), "ip_address");
+        assert_eq!(to_rust_field("nodeUUID"), "node_uuid");
+        assert_eq!(to_rust_field("simple"), "simple");
+        assert_eq!(to_rust_field("camelCase"), "camel_case");
+    }
+
+    #[test]
+    fn test_to_rust_field_keyword_escaping() {
+        assert_eq!(to_rust_field("type"), "r#type");
+        assert_eq!(to_rust_field("self"), "r#self");
+    }
+
+    #[test]
+    fn test_to_rust_ident_all_caps_enum_variants() {
+        assert_eq!(to_rust_ident("DENY"), "Deny");
+        assert_eq!(to_rust_ident("ALLOW_DEFAULT"), "AllowDefault");
+        assert_eq!(to_rust_ident("NEED_UPGRADE_REBASE"), "NeedUpgradeRebase");
+        assert_eq!(to_rust_ident("BASE_BRANCH"), "BaseBranch");
+        assert_eq!(to_rust_ident("ASC"), "Asc");
+    }
+
+    #[test]
+    fn test_to_rust_ident_pascal_case_passthrough() {
+        assert_eq!(to_rust_ident("CoreMenuItem"), "CoreMenuItem");
+        assert_eq!(to_rust_ident("InfrahubTask"), "InfrahubTask");
+    }
+
+    #[test]
+    fn test_to_rust_ident_preserves_uppercase_clusters() {
+        assert_eq!(to_rust_ident("BuiltinIPAddress"), "BuiltinIPAddress");
+        assert_eq!(to_rust_ident("CoreGraphQLQuery"), "CoreGraphQLQuery");
+        assert_eq!(to_rust_ident("CoreIPAddressPool"), "CoreIPAddressPool");
+        assert_eq!(to_rust_ident("JSONAttribute"), "JSONAttribute");
+        assert_eq!(to_rust_ident("UpdateHFID"), "UpdateHFID");
+    }
+
+    #[test]
+    fn test_to_rust_ident_digit_boundaries() {
+        assert_eq!(
+            to_rust_ident("CoreTransformJinja2Create"),
+            "CoreTransformJinja2Create"
+        );
+        assert_eq!(to_rust_ident("Http2Client"), "Http2Client");
+        assert_eq!(to_rust_ident("V2Api"), "V2Api");
+    }
+
+    #[test]
+    fn test_to_rust_ident_reserved_words() {
+        assert_eq!(to_rust_ident("Self"), "SelfType");
+        assert_eq!(to_rust_ident("Type"), "TypeType");
+        assert_eq!(to_rust_ident("Box"), "BoxType");
+        assert_eq!(to_rust_ident("Result"), "ResultType");
+    }
+
+    #[test]
+    fn test_to_rust_ident_lowercase_input() {
+        assert_eq!(to_rust_ident("core"), "Core");
+        assert_eq!(to_rust_ident("builtin"), "Builtin");
+    }
+
+    #[test]
     fn test_model_accessor_name_strips_namespace() {
         assert_eq!(
             model_accessor_name("CoreRepository", "Core"),
@@ -1499,9 +1576,12 @@ mod codegen_name_tests {
         let doc = parse_schema::<String>(schema).unwrap();
         let ctx = SchemaContext::new(&doc);
         let types_rs = render_types(&ctx);
-        assert!(types_rs.contains("ACTIVE"));
-        assert!(types_rs.contains("PENDING"));
-        assert!(!types_rs.contains("DELETED"));
+        assert!(types_rs.contains("Active"));
+        assert!(types_rs.contains("Pending"));
+        assert!(
+            !types_rs.contains("Deleted"),
+            "deprecated DELETED should be skipped, got:\n{types_rs}"
+        );
     }
 
     #[test]
@@ -1516,8 +1596,89 @@ mod codegen_name_tests {
         let doc = parse_schema::<String>(schema).unwrap();
         let ctx = SchemaContext::new(&doc);
         let types_rs = render_types(&ctx);
+        assert!(
+            types_rs.contains("Active"),
+            "ACTIVE should become Active, got:\n{types_rs}"
+        );
         assert!(!types_rs.contains("Unknown"));
         assert!(!types_rs.contains("#[serde(other)]"));
+    }
+
+    #[test]
+    fn test_acronym_fields_in_generated_types() {
+        let schema = r#"
+            type Query { node: Node }
+            type Node {
+                nodeID: String
+                hFID: String
+                ipAddress: String
+                nodeUUID: String
+                simpleName: String
+            }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let types_rs = render_types(&ctx);
+        assert!(
+            types_rs.contains("pub node_id:"),
+            "nodeID should become node_id, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("pub h_fid:"),
+            "hFID should become h_fid, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("pub ip_address:"),
+            "ipAddress should become ip_address, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("pub node_uuid:"),
+            "nodeUUID should become node_uuid, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("pub simple_name:"),
+            "simpleName should become simple_name, got:\n{types_rs}"
+        );
+    }
+
+    #[test]
+    fn test_enum_variants_use_pascal_case() {
+        let schema = r#"
+            type Query { perm: Permission }
+            enum Permission {
+                DENY
+                ALLOW
+                ALLOW_DEFAULT
+                ALLOW_OTHER
+            }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let types_rs = render_types(&ctx);
+        assert!(
+            types_rs.contains("Deny,"),
+            "DENY should become Deny, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("Allow,"),
+            "ALLOW should become Allow, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("AllowDefault,"),
+            "ALLOW_DEFAULT should become AllowDefault, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("AllowOther,"),
+            "ALLOW_OTHER should become AllowOther, got:\n{types_rs}"
+        );
+        assert!(
+            types_rs.contains("serde(rename = \"DENY\")"),
+            "serde rename should preserve original name"
+        );
+        assert!(
+            types_rs.contains("serde(rename = \"ALLOW_DEFAULT\")"),
+            "serde rename should preserve original name"
+        );
     }
 
     #[test]

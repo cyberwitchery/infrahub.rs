@@ -5,127 +5,127 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum BranchRelativePermissionDecision {
     #[serde(rename = "DENY")]
-    DENY,
+    Deny,
     #[serde(rename = "ALLOW")]
-    ALLOW,
+    Allow,
     #[serde(rename = "ALLOW_DEFAULT")]
-    ALLOWDEFAULT,
+    AllowDefault,
     #[serde(rename = "ALLOW_OTHER")]
-    ALLOWOTHER,
+    AllowOther,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum BranchStatus {
     #[serde(rename = "OPEN")]
-    OPEN,
+    Open,
     #[serde(rename = "NEED_REBASE")]
-    NEEDREBASE,
+    NeedRebase,
     #[serde(rename = "NEED_UPGRADE_REBASE")]
-    NEEDUPGRADEREBASE,
+    NeedUpgradeRebase,
     #[serde(rename = "DELETING")]
-    DELETING,
+    Deleting,
     #[serde(rename = "MERGING")]
-    MERGING,
+    Merging,
     #[serde(rename = "MERGED")]
-    MERGED,
+    Merged,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum CheckType {
     #[serde(rename = "ARTIFACT")]
-    ARTIFACT,
+    Artifact,
     #[serde(rename = "DATA")]
-    DATA,
+    Data,
     #[serde(rename = "GENERATOR")]
-    GENERATOR,
+    Generator,
     #[serde(rename = "REPOSITORY")]
-    REPOSITORY,
+    Repository,
     #[serde(rename = "SCHEMA")]
-    SCHEMA,
+    Schema,
     #[serde(rename = "TEST")]
-    TEST,
+    Test,
     #[serde(rename = "USER")]
-    USER,
+    User,
     #[serde(rename = "ALL")]
-    ALL,
+    All,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum ConflictSelection {
     #[serde(rename = "BASE_BRANCH")]
-    BASEBRANCH,
+    BaseBranch,
     #[serde(rename = "DIFF_BRANCH")]
-    DIFFBRANCH,
+    DiffBranch,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum DiffAction {
     #[serde(rename = "ADDED")]
-    ADDED,
+    Added,
     #[serde(rename = "REMOVED")]
-    REMOVED,
+    Removed,
     #[serde(rename = "UPDATED")]
-    UPDATED,
+    Updated,
     #[serde(rename = "UNCHANGED")]
-    UNCHANGED,
+    Unchanged,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum EventSortOrder {
     #[serde(rename = "ASC")]
-    ASC,
+    Asc,
     #[serde(rename = "DESC")]
-    DESC,
+    Desc,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum OrderDirection {
     #[serde(rename = "ASC")]
-    ASC,
+    Asc,
     #[serde(rename = "DESC")]
-    DESC,
+    Desc,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum ProposedChangeApprovalDecision {
     #[serde(rename = "APPROVE")]
-    APPROVE,
+    Approve,
     #[serde(rename = "CANCEL_APPROVE")]
-    CANCELAPPROVE,
+    CancelApprove,
     #[serde(rename = "REJECT")]
-    REJECT,
+    Reject,
     #[serde(rename = "CANCEL_REJECT")]
-    CANCELREJECT,
+    CancelReject,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum RelationshipCardinality {
     #[serde(rename = "ONE")]
-    ONE,
+    One,
     #[serde(rename = "MANY")]
-    MANY,
+    Many,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum StateType {
     #[serde(rename = "SCHEDULED")]
-    SCHEDULED,
+    Scheduled,
     #[serde(rename = "PENDING")]
-    PENDING,
+    Pending,
     #[serde(rename = "RUNNING")]
-    RUNNING,
+    Running,
     #[serde(rename = "COMPLETED")]
-    COMPLETED,
+    Completed,
     #[serde(rename = "FAILED")]
-    FAILED,
+    Failed,
     #[serde(rename = "CANCELLED")]
-    CANCELLED,
+    Cancelled,
     #[serde(rename = "CRASHED")]
-    CRASHED,
+    Crashed,
     #[serde(rename = "PAUSED")]
-    PAUSED,
+    Paused,
     #[serde(rename = "CANCELLING")]
-    CANCELLING,
+    Cancelling,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3958,13 +3958,13 @@ pub struct Mutation {
     #[serde(rename = "CoreGeneratorAwareGroupDelete")]
     pub core_generator_aware_group_delete: Option<Box<CoreGeneratorAwareGroupDelete>>,
     #[serde(rename = "CoreGraphQLQueryGroupCreate")]
-    pub core_graph_q_l_query_group_create: Option<Box<CoreGraphQLQueryGroupCreate>>,
+    pub core_graph_ql_query_group_create: Option<Box<CoreGraphQLQueryGroupCreate>>,
     #[serde(rename = "CoreGraphQLQueryGroupUpdate")]
-    pub core_graph_q_l_query_group_update: Option<Box<CoreGraphQLQueryGroupUpdate>>,
+    pub core_graph_ql_query_group_update: Option<Box<CoreGraphQLQueryGroupUpdate>>,
     #[serde(rename = "CoreGraphQLQueryGroupUpsert")]
-    pub core_graph_q_l_query_group_upsert: Option<Box<CoreGraphQLQueryGroupUpsert>>,
+    pub core_graph_ql_query_group_upsert: Option<Box<CoreGraphQLQueryGroupUpsert>>,
     #[serde(rename = "CoreGraphQLQueryGroupDelete")]
-    pub core_graph_q_l_query_group_delete: Option<Box<CoreGraphQLQueryGroupDelete>>,
+    pub core_graph_ql_query_group_delete: Option<Box<CoreGraphQLQueryGroupDelete>>,
     #[serde(rename = "CoreRepositoryGroupCreate")]
     pub core_repository_group_create: Option<Box<CoreRepositoryGroupCreate>>,
     #[serde(rename = "CoreRepositoryGroupUpdate")]
@@ -4230,13 +4230,13 @@ pub struct Mutation {
     #[serde(rename = "CoreTransformPythonDelete")]
     pub core_transform_python_delete: Option<Box<CoreTransformPythonDelete>>,
     #[serde(rename = "CoreGraphQLQueryCreate")]
-    pub core_graph_q_l_query_create: Option<Box<CoreGraphQLQueryCreate>>,
+    pub core_graph_ql_query_create: Option<Box<CoreGraphQLQueryCreate>>,
     #[serde(rename = "CoreGraphQLQueryUpdate")]
-    pub core_graph_q_l_query_update: Option<Box<CoreGraphQLQueryUpdate>>,
+    pub core_graph_ql_query_update: Option<Box<CoreGraphQLQueryUpdate>>,
     #[serde(rename = "CoreGraphQLQueryUpsert")]
-    pub core_graph_q_l_query_upsert: Option<Box<CoreGraphQLQueryUpsert>>,
+    pub core_graph_ql_query_upsert: Option<Box<CoreGraphQLQueryUpsert>>,
     #[serde(rename = "CoreGraphQLQueryDelete")]
-    pub core_graph_q_l_query_delete: Option<Box<CoreGraphQLQueryDelete>>,
+    pub core_graph_ql_query_delete: Option<Box<CoreGraphQLQueryDelete>>,
     #[serde(rename = "CoreArtifactCreate")]
     pub core_artifact_create: Option<Box<CoreArtifactCreate>>,
     #[serde(rename = "CoreArtifactUpdate")]
@@ -4310,21 +4310,21 @@ pub struct Mutation {
     #[serde(rename = "IpamNamespaceDelete")]
     pub ipam_namespace_delete: Option<Box<IpamNamespaceDelete>>,
     #[serde(rename = "CoreIPPrefixPoolCreate")]
-    pub core_i_p_prefix_pool_create: Option<Box<CoreIPPrefixPoolCreate>>,
+    pub core_ip_prefix_pool_create: Option<Box<CoreIPPrefixPoolCreate>>,
     #[serde(rename = "CoreIPPrefixPoolUpdate")]
-    pub core_i_p_prefix_pool_update: Option<Box<CoreIPPrefixPoolUpdate>>,
+    pub core_ip_prefix_pool_update: Option<Box<CoreIPPrefixPoolUpdate>>,
     #[serde(rename = "CoreIPPrefixPoolUpsert")]
-    pub core_i_p_prefix_pool_upsert: Option<Box<CoreIPPrefixPoolUpsert>>,
+    pub core_ip_prefix_pool_upsert: Option<Box<CoreIPPrefixPoolUpsert>>,
     #[serde(rename = "CoreIPPrefixPoolDelete")]
-    pub core_i_p_prefix_pool_delete: Option<Box<CoreIPPrefixPoolDelete>>,
+    pub core_ip_prefix_pool_delete: Option<Box<CoreIPPrefixPoolDelete>>,
     #[serde(rename = "CoreIPAddressPoolCreate")]
-    pub core_i_p_address_pool_create: Option<Box<CoreIPAddressPoolCreate>>,
+    pub core_ip_address_pool_create: Option<Box<CoreIPAddressPoolCreate>>,
     #[serde(rename = "CoreIPAddressPoolUpdate")]
-    pub core_i_p_address_pool_update: Option<Box<CoreIPAddressPoolUpdate>>,
+    pub core_ip_address_pool_update: Option<Box<CoreIPAddressPoolUpdate>>,
     #[serde(rename = "CoreIPAddressPoolUpsert")]
-    pub core_i_p_address_pool_upsert: Option<Box<CoreIPAddressPoolUpsert>>,
+    pub core_ip_address_pool_upsert: Option<Box<CoreIPAddressPoolUpsert>>,
     #[serde(rename = "CoreIPAddressPoolDelete")]
-    pub core_i_p_address_pool_delete: Option<Box<CoreIPAddressPoolDelete>>,
+    pub core_ip_address_pool_delete: Option<Box<CoreIPAddressPoolDelete>>,
     #[serde(rename = "CoreNumberPoolCreate")]
     pub core_number_pool_create: Option<Box<CoreNumberPoolCreate>>,
     #[serde(rename = "CoreNumberPoolUpdate")]
@@ -4400,11 +4400,11 @@ pub struct Mutation {
     #[serde(rename = "CoreGenericRepositoryUpdate")]
     pub core_generic_repository_update: Option<Box<CoreGenericRepositoryUpdate>>,
     #[serde(rename = "BuiltinIPNamespaceUpdate")]
-    pub builtin_i_p_namespace_update: Option<Box<BuiltinIPNamespaceUpdate>>,
+    pub builtin_ip_namespace_update: Option<Box<BuiltinIPNamespaceUpdate>>,
     #[serde(rename = "BuiltinIPPrefixUpdate")]
-    pub builtin_i_p_prefix_update: Option<Box<BuiltinIPPrefixUpdate>>,
+    pub builtin_ip_prefix_update: Option<Box<BuiltinIPPrefixUpdate>>,
     #[serde(rename = "BuiltinIPAddressUpdate")]
-    pub builtin_i_p_address_update: Option<Box<BuiltinIPAddressUpdate>>,
+    pub builtin_ip_address_update: Option<Box<BuiltinIPAddressUpdate>>,
     #[serde(rename = "CoreResourcePoolUpdate")]
     pub core_resource_pool_update: Option<Box<CoreResourcePoolUpdate>>,
     #[serde(rename = "CoreWeightedPoolResourceUpdate")]
@@ -4438,21 +4438,21 @@ pub struct Mutation {
     #[serde(rename = "ProfileIpamNamespaceDelete")]
     pub profile_ipam_namespace_delete: Option<Box<ProfileIpamNamespaceDelete>>,
     #[serde(rename = "ProfileBuiltinIPPrefixCreate")]
-    pub profile_builtin_i_p_prefix_create: Option<Box<ProfileBuiltinIPPrefixCreate>>,
+    pub profile_builtin_ip_prefix_create: Option<Box<ProfileBuiltinIPPrefixCreate>>,
     #[serde(rename = "ProfileBuiltinIPPrefixUpdate")]
-    pub profile_builtin_i_p_prefix_update: Option<Box<ProfileBuiltinIPPrefixUpdate>>,
+    pub profile_builtin_ip_prefix_update: Option<Box<ProfileBuiltinIPPrefixUpdate>>,
     #[serde(rename = "ProfileBuiltinIPPrefixUpsert")]
-    pub profile_builtin_i_p_prefix_upsert: Option<Box<ProfileBuiltinIPPrefixUpsert>>,
+    pub profile_builtin_ip_prefix_upsert: Option<Box<ProfileBuiltinIPPrefixUpsert>>,
     #[serde(rename = "ProfileBuiltinIPPrefixDelete")]
-    pub profile_builtin_i_p_prefix_delete: Option<Box<ProfileBuiltinIPPrefixDelete>>,
+    pub profile_builtin_ip_prefix_delete: Option<Box<ProfileBuiltinIPPrefixDelete>>,
     #[serde(rename = "ProfileBuiltinIPAddressCreate")]
-    pub profile_builtin_i_p_address_create: Option<Box<ProfileBuiltinIPAddressCreate>>,
+    pub profile_builtin_ip_address_create: Option<Box<ProfileBuiltinIPAddressCreate>>,
     #[serde(rename = "ProfileBuiltinIPAddressUpdate")]
-    pub profile_builtin_i_p_address_update: Option<Box<ProfileBuiltinIPAddressUpdate>>,
+    pub profile_builtin_ip_address_update: Option<Box<ProfileBuiltinIPAddressUpdate>>,
     #[serde(rename = "ProfileBuiltinIPAddressUpsert")]
-    pub profile_builtin_i_p_address_upsert: Option<Box<ProfileBuiltinIPAddressUpsert>>,
+    pub profile_builtin_ip_address_upsert: Option<Box<ProfileBuiltinIPAddressUpsert>>,
     #[serde(rename = "ProfileBuiltinIPAddressDelete")]
-    pub profile_builtin_i_p_address_delete: Option<Box<ProfileBuiltinIPAddressDelete>>,
+    pub profile_builtin_ip_address_delete: Option<Box<ProfileBuiltinIPAddressDelete>>,
     #[serde(rename = "InfrahubAccountTokenCreate")]
     pub infrahub_account_token_create: Option<Box<InfrahubAccountTokenCreate>>,
     #[serde(rename = "InfrahubAccountSelfUpdate")]
@@ -4468,9 +4468,9 @@ pub struct Mutation {
     #[serde(rename = "CoreGeneratorDefinitionRun")]
     pub core_generator_definition_run: Option<Box<GeneratorDefinitionRequestRun>>,
     #[serde(rename = "InfrahubIPPrefixPoolGetResource")]
-    pub infrahub_i_p_prefix_pool_get_resource: Option<Box<IPPrefixPoolGetResource>>,
+    pub infrahub_ip_prefix_pool_get_resource: Option<Box<IPPrefixPoolGetResource>>,
     #[serde(rename = "InfrahubIPAddressPoolGetResource")]
-    pub infrahub_i_p_address_pool_get_resource: Option<Box<IPAddressPoolGetResource>>,
+    pub infrahub_ip_address_pool_get_resource: Option<Box<IPAddressPoolGetResource>>,
     #[serde(rename = "BranchCreate")]
     pub branch_create: Option<Box<BranchCreate>>,
     #[serde(rename = "BranchDelete")]
@@ -4496,7 +4496,7 @@ pub struct Mutation {
     #[serde(rename = "InfrahubUpdateDisplayLabel")]
     pub infrahub_update_display_label: Option<Box<UpdateDisplayLabel>>,
     #[serde(rename = "InfrahubUpdateHFID")]
-    pub infrahub_update_h_f_i_d: Option<Box<UpdateHFID>>,
+    pub infrahub_update_hfid: Option<Box<UpdateHFID>>,
     #[serde(rename = "InfrahubRecomputeComputedAttribute")]
     pub infrahub_recompute_computed_attribute: Option<Box<RecomputeComputedAttribute>>,
     #[serde(rename = "RelationshipAdd")]

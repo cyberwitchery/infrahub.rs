@@ -1,8 +1,15 @@
 //! generated api module
 
-#![allow(non_snake_case, unused_imports, unused_assignments, clippy::field_reassign_with_default)]
+#![allow(
+    non_snake_case,
+    unused_imports,
+    unused_assignments,
+    clippy::field_reassign_with_default
+)]
 
-use infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};
+use infrahub::{
+    BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result,
+};
 use serde_json::Value;
 
 use crate::inputs::*;
@@ -78,40 +85,73 @@ impl LineageOwnerFilters {
             vars.insert("any__owner__id".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.any_is_protected {
-            vars.insert("any__is_protected".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "any__is_protected".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.partial_match {
             vars.insert("partial_match".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.node_metadata_created_by_id {
-            vars.insert("node_metadata__created_by__id".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__created_by__id".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_created_by_ids {
-            vars.insert("node_metadata__created_by__ids".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__created_by__ids".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_updated_by_id {
-            vars.insert("node_metadata__updated_by__id".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__updated_by__id".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_updated_by_ids {
-            vars.insert("node_metadata__updated_by__ids".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__updated_by__ids".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_created_at {
-            vars.insert("node_metadata__created_at".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__created_at".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_created_at_before {
-            vars.insert("node_metadata__created_at__before".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__created_at__before".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_created_at_after {
-            vars.insert("node_metadata__created_at__after".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__created_at__after".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_updated_at {
-            vars.insert("node_metadata__updated_at".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__updated_at".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_updated_at_before {
-            vars.insert("node_metadata__updated_at__before".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__updated_at__before".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_updated_at_after {
-            vars.insert("node_metadata__updated_at__after".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__updated_at__after".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         Ok(Value::Object(vars))
     }
@@ -126,11 +166,23 @@ impl<'a> LineageOwnerClient<'a> {
         Self { client }
     }
 
-    pub async fn list(&self, filters: Option<LineageOwnerFilters>, request_branch: Option<&str>) -> Result<Vec<serde_json::Value>> {
-        let vars = filters.map(|f| f.to_vars()).transpose()?.unwrap_or_else(|| Value::Object(serde_json::Map::new()));
+    pub async fn list(
+        &self,
+        filters: Option<LineageOwnerFilters>,
+        request_branch: Option<&str>,
+    ) -> Result<Vec<serde_json::Value>> {
+        let vars = filters
+            .map(|f| f.to_vars())
+            .transpose()?
+            .unwrap_or_else(|| Value::Object(serde_json::Map::new()));
         let query = r#"query LineageOwner($offset: Int, $limit: Int, $order: OrderInput, $ids: [ID], $any__value: String, $any__values: [String], $any__source__id: ID, $any__owner__id: ID, $any__is_protected: Boolean, $partial_match: Boolean, $node_metadata__created_by__id: ID, $node_metadata__created_by__ids: [ID], $node_metadata__updated_by__id: ID, $node_metadata__updated_by__ids: [ID], $node_metadata__created_at: DateTime, $node_metadata__created_at__before: DateTime, $node_metadata__created_at__after: DateTime, $node_metadata__updated_at: DateTime, $node_metadata__updated_at__before: DateTime, $node_metadata__updated_at__after: DateTime) { LineageOwner(offset: $offset, limit: $limit, order: $order, ids: $ids, any__value: $any__value, any__values: $any__values, any__source__id: $any__source__id, any__owner__id: $any__owner__id, any__is_protected: $any__is_protected, partial_match: $partial_match, node_metadata__created_by__id: $node_metadata__created_by__id, node_metadata__created_by__ids: $node_metadata__created_by__ids, node_metadata__updated_by__id: $node_metadata__updated_by__id, node_metadata__updated_by__ids: $node_metadata__updated_by__ids, node_metadata__created_at: $node_metadata__created_at, node_metadata__created_at__before: $node_metadata__created_at__before, node_metadata__created_at__after: $node_metadata__created_at__after, node_metadata__updated_at: $node_metadata__updated_at, node_metadata__updated_at__before: $node_metadata__updated_at__before, node_metadata__updated_at__after: $node_metadata__updated_at__after) { count edges { node_metadata { created_at updated_at } } permissions { count edges { node { kind view create update delete } } } } }"#;
-        let response = self.client.execute::<LineageOwnerResponse>(query, Some(vars), request_branch).await?;
-        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let response = self
+            .client
+            .execute::<LineageOwnerResponse>(query, Some(vars), request_branch)
+            .await?;
+        let data = response
+            .data
+            .ok_or_else(|| Error::Config("missing data".to_string()))?;
         let mut items = Vec::new();
         for edge in data.lineage_owner.edges {
             if let Some(node) = edge.node {
@@ -140,28 +192,38 @@ impl<'a> LineageOwnerClient<'a> {
         Ok(items)
     }
 
-    pub fn paginate(&self, filters: Option<LineageOwnerFilters>, request_branch: Option<&str>) -> DynPaginator<'a, serde_json::Value, String, (LineageOwnerResponse, i64)> {
+    pub fn paginate(
+        &self,
+        filters: Option<LineageOwnerFilters>,
+        request_branch: Option<&str>,
+    ) -> DynPaginator<'a, serde_json::Value, String, (LineageOwnerResponse, i64)> {
         let client = self.client;
         let base_filters = filters.unwrap_or_default();
         let request_branch = request_branch.map(|b| b.to_string());
         let query = r#"query LineageOwner($offset: Int, $limit: Int, $order: OrderInput, $ids: [ID], $any__value: String, $any__values: [String], $any__source__id: ID, $any__owner__id: ID, $any__is_protected: Boolean, $partial_match: Boolean, $node_metadata__created_by__id: ID, $node_metadata__created_by__ids: [ID], $node_metadata__updated_by__id: ID, $node_metadata__updated_by__ids: [ID], $node_metadata__created_at: DateTime, $node_metadata__created_at__before: DateTime, $node_metadata__created_at__after: DateTime, $node_metadata__updated_at: DateTime, $node_metadata__updated_at__before: DateTime, $node_metadata__updated_at__after: DateTime) { LineageOwner(offset: $offset, limit: $limit, order: $order, ids: $ids, any__value: $any__value, any__values: $any__values, any__source__id: $any__source__id, any__owner__id: $any__owner__id, any__is_protected: $any__is_protected, partial_match: $partial_match, node_metadata__created_by__id: $node_metadata__created_by__id, node_metadata__created_by__ids: $node_metadata__created_by__ids, node_metadata__updated_by__id: $node_metadata__updated_by__id, node_metadata__updated_by__ids: $node_metadata__updated_by__ids, node_metadata__created_at: $node_metadata__created_at, node_metadata__created_at__before: $node_metadata__created_at__before, node_metadata__created_at__after: $node_metadata__created_at__after, node_metadata__updated_at: $node_metadata__updated_at, node_metadata__updated_at__before: $node_metadata__updated_at__before, node_metadata__updated_at__after: $node_metadata__updated_at__after) { count edges { node_metadata { created_at updated_at } } permissions { count edges { node { kind view create update delete } } } } }"#;
-        let fetch: BoxFetch<'a, String, (LineageOwnerResponse, i64)> = Box::new(move |cursor: Option<String>| -> BoxFutureResult<'a, (LineageOwnerResponse, i64)> {
-            let mut page_filters = base_filters.clone();
-            let branch = request_branch.clone();
-            let mut current_offset: i64 = 0;
-            let base_offset = page_filters.offset.unwrap_or(0);
-            current_offset = cursor
-                .as_deref()
-                .and_then(|c| c.parse::<i64>().ok())
-                .unwrap_or(base_offset);
-            page_filters.offset = Some(current_offset);
-            Box::pin(async move {
-            let vars = page_filters.to_vars()?;
-                let response = client.execute::<LineageOwnerResponse>(query, Some(vars), branch.as_deref()).await?;
-                let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
-                Ok((data, current_offset))
-            })
-        });
+        let fetch: BoxFetch<'a, String, (LineageOwnerResponse, i64)> = Box::new(
+            move |cursor: Option<String>| -> BoxFutureResult<'a, (LineageOwnerResponse, i64)> {
+                let mut page_filters = base_filters.clone();
+                let branch = request_branch.clone();
+                let mut current_offset: i64 = 0;
+                let base_offset = page_filters.offset.unwrap_or(0);
+                current_offset = cursor
+                    .as_deref()
+                    .and_then(|c| c.parse::<i64>().ok())
+                    .unwrap_or(base_offset);
+                page_filters.offset = Some(current_offset);
+                Box::pin(async move {
+                    let vars = page_filters.to_vars()?;
+                    let response = client
+                        .execute::<LineageOwnerResponse>(query, Some(vars), branch.as_deref())
+                        .await?;
+                    let data = response
+                        .data
+                        .ok_or_else(|| Error::Config("missing data".to_string()))?;
+                    Ok((data, current_offset))
+                })
+            },
+        );
         let extract: BoxExtract<'a, serde_json::Value, String, (LineageOwnerResponse, i64)> = Box::new(move |(data, current_offset): (LineageOwnerResponse, i64)| -> Result<EdgePage<serde_json::Value, String>> {
             let mut items = Vec::new();
             let mut next: Option<String> = None;
@@ -178,13 +240,16 @@ impl<'a> LineageOwnerClient<'a> {
         infrahub::Paginator::new(fetch, extract)
     }
 
-    pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<serde_json::Value>> {
+    pub async fn get_by_id(
+        &self,
+        id: impl Into<String>,
+        request_branch: Option<&str>,
+    ) -> Result<Option<serde_json::Value>> {
         let mut filters = LineageOwnerFilters::default();
         filters.ids = Some(vec![id.into()]);
         let mut items = self.list(Some(filters), request_branch).await?;
         Ok(items.pop())
     }
-
 }
 
 #[derive(Debug, Clone, Default)]
@@ -239,40 +304,73 @@ impl LineageSourceFilters {
             vars.insert("any__owner__id".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.any_is_protected {
-            vars.insert("any__is_protected".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "any__is_protected".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.partial_match {
             vars.insert("partial_match".to_string(), serde_json::to_value(value)?);
         }
         if let Some(value) = &self.node_metadata_created_by_id {
-            vars.insert("node_metadata__created_by__id".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__created_by__id".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_created_by_ids {
-            vars.insert("node_metadata__created_by__ids".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__created_by__ids".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_updated_by_id {
-            vars.insert("node_metadata__updated_by__id".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__updated_by__id".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_updated_by_ids {
-            vars.insert("node_metadata__updated_by__ids".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__updated_by__ids".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_created_at {
-            vars.insert("node_metadata__created_at".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__created_at".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_created_at_before {
-            vars.insert("node_metadata__created_at__before".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__created_at__before".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_created_at_after {
-            vars.insert("node_metadata__created_at__after".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__created_at__after".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_updated_at {
-            vars.insert("node_metadata__updated_at".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__updated_at".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_updated_at_before {
-            vars.insert("node_metadata__updated_at__before".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__updated_at__before".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         if let Some(value) = &self.node_metadata_updated_at_after {
-            vars.insert("node_metadata__updated_at__after".to_string(), serde_json::to_value(value)?);
+            vars.insert(
+                "node_metadata__updated_at__after".to_string(),
+                serde_json::to_value(value)?,
+            );
         }
         Ok(Value::Object(vars))
     }
@@ -287,11 +385,23 @@ impl<'a> LineageSourceClient<'a> {
         Self { client }
     }
 
-    pub async fn list(&self, filters: Option<LineageSourceFilters>, request_branch: Option<&str>) -> Result<Vec<serde_json::Value>> {
-        let vars = filters.map(|f| f.to_vars()).transpose()?.unwrap_or_else(|| Value::Object(serde_json::Map::new()));
+    pub async fn list(
+        &self,
+        filters: Option<LineageSourceFilters>,
+        request_branch: Option<&str>,
+    ) -> Result<Vec<serde_json::Value>> {
+        let vars = filters
+            .map(|f| f.to_vars())
+            .transpose()?
+            .unwrap_or_else(|| Value::Object(serde_json::Map::new()));
         let query = r#"query LineageSource($offset: Int, $limit: Int, $order: OrderInput, $ids: [ID], $any__value: String, $any__values: [String], $any__source__id: ID, $any__owner__id: ID, $any__is_protected: Boolean, $partial_match: Boolean, $node_metadata__created_by__id: ID, $node_metadata__created_by__ids: [ID], $node_metadata__updated_by__id: ID, $node_metadata__updated_by__ids: [ID], $node_metadata__created_at: DateTime, $node_metadata__created_at__before: DateTime, $node_metadata__created_at__after: DateTime, $node_metadata__updated_at: DateTime, $node_metadata__updated_at__before: DateTime, $node_metadata__updated_at__after: DateTime) { LineageSource(offset: $offset, limit: $limit, order: $order, ids: $ids, any__value: $any__value, any__values: $any__values, any__source__id: $any__source__id, any__owner__id: $any__owner__id, any__is_protected: $any__is_protected, partial_match: $partial_match, node_metadata__created_by__id: $node_metadata__created_by__id, node_metadata__created_by__ids: $node_metadata__created_by__ids, node_metadata__updated_by__id: $node_metadata__updated_by__id, node_metadata__updated_by__ids: $node_metadata__updated_by__ids, node_metadata__created_at: $node_metadata__created_at, node_metadata__created_at__before: $node_metadata__created_at__before, node_metadata__created_at__after: $node_metadata__created_at__after, node_metadata__updated_at: $node_metadata__updated_at, node_metadata__updated_at__before: $node_metadata__updated_at__before, node_metadata__updated_at__after: $node_metadata__updated_at__after) { count edges { node_metadata { created_at updated_at } } permissions { count edges { node { kind view create update delete } } } } }"#;
-        let response = self.client.execute::<LineageSourceResponse>(query, Some(vars), request_branch).await?;
-        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let response = self
+            .client
+            .execute::<LineageSourceResponse>(query, Some(vars), request_branch)
+            .await?;
+        let data = response
+            .data
+            .ok_or_else(|| Error::Config("missing data".to_string()))?;
         let mut items = Vec::new();
         for edge in data.lineage_source.edges {
             if let Some(node) = edge.node {
@@ -301,28 +411,38 @@ impl<'a> LineageSourceClient<'a> {
         Ok(items)
     }
 
-    pub fn paginate(&self, filters: Option<LineageSourceFilters>, request_branch: Option<&str>) -> DynPaginator<'a, serde_json::Value, String, (LineageSourceResponse, i64)> {
+    pub fn paginate(
+        &self,
+        filters: Option<LineageSourceFilters>,
+        request_branch: Option<&str>,
+    ) -> DynPaginator<'a, serde_json::Value, String, (LineageSourceResponse, i64)> {
         let client = self.client;
         let base_filters = filters.unwrap_or_default();
         let request_branch = request_branch.map(|b| b.to_string());
         let query = r#"query LineageSource($offset: Int, $limit: Int, $order: OrderInput, $ids: [ID], $any__value: String, $any__values: [String], $any__source__id: ID, $any__owner__id: ID, $any__is_protected: Boolean, $partial_match: Boolean, $node_metadata__created_by__id: ID, $node_metadata__created_by__ids: [ID], $node_metadata__updated_by__id: ID, $node_metadata__updated_by__ids: [ID], $node_metadata__created_at: DateTime, $node_metadata__created_at__before: DateTime, $node_metadata__created_at__after: DateTime, $node_metadata__updated_at: DateTime, $node_metadata__updated_at__before: DateTime, $node_metadata__updated_at__after: DateTime) { LineageSource(offset: $offset, limit: $limit, order: $order, ids: $ids, any__value: $any__value, any__values: $any__values, any__source__id: $any__source__id, any__owner__id: $any__owner__id, any__is_protected: $any__is_protected, partial_match: $partial_match, node_metadata__created_by__id: $node_metadata__created_by__id, node_metadata__created_by__ids: $node_metadata__created_by__ids, node_metadata__updated_by__id: $node_metadata__updated_by__id, node_metadata__updated_by__ids: $node_metadata__updated_by__ids, node_metadata__created_at: $node_metadata__created_at, node_metadata__created_at__before: $node_metadata__created_at__before, node_metadata__created_at__after: $node_metadata__created_at__after, node_metadata__updated_at: $node_metadata__updated_at, node_metadata__updated_at__before: $node_metadata__updated_at__before, node_metadata__updated_at__after: $node_metadata__updated_at__after) { count edges { node_metadata { created_at updated_at } } permissions { count edges { node { kind view create update delete } } } } }"#;
-        let fetch: BoxFetch<'a, String, (LineageSourceResponse, i64)> = Box::new(move |cursor: Option<String>| -> BoxFutureResult<'a, (LineageSourceResponse, i64)> {
-            let mut page_filters = base_filters.clone();
-            let branch = request_branch.clone();
-            let mut current_offset: i64 = 0;
-            let base_offset = page_filters.offset.unwrap_or(0);
-            current_offset = cursor
-                .as_deref()
-                .and_then(|c| c.parse::<i64>().ok())
-                .unwrap_or(base_offset);
-            page_filters.offset = Some(current_offset);
-            Box::pin(async move {
-            let vars = page_filters.to_vars()?;
-                let response = client.execute::<LineageSourceResponse>(query, Some(vars), branch.as_deref()).await?;
-                let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
-                Ok((data, current_offset))
-            })
-        });
+        let fetch: BoxFetch<'a, String, (LineageSourceResponse, i64)> = Box::new(
+            move |cursor: Option<String>| -> BoxFutureResult<'a, (LineageSourceResponse, i64)> {
+                let mut page_filters = base_filters.clone();
+                let branch = request_branch.clone();
+                let mut current_offset: i64 = 0;
+                let base_offset = page_filters.offset.unwrap_or(0);
+                current_offset = cursor
+                    .as_deref()
+                    .and_then(|c| c.parse::<i64>().ok())
+                    .unwrap_or(base_offset);
+                page_filters.offset = Some(current_offset);
+                Box::pin(async move {
+                    let vars = page_filters.to_vars()?;
+                    let response = client
+                        .execute::<LineageSourceResponse>(query, Some(vars), branch.as_deref())
+                        .await?;
+                    let data = response
+                        .data
+                        .ok_or_else(|| Error::Config("missing data".to_string()))?;
+                    Ok((data, current_offset))
+                })
+            },
+        );
         let extract: BoxExtract<'a, serde_json::Value, String, (LineageSourceResponse, i64)> = Box::new(move |(data, current_offset): (LineageSourceResponse, i64)| -> Result<EdgePage<serde_json::Value, String>> {
             let mut items = Vec::new();
             let mut next: Option<String> = None;
@@ -339,12 +459,14 @@ impl<'a> LineageSourceClient<'a> {
         infrahub::Paginator::new(fetch, extract)
     }
 
-    pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<serde_json::Value>> {
+    pub async fn get_by_id(
+        &self,
+        id: impl Into<String>,
+        request_branch: Option<&str>,
+    ) -> Result<Option<serde_json::Value>> {
         let mut filters = LineageSourceFilters::default();
         filters.ids = Some(vec![id.into()]);
         let mut items = self.list(Some(filters), request_branch).await?;
         Ok(items.pop())
     }
-
 }
-

@@ -341,6 +341,60 @@ pub struct CoreAccountGroupResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DcimCableResponse {
+    #[serde(rename = "DcimCable")]
+    pub dcim_cable: Box<PaginatedDcimCable>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DcimDeviceResponse {
+    #[serde(rename = "DcimDevice")]
+    pub dcim_device: Box<PaginatedDcimDevice>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DcimDeviceRoleResponse {
+    #[serde(rename = "DcimDeviceRole")]
+    pub dcim_device_role: Box<PaginatedDcimDeviceRole>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DcimDeviceTypeResponse {
+    #[serde(rename = "DcimDeviceType")]
+    pub dcim_device_type: Box<PaginatedDcimDeviceType>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DcimInterfaceResponse {
+    #[serde(rename = "DcimInterface")]
+    pub dcim_interface: Box<PaginatedDcimInterface>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DcimManufacturerResponse {
+    #[serde(rename = "DcimManufacturer")]
+    pub dcim_manufacturer: Box<PaginatedDcimManufacturer>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DcimPlatformResponse {
+    #[serde(rename = "DcimPlatform")]
+    pub dcim_platform: Box<PaginatedDcimPlatform>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DcimSiteResponse {
+    #[serde(rename = "DcimSite")]
+    pub dcim_site: Box<PaginatedDcimSite>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct IpamIpAddressResponse {
+    #[serde(rename = "IpamIpAddress")]
+    pub ipam_ip_address: Box<PaginatedIpamIpAddress>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreProfileResponse {
     #[serde(rename = "CoreProfile")]
     pub core_profile: Box<PaginatedCoreProfile>,
@@ -539,6 +593,60 @@ pub struct ProfileIpamNamespaceResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileDcimCableResponse {
+    #[serde(rename = "ProfileDcimCable")]
+    pub profile_dcim_cable: Box<PaginatedProfileDcimCable>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileDcimDeviceResponse {
+    #[serde(rename = "ProfileDcimDevice")]
+    pub profile_dcim_device: Box<PaginatedProfileDcimDevice>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileDcimDeviceRoleResponse {
+    #[serde(rename = "ProfileDcimDeviceRole")]
+    pub profile_dcim_device_role: Box<PaginatedProfileDcimDeviceRole>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileDcimDeviceTypeResponse {
+    #[serde(rename = "ProfileDcimDeviceType")]
+    pub profile_dcim_device_type: Box<PaginatedProfileDcimDeviceType>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileDcimInterfaceResponse {
+    #[serde(rename = "ProfileDcimInterface")]
+    pub profile_dcim_interface: Box<PaginatedProfileDcimInterface>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileDcimManufacturerResponse {
+    #[serde(rename = "ProfileDcimManufacturer")]
+    pub profile_dcim_manufacturer: Box<PaginatedProfileDcimManufacturer>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileDcimPlatformResponse {
+    #[serde(rename = "ProfileDcimPlatform")]
+    pub profile_dcim_platform: Box<PaginatedProfileDcimPlatform>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileDcimSiteResponse {
+    #[serde(rename = "ProfileDcimSite")]
+    pub profile_dcim_site: Box<PaginatedProfileDcimSite>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileIpamIpAddressResponse {
+    #[serde(rename = "ProfileIpamIpAddress")]
+    pub profile_ipam_ip_address: Box<PaginatedProfileIpamIpAddress>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ProfileBuiltinIPPrefixResponse {
     #[serde(rename = "ProfileBuiltinIPPrefix")]
     pub profile_builtin_ip_prefix: Box<PaginatedProfileBuiltinIPPrefix>,
@@ -599,9 +707,21 @@ pub struct InfrahubIPPrefixGetNextAvailableResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InfrahubPathTraversalResponse {
+    #[serde(rename = "InfrahubPathTraversal")]
+    pub infrahub_path_traversal: Box<PathTraversalResultType>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreProposedChangeAvailableActionsResponse {
     #[serde(rename = "CoreProposedChangeAvailableActions")]
     pub core_proposed_change_available_actions: Box<AvailableActions>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InfrahubReachableNodesResponse {
+    #[serde(rename = "InfrahubReachableNodes")]
+    pub infrahub_reachable_nodes: Box<ReachableNodesResultType>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -669,4 +789,3 @@ pub struct InfrahubEventResponse {
     #[serde(rename = "InfrahubEvent")]
     pub infrahub_event: Box<Events>,
 }
-

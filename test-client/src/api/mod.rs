@@ -4,6 +4,7 @@ use infrahub::Client;
 
 pub mod builtin;
 pub mod core;
+pub mod dcim;
 pub mod ipam;
 pub mod lineage;
 pub mod profile;
@@ -28,6 +29,9 @@ impl<'a> Api<'a> {
     }
     pub fn core(&self) -> core::CoreApi<'a> {
         core::CoreApi::new(self.client)
+    }
+    pub fn dcim(&self) -> dcim::DcimApi<'a> {
+        dcim::DcimApi::new(self.client)
     }
     pub fn ipam(&self) -> ipam::IpamApi<'a> {
         ipam::IpamApi::new(self.client)

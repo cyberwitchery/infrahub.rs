@@ -316,6 +316,16 @@ fn render_lib() -> String {
     out
 }
 
+/// emit a struct field, prefixed with `#[serde(rename = "...")]` when the rust
+/// identifier diverges from the schema field name.
+fn push_struct_field(out: &mut String, schema_name: &str, ty: &str) {
+    let rust_name = to_rust_field(schema_name);
+    if rust_name != schema_name {
+        out.push_str(&format!("    #[serde(rename = \"{}\")]\n", schema_name));
+    }
+    out.push_str(&format!("    pub {}: {},\n", rust_name, ty));
+}
+
 fn render_types(ctx: &SchemaContext) -> String {
     let mut out = String::new();
     out.push_str("//! generated types\n\n");
@@ -348,12 +358,8 @@ fn render_types(ctx: &SchemaContext) -> String {
                 if should_skip_field(field) {
                     continue;
                 }
-                let rust_name = to_rust_field(field.name.as_str());
                 let ty = rust_type(&field.field_type, ctx, false);
-                if rust_name != field.name {
-                    out.push_str(&format!("    #[serde(rename = \"{}\")]\n", field.name));
-                }
-                out.push_str(&format!("    pub {}: {},\n", rust_name, ty));
+                push_struct_field(&mut out, field.name.as_str(), &ty);
             }
             out.push_str("}\n\n");
         }
@@ -383,12 +389,8 @@ fn render_inputs(ctx: &SchemaContext) -> String {
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
             out.push_str(&format!("pub struct {} {{\n", name));
             for field in fields {
-                let rust_name = to_rust_field(field.name.as_str());
                 let ty = rust_type(&field.value_type, ctx, true);
-                if rust_name != field.name {
-                    out.push_str(&format!("    #[serde(rename = \"{}\")]\n", field.name));
-                }
-                out.push_str(&format!("    pub {}: {},\n", rust_name, ty));
+                push_struct_field(&mut out, field.name.as_str(), &ty);
             }
             out.push_str("}\n\n");
         }
@@ -413,12 +415,8 @@ fn render_responses(ctx: &SchemaContext) -> String {
             let resp_name = format!("{}Response", to_rust_ident(field.name.as_str()));
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
             out.push_str(&format!("pub struct {} {{\n", resp_name));
-            let rust_name = to_rust_field(field.name.as_str());
             let ty = rust_type(&field.field_type, ctx, false);
-            if rust_name != field.name {
-                out.push_str(&format!("    #[serde(rename = \"{}\")]\n", field.name));
-            }
-            out.push_str(&format!("    pub {}: {},\n", rust_name, ty));
+            push_struct_field(&mut out, field.name.as_str(), &ty);
             out.push_str("}\n\n");
         }
     }
@@ -429,12 +427,8 @@ fn render_responses(ctx: &SchemaContext) -> String {
                 let resp_name = format!("{}Response", to_rust_ident(field.name.as_str()));
                 out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
                 out.push_str(&format!("pub struct {} {{\n", resp_name));
-                let rust_name = to_rust_field(field.name.as_str());
                 let ty = rust_type(&field.field_type, ctx, false);
-                if rust_name != field.name {
-                    out.push_str(&format!("    #[serde(rename = \"{}\")]\n", field.name));
-                }
-                out.push_str(&format!("    pub {}: {},\n", rust_name, ty));
+                push_struct_field(&mut out, field.name.as_str(), &ty);
                 out.push_str("}\n\n");
             }
         }

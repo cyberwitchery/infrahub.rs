@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- honor a server `Retry-After` response header (in seconds) on retryable responses, capping the delay at the existing 30s backoff ceiling; HTTP-date and non-integer values fall back to exponential backoff
 - ci: bump pinned Infrahub version from 1.9.8 to 1.10.0; regenerate the `test-client` bindings against the 1.10.0 schema (adds a `dcim` api module and the 1.10.0 event types) and update the compat table
 
 ## 0.4.1 - 2026-07-05

@@ -102,8 +102,12 @@ impl Client {
             async move {
                 let response = self.http.post(url).json(&body).send().await?;
                 let status = response.status();
+                let retry_after = parse_retry_after(response.headers());
                 let text = response.text().await?;
-                parse_graphql_response(status, text)
+                parse_graphql_response(status, text).map_err(|e| RetryError {
+                    inner: e,
+                    retry_after,
+                })
             }
         })
         .await
@@ -126,8 +130,12 @@ impl Client {
             async move {
                 let response = self.http.get(url).send().await?;
                 let status = response.status();
+                let retry_after = parse_retry_after(response.headers());
                 let text = response.text().await?;
-                parse_schema_response(status, text)
+                parse_schema_response(status, text).map_err(|e| RetryError {
+                    inner: e,
+                    retry_after,
+                })
             }
         })
         .await
@@ -159,8 +167,12 @@ impl Client {
                 let form = build_multipart_form(query, variables, files_for_attempt)?;
                 let response = self.http.post(url).multipart(form).send().await?;
                 let status = response.status();
+                let retry_after = parse_retry_after(response.headers());
                 let text = response.text().await?;
-                parse_graphql_response(status, text)
+                parse_graphql_response(status, text).map_err(|e| RetryError {
+                    inner: e,
+                    retry_after,
+                })
             }
         })
         .await
@@ -201,12 +213,16 @@ impl Client {
                 let response = self.http.get(url).send().await?;
                 if !response.status().is_success() {
                     let status = response.status();
+                    let retry_after = parse_retry_after(response.headers());
                     let body = response.text().await?;
-                    return Err(Error::GraphQl {
-                        status: Some(status.as_u16()),
-                        errors: Vec::new(),
-                        body,
-                        message: format!("file download error: {status}"),
+                    return Err(RetryError {
+                        inner: Error::GraphQl {
+                            status: Some(status.as_u16()),
+                            errors: Vec::new(),
+                            body,
+                            message: format!("file download error: {status}"),
+                        },
+                        retry_after,
                     });
                 }
                 Ok(response.bytes().await?.to_vec())
@@ -220,23 +236,28 @@ impl Client {
     async fn retry_loop<T, F, Fut>(&self, mut operation: F) -> Result<T>
     where
         F: FnMut() -> Fut,
-        Fut: Future<Output = Result<T>>,
+        Fut: Future<Output = std::result::Result<T, RetryError>>,
     {
         let mut attempts = 0;
         loop {
-            let result = operation().await;
-            match result {
+            match operation().await {
                 Ok(value) => return Ok(value),
-                Err(err) => {
-                    if attempts >= self.config.max_retries || !err.is_retryable() {
-                        return Err(err);
+                Err(retry_err) => {
+                    if attempts >= self.config.max_retries || !retry_err.inner.is_retryable() {
+                        return Err(retry_err.inner);
                     }
                     attempts += 1;
-                    let delay = Self::retry_delay(attempts);
+                    let delay = Self::next_delay(attempts, retry_err.retry_after);
                     sleep(delay).await;
                 }
             }
         }
+    }
+
+    fn next_delay(attempt: u32, hint: Option<Duration>) -> Duration {
+        // clamp a server hint to the backoff ceiling so a huge Retry-After can't stall the client
+        hint.map(|d| d.min(RETRY_MAX_BACKOFF))
+            .unwrap_or_else(|| Self::retry_delay(attempt))
     }
 
     fn retry_delay(attempt: u32) -> Duration {
@@ -263,6 +284,36 @@ impl Client {
             .unwrap_or_else(|_| std::process::id() as u64);
         nanos.wrapping_mul(31).wrapping_add(attempt as u64)
     }
+}
+
+struct RetryError {
+    inner: Error,
+    retry_after: Option<Duration>,
+}
+
+impl From<Error> for RetryError {
+    fn from(inner: Error) -> Self {
+        RetryError {
+            inner,
+            retry_after: None,
+        }
+    }
+}
+
+impl From<reqwest::Error> for RetryError {
+    fn from(err: reqwest::Error) -> Self {
+        RetryError {
+            inner: Error::from(err),
+            retry_after: None,
+        }
+    }
+}
+
+// only the delta-seconds form is parsed; http-date and non-integer values fall back to backoff (no date dependency)
+fn parse_retry_after(headers: &HeaderMap) -> Option<Duration> {
+    let value = headers.get(reqwest::header::RETRY_AFTER)?;
+    let seconds: u64 = value.to_str().ok()?.trim().parse().ok()?;
+    Some(Duration::from_secs(seconds))
 }
 
 fn parse_graphql_response<T: DeserializeOwned>(
@@ -935,6 +986,88 @@ mod tests {
         assert_ne!(s1, s2, "jitter seed should differ across attempts");
     }
 
+    fn headers_with_retry_after(value: &str) -> HeaderMap {
+        let mut headers = HeaderMap::new();
+        headers.insert(
+            reqwest::header::RETRY_AFTER,
+            HeaderValue::from_str(value).unwrap(),
+        );
+        headers
+    }
+
+    #[test]
+    fn test_parse_retry_after_valid_seconds() {
+        assert_eq!(
+            parse_retry_after(&headers_with_retry_after("5")),
+            Some(Duration::from_secs(5))
+        );
+        assert_eq!(
+            parse_retry_after(&headers_with_retry_after("0")),
+            Some(Duration::from_secs(0))
+        );
+    }
+
+    #[test]
+    fn test_parse_retry_after_trims_whitespace() {
+        assert_eq!(
+            parse_retry_after(&headers_with_retry_after("  10 ")),
+            Some(Duration::from_secs(10))
+        );
+    }
+
+    #[test]
+    fn test_parse_retry_after_absent_is_none() {
+        assert_eq!(parse_retry_after(&HeaderMap::new()), None);
+    }
+
+    #[test]
+    fn test_parse_retry_after_non_integer_is_none() {
+        assert_eq!(parse_retry_after(&headers_with_retry_after("")), None);
+        assert_eq!(parse_retry_after(&headers_with_retry_after("soon")), None);
+        assert_eq!(
+            parse_retry_after(&headers_with_retry_after("Wed, 21 Oct 2015 07:28:00 GMT")),
+            None
+        );
+    }
+
+    #[test]
+    fn test_parse_retry_after_large_value_returned_raw() {
+        assert_eq!(
+            parse_retry_after(&headers_with_retry_after("100000")),
+            Some(Duration::from_secs(100_000))
+        );
+    }
+
+    #[test]
+    fn test_next_delay_uses_hint_capped_at_max() {
+        assert_eq!(
+            Client::next_delay(1, Some(Duration::from_secs(5))),
+            Duration::from_secs(5)
+        );
+        assert_eq!(
+            Client::next_delay(1, Some(Duration::from_secs(100_000))),
+            RETRY_MAX_BACKOFF
+        );
+    }
+
+    #[test]
+    fn test_next_delay_hint_overrides_backoff() {
+        assert_eq!(
+            Client::next_delay(20, Some(Duration::from_secs(1))),
+            Duration::from_secs(1)
+        );
+    }
+
+    #[test]
+    fn test_next_delay_without_hint_falls_back_to_backoff() {
+        assert_eq!(Client::next_delay(0, None), Duration::from_millis(0));
+        let delay1 = Client::next_delay(1, None).as_millis();
+        assert!(
+            (200..=250).contains(&delay1),
+            "attempt 1 backoff {delay1}ms outside expected 200..=250"
+        );
+    }
+
     #[cfg_attr(miri, ignore)]
     #[tokio::test]
     async fn test_retry_loop_succeeds_after_transient_errors() {
@@ -953,7 +1086,8 @@ mod tests {
                             errors: vec![],
                             body: String::new(),
                             message: "service unavailable".to_string(),
-                        })
+                        }
+                        .into())
                     } else {
                         Ok("ok".to_string())
                     }
@@ -985,7 +1119,8 @@ mod tests {
                         errors: vec![],
                         body: String::new(),
                         message: "server error".to_string(),
-                    })
+                    }
+                    .into())
                 }
             })
             .await;
@@ -1014,7 +1149,8 @@ mod tests {
                         errors: vec![],
                         body: String::new(),
                         message: "bad request".to_string(),
-                    })
+                    }
+                    .into())
                 }
             })
             .await;
@@ -1043,7 +1179,8 @@ mod tests {
                         errors: vec![],
                         body: String::new(),
                         message: "service unavailable".to_string(),
-                    })
+                    }
+                    .into())
                 }
             })
             .await;

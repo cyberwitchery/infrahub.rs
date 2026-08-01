@@ -39,7 +39,7 @@ pub struct ClientConfig {
     /// additional headers to send with every request
     pub(crate) extra_headers: HeaderMap,
 
-    /// prebuilt http client (takes precedence over http_client_builder)
+    /// prebuilt http client
     pub(crate) http_client: Option<reqwest::Client>,
 
     /// callback to customize the http client builder before building
@@ -192,7 +192,6 @@ impl ClientConfig {
             )));
         }
 
-        // token is only required when the client is not managing its own transport
         if self.http_client.is_none() && self.token.is_empty() {
             return Err(Error::Config("api token cannot be empty".to_string()));
         }
@@ -200,8 +199,8 @@ impl ClientConfig {
         Ok(())
     }
 
-    /// resolve the effective branch: use the explicit argument if non-empty,
-    /// fall back to `default_branch`, or return `None`.
+    /// resolve the effective branch: explicit argument wins over `default_branch`;
+    /// an empty value (explicit or default) means no branch.
     fn resolve_branch(&self, branch: Option<&str>) -> Option<String> {
         branch
             .map(|b| b.to_string())
@@ -358,7 +357,6 @@ mod tests {
         let empty_token = ClientConfig::new("https://infrahub.example.com", "");
         assert!(empty_token.validate().is_err());
 
-        // empty token is allowed when a prebuilt client handles auth
         let empty_token_prebuilt = ClientConfig::new("https://infrahub.example.com", "")
             .with_http_client(reqwest::Client::new());
         assert!(empty_token_prebuilt.validate().is_ok());

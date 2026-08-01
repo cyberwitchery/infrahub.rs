@@ -39,7 +39,7 @@ pub type BoxFetch<'a, C, R> = Box<dyn FnMut(Option<C>) -> BoxFutureResult<'a, R>
 /// boxed extract callback used by [`DynPaginator`]
 pub type BoxExtract<'a, T, C, R> = Box<dyn FnMut(R) -> Result<EdgePage<T, C>> + 'a>;
 
-/// type-erased paginator for ergonomic API surfaces that cannot expose closure types.
+/// type-erased paginator for ergonomic api surfaces that cannot expose closure types.
 pub type DynPaginator<'a, T, C, R> =
     Paginator<T, C, R, BoxFetch<'a, C, R>, BoxFutureResult<'a, R>, BoxExtract<'a, T, C, R>>;
 

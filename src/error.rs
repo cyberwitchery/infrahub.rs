@@ -53,8 +53,9 @@ impl Error {
 
     /// true if the error is transient and the request may succeed on retry
     ///
-    /// auth errors, config errors, and parse errors are permanent.
-    /// server errors (5xx), rate limits (429), and network errors are retryable.
+    /// config, url, and parse errors are permanent. http errors retry on
+    /// any 5xx, 429, and network-level failures; graphql errors retry only
+    /// on 429, 500, 502, 503, and 504.
     pub fn is_retryable(&self) -> bool {
         match self {
             Error::Config(_) | Error::Url(_) | Error::Json(_) => false,

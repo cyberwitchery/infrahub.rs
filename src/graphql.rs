@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 /// graphql response wrapper
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GraphQlResponse<T> {
-    /// response data or null if errors
+    /// response data (may be absent when errors are present)
     pub data: Option<T>,
     /// graphql errors array
     #[serde(default)]

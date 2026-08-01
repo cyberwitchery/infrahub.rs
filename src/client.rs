@@ -25,6 +25,9 @@ const RETRY_MAX_JITTER_MS: u64 = 500;
 const RETRY_MAX_BACKOFF: Duration = Duration::from_secs(30);
 
 /// graphql client for infrahub
+///
+/// all requests go through a retry loop (transient network errors, 429,
+/// and retryable 5xx, with backoff).
 #[derive(Clone)]
 pub struct Client {
     config: Arc<ClientConfig>,
@@ -74,7 +77,7 @@ impl Client {
         &self.config
     }
 
-    /// execute a raw graphql query and return the untyped json response, retrying on transient errors
+    /// execute a raw graphql query and return the untyped json response
     pub async fn execute_raw(
         &self,
         query: &str,
@@ -84,7 +87,7 @@ impl Client {
         self.execute(query, variables, branch).await
     }
 
-    /// execute a graphql query and deserialize into a typed response, retrying on transient errors
+    /// execute a graphql query and deserialize into a typed response
     pub async fn execute<T: DeserializeOwned>(
         &self,
         query: &str,
@@ -113,7 +116,7 @@ impl Client {
         .await
     }
 
-    /// execute a generated operation by name, retrying on transient errors
+    /// execute a generated operation by name
     pub async fn execute_operation<O: Operation>(
         &self,
         variables: Option<serde_json::Value>,
@@ -142,8 +145,7 @@ impl Client {
     }
 
     /// execute a graphql mutation with file uploads per the
-    /// [graphql multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec),
-    /// retrying on transient errors.
+    /// [graphql multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
     ///
     /// `files` maps variable paths (e.g. `"file"`) to [`FileUpload`] values.
     pub async fn execute_multipart<T: DeserializeOwned>(

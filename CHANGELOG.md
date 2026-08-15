@@ -3,7 +3,7 @@
 ## Unreleased
 
 - ci: bump pinned Infrahub version from 1.10.0 to 1.10.6, refresh the schema snapshot, regenerate `test-client`
-- schema: the 1.10.0 snapshot came from an instance with a demo schema loaded; the stock snapshot drops its `Dcim*` and `IpamIpAddress` nodes, and with them the generated `dcim` api module
+- schema: drop the `Dcim*` and `IpamIpAddress` nodes and the generated `dcim` api module, which are not part of stock Infrahub
 - tests: re-enable the three `CoreAccount` smoke tests, ignored on 1.9.x for an upstream resolver race that no longer reproduces
 
 ## 0.4.2 - 2026-08-07

@@ -7,6 +7,7 @@ series is inferred from the absence of breaking api changes in that range.
 | infrahub | infrahub upstream | notes                                |
 |----------|-------------------|--------------------------------------|
 | main     | 1.10.x            | CI pinned to v1.10.6                 |
+| 0.4.2    | 1.10.x            | CI pinned to v1.10.0                 |
 | 0.4.1    | 1.9.x             | CI pinned to v1.9.8                  |
 | 0.4.0    | 1.9.x             | CI pinned to v1.9.6                  |
 | 0.3.0    | 1.9.x             | CI pinned to v1.9.3                  |

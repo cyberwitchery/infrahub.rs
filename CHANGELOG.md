@@ -3,7 +3,7 @@
 ## Unreleased
 
 - ci: bump pinned Infrahub version from 1.10.0 to 1.10.6, refresh the schema snapshot, regenerate `test-client`
-- schema: the 1.10.0 snapshot was taken against an instance with a demo schema loaded; the stock 1.10.6 snapshot drops the `Dcim*` and `IpamIpAddress` nodes it picked up, and with them the generated `dcim` api module. 1.10 adds the `CoreIPPool` interface, the group auto-create event types, and the path-traversal / reachable-nodes queries
+- schema: the 1.10.0 snapshot came from an instance with a demo schema loaded; the stock snapshot drops its `Dcim*` and `IpamIpAddress` nodes, and with them the generated `dcim` api module
 - tests: re-enable the three `CoreAccount` smoke tests, ignored on 1.9.x for an upstream resolver race that no longer reproduces
 
 ## 0.4.2 - 2026-08-07

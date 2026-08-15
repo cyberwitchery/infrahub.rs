@@ -57,17 +57,14 @@ async fn delete_tag(client: &Client, id: &str) {
 // ---------------------------------------------------------------------------
 // CoreAccount — guaranteed to exist in a fresh infrahub (admin user)
 //
-// These tests are ignored because Infrahub 1.9.x has a race condition in the
-// is_externally_managed_resolver: the resolver does a NodeManager.query per
-// account node and concurrent GraphQL resolution triggers "read() called while
-// another coroutine is already waiting for incoming data". Since the generated
-// CoreAccount query now includes is_externally_managed in its selection set,
-// all account queries can hit this upstream bug.
-//
-// TODO: re-enable when Infrahub fixes the resolver (still present in 1.9.8).
+// These were ignored on 1.9.x, where the is_externally_managed_resolver did a
+// NodeManager.query per account node and concurrent GraphQL resolution
+// triggered "read() called while another coroutine is already waiting for
+// incoming data". The generated CoreAccount query selects
+// is_externally_managed, so every account query could hit it. Fixed upstream;
+// verified against 1.10.6.
 // ---------------------------------------------------------------------------
 
-#[ignore = "Infrahub 1.9.x is_externally_managed_resolver race condition"]
 #[cfg_attr(miri, ignore)]
 #[tokio::test]
 async fn account_list_returns_admin() {
@@ -100,7 +97,6 @@ async fn account_list_returns_admin() {
     assert!(!admin.id.is_empty());
 }
 
-#[ignore = "Infrahub 1.9.x is_externally_managed_resolver race condition"]
 #[cfg_attr(miri, ignore)]
 #[tokio::test]
 async fn account_get_by_id() {
@@ -128,7 +124,6 @@ async fn account_get_by_id() {
     assert_eq!(found.id, first.id);
 }
 
-#[ignore = "Infrahub 1.9.x is_externally_managed_resolver race condition"]
 #[cfg_attr(miri, ignore)]
 #[tokio::test]
 async fn account_paginate() {

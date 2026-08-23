@@ -5,6 +5,8 @@
 - ci: bump pinned Infrahub version from 1.10.0 to 1.10.6, refresh the schema snapshot, regenerate `test-client`
 - schema: drop the `Dcim*` and `IpamIpAddress` nodes and the generated `dcim` api module, which are not part of stock Infrahub
 - tests: re-enable the three `CoreAccount` smoke tests
+- fix: `Paginator` now returns an error instead of walking forever when a server keeps handing back the cursor it was just given, which previously grew the collected result without bound
+- add `Paginator::with_max_pages` to bound how many pages a walk may fetch; unset by default, and exceeding it is an error rather than a silently truncated result
 
 ## 0.4.2 - 2026-08-07
 

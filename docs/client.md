@@ -268,6 +268,10 @@ Ok(())
 # }
 ```
 
+a server that keeps returning the cursor it was just given fails the walk with `Error::PaginationStalled`.
+`Paginator::with_max_pages(n)` bounds the walk further, failing with `Error::PaginationLimit` once more than
+`n` pages are asked for.
+
 ## codegen
 
 generate a full typed client from a schema snapshot:

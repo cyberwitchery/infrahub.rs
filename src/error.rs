@@ -1,6 +1,6 @@
 //! error types
 //!
-//! structured errors for config, http, json, and graphql responses.
+//! structured errors for config, http, json, pagination, and graphql responses.
 
 use crate::graphql::GraphQlError;
 use std::fmt;
@@ -25,6 +25,18 @@ pub enum Error {
 
     #[error("json error: {0}")]
     Json(#[from] serde_json::Error),
+
+    #[error("pagination error: server repeated cursor after {pages} page(s)")]
+    PaginationStalled {
+        /// pages fetched before the cursor stopped advancing
+        pages: usize,
+    },
+
+    #[error("pagination error: exceeded max_pages limit of {max_pages}")]
+    PaginationLimit {
+        /// configured page ceiling
+        max_pages: usize,
+    },
 
     #[error("graphql error: {message}")]
     GraphQl {
@@ -58,7 +70,11 @@ impl Error {
     /// on 429, 500, 502, 503, and 504.
     pub fn is_retryable(&self) -> bool {
         match self {
-            Error::Config(_) | Error::Url(_) | Error::Json(_) => false,
+            Error::Config(_)
+            | Error::Url(_)
+            | Error::Json(_)
+            | Error::PaginationStalled { .. }
+            | Error::PaginationLimit { .. } => false,
             Error::Http(err) => {
                 if err.is_timeout() || err.is_connect() {
                     return true;
@@ -156,6 +172,26 @@ mod tests {
                 "status {status} should not be retryable"
             );
         }
+    }
+
+    #[test]
+    fn test_pagination_errors_not_retryable() {
+        assert!(!Error::PaginationStalled { pages: 3 }.is_retryable());
+        assert!(!Error::PaginationLimit { max_pages: 10 }.is_retryable());
+        assert!(!Error::PaginationStalled { pages: 3 }.is_auth_error());
+        assert!(!Error::PaginationLimit { max_pages: 10 }.is_auth_error());
+    }
+
+    #[test]
+    fn test_pagination_error_messages() {
+        assert_eq!(
+            Error::PaginationStalled { pages: 4 }.to_string(),
+            "pagination error: server repeated cursor after 4 page(s)"
+        );
+        assert_eq!(
+            Error::PaginationLimit { max_pages: 7 }.to_string(),
+            "pagination error: exceeded max_pages limit of 7"
+        );
     }
 
     #[test]

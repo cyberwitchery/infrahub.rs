@@ -3,8 +3,12 @@
 //! generic paginator for connection-style graphql results.
 
 use crate::error::{Error, Result};
+use std::collections::VecDeque;
 use std::future::Future;
 use std::pin::Pin;
+
+/// how many already-used cursors the stall guard keeps to compare against
+const CURSOR_WINDOW: usize = 16;
 
 /// a single page of connection results
 #[derive(Debug, Clone)]
@@ -26,6 +30,7 @@ where
     fetch: Fetch,
     extract: Extract,
     cursor: Option<C>,
+    recent: VecDeque<C>,
     done: bool,
     pages_fetched: usize,
     max_pages: Option<usize>,
@@ -58,6 +63,7 @@ where
             fetch,
             extract,
             cursor: None,
+            recent: VecDeque::new(),
             done: false,
             pages_fetched: 0,
             max_pages: None,
@@ -84,10 +90,13 @@ where
 {
     /// fetch the next page of results
     ///
-    /// fails with [`Error::PaginationStalled`] if the server hands back the
-    /// cursor it was just given, and with [`Error::PaginationLimit`] if
-    /// [`Paginator::with_max_pages`] is exceeded. both end the walk: later
-    /// calls return `Ok(None)` without another fetch.
+    /// fails with [`Error::PaginationStalled`] if the page carries a cursor the
+    /// walk already used within the last 16 fetches. that catches a server
+    /// repeating one cursor and a server cycling through up to 16 of them; a
+    /// cycle longer than the window is not detected and is bounded only by
+    /// [`Paginator::with_max_pages`], which fails with
+    /// [`Error::PaginationLimit`] once exceeded. both errors end the walk:
+    /// later calls return `Ok(None)` without another fetch.
     pub async fn next_page(&mut self) -> Result<Option<Vec<T>>> {
         if self.done {
             return Ok(None);
@@ -103,11 +112,20 @@ where
         let page = (self.extract)(response)?;
         self.pages_fetched += 1;
 
-        if page.next_cursor.is_some() && page.next_cursor == self.cursor {
-            self.done = true;
-            return Err(Error::PaginationStalled {
-                pages: self.pages_fetched,
-            });
+        if let Some(used) = self.cursor.clone() {
+            if self.recent.len() == CURSOR_WINDOW {
+                self.recent.pop_front();
+            }
+            self.recent.push_back(used);
+        }
+
+        if let Some(next) = page.next_cursor.as_ref() {
+            if self.recent.contains(next) {
+                self.done = true;
+                return Err(Error::PaginationStalled {
+                    pages: self.pages_fetched - 1,
+                });
+            }
         }
 
         self.cursor = page.next_cursor.clone();
@@ -120,7 +138,8 @@ where
 
     /// fetch all pages and return a single collection
     ///
-    /// unbounded unless [`Paginator::with_max_pages`] is set.
+    /// unbounded unless [`Paginator::with_max_pages`] is set: the stall guard
+    /// on [`Paginator::next_page`] ends a short cursor cycle, not a long one.
     pub async fn collect_all(mut self) -> Result<Vec<T>> {
         let mut items = Vec::new();
         while let Some(page) = self.next_page().await? {
@@ -292,7 +311,7 @@ mod tests {
             .await
             .unwrap_err();
 
-        assert!(matches!(err, Error::PaginationStalled { pages: 2 }));
+        assert!(matches!(err, Error::PaginationStalled { pages: 1 }));
         assert_eq!(*calls.lock().unwrap(), 2);
     }
 
@@ -321,10 +340,98 @@ mod tests {
         assert_eq!(paginator.next_page().await.unwrap().unwrap(), vec![7]);
         assert!(matches!(
             paginator.next_page().await.unwrap_err(),
-            Error::PaginationStalled { pages: 2 }
+            Error::PaginationStalled { pages: 1 }
         ));
         assert!(paginator.next_page().await.unwrap().is_none());
         assert_eq!(*calls.lock().unwrap(), 2);
+    }
+
+    async fn walk_cursor_cycle(
+        period: usize,
+        max_pages: Option<usize>,
+        ceiling: u32,
+    ) -> (Error, u32) {
+        let calls: Arc<Mutex<u32>> = Arc::new(Mutex::new(0));
+        let calls_fetch = calls.clone();
+
+        let fetch = move |cursor: Option<String>| {
+            let calls = calls_fetch.clone();
+            async move {
+                let mut count = calls.lock().unwrap();
+                *count += 1;
+                assert!(*count <= ceiling, "paginator kept walking a {period}-cycle");
+                let next = match cursor {
+                    None => 0,
+                    Some(ref c) => {
+                        (c.trim_start_matches('c').parse::<usize>().unwrap() + 1) % period
+                    }
+                };
+                Ok(EdgePage {
+                    nodes: vec![1],
+                    next_cursor: Some(format!("c{next}")),
+                })
+            }
+        };
+        let extract = |page: EdgePage<i32, String>| Ok(page);
+
+        let mut paginator = Paginator::new(fetch, extract);
+        if let Some(max_pages) = max_pages {
+            paginator = paginator.with_max_pages(max_pages);
+        }
+        let err = paginator.collect_all().await.unwrap_err();
+        let count = *calls.lock().unwrap();
+        (err, count)
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_alternating_cursor_errors_instead_of_looping() {
+        let (err, calls) = walk_cursor_cycle(2, None, 8).await;
+
+        assert!(matches!(err, Error::PaginationStalled { pages: 2 }));
+        assert_eq!(calls, 3);
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_cycle_at_documented_window_boundary_is_caught() {
+        let (err, calls) = walk_cursor_cycle(16, None, 20).await;
+
+        assert!(matches!(err, Error::PaginationStalled { pages: 16 }));
+        assert_eq!(calls, 17);
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_cycle_past_documented_window_is_bounded_only_by_max_pages() {
+        let (err, calls) = walk_cursor_cycle(17, Some(48), 52).await;
+
+        assert!(matches!(err, Error::PaginationLimit { max_pages: 48 }));
+        assert_eq!(calls, 48);
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_long_walk_of_distinct_cursors_never_stalls() {
+        let total = CURSOR_WINDOW * 8;
+
+        let fetch = move |cursor: Option<String>| async move {
+            let n = match cursor {
+                None => 0usize,
+                Some(ref c) => c.trim_start_matches('c').parse::<usize>().unwrap(),
+            };
+            Ok(EdgePage {
+                nodes: vec![n as i32],
+                next_cursor: (n + 1 < total).then(|| format!("c{}", n + 1)),
+            })
+        };
+        let extract = |page: EdgePage<i32, String>| Ok(page);
+
+        let items = Paginator::new(fetch, extract).collect_all().await.unwrap();
+
+        assert_eq!(items.len(), total);
+        assert_eq!(items.first(), Some(&0));
+        assert_eq!(items.last(), Some(&(total as i32 - 1)));
     }
 
     #[cfg_attr(miri, ignore)]

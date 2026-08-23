@@ -12,7 +12,11 @@ const RETRYABLE_STATUSES: &[u16] = &[429, 500, 502, 503, 504];
 pub type Result<T> = std::result::Result<T, Error>;
 
 /// error type for client and codegen helpers
+///
+/// non-exhaustive: match on it with a wildcard arm, since later releases may
+/// add variants.
 #[derive(Debug, thiserror::Error)]
+#[non_exhaustive]
 pub enum Error {
     #[error("config error: {0}")]
     Config(String),
@@ -28,7 +32,7 @@ pub enum Error {
 
     #[error("pagination error: server repeated cursor after {pages} page(s)")]
     PaginationStalled {
-        /// pages fetched before the cursor stopped advancing
+        /// pages handed to the caller before the repeated cursor arrived
         pages: usize,
     },
 

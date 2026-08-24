@@ -1,6 +1,6 @@
 # changelog
 
-## Unreleased
+## 0.4.3 - 2026-08-24
 
 - ci: bump pinned Infrahub version from 1.10.0 to 1.10.6, refresh the schema snapshot, regenerate `test-client`
 - schema: drop the `Dcim*` and `IpamIpAddress` nodes and the generated `dcim` api module, which are not part of stock Infrahub

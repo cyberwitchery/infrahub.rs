@@ -5,9 +5,9 @@
 - ci: bump pinned Infrahub version from 1.10.0 to 1.10.6, refresh the schema snapshot, regenerate `test-client`
 - schema: drop the `Dcim*` and `IpamIpAddress` nodes and the generated `dcim` api module, which are not part of stock Infrahub
 - tests: re-enable the three `CoreAccount` smoke tests
-- fix: breaking change to `Paginator` — `next_page` and `collect_all` now require `C: PartialEq` on the cursor type, and a walk fails with `Error::PaginationStalled` when a page carries a cursor the walk already used within its last 16 fetches, instead of growing the collected result without bound. a cursor cycle longer than that window is still bounded only by `Paginator::with_max_pages`
+- fix: a paginated walk now fails with `Error::PaginationStalled` when a page carries a cursor the walk already used within its last 16 fetches, instead of collecting the same pages without bound; a cursor cycle longer than that window is bounded only by `Paginator::with_max_pages`. `next_page` and `collect_all` compare cursors, so they require `C: PartialEq`
 - add `Paginator::with_max_pages` to bound how many pages a walk may fetch; unset by default, and exceeding it is an error rather than a silently truncated result
-- breaking change to `Error`: adds the `PaginationStalled` and `PaginationLimit` variants and marks the enum `#[non_exhaustive]`, so a downstream exhaustive `match` now needs a wildcard arm and later variants will not be breaking
+- add the `Error::PaginationStalled` and `Error::PaginationLimit` variants; neither is classified retryable
 
 ## 0.4.2 - 2026-08-07
 

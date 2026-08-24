@@ -268,6 +268,11 @@ Ok(())
 # }
 ```
 
+a page carrying a cursor the walk already used within its last 16 fetches fails with
+`Error::PaginationStalled`. that covers a server repeating one cursor and a server cycling through up to 16
+of them; a cycle longer than that window is not detected. `Paginator::with_max_pages(n)` is the only bound on
+such a walk, failing with `Error::PaginationLimit` once more than `n` pages are asked for.
+
 ## codegen
 
 generate a full typed client from a schema snapshot:

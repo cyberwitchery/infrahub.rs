@@ -1,6 +1,6 @@
 # changelog
 
-## unreleased
+## 0.4.4 - 2026-09-12
 
 - ci: bump pinned Infrahub version from 1.10.6 to 1.11.2, refresh the schema snapshot, regenerate `test-client` (closes #59)
 - schema: nineteen new types, none removed. user preferences (`InfrahubSetPreferences`, `EffectivePreferencesType`, `RawPreferencesType`, `PreferenceSource`, `PreferenceWriteScope`, `DateFormat`, `EffectiveDateFormat`, `EffectiveTimezone`), task control (`InfrahubTaskRetry`, `InfrahubTaskCancel`, `TaskAction`, `TaskActionInput`, `TaskActionType`, `TaskError`, `TaskNodeInterface`, `WebhookDeliveryTask`), the `HttpRequest`/`HttpResponse` pair that reports a webhook delivery with secret headers masked, and an `IPAddress` attribute type

@@ -2,6 +2,7 @@
 name = "infrahub-test-client"
 version = "0.4.0"
 edition = "2021"
+publish = false
 
 [dependencies]
 infrahub = { path = ".." }

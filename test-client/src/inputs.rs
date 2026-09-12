@@ -44,71 +44,71 @@ pub struct BranchUpdateInput {
 pub struct BuiltinIPAddressUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub description: Option<TextAttributeUpdate>,
     pub address: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub ip_namespace: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub profiles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BuiltinIPNamespaceUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub ip_prefixes: Option<Vec<RelatedIPPrefixNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub ip_addresses: Option<Vec<RelatedIPAddressNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub profiles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BuiltinIPPrefixUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub member_type: Option<TextAttributeUpdate>,
     pub prefix: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub member_type: Option<TextAttributeUpdate>,
     pub is_pool: Option<CheckboxAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub ip_namespace: Option<RelatedNodeInput>,
     pub profiles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BuiltinTagCreateInput {
     pub id: Option<String>,
-    pub description: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub description: Option<TextAttributeCreate>,
     pub profiles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BuiltinTagUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub description: Option<TextAttributeUpdate>,
     pub profiles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BuiltinTagUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub description: Option<TextAttributeUpdate>,
     pub profiles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -148,28 +148,28 @@ pub struct ConvertObjectTypeInput {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreAccountCreateInput {
     pub id: Option<String>,
-    pub description: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
     pub password: Option<TextAttributeCreate>,
-    pub account_type: Option<TextAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
+    pub account_type: Option<TextAttributeCreate>,
     pub status: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreAccountGroupCreateInput {
     pub id: Option<String>,
     pub name: Option<TextAttributeCreate>,
-    pub group_type: Option<TextAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeCreate>,
     pub roles: Option<Vec<RelatedNodeInput>>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -177,14 +177,14 @@ pub struct CoreAccountGroupUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeUpdate>,
     pub roles: Option<Vec<RelatedNodeInput>>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -192,24 +192,24 @@ pub struct CoreAccountGroupUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeUpdate>,
     pub roles: Option<Vec<RelatedNodeInput>>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreAccountRoleCreateInput {
     pub id: Option<String>,
     pub name: Option<TextAttributeCreate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub groups: Option<Vec<RelatedNodeInput>>,
     pub permissions: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -217,10 +217,10 @@ pub struct CoreAccountRoleUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub groups: Option<Vec<RelatedNodeInput>>,
     pub permissions: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -228,38 +228,38 @@ pub struct CoreAccountRoleUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub groups: Option<Vec<RelatedNodeInput>>,
     pub permissions: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreAccountUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub password: Option<TextAttributeUpdate>,
-    pub account_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub account_type: Option<TextAttributeUpdate>,
     pub status: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreAccountUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub password: Option<TextAttributeUpdate>,
-    pub account_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub account_type: Option<TextAttributeUpdate>,
     pub status: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -277,21 +277,21 @@ pub struct CoreActionUpdateInput {
 pub struct CoreArtifactCheckCreateInput {
     pub id: Option<String>,
     pub changed: Option<CheckboxAttributeCreate>,
+    pub checksum: Option<TextAttributeCreate>,
     pub artifact_id: Option<TextAttributeCreate>,
     pub storage_id: Option<TextAttributeCreate>,
-    pub checksum: Option<TextAttributeCreate>,
     pub line_number: Option<NumberAttributeCreate>,
-    pub origin: Option<TextAttributeCreate>,
-    pub conclusion: Option<TextAttributeCreate>,
-    pub created_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub severity: Option<TextAttributeCreate>,
-    pub message: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
+    pub origin: Option<TextAttributeCreate>,
     pub kind: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub message: Option<TextAttributeCreate>,
+    pub conclusion: Option<TextAttributeCreate>,
+    pub severity: Option<TextAttributeCreate>,
+    pub created_at: Option<TextAttributeCreate>,
     pub validator: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -299,21 +299,21 @@ pub struct CoreArtifactCheckUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub changed: Option<CheckboxAttributeUpdate>,
+    pub checksum: Option<TextAttributeUpdate>,
     pub artifact_id: Option<TextAttributeUpdate>,
     pub storage_id: Option<TextAttributeUpdate>,
-    pub checksum: Option<TextAttributeUpdate>,
     pub line_number: Option<NumberAttributeUpdate>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
     pub validator: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -321,218 +321,221 @@ pub struct CoreArtifactCheckUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub changed: Option<CheckboxAttributeUpdate>,
+    pub checksum: Option<TextAttributeUpdate>,
     pub artifact_id: Option<TextAttributeUpdate>,
     pub storage_id: Option<TextAttributeUpdate>,
-    pub checksum: Option<TextAttributeUpdate>,
     pub line_number: Option<NumberAttributeUpdate>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
     pub validator: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactCreateInput {
     pub id: Option<String>,
-    pub checksum: Option<TextAttributeCreate>,
-    pub parameters: Option<JSONAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub storage_id: Option<TextAttributeCreate>,
     pub status: Option<TextAttributeCreate>,
     pub content_type: Option<TextAttributeCreate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub checksum: Option<TextAttributeCreate>,
+    pub storage_id: Option<TextAttributeCreate>,
+    pub parameters: Option<JSONAttributeCreate>,
     pub object: Option<RelatedNodeInput>,
     pub definition: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactDefinitionCreateInput {
     pub id: Option<String>,
-    pub content_type: Option<TextAttributeCreate>,
+    pub name: Option<TextAttributeCreate>,
     pub artifact_name: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub name: Option<TextAttributeCreate>,
     pub parameters: Option<JSONAttributeCreate>,
-    pub transformation: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub content_type: Option<TextAttributeCreate>,
+    pub fingerprint: Option<TextAttributeCreate>,
     pub targets: Option<RelatedNodeInput>,
+    pub transformation: Option<RelatedNodeInput>,
     pub artifacts: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub validators: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactDefinitionUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub content_type: Option<TextAttributeUpdate>,
+    pub name: Option<TextAttributeUpdate>,
     pub artifact_name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub name: Option<TextAttributeUpdate>,
     pub parameters: Option<JSONAttributeUpdate>,
-    pub transformation: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub content_type: Option<TextAttributeUpdate>,
+    pub fingerprint: Option<TextAttributeUpdate>,
     pub targets: Option<RelatedNodeInput>,
+    pub transformation: Option<RelatedNodeInput>,
     pub artifacts: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub validators: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactDefinitionUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub content_type: Option<TextAttributeUpdate>,
+    pub name: Option<TextAttributeUpdate>,
     pub artifact_name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub name: Option<TextAttributeUpdate>,
     pub parameters: Option<JSONAttributeUpdate>,
-    pub transformation: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub content_type: Option<TextAttributeUpdate>,
+    pub fingerprint: Option<TextAttributeUpdate>,
     pub targets: Option<RelatedNodeInput>,
+    pub transformation: Option<RelatedNodeInput>,
     pub artifacts: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub validators: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactTargetUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub artifacts: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactThreadCreateInput {
     pub id: Option<String>,
-    pub line_number: Option<NumberAttributeCreate>,
-    pub storage_id: Option<TextAttributeCreate>,
     pub artifact_id: Option<TextAttributeCreate>,
+    pub storage_id: Option<TextAttributeCreate>,
+    pub line_number: Option<NumberAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
     pub resolved: Option<CheckboxAttributeCreate>,
+    pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
-    pub change: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactThreadUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub line_number: Option<NumberAttributeUpdate>,
-    pub storage_id: Option<TextAttributeUpdate>,
     pub artifact_id: Option<TextAttributeUpdate>,
+    pub storage_id: Option<TextAttributeUpdate>,
+    pub line_number: Option<NumberAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub resolved: Option<CheckboxAttributeUpdate>,
+    pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
-    pub change: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactThreadUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub line_number: Option<NumberAttributeUpdate>,
-    pub storage_id: Option<TextAttributeUpdate>,
     pub artifact_id: Option<TextAttributeUpdate>,
+    pub storage_id: Option<TextAttributeUpdate>,
+    pub line_number: Option<NumberAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub resolved: Option<CheckboxAttributeUpdate>,
+    pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
-    pub change: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub checksum: Option<TextAttributeUpdate>,
-    pub parameters: Option<JSONAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub storage_id: Option<TextAttributeUpdate>,
     pub status: Option<TextAttributeUpdate>,
     pub content_type: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub checksum: Option<TextAttributeUpdate>,
+    pub storage_id: Option<TextAttributeUpdate>,
+    pub parameters: Option<JSONAttributeUpdate>,
     pub object: Option<RelatedNodeInput>,
     pub definition: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub checksum: Option<TextAttributeUpdate>,
-    pub parameters: Option<JSONAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub storage_id: Option<TextAttributeUpdate>,
     pub status: Option<TextAttributeUpdate>,
     pub content_type: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub checksum: Option<TextAttributeUpdate>,
+    pub storage_id: Option<TextAttributeUpdate>,
+    pub parameters: Option<JSONAttributeUpdate>,
     pub object: Option<RelatedNodeInput>,
     pub definition: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactValidatorCreateInput {
     pub id: Option<String>,
-    pub completed_at: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
     pub state: Option<TextAttributeCreate>,
     pub conclusion: Option<TextAttributeCreate>,
+    pub completed_at: Option<TextAttributeCreate>,
     pub started_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub definition: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactValidatorUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub definition: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreArtifactValidatorUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub definition: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -549,9 +552,9 @@ pub struct CoreBasePermissionUpdateInput {
 pub struct CoreChangeCommentCreateInput {
     pub id: Option<String>,
     pub text: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub change: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -559,9 +562,9 @@ pub struct CoreChangeCommentUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub text: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub change: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -569,9 +572,9 @@ pub struct CoreChangeCommentUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub text: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub change: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -579,10 +582,10 @@ pub struct CoreChangeThreadCreateInput {
     pub id: Option<String>,
     pub label: Option<TextAttributeCreate>,
     pub resolved: Option<CheckboxAttributeCreate>,
+    pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
-    pub change: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -591,10 +594,10 @@ pub struct CoreChangeThreadUpdateInput {
     pub hfid: Option<Vec<String>>,
     pub label: Option<TextAttributeUpdate>,
     pub resolved: Option<CheckboxAttributeUpdate>,
+    pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
-    pub change: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -603,83 +606,83 @@ pub struct CoreChangeThreadUpsertInput {
     pub hfid: Option<Vec<String>>,
     pub label: Option<TextAttributeUpdate>,
     pub resolved: Option<CheckboxAttributeUpdate>,
+    pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
-    pub change: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreCheckDefinitionCreateInput {
     pub id: Option<String>,
-    pub description: Option<TextAttributeCreate>,
-    pub class_name: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub timeout: Option<NumberAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
     pub file_path: Option<TextAttributeCreate>,
+    pub class_name: Option<TextAttributeCreate>,
+    pub timeout: Option<NumberAttributeCreate>,
     pub parameters: Option<JSONAttributeCreate>,
     pub repository: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validators: Option<Vec<RelatedNodeInput>>,
-    pub tags: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub query: Option<RelatedNodeInput>,
     pub targets: Option<RelatedNodeInput>,
+    pub tags: Option<Vec<RelatedNodeInput>>,
+    pub validators: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreCheckDefinitionUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub description: Option<TextAttributeUpdate>,
-    pub class_name: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub timeout: Option<NumberAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub file_path: Option<TextAttributeUpdate>,
+    pub class_name: Option<TextAttributeUpdate>,
+    pub timeout: Option<NumberAttributeUpdate>,
     pub parameters: Option<JSONAttributeUpdate>,
     pub repository: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validators: Option<Vec<RelatedNodeInput>>,
-    pub tags: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub query: Option<RelatedNodeInput>,
     pub targets: Option<RelatedNodeInput>,
+    pub tags: Option<Vec<RelatedNodeInput>>,
+    pub validators: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreCheckDefinitionUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub description: Option<TextAttributeUpdate>,
-    pub class_name: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub timeout: Option<NumberAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub file_path: Option<TextAttributeUpdate>,
+    pub class_name: Option<TextAttributeUpdate>,
+    pub timeout: Option<NumberAttributeUpdate>,
     pub parameters: Option<JSONAttributeUpdate>,
     pub repository: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validators: Option<Vec<RelatedNodeInput>>,
-    pub tags: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub query: Option<RelatedNodeInput>,
     pub targets: Option<RelatedNodeInput>,
+    pub tags: Option<Vec<RelatedNodeInput>>,
+    pub validators: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreCheckUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
     pub validator: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -696,28 +699,28 @@ pub struct CoreCredentialUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub description: Option<TextAttributeUpdate>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreCustomWebhookCreateInput {
     pub id: Option<String>,
     pub shared_key: Option<TextAttributeCreate>,
-    pub branch_scope: Option<TextAttributeCreate>,
-    pub active: Option<CheckboxAttributeCreate>,
-    pub event_type: Option<TextAttributeCreate>,
-    pub validate_certificates: Option<CheckboxAttributeCreate>,
-    pub node_kind: Option<TextAttributeCreate>,
-    pub url: Option<TextAttributeCreate>,
-    pub description: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub event_type: Option<TextAttributeCreate>,
+    pub active: Option<CheckboxAttributeCreate>,
+    pub branch_scope: Option<TextAttributeCreate>,
+    pub node_kind: Option<TextAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
+    pub url: Option<TextAttributeCreate>,
+    pub validate_certificates: Option<CheckboxAttributeCreate>,
     pub transformation: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub headers: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -725,18 +728,18 @@ pub struct CoreCustomWebhookUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub shared_key: Option<TextAttributeUpdate>,
-    pub branch_scope: Option<TextAttributeUpdate>,
-    pub active: Option<CheckboxAttributeUpdate>,
-    pub event_type: Option<TextAttributeUpdate>,
-    pub validate_certificates: Option<CheckboxAttributeUpdate>,
-    pub node_kind: Option<TextAttributeUpdate>,
-    pub url: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub event_type: Option<TextAttributeUpdate>,
+    pub active: Option<CheckboxAttributeUpdate>,
+    pub branch_scope: Option<TextAttributeUpdate>,
+    pub node_kind: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub url: Option<TextAttributeUpdate>,
+    pub validate_certificates: Option<CheckboxAttributeUpdate>,
     pub transformation: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub headers: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -744,130 +747,130 @@ pub struct CoreCustomWebhookUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub shared_key: Option<TextAttributeUpdate>,
-    pub branch_scope: Option<TextAttributeUpdate>,
-    pub active: Option<CheckboxAttributeUpdate>,
-    pub event_type: Option<TextAttributeUpdate>,
-    pub validate_certificates: Option<CheckboxAttributeUpdate>,
-    pub node_kind: Option<TextAttributeUpdate>,
-    pub url: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub event_type: Option<TextAttributeUpdate>,
+    pub active: Option<CheckboxAttributeUpdate>,
+    pub branch_scope: Option<TextAttributeUpdate>,
+    pub node_kind: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub url: Option<TextAttributeUpdate>,
+    pub validate_certificates: Option<CheckboxAttributeUpdate>,
     pub transformation: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub headers: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreDataCheckCreateInput {
     pub id: Option<String>,
+    pub conflicts: Option<JSONAttributeCreate>,
     pub keep_branch: Option<TextAttributeCreate>,
     pub enriched_conflict_id: Option<TextAttributeCreate>,
-    pub conflicts: Option<JSONAttributeCreate>,
-    pub origin: Option<TextAttributeCreate>,
-    pub conclusion: Option<TextAttributeCreate>,
-    pub created_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub severity: Option<TextAttributeCreate>,
-    pub message: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
+    pub origin: Option<TextAttributeCreate>,
     pub kind: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub message: Option<TextAttributeCreate>,
+    pub conclusion: Option<TextAttributeCreate>,
+    pub severity: Option<TextAttributeCreate>,
+    pub created_at: Option<TextAttributeCreate>,
     pub validator: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreDataCheckUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
+    pub conflicts: Option<JSONAttributeUpdate>,
     pub keep_branch: Option<TextAttributeUpdate>,
     pub enriched_conflict_id: Option<TextAttributeUpdate>,
-    pub conflicts: Option<JSONAttributeUpdate>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
     pub validator: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreDataCheckUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
+    pub conflicts: Option<JSONAttributeUpdate>,
     pub keep_branch: Option<TextAttributeUpdate>,
     pub enriched_conflict_id: Option<TextAttributeUpdate>,
-    pub conflicts: Option<JSONAttributeUpdate>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
     pub validator: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreDataValidatorCreateInput {
     pub id: Option<String>,
-    pub completed_at: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
     pub state: Option<TextAttributeCreate>,
     pub conclusion: Option<TextAttributeCreate>,
+    pub completed_at: Option<TextAttributeCreate>,
     pub started_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreDataValidatorUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreDataValidatorUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreEnvKeyValueCreateInput {
     pub id: Option<String>,
-    pub value: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
     pub key: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
+    pub value: Option<TextAttributeCreate>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
@@ -876,10 +879,10 @@ pub struct CoreEnvKeyValueCreateInput {
 pub struct CoreEnvKeyValueUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub value: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub key: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub value: Option<TextAttributeUpdate>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
@@ -888,10 +891,10 @@ pub struct CoreEnvKeyValueUpdateInput {
 pub struct CoreEnvKeyValueUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub value: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub key: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub value: Option<TextAttributeUpdate>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
@@ -899,65 +902,65 @@ pub struct CoreEnvKeyValueUpsertInput {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreFileCheckCreateInput {
     pub id: Option<String>,
-    pub commit: Option<TextAttributeCreate>,
     pub files: Option<ListAttributeCreate>,
-    pub origin: Option<TextAttributeCreate>,
-    pub conclusion: Option<TextAttributeCreate>,
-    pub created_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub severity: Option<TextAttributeCreate>,
-    pub message: Option<TextAttributeCreate>,
+    pub commit: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
+    pub origin: Option<TextAttributeCreate>,
     pub kind: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub message: Option<TextAttributeCreate>,
+    pub conclusion: Option<TextAttributeCreate>,
+    pub severity: Option<TextAttributeCreate>,
+    pub created_at: Option<TextAttributeCreate>,
     pub validator: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreFileCheckUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub commit: Option<TextAttributeUpdate>,
     pub files: Option<ListAttributeUpdate>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
+    pub commit: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
     pub validator: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreFileCheckUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub commit: Option<TextAttributeUpdate>,
     pub files: Option<ListAttributeUpdate>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
+    pub commit: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
     pub validator: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreFileObjectUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -968,11 +971,11 @@ pub struct CoreFileThreadCreateInput {
     pub line_number: Option<NumberAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
     pub resolved: Option<CheckboxAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub repository: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
     pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -984,11 +987,11 @@ pub struct CoreFileThreadUpdateInput {
     pub line_number: Option<NumberAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub resolved: Option<CheckboxAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub repository: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
     pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1000,11 +1003,11 @@ pub struct CoreFileThreadUpsertInput {
     pub line_number: Option<NumberAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub resolved: Option<CheckboxAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub repository: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
     pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1013,9 +1016,9 @@ pub struct CoreGeneratorActionCreateInput {
     pub name: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
     pub generator: Option<RelatedNodeInput>,
+    pub triggers: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub triggers: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1025,9 +1028,9 @@ pub struct CoreGeneratorActionUpdateInput {
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
     pub generator: Option<RelatedNodeInput>,
+    pub triggers: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub triggers: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1037,22 +1040,22 @@ pub struct CoreGeneratorActionUpsertInput {
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
     pub generator: Option<RelatedNodeInput>,
+    pub triggers: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub triggers: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGeneratorAwareGroupCreateInput {
     pub id: Option<String>,
     pub name: Option<TextAttributeCreate>,
-    pub group_type: Option<TextAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
+    pub group_type: Option<TextAttributeCreate>,
+    pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub parent: Option<RelatedNodeInput>,
     pub children: Option<Vec<RelatedNodeInput>>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
-    pub members: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1060,13 +1063,13 @@ pub struct CoreGeneratorAwareGroupUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub group_type: Option<TextAttributeUpdate>,
+    pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub parent: Option<RelatedNodeInput>,
     pub children: Option<Vec<RelatedNodeInput>>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
-    pub members: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1074,30 +1077,30 @@ pub struct CoreGeneratorAwareGroupUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub group_type: Option<TextAttributeUpdate>,
+    pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub parent: Option<RelatedNodeInput>,
     pub children: Option<Vec<RelatedNodeInput>>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
-    pub members: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGeneratorCheckCreateInput {
     pub id: Option<String>,
     pub instance: Option<TextAttributeCreate>,
-    pub origin: Option<TextAttributeCreate>,
-    pub conclusion: Option<TextAttributeCreate>,
-    pub created_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub severity: Option<TextAttributeCreate>,
-    pub message: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
+    pub origin: Option<TextAttributeCreate>,
     pub kind: Option<TextAttributeCreate>,
+    pub message: Option<TextAttributeCreate>,
+    pub conclusion: Option<TextAttributeCreate>,
+    pub severity: Option<TextAttributeCreate>,
+    pub created_at: Option<TextAttributeCreate>,
+    pub validator: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validator: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1105,17 +1108,17 @@ pub struct CoreGeneratorCheckUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub instance: Option<TextAttributeUpdate>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
+    pub validator: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validator: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1123,92 +1126,101 @@ pub struct CoreGeneratorCheckUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub instance: Option<TextAttributeUpdate>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
+    pub validator: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validator: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGeneratorDefinitionCreateInput {
     pub id: Option<String>,
-    pub execute_after_merge: Option<CheckboxAttributeCreate>,
-    pub class_name: Option<TextAttributeCreate>,
-    pub parameters: Option<JSONAttributeCreate>,
-    pub file_path: Option<TextAttributeCreate>,
-    pub convert_query_response: Option<CheckboxAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
+    pub parameters: Option<JSONAttributeCreate>,
+    pub file_path: Option<TextAttributeCreate>,
+    pub class_name: Option<TextAttributeCreate>,
+    pub convert_query_response: Option<CheckboxAttributeCreate>,
     pub execute_in_proposed_change: Option<CheckboxAttributeCreate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub repository: Option<RelatedNodeInput>,
-    pub validators: Option<Vec<RelatedNodeInput>>,
-    pub targets: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub instances: Option<Vec<RelatedNodeInput>>,
+    pub execute_after_merge: Option<CheckboxAttributeCreate>,
+    pub fingerprint: Option<TextAttributeCreate>,
+    pub dependencies: Option<ListAttributeCreate>,
+    pub dependencies_complete: Option<CheckboxAttributeCreate>,
     pub query: Option<RelatedNodeInput>,
+    pub repository: Option<RelatedNodeInput>,
+    pub targets: Option<RelatedNodeInput>,
+    pub instances: Option<Vec<RelatedNodeInput>>,
+    pub validators: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGeneratorDefinitionUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub execute_after_merge: Option<CheckboxAttributeUpdate>,
-    pub class_name: Option<TextAttributeUpdate>,
-    pub parameters: Option<JSONAttributeUpdate>,
-    pub file_path: Option<TextAttributeUpdate>,
-    pub convert_query_response: Option<CheckboxAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub parameters: Option<JSONAttributeUpdate>,
+    pub file_path: Option<TextAttributeUpdate>,
+    pub class_name: Option<TextAttributeUpdate>,
+    pub convert_query_response: Option<CheckboxAttributeUpdate>,
     pub execute_in_proposed_change: Option<CheckboxAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub repository: Option<RelatedNodeInput>,
-    pub validators: Option<Vec<RelatedNodeInput>>,
-    pub targets: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub instances: Option<Vec<RelatedNodeInput>>,
+    pub execute_after_merge: Option<CheckboxAttributeUpdate>,
+    pub fingerprint: Option<TextAttributeUpdate>,
+    pub dependencies: Option<ListAttributeUpdate>,
+    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
     pub query: Option<RelatedNodeInput>,
+    pub repository: Option<RelatedNodeInput>,
+    pub targets: Option<RelatedNodeInput>,
+    pub instances: Option<Vec<RelatedNodeInput>>,
+    pub validators: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGeneratorDefinitionUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub execute_after_merge: Option<CheckboxAttributeUpdate>,
-    pub class_name: Option<TextAttributeUpdate>,
-    pub parameters: Option<JSONAttributeUpdate>,
-    pub file_path: Option<TextAttributeUpdate>,
-    pub convert_query_response: Option<CheckboxAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub parameters: Option<JSONAttributeUpdate>,
+    pub file_path: Option<TextAttributeUpdate>,
+    pub class_name: Option<TextAttributeUpdate>,
+    pub convert_query_response: Option<CheckboxAttributeUpdate>,
     pub execute_in_proposed_change: Option<CheckboxAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub repository: Option<RelatedNodeInput>,
-    pub validators: Option<Vec<RelatedNodeInput>>,
-    pub targets: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub instances: Option<Vec<RelatedNodeInput>>,
+    pub execute_after_merge: Option<CheckboxAttributeUpdate>,
+    pub fingerprint: Option<TextAttributeUpdate>,
+    pub dependencies: Option<ListAttributeUpdate>,
+    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
     pub query: Option<RelatedNodeInput>,
+    pub repository: Option<RelatedNodeInput>,
+    pub targets: Option<RelatedNodeInput>,
+    pub instances: Option<Vec<RelatedNodeInput>>,
+    pub validators: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGeneratorGroupCreateInput {
     pub id: Option<String>,
     pub name: Option<TextAttributeCreate>,
-    pub group_type: Option<TextAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
+    pub group_type: Option<TextAttributeCreate>,
+    pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub parent: Option<RelatedNodeInput>,
     pub children: Option<Vec<RelatedNodeInput>>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
-    pub members: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1216,13 +1228,13 @@ pub struct CoreGeneratorGroupUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub group_type: Option<TextAttributeUpdate>,
+    pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub parent: Option<RelatedNodeInput>,
     pub children: Option<Vec<RelatedNodeInput>>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
-    pub members: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1230,23 +1242,23 @@ pub struct CoreGeneratorGroupUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub group_type: Option<TextAttributeUpdate>,
+    pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub parent: Option<RelatedNodeInput>,
     pub children: Option<Vec<RelatedNodeInput>>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
-    pub members: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGeneratorInstanceCreateInput {
     pub id: Option<String>,
-    pub status: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
+    pub status: Option<TextAttributeCreate>,
+    pub object: Option<RelatedNodeInput>,
     pub definition: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub object: Option<RelatedNodeInput>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
@@ -1254,11 +1266,11 @@ pub struct CoreGeneratorInstanceCreateInput {
 pub struct CoreGeneratorInstanceUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub status: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub status: Option<TextAttributeUpdate>,
+    pub object: Option<RelatedNodeInput>,
     pub definition: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub object: Option<RelatedNodeInput>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
@@ -1266,142 +1278,143 @@ pub struct CoreGeneratorInstanceUpdateInput {
 pub struct CoreGeneratorInstanceUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub status: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub status: Option<TextAttributeUpdate>,
+    pub object: Option<RelatedNodeInput>,
     pub definition: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub object: Option<RelatedNodeInput>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGeneratorValidatorCreateInput {
     pub id: Option<String>,
-    pub completed_at: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
     pub state: Option<TextAttributeCreate>,
     pub conclusion: Option<TextAttributeCreate>,
+    pub completed_at: Option<TextAttributeCreate>,
     pub started_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub definition: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGeneratorValidatorUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub definition: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGeneratorValidatorUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub definition: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGenericAccountUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub password: Option<TextAttributeUpdate>,
-    pub account_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub account_type: Option<TextAttributeUpdate>,
     pub status: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGenericRepositoryUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub internal_status: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub location: Option<TextAttributeUpdate>,
+    pub internal_status: Option<TextAttributeUpdate>,
     pub operational_status: Option<TextAttributeUpdate>,
     pub sync_status: Option<TextAttributeUpdate>,
-    pub location: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub credential: Option<RelatedNodeInput>,
-    pub checks: Option<Vec<RelatedNodeInput>>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub groups_objects: Option<Vec<RelatedNodeInput>>,
-    pub generators: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub transformations: Option<Vec<RelatedNodeInput>>,
     pub queries: Option<Vec<RelatedNodeInput>>,
+    pub checks: Option<Vec<RelatedNodeInput>>,
+    pub generators: Option<Vec<RelatedNodeInput>>,
+    pub groups_objects: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGlobalPermissionCreateInput {
     pub id: Option<String>,
-    pub decision: Option<NumberAttributeCreate>,
     pub action: Option<TextAttributeCreate>,
+    pub decision: Option<NumberAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
+    pub roles: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub roles: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGlobalPermissionUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub decision: Option<NumberAttributeUpdate>,
     pub action: Option<TextAttributeUpdate>,
+    pub decision: Option<NumberAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub roles: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub roles: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGlobalPermissionUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub decision: Option<NumberAttributeUpdate>,
     pub action: Option<TextAttributeUpdate>,
+    pub decision: Option<NumberAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub roles: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub roles: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGraphQLQueryCreateInput {
     pub id: Option<String>,
-    pub query: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub query_groups: Option<Vec<RelatedNodeInput>>,
-    pub tags: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub query: Option<TextAttributeCreate>,
+    pub fingerprint: Option<TextAttributeCreate>,
     pub repository: Option<RelatedNodeInput>,
+    pub tags: Option<Vec<RelatedNodeInput>>,
+    pub query_groups: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1409,14 +1422,14 @@ pub struct CoreGraphQLQueryGroupCreateInput {
     pub id: Option<String>,
     pub parameters: Option<JSONAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub group_type: Option<TextAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeCreate>,
     pub query: Option<RelatedNodeInput>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1425,14 +1438,14 @@ pub struct CoreGraphQLQueryGroupUpdateInput {
     pub hfid: Option<Vec<String>>,
     pub parameters: Option<JSONAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeUpdate>,
     pub query: Option<RelatedNodeInput>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1441,42 +1454,44 @@ pub struct CoreGraphQLQueryGroupUpsertInput {
     pub hfid: Option<Vec<String>>,
     pub parameters: Option<JSONAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeUpdate>,
     pub query: Option<RelatedNodeInput>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGraphQLQueryUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub query: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub query_groups: Option<Vec<RelatedNodeInput>>,
-    pub tags: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub query: Option<TextAttributeUpdate>,
+    pub fingerprint: Option<TextAttributeUpdate>,
     pub repository: Option<RelatedNodeInput>,
+    pub tags: Option<Vec<RelatedNodeInput>>,
+    pub query_groups: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGraphQLQueryUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub query: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub query_groups: Option<Vec<RelatedNodeInput>>,
-    pub tags: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub query: Option<TextAttributeUpdate>,
+    pub fingerprint: Option<TextAttributeUpdate>,
     pub repository: Option<RelatedNodeInput>,
+    pub tags: Option<Vec<RelatedNodeInput>>,
+    pub query_groups: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1485,10 +1500,10 @@ pub struct CoreGroupActionCreateInput {
     pub member_action: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub group: Option<RelatedNodeInput>,
     pub triggers: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1498,10 +1513,10 @@ pub struct CoreGroupActionUpdateInput {
     pub member_action: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub group: Option<RelatedNodeInput>,
     pub triggers: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1511,24 +1526,24 @@ pub struct CoreGroupActionUpsertInput {
     pub member_action: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub group: Option<RelatedNodeInput>,
     pub triggers: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreGroupTriggerRuleCreateInput {
     pub id: Option<String>,
     pub member_update: Option<TextAttributeCreate>,
+    pub name: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
     pub active: Option<CheckboxAttributeCreate>,
     pub branch_scope: Option<TextAttributeCreate>,
-    pub name: Option<TextAttributeCreate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub group: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub action: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1536,14 +1551,14 @@ pub struct CoreGroupTriggerRuleUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub member_update: Option<TextAttributeUpdate>,
+    pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
     pub active: Option<CheckboxAttributeUpdate>,
     pub branch_scope: Option<TextAttributeUpdate>,
-    pub name: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub group: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub action: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1551,14 +1566,14 @@ pub struct CoreGroupTriggerRuleUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub member_update: Option<TextAttributeUpdate>,
+    pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
     pub active: Option<CheckboxAttributeUpdate>,
     pub branch_scope: Option<TextAttributeUpdate>,
-    pub name: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub group: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub action: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1566,25 +1581,25 @@ pub struct CoreGroupUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub group_type: Option<TextAttributeUpdate>,
+    pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub parent: Option<RelatedNodeInput>,
     pub children: Option<Vec<RelatedNodeInput>>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
-    pub members: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreIPAddressPoolCreateInput {
     pub id: Option<String>,
-    pub default_prefix_length: Option<NumberAttributeCreate>,
     pub default_address_type: Option<TextAttributeCreate>,
+    pub default_prefix_length: Option<NumberAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub ip_namespace: Option<RelatedNodeInput>,
     pub resources: Option<Vec<RelatedIPPrefixNodeInput>>,
+    pub ip_namespace: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
@@ -1592,13 +1607,13 @@ pub struct CoreIPAddressPoolCreateInput {
 pub struct CoreIPAddressPoolUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub default_prefix_length: Option<NumberAttributeUpdate>,
     pub default_address_type: Option<TextAttributeUpdate>,
+    pub default_prefix_length: Option<NumberAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub ip_namespace: Option<RelatedNodeInput>,
     pub resources: Option<Vec<RelatedIPPrefixNodeInput>>,
+    pub ip_namespace: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
@@ -1606,13 +1621,13 @@ pub struct CoreIPAddressPoolUpdateInput {
 pub struct CoreIPAddressPoolUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub default_prefix_length: Option<NumberAttributeUpdate>,
     pub default_address_type: Option<TextAttributeUpdate>,
+    pub default_prefix_length: Option<NumberAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub ip_namespace: Option<RelatedNodeInput>,
     pub resources: Option<Vec<RelatedIPPrefixNodeInput>>,
+    pub ip_namespace: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
@@ -1620,62 +1635,62 @@ pub struct CoreIPAddressPoolUpsertInput {
 pub struct CoreIPPoolUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreIPPrefixPoolCreateInput {
     pub id: Option<String>,
+    pub default_prefix_length: Option<NumberAttributeCreate>,
     pub default_member_type: Option<TextAttributeCreate>,
     pub default_prefix_type: Option<TextAttributeCreate>,
-    pub default_prefix_length: Option<NumberAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub resources: Option<Vec<RelatedIPPrefixNodeInput>>,
     pub ip_namespace: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreIPPrefixPoolUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
+    pub default_prefix_length: Option<NumberAttributeUpdate>,
     pub default_member_type: Option<TextAttributeUpdate>,
     pub default_prefix_type: Option<TextAttributeUpdate>,
-    pub default_prefix_length: Option<NumberAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub resources: Option<Vec<RelatedIPPrefixNodeInput>>,
     pub ip_namespace: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreIPPrefixPoolUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
+    pub default_prefix_length: Option<NumberAttributeUpdate>,
     pub default_member_type: Option<TextAttributeUpdate>,
     pub default_prefix_type: Option<TextAttributeUpdate>,
-    pub default_prefix_length: Option<NumberAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub resources: Option<Vec<RelatedIPPrefixNodeInput>>,
     pub ip_namespace: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreKeyValueUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub value: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub key: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub value: Option<TextAttributeUpdate>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
@@ -1683,92 +1698,92 @@ pub struct CoreKeyValueUpdateInput {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreMenuItemCreateInput {
     pub id: Option<String>,
-    pub label: Option<TextAttributeCreate>,
-    pub order_weight: Option<NumberAttributeCreate>,
-    pub description: Option<TextAttributeCreate>,
-    pub path: Option<TextAttributeCreate>,
-    pub required_permissions: Option<ListAttributeCreate>,
-    pub section: Option<TextAttributeCreate>,
     pub namespace: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
     pub kind: Option<TextAttributeCreate>,
+    pub path: Option<TextAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
     pub icon: Option<TextAttributeCreate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub order_weight: Option<NumberAttributeCreate>,
+    pub required_permissions: Option<ListAttributeCreate>,
+    pub section: Option<TextAttributeCreate>,
     pub parent: Option<RelatedNodeInput>,
     pub children: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreMenuItemUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub label: Option<TextAttributeUpdate>,
-    pub order_weight: Option<NumberAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
-    pub path: Option<TextAttributeUpdate>,
-    pub required_permissions: Option<ListAttributeUpdate>,
-    pub section: Option<TextAttributeUpdate>,
     pub namespace: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
+    pub path: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub icon: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub order_weight: Option<NumberAttributeUpdate>,
+    pub required_permissions: Option<ListAttributeUpdate>,
+    pub section: Option<TextAttributeUpdate>,
     pub parent: Option<RelatedNodeInput>,
     pub children: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreMenuItemUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub label: Option<TextAttributeUpdate>,
-    pub order_weight: Option<NumberAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
-    pub path: Option<TextAttributeUpdate>,
-    pub required_permissions: Option<ListAttributeUpdate>,
-    pub section: Option<TextAttributeUpdate>,
     pub namespace: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
+    pub path: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub icon: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub order_weight: Option<NumberAttributeUpdate>,
+    pub required_permissions: Option<ListAttributeUpdate>,
+    pub section: Option<TextAttributeUpdate>,
     pub parent: Option<RelatedNodeInput>,
     pub children: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreMenuUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub label: Option<TextAttributeUpdate>,
-    pub order_weight: Option<NumberAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
-    pub path: Option<TextAttributeUpdate>,
-    pub required_permissions: Option<ListAttributeUpdate>,
-    pub section: Option<TextAttributeUpdate>,
     pub namespace: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
+    pub path: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub icon: Option<TextAttributeUpdate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub order_weight: Option<NumberAttributeUpdate>,
+    pub required_permissions: Option<ListAttributeUpdate>,
+    pub section: Option<TextAttributeUpdate>,
     pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreNodeTriggerAttributeMatchCreateInput {
     pub id: Option<String>,
     pub attribute_name: Option<TextAttributeCreate>,
-    pub value_previous: Option<TextAttributeCreate>,
     pub value: Option<TextAttributeCreate>,
+    pub value_previous: Option<TextAttributeCreate>,
     pub value_match: Option<TextAttributeCreate>,
+    pub trigger: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub trigger: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1776,12 +1791,12 @@ pub struct CoreNodeTriggerAttributeMatchUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub attribute_name: Option<TextAttributeUpdate>,
-    pub value_previous: Option<TextAttributeUpdate>,
     pub value: Option<TextAttributeUpdate>,
+    pub value_previous: Option<TextAttributeUpdate>,
     pub value_match: Option<TextAttributeUpdate>,
+    pub trigger: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub trigger: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1789,12 +1804,12 @@ pub struct CoreNodeTriggerAttributeMatchUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub attribute_name: Option<TextAttributeUpdate>,
-    pub value_previous: Option<TextAttributeUpdate>,
     pub value: Option<TextAttributeUpdate>,
+    pub value_previous: Option<TextAttributeUpdate>,
     pub value_match: Option<TextAttributeUpdate>,
+    pub trigger: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub trigger: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1802,8 +1817,8 @@ pub struct CoreNodeTriggerMatchUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub trigger: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1812,9 +1827,9 @@ pub struct CoreNodeTriggerRelationshipMatchCreateInput {
     pub relationship_name: Option<TextAttributeCreate>,
     pub modification_type: Option<TextAttributeCreate>,
     pub peer: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub trigger: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1824,9 +1839,9 @@ pub struct CoreNodeTriggerRelationshipMatchUpdateInput {
     pub relationship_name: Option<TextAttributeUpdate>,
     pub modification_type: Option<TextAttributeUpdate>,
     pub peer: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub trigger: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1836,105 +1851,105 @@ pub struct CoreNodeTriggerRelationshipMatchUpsertInput {
     pub relationship_name: Option<TextAttributeUpdate>,
     pub modification_type: Option<TextAttributeUpdate>,
     pub peer: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub trigger: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreNodeTriggerRuleCreateInput {
     pub id: Option<String>,
-    pub mutation_action: Option<TextAttributeCreate>,
     pub node_kind: Option<TextAttributeCreate>,
+    pub mutation_action: Option<TextAttributeCreate>,
+    pub name: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
     pub active: Option<CheckboxAttributeCreate>,
     pub branch_scope: Option<TextAttributeCreate>,
-    pub name: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub matches: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub action: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreNodeTriggerRuleUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub mutation_action: Option<TextAttributeUpdate>,
     pub node_kind: Option<TextAttributeUpdate>,
+    pub mutation_action: Option<TextAttributeUpdate>,
+    pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
     pub active: Option<CheckboxAttributeUpdate>,
     pub branch_scope: Option<TextAttributeUpdate>,
-    pub name: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub matches: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub action: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreNodeTriggerRuleUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub mutation_action: Option<TextAttributeUpdate>,
     pub node_kind: Option<TextAttributeUpdate>,
+    pub mutation_action: Option<TextAttributeUpdate>,
+    pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
     pub active: Option<CheckboxAttributeUpdate>,
     pub branch_scope: Option<TextAttributeUpdate>,
-    pub name: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub matches: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub action: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreNodeUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreNumberPoolCreateInput {
     pub id: Option<String>,
-    pub end_range: Option<NumberAttributeCreate>,
+    pub node: Option<TextAttributeCreate>,
     pub node_attribute: Option<TextAttributeCreate>,
     pub start_range: Option<NumberAttributeCreate>,
-    pub node: Option<TextAttributeCreate>,
+    pub end_range: Option<NumberAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreNumberPoolUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub end_range: Option<NumberAttributeUpdate>,
+    pub node: Option<TextAttributeUpdate>,
     pub node_attribute: Option<TextAttributeUpdate>,
     pub start_range: Option<NumberAttributeUpdate>,
-    pub node: Option<TextAttributeUpdate>,
+    pub end_range: Option<NumberAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreNumberPoolUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub end_range: Option<NumberAttributeUpdate>,
+    pub node: Option<TextAttributeUpdate>,
     pub node_attribute: Option<TextAttributeUpdate>,
     pub start_range: Option<NumberAttributeUpdate>,
-    pub node: Option<TextAttributeUpdate>,
+    pub end_range: Option<NumberAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1949,42 +1964,42 @@ pub struct CoreObjectComponentTemplateUpdateInput {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreObjectPermissionCreateInput {
     pub id: Option<String>,
+    pub namespace: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
     pub action: Option<TextAttributeCreate>,
     pub decision: Option<NumberAttributeCreate>,
-    pub namespace: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub roles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreObjectPermissionUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
+    pub namespace: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub action: Option<TextAttributeUpdate>,
     pub decision: Option<NumberAttributeUpdate>,
-    pub namespace: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub roles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreObjectPermissionUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
+    pub namespace: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub action: Option<TextAttributeUpdate>,
     pub decision: Option<NumberAttributeUpdate>,
-    pub namespace: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub roles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2002,10 +2017,10 @@ pub struct CoreObjectThreadCreateInput {
     pub object_path: Option<TextAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
     pub resolved: Option<CheckboxAttributeCreate>,
+    pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
-    pub change: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2015,10 +2030,10 @@ pub struct CoreObjectThreadUpdateInput {
     pub object_path: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub resolved: Option<CheckboxAttributeUpdate>,
+    pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
-    pub change: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2028,20 +2043,20 @@ pub struct CoreObjectThreadUpsertInput {
     pub object_path: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub resolved: Option<CheckboxAttributeUpdate>,
+    pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
-    pub change: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CorePasswordCredentialCreateInput {
     pub id: Option<String>,
-    pub password: Option<TextAttributeCreate>,
     pub username: Option<TextAttributeCreate>,
+    pub password: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub description: Option<TextAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
@@ -2050,11 +2065,11 @@ pub struct CorePasswordCredentialCreateInput {
 pub struct CorePasswordCredentialUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub password: Option<TextAttributeUpdate>,
     pub username: Option<TextAttributeUpdate>,
+    pub password: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
@@ -2063,11 +2078,11 @@ pub struct CorePasswordCredentialUpdateInput {
 pub struct CorePasswordCredentialUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub password: Option<TextAttributeUpdate>,
     pub username: Option<TextAttributeUpdate>,
+    pub password: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
@@ -2085,17 +2100,17 @@ pub struct CoreProfileUpdateInput {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreProposedChangeCreateInput {
     pub id: Option<String>,
-    pub is_draft: Option<CheckboxAttributeCreate>,
-    pub description: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub state: Option<TextAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
     pub source_branch: Option<TextAttributeCreate>,
     pub destination_branch: Option<TextAttributeCreate>,
+    pub state: Option<TextAttributeCreate>,
+    pub is_draft: Option<CheckboxAttributeCreate>,
+    pub reviewers: Option<Vec<RelatedNodeInput>>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
+    pub threads: Option<Vec<RelatedNodeInput>>,
     pub validations: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub reviewers: Option<Vec<RelatedNodeInput>>,
-    pub threads: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
@@ -2103,17 +2118,17 @@ pub struct CoreProposedChangeCreateInput {
 pub struct CoreProposedChangeUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub is_draft: Option<CheckboxAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub state: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub source_branch: Option<TextAttributeUpdate>,
     pub destination_branch: Option<TextAttributeUpdate>,
+    pub state: Option<TextAttributeUpdate>,
+    pub is_draft: Option<CheckboxAttributeUpdate>,
+    pub reviewers: Option<Vec<RelatedNodeInput>>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
+    pub threads: Option<Vec<RelatedNodeInput>>,
     pub validations: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub reviewers: Option<Vec<RelatedNodeInput>>,
-    pub threads: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
@@ -2121,111 +2136,111 @@ pub struct CoreProposedChangeUpdateInput {
 pub struct CoreProposedChangeUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub is_draft: Option<CheckboxAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub state: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub source_branch: Option<TextAttributeUpdate>,
     pub destination_branch: Option<TextAttributeUpdate>,
+    pub state: Option<TextAttributeUpdate>,
+    pub is_draft: Option<CheckboxAttributeUpdate>,
+    pub reviewers: Option<Vec<RelatedNodeInput>>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
+    pub threads: Option<Vec<RelatedNodeInput>>,
     pub validations: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub reviewers: Option<Vec<RelatedNodeInput>>,
-    pub threads: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreReadOnlyRepositoryCreateInput {
     pub id: Option<String>,
-    pub commit: Option<TextAttributeCreate>,
     #[serde(rename = "ref")]
     pub r#ref: Option<TextAttributeCreate>,
-    pub internal_status: Option<TextAttributeCreate>,
+    pub commit: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
+    pub location: Option<TextAttributeCreate>,
+    pub internal_status: Option<TextAttributeCreate>,
     pub operational_status: Option<TextAttributeCreate>,
     pub sync_status: Option<TextAttributeCreate>,
-    pub location: Option<TextAttributeCreate>,
-    pub description: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub credential: Option<RelatedNodeInput>,
-    pub checks: Option<Vec<RelatedNodeInput>>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub groups_objects: Option<Vec<RelatedNodeInput>>,
-    pub generators: Option<Vec<RelatedNodeInput>>,
     pub transformations: Option<Vec<RelatedNodeInput>>,
     pub queries: Option<Vec<RelatedNodeInput>>,
+    pub checks: Option<Vec<RelatedNodeInput>>,
+    pub generators: Option<Vec<RelatedNodeInput>>,
+    pub groups_objects: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreReadOnlyRepositoryUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub commit: Option<TextAttributeUpdate>,
     #[serde(rename = "ref")]
     pub r#ref: Option<TextAttributeUpdate>,
-    pub internal_status: Option<TextAttributeUpdate>,
+    pub commit: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub location: Option<TextAttributeUpdate>,
+    pub internal_status: Option<TextAttributeUpdate>,
     pub operational_status: Option<TextAttributeUpdate>,
     pub sync_status: Option<TextAttributeUpdate>,
-    pub location: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub credential: Option<RelatedNodeInput>,
-    pub checks: Option<Vec<RelatedNodeInput>>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub groups_objects: Option<Vec<RelatedNodeInput>>,
-    pub generators: Option<Vec<RelatedNodeInput>>,
     pub transformations: Option<Vec<RelatedNodeInput>>,
     pub queries: Option<Vec<RelatedNodeInput>>,
+    pub checks: Option<Vec<RelatedNodeInput>>,
+    pub generators: Option<Vec<RelatedNodeInput>>,
+    pub groups_objects: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreReadOnlyRepositoryUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub commit: Option<TextAttributeUpdate>,
     #[serde(rename = "ref")]
     pub r#ref: Option<TextAttributeUpdate>,
-    pub internal_status: Option<TextAttributeUpdate>,
+    pub commit: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub location: Option<TextAttributeUpdate>,
+    pub internal_status: Option<TextAttributeUpdate>,
     pub operational_status: Option<TextAttributeUpdate>,
     pub sync_status: Option<TextAttributeUpdate>,
-    pub location: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub credential: Option<RelatedNodeInput>,
-    pub checks: Option<Vec<RelatedNodeInput>>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub groups_objects: Option<Vec<RelatedNodeInput>>,
-    pub generators: Option<Vec<RelatedNodeInput>>,
     pub transformations: Option<Vec<RelatedNodeInput>>,
     pub queries: Option<Vec<RelatedNodeInput>>,
+    pub checks: Option<Vec<RelatedNodeInput>>,
+    pub generators: Option<Vec<RelatedNodeInput>>,
+    pub groups_objects: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreRepositoryCreateInput {
     pub id: Option<String>,
-    pub commit: Option<TextAttributeCreate>,
     pub default_branch: Option<TextAttributeCreate>,
-    pub internal_status: Option<TextAttributeCreate>,
+    pub commit: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
+    pub location: Option<TextAttributeCreate>,
+    pub internal_status: Option<TextAttributeCreate>,
     pub operational_status: Option<TextAttributeCreate>,
     pub sync_status: Option<TextAttributeCreate>,
-    pub location: Option<TextAttributeCreate>,
-    pub description: Option<TextAttributeCreate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub credential: Option<RelatedNodeInput>,
-    pub checks: Option<Vec<RelatedNodeInput>>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub groups_objects: Option<Vec<RelatedNodeInput>>,
-    pub generators: Option<Vec<RelatedNodeInput>>,
     pub transformations: Option<Vec<RelatedNodeInput>>,
     pub queries: Option<Vec<RelatedNodeInput>>,
+    pub checks: Option<Vec<RelatedNodeInput>>,
+    pub generators: Option<Vec<RelatedNodeInput>>,
+    pub groups_objects: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2233,14 +2248,14 @@ pub struct CoreRepositoryGroupCreateInput {
     pub id: Option<String>,
     pub content: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub group_type: Option<TextAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeCreate>,
     pub repository: Option<RelatedNodeInput>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2249,14 +2264,14 @@ pub struct CoreRepositoryGroupUpdateInput {
     pub hfid: Option<Vec<String>>,
     pub content: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeUpdate>,
     pub repository: Option<RelatedNodeInput>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2265,107 +2280,107 @@ pub struct CoreRepositoryGroupUpsertInput {
     pub hfid: Option<Vec<String>>,
     pub content: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeUpdate>,
     pub repository: Option<RelatedNodeInput>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreRepositoryUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub commit: Option<TextAttributeUpdate>,
     pub default_branch: Option<TextAttributeUpdate>,
-    pub internal_status: Option<TextAttributeUpdate>,
+    pub commit: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub location: Option<TextAttributeUpdate>,
+    pub internal_status: Option<TextAttributeUpdate>,
     pub operational_status: Option<TextAttributeUpdate>,
     pub sync_status: Option<TextAttributeUpdate>,
-    pub location: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub credential: Option<RelatedNodeInput>,
-    pub checks: Option<Vec<RelatedNodeInput>>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub groups_objects: Option<Vec<RelatedNodeInput>>,
-    pub generators: Option<Vec<RelatedNodeInput>>,
     pub transformations: Option<Vec<RelatedNodeInput>>,
     pub queries: Option<Vec<RelatedNodeInput>>,
+    pub checks: Option<Vec<RelatedNodeInput>>,
+    pub generators: Option<Vec<RelatedNodeInput>>,
+    pub groups_objects: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreRepositoryUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub commit: Option<TextAttributeUpdate>,
     pub default_branch: Option<TextAttributeUpdate>,
-    pub internal_status: Option<TextAttributeUpdate>,
+    pub commit: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub location: Option<TextAttributeUpdate>,
+    pub internal_status: Option<TextAttributeUpdate>,
     pub operational_status: Option<TextAttributeUpdate>,
     pub sync_status: Option<TextAttributeUpdate>,
-    pub location: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub credential: Option<RelatedNodeInput>,
-    pub checks: Option<Vec<RelatedNodeInput>>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub groups_objects: Option<Vec<RelatedNodeInput>>,
-    pub generators: Option<Vec<RelatedNodeInput>>,
     pub transformations: Option<Vec<RelatedNodeInput>>,
     pub queries: Option<Vec<RelatedNodeInput>>,
+    pub checks: Option<Vec<RelatedNodeInput>>,
+    pub generators: Option<Vec<RelatedNodeInput>>,
+    pub groups_objects: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreRepositoryValidatorCreateInput {
     pub id: Option<String>,
-    pub completed_at: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
     pub state: Option<TextAttributeCreate>,
     pub conclusion: Option<TextAttributeCreate>,
+    pub completed_at: Option<TextAttributeCreate>,
     pub started_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub repository: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreRepositoryValidatorUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub repository: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreRepositoryValidatorUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub repository: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2374,8 +2389,8 @@ pub struct CoreResourcePoolUpdateInput {
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2383,17 +2398,17 @@ pub struct CoreSchemaCheckCreateInput {
     pub id: Option<String>,
     pub conflicts: Option<JSONAttributeCreate>,
     pub enriched_conflict_id: Option<TextAttributeCreate>,
-    pub origin: Option<TextAttributeCreate>,
-    pub conclusion: Option<TextAttributeCreate>,
-    pub created_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub severity: Option<TextAttributeCreate>,
-    pub message: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
+    pub origin: Option<TextAttributeCreate>,
     pub kind: Option<TextAttributeCreate>,
+    pub message: Option<TextAttributeCreate>,
+    pub conclusion: Option<TextAttributeCreate>,
+    pub severity: Option<TextAttributeCreate>,
+    pub created_at: Option<TextAttributeCreate>,
+    pub validator: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validator: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2402,17 +2417,17 @@ pub struct CoreSchemaCheckUpdateInput {
     pub hfid: Option<Vec<String>>,
     pub conflicts: Option<JSONAttributeUpdate>,
     pub enriched_conflict_id: Option<TextAttributeUpdate>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
+    pub validator: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validator: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2421,124 +2436,124 @@ pub struct CoreSchemaCheckUpsertInput {
     pub hfid: Option<Vec<String>>,
     pub conflicts: Option<JSONAttributeUpdate>,
     pub enriched_conflict_id: Option<TextAttributeUpdate>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
+    pub validator: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validator: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreSchemaValidatorCreateInput {
     pub id: Option<String>,
-    pub completed_at: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
     pub state: Option<TextAttributeCreate>,
     pub conclusion: Option<TextAttributeCreate>,
+    pub completed_at: Option<TextAttributeCreate>,
     pub started_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreSchemaValidatorUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreSchemaValidatorUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreStandardCheckCreateInput {
     pub id: Option<String>,
-    pub origin: Option<TextAttributeCreate>,
-    pub conclusion: Option<TextAttributeCreate>,
-    pub created_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub severity: Option<TextAttributeCreate>,
-    pub message: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
+    pub origin: Option<TextAttributeCreate>,
     pub kind: Option<TextAttributeCreate>,
+    pub message: Option<TextAttributeCreate>,
+    pub conclusion: Option<TextAttributeCreate>,
+    pub severity: Option<TextAttributeCreate>,
+    pub created_at: Option<TextAttributeCreate>,
+    pub validator: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validator: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreStandardCheckUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
+    pub validator: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validator: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreStandardCheckUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub origin: Option<TextAttributeUpdate>,
-    pub conclusion: Option<TextAttributeUpdate>,
-    pub created_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub severity: Option<TextAttributeUpdate>,
-    pub message: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
+    pub origin: Option<TextAttributeUpdate>,
     pub kind: Option<TextAttributeUpdate>,
+    pub message: Option<TextAttributeUpdate>,
+    pub conclusion: Option<TextAttributeUpdate>,
+    pub severity: Option<TextAttributeUpdate>,
+    pub created_at: Option<TextAttributeUpdate>,
+    pub validator: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub validator: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreStandardGroupCreateInput {
     pub id: Option<String>,
     pub name: Option<TextAttributeCreate>,
-    pub group_type: Option<TextAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeCreate>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2546,13 +2561,13 @@ pub struct CoreStandardGroupUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeUpdate>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2560,30 +2575,30 @@ pub struct CoreStandardGroupUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub name: Option<TextAttributeUpdate>,
-    pub group_type: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub children: Option<Vec<RelatedNodeInput>>,
-    pub parent: Option<RelatedNodeInput>,
-    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub group_type: Option<TextAttributeUpdate>,
     pub members: Option<Vec<RelatedNodeInput>>,
+    pub subscribers: Option<Vec<RelatedNodeInput>>,
+    pub parent: Option<RelatedNodeInput>,
+    pub children: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreStandardWebhookCreateInput {
     pub id: Option<String>,
     pub shared_key: Option<TextAttributeCreate>,
-    pub branch_scope: Option<TextAttributeCreate>,
-    pub active: Option<CheckboxAttributeCreate>,
-    pub event_type: Option<TextAttributeCreate>,
-    pub validate_certificates: Option<CheckboxAttributeCreate>,
-    pub node_kind: Option<TextAttributeCreate>,
-    pub url: Option<TextAttributeCreate>,
-    pub description: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub event_type: Option<TextAttributeCreate>,
+    pub active: Option<CheckboxAttributeCreate>,
+    pub branch_scope: Option<TextAttributeCreate>,
+    pub node_kind: Option<TextAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
+    pub url: Option<TextAttributeCreate>,
+    pub validate_certificates: Option<CheckboxAttributeCreate>,
     pub headers: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2591,17 +2606,17 @@ pub struct CoreStandardWebhookUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub shared_key: Option<TextAttributeUpdate>,
-    pub branch_scope: Option<TextAttributeUpdate>,
-    pub active: Option<CheckboxAttributeUpdate>,
-    pub event_type: Option<TextAttributeUpdate>,
-    pub validate_certificates: Option<CheckboxAttributeUpdate>,
-    pub node_kind: Option<TextAttributeUpdate>,
-    pub url: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub event_type: Option<TextAttributeUpdate>,
+    pub active: Option<CheckboxAttributeUpdate>,
+    pub branch_scope: Option<TextAttributeUpdate>,
+    pub node_kind: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub url: Option<TextAttributeUpdate>,
+    pub validate_certificates: Option<CheckboxAttributeUpdate>,
     pub headers: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2609,69 +2624,69 @@ pub struct CoreStandardWebhookUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub shared_key: Option<TextAttributeUpdate>,
-    pub branch_scope: Option<TextAttributeUpdate>,
-    pub active: Option<CheckboxAttributeUpdate>,
-    pub event_type: Option<TextAttributeUpdate>,
-    pub validate_certificates: Option<CheckboxAttributeUpdate>,
-    pub node_kind: Option<TextAttributeUpdate>,
-    pub url: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub event_type: Option<TextAttributeUpdate>,
+    pub active: Option<CheckboxAttributeUpdate>,
+    pub branch_scope: Option<TextAttributeUpdate>,
+    pub node_kind: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub url: Option<TextAttributeUpdate>,
+    pub validate_certificates: Option<CheckboxAttributeUpdate>,
     pub headers: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreStaticKeyValueCreateInput {
     pub id: Option<String>,
-    pub value: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
     pub key: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub value: Option<TextAttributeCreate>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreStaticKeyValueUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub value: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub key: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub value: Option<TextAttributeUpdate>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreStaticKeyValueUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub value: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
     pub key: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub value: Option<TextAttributeUpdate>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreTaskTargetUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreThreadCommentCreateInput {
     pub id: Option<String>,
     pub text: Option<TextAttributeCreate>,
+    pub thread: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub thread: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2679,9 +2694,9 @@ pub struct CoreThreadCommentUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub text: Option<TextAttributeUpdate>,
+    pub thread: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub thread: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2689,9 +2704,9 @@ pub struct CoreThreadCommentUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub text: Option<TextAttributeUpdate>,
+    pub thread: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub thread: Option<RelatedNodeInput>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2700,28 +2715,29 @@ pub struct CoreThreadUpdateInput {
     pub hfid: Option<Vec<String>>,
     pub label: Option<TextAttributeUpdate>,
     pub resolved: Option<CheckboxAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub comments: Option<Vec<RelatedNodeInput>>,
     pub change: Option<RelatedNodeInput>,
+    pub comments: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreTransformJinja2CreateInput {
     pub id: Option<String>,
     pub template_path: Option<TextAttributeCreate>,
-    pub dependencies_complete: Option<CheckboxAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub dependencies: Option<ListAttributeCreate>,
-    pub description: Option<TextAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
     pub timeout: Option<NumberAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub fingerprint: Option<TextAttributeCreate>,
+    pub dependencies: Option<ListAttributeCreate>,
+    pub dependencies_complete: Option<CheckboxAttributeCreate>,
+    pub query: Option<RelatedNodeInput>,
     pub repository: Option<RelatedNodeInput>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub query: Option<RelatedNodeInput>,
+    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2729,18 +2745,19 @@ pub struct CoreTransformJinja2UpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub template_path: Option<TextAttributeUpdate>,
-    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub dependencies: Option<ListAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub timeout: Option<NumberAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub fingerprint: Option<TextAttributeUpdate>,
+    pub dependencies: Option<ListAttributeUpdate>,
+    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
+    pub query: Option<RelatedNodeInput>,
     pub repository: Option<RelatedNodeInput>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub query: Option<RelatedNodeInput>,
+    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2748,97 +2765,102 @@ pub struct CoreTransformJinja2UpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
     pub template_path: Option<TextAttributeUpdate>,
-    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub dependencies: Option<ListAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub timeout: Option<NumberAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub fingerprint: Option<TextAttributeUpdate>,
+    pub dependencies: Option<ListAttributeUpdate>,
+    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
+    pub query: Option<RelatedNodeInput>,
     pub repository: Option<RelatedNodeInput>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub query: Option<RelatedNodeInput>,
+    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreTransformPythonCreateInput {
     pub id: Option<String>,
-    pub class_name: Option<TextAttributeCreate>,
     pub file_path: Option<TextAttributeCreate>,
+    pub class_name: Option<TextAttributeCreate>,
     pub convert_query_response: Option<CheckboxAttributeCreate>,
-    pub dependencies_complete: Option<CheckboxAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub dependencies: Option<ListAttributeCreate>,
-    pub description: Option<TextAttributeCreate>,
     pub label: Option<TextAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
     pub timeout: Option<NumberAttributeCreate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub fingerprint: Option<TextAttributeCreate>,
+    pub dependencies: Option<ListAttributeCreate>,
+    pub dependencies_complete: Option<CheckboxAttributeCreate>,
+    pub query: Option<RelatedNodeInput>,
     pub repository: Option<RelatedNodeInput>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub query: Option<RelatedNodeInput>,
+    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreTransformPythonUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub class_name: Option<TextAttributeUpdate>,
     pub file_path: Option<TextAttributeUpdate>,
+    pub class_name: Option<TextAttributeUpdate>,
     pub convert_query_response: Option<CheckboxAttributeUpdate>,
-    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub dependencies: Option<ListAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub timeout: Option<NumberAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub fingerprint: Option<TextAttributeUpdate>,
+    pub dependencies: Option<ListAttributeUpdate>,
+    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
+    pub query: Option<RelatedNodeInput>,
     pub repository: Option<RelatedNodeInput>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub query: Option<RelatedNodeInput>,
+    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreTransformPythonUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub class_name: Option<TextAttributeUpdate>,
     pub file_path: Option<TextAttributeUpdate>,
+    pub class_name: Option<TextAttributeUpdate>,
     pub convert_query_response: Option<CheckboxAttributeUpdate>,
-    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub dependencies: Option<ListAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub timeout: Option<NumberAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub fingerprint: Option<TextAttributeUpdate>,
+    pub dependencies: Option<ListAttributeUpdate>,
+    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
+    pub query: Option<RelatedNodeInput>,
     pub repository: Option<RelatedNodeInput>,
     pub tags: Option<Vec<RelatedNodeInput>>,
-    pub query: Option<RelatedNodeInput>,
+    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreTransformationUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub dependencies: Option<ListAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub label: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub timeout: Option<NumberAttributeUpdate>,
-    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
-    pub repository: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub tags: Option<Vec<RelatedNodeInput>>,
+    pub fingerprint: Option<TextAttributeUpdate>,
+    pub dependencies: Option<ListAttributeUpdate>,
+    pub dependencies_complete: Option<CheckboxAttributeUpdate>,
     pub query: Option<RelatedNodeInput>,
+    pub repository: Option<RelatedNodeInput>,
+    pub tags: Option<Vec<RelatedNodeInput>>,
+    pub artifact_definitions: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
@@ -2846,95 +2868,95 @@ pub struct CoreTransformationUpdateInput {
 pub struct CoreTriggerRuleUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
+    pub name: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
     pub active: Option<CheckboxAttributeUpdate>,
     pub branch_scope: Option<TextAttributeUpdate>,
-    pub name: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub action: Option<RelatedNodeInput>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreUserValidatorCreateInput {
     pub id: Option<String>,
-    pub completed_at: Option<TextAttributeCreate>,
+    pub label: Option<TextAttributeCreate>,
     pub state: Option<TextAttributeCreate>,
     pub conclusion: Option<TextAttributeCreate>,
+    pub completed_at: Option<TextAttributeCreate>,
     pub started_at: Option<TextAttributeCreate>,
-    pub label: Option<TextAttributeCreate>,
-    pub repository: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub check_definition: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub repository: Option<RelatedNodeInput>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreUserValidatorUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub repository: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub check_definition: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub repository: Option<RelatedNodeInput>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreUserValidatorUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub repository: Option<RelatedNodeInput>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub check_definition: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub repository: Option<RelatedNodeInput>,
     pub proposed_change: Option<RelatedNodeInput>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreValidatorUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub completed_at: Option<TextAttributeUpdate>,
+    pub label: Option<TextAttributeUpdate>,
     pub state: Option<TextAttributeUpdate>,
     pub conclusion: Option<TextAttributeUpdate>,
+    pub completed_at: Option<TextAttributeUpdate>,
     pub started_at: Option<TextAttributeUpdate>,
-    pub label: Option<TextAttributeUpdate>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub proposed_change: Option<RelatedNodeInput>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
     pub checks: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreWebhookUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub branch_scope: Option<TextAttributeUpdate>,
-    pub active: Option<CheckboxAttributeUpdate>,
-    pub event_type: Option<TextAttributeUpdate>,
-    pub validate_certificates: Option<CheckboxAttributeUpdate>,
-    pub node_kind: Option<TextAttributeUpdate>,
-    pub url: Option<TextAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
+    pub event_type: Option<TextAttributeUpdate>,
+    pub active: Option<CheckboxAttributeUpdate>,
+    pub branch_scope: Option<TextAttributeUpdate>,
+    pub node_kind: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
+    pub url: Option<TextAttributeUpdate>,
+    pub validate_certificates: Option<CheckboxAttributeUpdate>,
+    pub headers: Option<Vec<RelatedNodeInput>>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
     pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub headers: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3106,39 +3128,39 @@ pub struct InfrahubNodeMetadataOrder {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct IpamNamespaceCreateInput {
     pub id: Option<String>,
-    pub description: Option<TextAttributeCreate>,
     pub name: Option<TextAttributeCreate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub description: Option<TextAttributeCreate>,
     pub ip_prefixes: Option<Vec<RelatedIPPrefixNodeInput>>,
     pub ip_addresses: Option<Vec<RelatedIPAddressNodeInput>>,
     pub profiles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct IpamNamespaceUpdateInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub description: Option<TextAttributeUpdate>,
     pub ip_prefixes: Option<Vec<RelatedIPPrefixNodeInput>>,
     pub ip_addresses: Option<Vec<RelatedIPAddressNodeInput>>,
     pub profiles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct IpamNamespaceUpsertInput {
     pub id: Option<String>,
     pub hfid: Option<Vec<String>>,
-    pub description: Option<TextAttributeUpdate>,
     pub name: Option<TextAttributeUpdate>,
-    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
-    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub description: Option<TextAttributeUpdate>,
     pub ip_prefixes: Option<Vec<RelatedIPPrefixNodeInput>>,
     pub ip_addresses: Option<Vec<RelatedIPAddressNodeInput>>,
     pub profiles: Option<Vec<RelatedNodeInput>>,
+    pub member_of_groups: Option<Vec<RelatedNodeInput>>,
+    pub subscriber_of_groups: Option<Vec<RelatedNodeInput>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3231,8 +3253,8 @@ pub struct ProfileBuiltinIPAddressCreateInput {
     pub id: Option<String>,
     pub profile_name: Option<TextAttributeCreate>,
     pub profile_priority: Option<NumberAttributeCreate>,
-    pub description: Option<TextAttributeCreate>,
     pub address: Option<TextAttributeCreate>,
+    pub description: Option<TextAttributeCreate>,
     pub related_nodes: Option<Vec<RelatedIPAddressNodeInput>>,
     pub ip_namespace: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
@@ -3245,8 +3267,8 @@ pub struct ProfileBuiltinIPAddressUpdateInput {
     pub hfid: Option<Vec<String>>,
     pub profile_name: Option<TextAttributeUpdate>,
     pub profile_priority: Option<NumberAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub address: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub related_nodes: Option<Vec<RelatedIPAddressNodeInput>>,
     pub ip_namespace: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
@@ -3259,8 +3281,8 @@ pub struct ProfileBuiltinIPAddressUpsertInput {
     pub hfid: Option<Vec<String>>,
     pub profile_name: Option<TextAttributeUpdate>,
     pub profile_priority: Option<NumberAttributeUpdate>,
-    pub description: Option<TextAttributeUpdate>,
     pub address: Option<TextAttributeUpdate>,
+    pub description: Option<TextAttributeUpdate>,
     pub related_nodes: Option<Vec<RelatedIPAddressNodeInput>>,
     pub ip_namespace: Option<RelatedNodeInput>,
     pub member_of_groups: Option<Vec<RelatedNodeInput>>,
@@ -3272,9 +3294,9 @@ pub struct ProfileBuiltinIPPrefixCreateInput {
     pub id: Option<String>,
     pub profile_name: Option<TextAttributeCreate>,
     pub profile_priority: Option<NumberAttributeCreate>,
-    pub member_type: Option<TextAttributeCreate>,
     pub prefix: Option<TextAttributeCreate>,
     pub description: Option<TextAttributeCreate>,
+    pub member_type: Option<TextAttributeCreate>,
     pub is_pool: Option<CheckboxAttributeCreate>,
     pub related_nodes: Option<Vec<RelatedIPPrefixNodeInput>>,
     pub ip_namespace: Option<RelatedNodeInput>,
@@ -3288,9 +3310,9 @@ pub struct ProfileBuiltinIPPrefixUpdateInput {
     pub hfid: Option<Vec<String>>,
     pub profile_name: Option<TextAttributeUpdate>,
     pub profile_priority: Option<NumberAttributeUpdate>,
-    pub member_type: Option<TextAttributeUpdate>,
     pub prefix: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub member_type: Option<TextAttributeUpdate>,
     pub is_pool: Option<CheckboxAttributeUpdate>,
     pub related_nodes: Option<Vec<RelatedIPPrefixNodeInput>>,
     pub ip_namespace: Option<RelatedNodeInput>,
@@ -3304,9 +3326,9 @@ pub struct ProfileBuiltinIPPrefixUpsertInput {
     pub hfid: Option<Vec<String>>,
     pub profile_name: Option<TextAttributeUpdate>,
     pub profile_priority: Option<NumberAttributeUpdate>,
-    pub member_type: Option<TextAttributeUpdate>,
     pub prefix: Option<TextAttributeUpdate>,
     pub description: Option<TextAttributeUpdate>,
+    pub member_type: Option<TextAttributeUpdate>,
     pub is_pool: Option<CheckboxAttributeUpdate>,
     pub related_nodes: Option<Vec<RelatedIPPrefixNodeInput>>,
     pub ip_namespace: Option<RelatedNodeInput>,
@@ -3503,6 +3525,11 @@ pub struct SchemaEnumInput {
     pub attribute: String,
     #[serde(rename = "enum")]
     pub r#enum: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TaskActionInput {
+    pub id: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

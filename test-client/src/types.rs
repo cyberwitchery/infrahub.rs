@@ -26,6 +26,8 @@ pub enum BranchStatus {
     Deleting,
     #[serde(rename = "MERGING")]
     Merging,
+    #[serde(rename = "MERGE_FAILED")]
+    MergeFailed,
     #[serde(rename = "MERGED")]
     Merged,
 }
@@ -59,6 +61,20 @@ pub enum ConflictSelection {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum DateFormat {
+    #[serde(rename = "ISO_8601")]
+    Iso8601,
+    #[serde(rename = "ISO_DATETIME")]
+    IsoDatetime,
+    #[serde(rename = "ISO_DATETIME_SECONDS")]
+    IsoDatetimeSeconds,
+    #[serde(rename = "EU_DATETIME")]
+    EuDatetime,
+    #[serde(rename = "US_12H")]
+    Us12H,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum DiffAction {
     #[serde(rename = "ADDED")]
     Added,
@@ -84,6 +100,24 @@ pub enum OrderDirection {
     Asc,
     #[serde(rename = "DESC")]
     Desc,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum PreferenceSource {
+    #[serde(rename = "USER")]
+    User,
+    #[serde(rename = "GLOBAL")]
+    Global,
+    #[serde(rename = "DEFAULT")]
+    Default,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum PreferenceWriteScope {
+    #[serde(rename = "USER")]
+    User,
+    #[serde(rename = "GLOBAL")]
+    Global,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -126,6 +160,14 @@ pub enum StateType {
     Paused,
     #[serde(rename = "CANCELLING")]
     Cancelling,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub enum TaskActionType {
+    #[serde(rename = "RETRY")]
+    Retry,
+    #[serde(rename = "CANCEL")]
+    Cancel,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -308,7 +350,7 @@ pub struct Branch {
     pub created_at: Option<String>,
     pub sync_with_git: Option<bool>,
     pub is_default: Option<bool>,
-    pub has_schema_changes: Option<bool>,
+    pub schema_differs_from_default_branch: Option<bool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -437,11 +479,11 @@ pub struct BuiltinTag {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub description: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub description: Option<Box<TextAttribute>>,
     pub profiles: Box<NestedPaginatedCoreProfile>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -507,14 +549,14 @@ pub struct CoreAccount {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub description: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
     pub password: Option<Box<TextAttribute>>,
-    pub account_type: Option<Box<TextAttribute>>,
     pub label: Option<Box<TextAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
+    pub account_type: Option<Box<TextAttribute>>,
     pub status: Option<Box<Dropdown>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub is_externally_managed: bool,
 }
 
@@ -535,13 +577,13 @@ pub struct CoreAccountGroup {
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
     pub name: Option<Box<TextAttribute>>,
-    pub group_type: Option<Box<TextAttribute>>,
     pub label: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
+    pub group_type: Option<Box<TextAttribute>>,
     pub origin: Option<Box<TextAttribute>>,
     pub roles: Box<NestedPaginatedCoreAccountRole>,
-    pub subscribers: Box<NestedPaginatedCoreNode>,
     pub members: Box<NestedPaginatedCoreNode>,
+    pub subscribers: Box<NestedPaginatedCoreNode>,
     pub parent: Box<NestedEdgedCoreGroup>,
     pub children: Box<NestedPaginatedCoreGroup>,
     pub ancestors: Box<NestedPaginatedCoreGroup>,
@@ -577,10 +619,10 @@ pub struct CoreAccountRole {
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
     pub name: Option<Box<TextAttribute>>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub groups: Box<NestedPaginatedCoreAccountGroup>,
     pub permissions: Box<NestedPaginatedCoreBasePermission>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -629,16 +671,16 @@ pub struct CoreArtifact {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub checksum: Option<Box<TextAttribute>>,
-    pub parameters: Option<Box<JSONAttribute>>,
     pub name: Option<Box<TextAttribute>>,
-    pub storage_id: Option<Box<TextAttribute>>,
     pub status: Option<Box<TextAttribute>>,
     pub content_type: Option<Box<TextAttribute>>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub checksum: Option<Box<TextAttribute>>,
+    pub storage_id: Option<Box<TextAttribute>>,
+    pub parameters: Option<Box<JSONAttribute>>,
     pub object: Box<NestedEdgedCoreArtifactTarget>,
     pub definition: Box<NestedEdgedCoreArtifactDefinition>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -646,22 +688,22 @@ pub struct CoreArtifactCheck {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub origin: Option<Box<TextAttribute>>,
-    pub conclusion: Option<Box<TextAttribute>>,
-    pub created_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub severity: Option<Box<TextAttribute>>,
-    pub message: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
+    pub origin: Option<Box<TextAttribute>>,
     pub kind: Option<Box<TextAttribute>>,
+    pub message: Option<Box<TextAttribute>>,
+    pub conclusion: Option<Box<TextAttribute>>,
+    pub severity: Option<Box<TextAttribute>>,
+    pub created_at: Option<Box<TextAttribute>>,
     pub changed: Option<Box<CheckboxAttribute>>,
+    pub checksum: Option<Box<TextAttribute>>,
     pub artifact_id: Option<Box<TextAttribute>>,
     pub storage_id: Option<Box<TextAttribute>>,
-    pub checksum: Option<Box<TextAttribute>>,
     pub line_number: Option<Box<NumberAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub validator: Box<NestedEdgedCoreValidator>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -698,17 +740,18 @@ pub struct CoreArtifactDefinition {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub content_type: Option<Box<TextAttribute>>,
+    pub name: Option<Box<TextAttribute>>,
     pub artifact_name: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
-    pub name: Option<Box<TextAttribute>>,
     pub parameters: Option<Box<JSONAttribute>>,
-    pub transformation: Box<NestedEdgedCoreTransformation>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub content_type: Option<Box<TextAttribute>>,
+    pub fingerprint: Option<Box<TextAttribute>>,
     pub targets: Box<NestedEdgedCoreGroup>,
+    pub transformation: Box<NestedEdgedCoreTransformation>,
     pub artifacts: Box<NestedPaginatedCoreArtifact>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub validators: Box<NestedPaginatedCoreArtifactValidator>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -752,13 +795,13 @@ pub struct CoreArtifactThread {
     pub display_label: Option<String>,
     pub label: Option<Box<TextAttribute>>,
     pub resolved: Option<Box<CheckboxAttribute>>,
-    pub line_number: Option<Box<NumberAttribute>>,
-    pub storage_id: Option<Box<TextAttribute>>,
     pub artifact_id: Option<Box<TextAttribute>>,
+    pub storage_id: Option<Box<TextAttribute>>,
+    pub line_number: Option<Box<NumberAttribute>>,
+    pub change: Box<NestedEdgedCoreProposedChange>,
+    pub comments: Box<NestedPaginatedCoreThreadComment>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub comments: Box<NestedPaginatedCoreThreadComment>,
-    pub change: Box<NestedEdgedCoreProposedChange>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -801,16 +844,16 @@ pub struct CoreArtifactValidator {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub completed_at: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
     pub state: Option<Box<TextAttribute>>,
     pub conclusion: Option<Box<TextAttribute>>,
+    pub completed_at: Option<Box<TextAttribute>>,
     pub started_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub definition: Box<NestedEdgedCoreArtifactDefinition>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub proposed_change: Box<NestedEdgedCoreProposedChange>,
     pub checks: Box<NestedPaginatedCoreCheck>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -848,9 +891,9 @@ pub struct CoreChangeComment {
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
     pub text: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub change: Box<NestedEdgedCoreProposedChange>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -883,10 +926,10 @@ pub struct CoreChangeThread {
     pub display_label: Option<String>,
     pub label: Option<Box<TextAttribute>>,
     pub resolved: Option<Box<CheckboxAttribute>>,
+    pub change: Box<NestedEdgedCoreProposedChange>,
+    pub comments: Box<NestedPaginatedCoreThreadComment>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub comments: Box<NestedPaginatedCoreThreadComment>,
-    pub change: Box<NestedEdgedCoreProposedChange>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -917,19 +960,19 @@ pub struct CoreCheckDefinition {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub description: Option<Box<TextAttribute>>,
-    pub class_name: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
-    pub timeout: Option<Box<NumberAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
     pub file_path: Option<Box<TextAttribute>>,
+    pub class_name: Option<Box<TextAttribute>>,
+    pub timeout: Option<Box<NumberAttribute>>,
     pub parameters: Option<Box<JSONAttribute>>,
     pub repository: Box<NestedEdgedCoreGenericRepository>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub validators: Box<NestedPaginatedCoreUserValidator>,
-    pub tags: Box<NestedPaginatedBuiltinTag>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub query: Box<NestedEdgedCoreGraphQLQuery>,
     pub targets: Box<NestedEdgedCoreGroup>,
+    pub tags: Box<NestedPaginatedBuiltinTag>,
+    pub validators: Box<NestedPaginatedCoreUserValidator>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -978,19 +1021,19 @@ pub struct CoreCustomWebhook {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub branch_scope: Option<Box<Dropdown>>,
-    pub active: Option<Box<CheckboxAttribute>>,
-    pub event_type: Option<Box<TextAttribute>>,
-    pub validate_certificates: Option<Box<CheckboxAttribute>>,
-    pub node_kind: Option<Box<TextAttribute>>,
-    pub url: Option<Box<TextAttribute>>,
-    pub description: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
+    pub event_type: Option<Box<TextAttribute>>,
+    pub active: Option<Box<CheckboxAttribute>>,
+    pub branch_scope: Option<Box<Dropdown>>,
+    pub node_kind: Option<Box<TextAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
+    pub url: Option<Box<TextAttribute>>,
+    pub validate_certificates: Option<Box<CheckboxAttribute>>,
     pub shared_key: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub transformation: Box<NestedEdgedCoreTransformPython>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub headers: Box<NestedPaginatedCoreKeyValue>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1021,20 +1064,20 @@ pub struct CoreDataCheck {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub origin: Option<Box<TextAttribute>>,
-    pub conclusion: Option<Box<TextAttribute>>,
-    pub created_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub severity: Option<Box<TextAttribute>>,
-    pub message: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
+    pub origin: Option<Box<TextAttribute>>,
     pub kind: Option<Box<TextAttribute>>,
+    pub message: Option<Box<TextAttribute>>,
+    pub conclusion: Option<Box<TextAttribute>>,
+    pub severity: Option<Box<TextAttribute>>,
+    pub created_at: Option<Box<TextAttribute>>,
+    pub conflicts: Option<Box<JSONAttribute>>,
     pub keep_branch: Option<Box<TextAttribute>>,
     pub enriched_conflict_id: Option<Box<TextAttribute>>,
-    pub conflicts: Option<Box<JSONAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub validator: Box<NestedEdgedCoreValidator>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1065,15 +1108,15 @@ pub struct CoreDataValidator {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub completed_at: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
     pub state: Option<Box<TextAttribute>>,
     pub conclusion: Option<Box<TextAttribute>>,
+    pub completed_at: Option<Box<TextAttribute>>,
     pub started_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub proposed_change: Box<NestedEdgedCoreProposedChange>,
     pub checks: Box<NestedPaginatedCoreCheck>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1104,10 +1147,10 @@ pub struct CoreEnvKeyValue {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub value: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
     pub key: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
+    pub value: Option<Box<TextAttribute>>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
@@ -1140,19 +1183,19 @@ pub struct CoreFileCheck {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub origin: Option<Box<TextAttribute>>,
-    pub conclusion: Option<Box<TextAttribute>>,
-    pub created_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub severity: Option<Box<TextAttribute>>,
-    pub message: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
+    pub origin: Option<Box<TextAttribute>>,
     pub kind: Option<Box<TextAttribute>>,
-    pub commit: Option<Box<TextAttribute>>,
+    pub message: Option<Box<TextAttribute>>,
+    pub conclusion: Option<Box<TextAttribute>>,
+    pub severity: Option<Box<TextAttribute>>,
+    pub created_at: Option<Box<TextAttribute>>,
     pub files: Option<Box<ListAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub commit: Option<Box<TextAttribute>>,
     pub validator: Box<NestedEdgedCoreValidator>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1194,11 +1237,11 @@ pub struct CoreFileThread {
     pub file: Option<Box<TextAttribute>>,
     pub commit: Option<Box<TextAttribute>>,
     pub line_number: Option<Box<NumberAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub repository: Box<NestedEdgedCoreRepository>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub comments: Box<NestedPaginatedCoreThreadComment>,
     pub change: Box<NestedEdgedCoreProposedChange>,
+    pub comments: Box<NestedPaginatedCoreThreadComment>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1232,9 +1275,9 @@ pub struct CoreGeneratorAction {
     pub name: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
     pub generator: Box<NestedEdgedCoreGeneratorDefinition>,
+    pub triggers: Box<NestedPaginatedCoreTriggerRule>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub triggers: Box<NestedPaginatedCoreTriggerRule>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1266,11 +1309,11 @@ pub struct CoreGeneratorAwareGroup {
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
     pub name: Option<Box<TextAttribute>>,
-    pub group_type: Option<Box<TextAttribute>>,
     pub label: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
-    pub subscribers: Box<NestedPaginatedCoreNode>,
+    pub group_type: Option<Box<TextAttribute>>,
     pub members: Box<NestedPaginatedCoreNode>,
+    pub subscribers: Box<NestedPaginatedCoreNode>,
     pub parent: Box<NestedEdgedCoreGroup>,
     pub children: Box<NestedPaginatedCoreGroup>,
     pub ancestors: Box<NestedPaginatedCoreGroup>,
@@ -1305,18 +1348,18 @@ pub struct CoreGeneratorCheck {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub origin: Option<Box<TextAttribute>>,
-    pub conclusion: Option<Box<TextAttribute>>,
-    pub created_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub severity: Option<Box<TextAttribute>>,
-    pub message: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
+    pub origin: Option<Box<TextAttribute>>,
     pub kind: Option<Box<TextAttribute>>,
+    pub message: Option<Box<TextAttribute>>,
+    pub conclusion: Option<Box<TextAttribute>>,
+    pub severity: Option<Box<TextAttribute>>,
+    pub created_at: Option<Box<TextAttribute>>,
     pub instance: Option<Box<TextAttribute>>,
+    pub validator: Box<NestedEdgedCoreValidator>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub validator: Box<NestedEdgedCoreValidator>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1347,21 +1390,24 @@ pub struct CoreGeneratorDefinition {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub execute_after_merge: Option<Box<CheckboxAttribute>>,
-    pub class_name: Option<Box<TextAttribute>>,
-    pub parameters: Option<Box<JSONAttribute>>,
-    pub file_path: Option<Box<TextAttribute>>,
-    pub convert_query_response: Option<Box<CheckboxAttribute>>,
     pub name: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
+    pub parameters: Option<Box<JSONAttribute>>,
+    pub file_path: Option<Box<TextAttribute>>,
+    pub class_name: Option<Box<TextAttribute>>,
+    pub convert_query_response: Option<Box<CheckboxAttribute>>,
     pub execute_in_proposed_change: Option<Box<CheckboxAttribute>>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub repository: Box<NestedEdgedCoreGenericRepository>,
-    pub validators: Box<NestedPaginatedCoreGeneratorValidator>,
-    pub targets: Box<NestedEdgedCoreGroup>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub instances: Box<NestedPaginatedCoreGeneratorInstance>,
+    pub execute_after_merge: Option<Box<CheckboxAttribute>>,
+    pub fingerprint: Option<Box<TextAttribute>>,
+    pub dependencies: Option<Box<ListAttribute>>,
+    pub dependencies_complete: Option<Box<CheckboxAttribute>>,
     pub query: Box<NestedEdgedCoreGraphQLQuery>,
+    pub repository: Box<NestedEdgedCoreGenericRepository>,
+    pub targets: Box<NestedEdgedCoreGroup>,
+    pub instances: Box<NestedPaginatedCoreGeneratorInstance>,
+    pub validators: Box<NestedPaginatedCoreGeneratorValidator>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1393,11 +1439,11 @@ pub struct CoreGeneratorGroup {
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
     pub name: Option<Box<TextAttribute>>,
-    pub group_type: Option<Box<TextAttribute>>,
     pub label: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
-    pub subscribers: Box<NestedPaginatedCoreNode>,
+    pub group_type: Option<Box<TextAttribute>>,
     pub members: Box<NestedPaginatedCoreNode>,
+    pub subscribers: Box<NestedPaginatedCoreNode>,
     pub parent: Box<NestedEdgedCoreGroup>,
     pub children: Box<NestedPaginatedCoreGroup>,
     pub ancestors: Box<NestedPaginatedCoreGroup>,
@@ -1432,11 +1478,11 @@ pub struct CoreGeneratorInstance {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub status: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
+    pub status: Option<Box<TextAttribute>>,
+    pub object: Box<NestedEdgedCoreNode>,
     pub definition: Box<NestedEdgedCoreGeneratorDefinition>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub object: Box<NestedEdgedCoreNode>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
@@ -1468,16 +1514,16 @@ pub struct CoreGeneratorValidator {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub completed_at: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
     pub state: Option<Box<TextAttribute>>,
     pub conclusion: Option<Box<TextAttribute>>,
+    pub completed_at: Option<Box<TextAttribute>>,
     pub started_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub definition: Box<NestedEdgedCoreGeneratorDefinition>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub proposed_change: Box<NestedEdgedCoreProposedChange>,
     pub checks: Box<NestedPaginatedCoreCheck>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1520,13 +1566,13 @@ pub struct CoreGlobalPermission {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub identifier: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
-    pub decision: Option<Box<NumberAttribute>>,
+    pub identifier: Option<Box<TextAttribute>>,
     pub action: Option<Box<Dropdown>>,
+    pub decision: Option<Box<NumberAttribute>>,
+    pub roles: Box<NestedPaginatedCoreAccountRole>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub roles: Box<NestedPaginatedCoreAccountRole>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1557,19 +1603,20 @@ pub struct CoreGraphQLQuery {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub height: Option<Box<NumberAttribute>>,
-    pub operations: Option<Box<ListAttribute>>,
-    pub query: Option<Box<TextAttribute>>,
-    pub depth: Option<Box<NumberAttribute>>,
-    pub models: Option<Box<ListAttribute>>,
-    pub variables: Option<Box<JSONAttribute>>,
     pub name: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub query_groups: Box<NestedPaginatedCoreGraphQLQueryGroup>,
-    pub tags: Box<NestedPaginatedBuiltinTag>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub query: Option<Box<TextAttribute>>,
+    pub fingerprint: Option<Box<TextAttribute>>,
+    pub variables: Option<Box<JSONAttribute>>,
+    pub operations: Option<Box<ListAttribute>>,
+    pub models: Option<Box<ListAttribute>>,
+    pub depth: Option<Box<NumberAttribute>>,
+    pub height: Option<Box<NumberAttribute>>,
     pub repository: Box<NestedEdgedCoreGenericRepository>,
+    pub tags: Box<NestedPaginatedBuiltinTag>,
+    pub query_groups: Box<NestedPaginatedCoreGraphQLQueryGroup>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1589,13 +1636,13 @@ pub struct CoreGraphQLQueryGroup {
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
     pub name: Option<Box<TextAttribute>>,
-    pub group_type: Option<Box<TextAttribute>>,
     pub label: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
+    pub group_type: Option<Box<TextAttribute>>,
     pub parameters: Option<Box<JSONAttribute>>,
     pub query: Box<NestedEdgedCoreGraphQLQuery>,
-    pub subscribers: Box<NestedPaginatedCoreNode>,
     pub members: Box<NestedPaginatedCoreNode>,
+    pub subscribers: Box<NestedPaginatedCoreNode>,
     pub parent: Box<NestedEdgedCoreGroup>,
     pub children: Box<NestedPaginatedCoreGroup>,
     pub ancestors: Box<NestedPaginatedCoreGroup>,
@@ -1645,10 +1692,10 @@ pub struct CoreGroupAction {
     pub name: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
     pub member_action: Option<Box<Dropdown>>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub group: Box<NestedEdgedCoreGroup>,
     pub triggers: Box<NestedPaginatedCoreTriggerRule>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1679,15 +1726,15 @@ pub struct CoreGroupTriggerRule {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
+    pub name: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
     pub active: Option<Box<CheckboxAttribute>>,
     pub branch_scope: Option<Box<Dropdown>>,
-    pub name: Option<Box<TextAttribute>>,
     pub member_update: Option<Box<Dropdown>>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub group: Box<NestedEdgedCoreGroup>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub action: Box<NestedEdgedCoreAction>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1726,11 +1773,11 @@ pub struct CoreIPAddressPool {
     pub display_label: Option<String>,
     pub name: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
-    pub default_prefix_length: Option<Box<NumberAttribute>>,
     pub default_address_type: Option<Box<TextAttribute>>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub ip_namespace: Box<NestedEdgedBuiltinIPNamespace>,
+    pub default_prefix_length: Option<Box<NumberAttribute>>,
     pub resources: Box<NestedPaginatedBuiltinIPPrefix>,
+    pub ip_namespace: Box<NestedEdgedBuiltinIPNamespace>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
@@ -1770,13 +1817,13 @@ pub struct CoreIPPrefixPool {
     pub display_label: Option<String>,
     pub name: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
+    pub default_prefix_length: Option<Box<NumberAttribute>>,
     pub default_member_type: Option<Box<TextAttribute>>,
     pub default_prefix_type: Option<Box<TextAttribute>>,
-    pub default_prefix_length: Option<Box<NumberAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub resources: Box<NestedPaginatedBuiltinIPPrefix>,
     pub ip_namespace: Box<NestedEdgedBuiltinIPNamespace>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1813,17 +1860,17 @@ pub struct CoreMenuItem {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub label: Option<Box<TextAttribute>>,
-    pub order_weight: Option<Box<NumberAttribute>>,
-    pub description: Option<Box<TextAttribute>>,
-    pub path: Option<Box<TextAttribute>>,
-    pub required_permissions: Option<Box<ListAttribute>>,
-    pub section: Option<Box<TextAttribute>>,
-    pub protected: Option<Box<CheckboxAttribute>>,
     pub namespace: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
     pub kind: Option<Box<TextAttribute>>,
+    pub path: Option<Box<TextAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
     pub icon: Option<Box<TextAttribute>>,
+    pub protected: Option<Box<CheckboxAttribute>>,
+    pub order_weight: Option<Box<NumberAttribute>>,
+    pub required_permissions: Option<Box<ListAttribute>>,
+    pub section: Option<Box<TextAttribute>>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub parent: Box<NestedEdgedCoreMenu>,
@@ -1867,12 +1914,12 @@ pub struct CoreNodeTriggerAttributeMatch {
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
     pub attribute_name: Option<Box<TextAttribute>>,
-    pub value_previous: Option<Box<TextAttribute>>,
     pub value: Option<Box<TextAttribute>>,
+    pub value_previous: Option<Box<TextAttribute>>,
     pub value_match: Option<Box<Dropdown>>,
+    pub trigger: Box<NestedEdgedCoreNodeTriggerRule>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub trigger: Box<NestedEdgedCoreNodeTriggerRule>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1912,9 +1959,9 @@ pub struct CoreNodeTriggerRelationshipMatch {
     pub relationship_name: Option<Box<TextAttribute>>,
     pub modification_type: Option<Box<Dropdown>>,
     pub peer: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub trigger: Box<NestedEdgedCoreNodeTriggerRule>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1945,16 +1992,16 @@ pub struct CoreNodeTriggerRule {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
+    pub name: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
     pub active: Option<Box<CheckboxAttribute>>,
     pub branch_scope: Option<Box<Dropdown>>,
-    pub name: Option<Box<TextAttribute>>,
-    pub mutation_action: Option<Box<TextAttribute>>,
     pub node_kind: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub mutation_action: Option<Box<TextAttribute>>,
     pub matches: Box<NestedPaginatedCoreNodeTriggerMatch>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub action: Box<NestedEdgedCoreAction>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -1993,13 +2040,13 @@ pub struct CoreNumberPool {
     pub display_label: Option<String>,
     pub name: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
-    pub end_range: Option<Box<NumberAttribute>>,
+    pub node: Option<Box<TextAttribute>>,
     pub node_attribute: Option<Box<TextAttribute>>,
     pub start_range: Option<Box<NumberAttribute>>,
+    pub end_range: Option<Box<NumberAttribute>>,
     pub pool_type: Option<Box<TextAttribute>>,
-    pub node: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2036,15 +2083,15 @@ pub struct CoreObjectPermission {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub identifier: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
+    pub identifier: Option<Box<TextAttribute>>,
+    pub namespace: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
     pub action: Option<Box<TextAttribute>>,
     pub decision: Option<Box<NumberAttribute>>,
-    pub namespace: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub roles: Box<NestedPaginatedCoreAccountRole>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2084,10 +2131,10 @@ pub struct CoreObjectThread {
     pub label: Option<Box<TextAttribute>>,
     pub resolved: Option<Box<CheckboxAttribute>>,
     pub object_path: Option<Box<TextAttribute>>,
+    pub change: Box<NestedEdgedCoreProposedChange>,
+    pub comments: Box<NestedPaginatedCoreThreadComment>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub comments: Box<NestedPaginatedCoreThreadComment>,
-    pub change: Box<NestedEdgedCoreProposedChange>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2119,10 +2166,10 @@ pub struct CorePasswordCredential {
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
     pub name: Option<Box<TextAttribute>>,
-    pub description: Option<Box<TextAttribute>>,
     pub label: Option<Box<TextAttribute>>,
-    pub password: Option<Box<TextAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
     pub username: Option<Box<TextAttribute>>,
+    pub password: Option<Box<TextAttribute>>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
@@ -2161,21 +2208,21 @@ pub struct CoreProposedChange {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub is_draft: Option<Box<CheckboxAttribute>>,
-    pub description: Option<Box<TextAttribute>>,
-    pub total_comments: Option<Box<NumberAttribute>>,
     pub name: Option<Box<TextAttribute>>,
-    pub state: Option<Box<TextAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
     pub source_branch: Option<Box<TextAttribute>>,
     pub destination_branch: Option<Box<TextAttribute>>,
+    pub state: Option<Box<TextAttribute>>,
+    pub is_draft: Option<Box<CheckboxAttribute>>,
+    pub total_comments: Option<Box<NumberAttribute>>,
+    pub approved_by: Box<NestedPaginatedCoreGenericAccount>,
+    pub rejected_by: Box<NestedPaginatedCoreGenericAccount>,
+    pub reviewers: Box<NestedPaginatedCoreGenericAccount>,
+    pub comments: Box<NestedPaginatedCoreChangeComment>,
+    pub threads: Box<NestedPaginatedCoreThread>,
     pub validations: Box<NestedPaginatedCoreValidator>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub reviewers: Box<NestedPaginatedCoreGenericAccount>,
-    pub approved_by: Box<NestedPaginatedCoreGenericAccount>,
-    pub threads: Box<NestedPaginatedCoreThread>,
-    pub comments: Box<NestedPaginatedCoreChangeComment>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub rejected_by: Box<NestedPaginatedCoreGenericAccount>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2206,24 +2253,24 @@ pub struct CoreReadOnlyRepository {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub internal_status: Option<Box<Dropdown>>,
     pub name: Option<Box<TextAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
+    pub location: Option<Box<TextAttribute>>,
+    pub internal_status: Option<Box<Dropdown>>,
     pub operational_status: Option<Box<Dropdown>>,
     pub sync_status: Option<Box<Dropdown>>,
-    pub location: Option<Box<TextAttribute>>,
-    pub description: Option<Box<TextAttribute>>,
-    pub commit: Option<Box<TextAttribute>>,
     #[serde(rename = "ref")]
     pub r#ref: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub commit: Option<Box<TextAttribute>>,
     pub credential: Box<NestedEdgedCoreCredential>,
-    pub checks: Box<NestedPaginatedCoreCheckDefinition>,
     pub tags: Box<NestedPaginatedBuiltinTag>,
-    pub groups_objects: Box<NestedPaginatedCoreRepositoryGroup>,
-    pub generators: Box<NestedPaginatedCoreGeneratorDefinition>,
     pub transformations: Box<NestedPaginatedCoreTransformation>,
     pub queries: Box<NestedPaginatedCoreGraphQLQuery>,
+    pub checks: Box<NestedPaginatedCoreCheckDefinition>,
+    pub generators: Box<NestedPaginatedCoreGeneratorDefinition>,
+    pub groups_objects: Box<NestedPaginatedCoreRepositoryGroup>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2254,23 +2301,23 @@ pub struct CoreRepository {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub internal_status: Option<Box<Dropdown>>,
     pub name: Option<Box<TextAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
+    pub location: Option<Box<TextAttribute>>,
+    pub internal_status: Option<Box<Dropdown>>,
     pub operational_status: Option<Box<Dropdown>>,
     pub sync_status: Option<Box<Dropdown>>,
-    pub location: Option<Box<TextAttribute>>,
-    pub description: Option<Box<TextAttribute>>,
-    pub commit: Option<Box<TextAttribute>>,
     pub default_branch: Option<Box<TextAttribute>>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub commit: Option<Box<TextAttribute>>,
     pub credential: Box<NestedEdgedCoreCredential>,
-    pub checks: Box<NestedPaginatedCoreCheckDefinition>,
     pub tags: Box<NestedPaginatedBuiltinTag>,
-    pub groups_objects: Box<NestedPaginatedCoreRepositoryGroup>,
-    pub generators: Box<NestedPaginatedCoreGeneratorDefinition>,
     pub transformations: Box<NestedPaginatedCoreTransformation>,
     pub queries: Box<NestedPaginatedCoreGraphQLQuery>,
+    pub checks: Box<NestedPaginatedCoreCheckDefinition>,
+    pub generators: Box<NestedPaginatedCoreGeneratorDefinition>,
+    pub groups_objects: Box<NestedPaginatedCoreRepositoryGroup>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2290,13 +2337,13 @@ pub struct CoreRepositoryGroup {
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
     pub name: Option<Box<TextAttribute>>,
-    pub group_type: Option<Box<TextAttribute>>,
     pub label: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
+    pub group_type: Option<Box<TextAttribute>>,
     pub content: Option<Box<Dropdown>>,
     pub repository: Box<NestedEdgedCoreGenericRepository>,
-    pub subscribers: Box<NestedPaginatedCoreNode>,
     pub members: Box<NestedPaginatedCoreNode>,
+    pub subscribers: Box<NestedPaginatedCoreNode>,
     pub parent: Box<NestedEdgedCoreGroup>,
     pub children: Box<NestedPaginatedCoreGroup>,
     pub ancestors: Box<NestedPaginatedCoreGroup>,
@@ -2343,16 +2390,16 @@ pub struct CoreRepositoryValidator {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub completed_at: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
     pub state: Option<Box<TextAttribute>>,
     pub conclusion: Option<Box<TextAttribute>>,
+    pub completed_at: Option<Box<TextAttribute>>,
     pub started_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub repository: Box<NestedEdgedCoreGenericRepository>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub proposed_change: Box<NestedEdgedCoreProposedChange>,
     pub checks: Box<NestedPaginatedCoreCheck>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2389,19 +2436,19 @@ pub struct CoreSchemaCheck {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub origin: Option<Box<TextAttribute>>,
-    pub conclusion: Option<Box<TextAttribute>>,
-    pub created_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub severity: Option<Box<TextAttribute>>,
-    pub message: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
+    pub origin: Option<Box<TextAttribute>>,
     pub kind: Option<Box<TextAttribute>>,
+    pub message: Option<Box<TextAttribute>>,
+    pub conclusion: Option<Box<TextAttribute>>,
+    pub severity: Option<Box<TextAttribute>>,
+    pub created_at: Option<Box<TextAttribute>>,
     pub conflicts: Option<Box<JSONAttribute>>,
     pub enriched_conflict_id: Option<Box<TextAttribute>>,
+    pub validator: Box<NestedEdgedCoreValidator>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub validator: Box<NestedEdgedCoreValidator>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2432,15 +2479,15 @@ pub struct CoreSchemaValidator {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub completed_at: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
     pub state: Option<Box<TextAttribute>>,
     pub conclusion: Option<Box<TextAttribute>>,
+    pub completed_at: Option<Box<TextAttribute>>,
     pub started_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub proposed_change: Box<NestedEdgedCoreProposedChange>,
     pub checks: Box<NestedPaginatedCoreCheck>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2471,17 +2518,17 @@ pub struct CoreStandardCheck {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub origin: Option<Box<TextAttribute>>,
-    pub conclusion: Option<Box<TextAttribute>>,
-    pub created_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub severity: Option<Box<TextAttribute>>,
-    pub message: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
+    pub origin: Option<Box<TextAttribute>>,
     pub kind: Option<Box<TextAttribute>>,
+    pub message: Option<Box<TextAttribute>>,
+    pub conclusion: Option<Box<TextAttribute>>,
+    pub severity: Option<Box<TextAttribute>>,
+    pub created_at: Option<Box<TextAttribute>>,
+    pub validator: Box<NestedEdgedCoreValidator>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub validator: Box<NestedEdgedCoreValidator>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2513,11 +2560,11 @@ pub struct CoreStandardGroup {
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
     pub name: Option<Box<TextAttribute>>,
-    pub group_type: Option<Box<TextAttribute>>,
     pub label: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
-    pub subscribers: Box<NestedPaginatedCoreNode>,
+    pub group_type: Option<Box<TextAttribute>>,
     pub members: Box<NestedPaginatedCoreNode>,
+    pub subscribers: Box<NestedPaginatedCoreNode>,
     pub parent: Box<NestedEdgedCoreGroup>,
     pub children: Box<NestedPaginatedCoreGroup>,
     pub ancestors: Box<NestedPaginatedCoreGroup>,
@@ -2552,18 +2599,18 @@ pub struct CoreStandardWebhook {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub branch_scope: Option<Box<Dropdown>>,
-    pub active: Option<Box<CheckboxAttribute>>,
-    pub event_type: Option<Box<TextAttribute>>,
-    pub validate_certificates: Option<Box<CheckboxAttribute>>,
-    pub node_kind: Option<Box<TextAttribute>>,
-    pub url: Option<Box<TextAttribute>>,
-    pub description: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
+    pub event_type: Option<Box<TextAttribute>>,
+    pub active: Option<Box<CheckboxAttribute>>,
+    pub branch_scope: Option<Box<Dropdown>>,
+    pub node_kind: Option<Box<TextAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
+    pub url: Option<Box<TextAttribute>>,
+    pub validate_certificates: Option<Box<CheckboxAttribute>>,
     pub shared_key: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub headers: Box<NestedPaginatedCoreKeyValue>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2594,12 +2641,12 @@ pub struct CoreStaticKeyValue {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub value: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
     pub key: Option<Box<TextAttribute>>,
     pub description: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub value: Option<Box<TextAttribute>>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2637,9 +2684,9 @@ pub struct CoreThreadComment {
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
     pub text: Option<Box<TextAttribute>>,
+    pub thread: Box<NestedEdgedCoreThread>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub thread: Box<NestedEdgedCoreThread>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2676,19 +2723,20 @@ pub struct CoreTransformJinja2 {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub dependencies_complete: Option<Box<CheckboxAttribute>>,
     pub name: Option<Box<TextAttribute>>,
-    pub dependencies: Option<Box<ListAttribute>>,
-    pub description: Option<Box<TextAttribute>>,
     pub label: Option<Box<TextAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
     pub timeout: Option<Box<NumberAttribute>>,
+    pub fingerprint: Option<Box<TextAttribute>>,
+    pub dependencies: Option<Box<ListAttribute>>,
+    pub dependencies_complete: Option<Box<CheckboxAttribute>>,
     pub template_path: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub artifact_definitions: Box<NestedPaginatedCoreArtifactDefinition>,
+    pub query: Box<NestedEdgedCoreGraphQLQuery>,
     pub repository: Box<NestedEdgedCoreGenericRepository>,
     pub tags: Box<NestedPaginatedBuiltinTag>,
-    pub query: Box<NestedEdgedCoreGraphQLQuery>,
+    pub artifact_definitions: Box<NestedPaginatedCoreArtifactDefinition>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2719,21 +2767,22 @@ pub struct CoreTransformPython {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub dependencies_complete: Option<Box<CheckboxAttribute>>,
     pub name: Option<Box<TextAttribute>>,
-    pub dependencies: Option<Box<ListAttribute>>,
-    pub description: Option<Box<TextAttribute>>,
     pub label: Option<Box<TextAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
     pub timeout: Option<Box<NumberAttribute>>,
-    pub class_name: Option<Box<TextAttribute>>,
+    pub fingerprint: Option<Box<TextAttribute>>,
+    pub dependencies: Option<Box<ListAttribute>>,
+    pub dependencies_complete: Option<Box<CheckboxAttribute>>,
     pub file_path: Option<Box<TextAttribute>>,
+    pub class_name: Option<Box<TextAttribute>>,
     pub convert_query_response: Option<Box<CheckboxAttribute>>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub artifact_definitions: Box<NestedPaginatedCoreArtifactDefinition>,
+    pub query: Box<NestedEdgedCoreGraphQLQuery>,
     pub repository: Box<NestedEdgedCoreGenericRepository>,
     pub tags: Box<NestedPaginatedBuiltinTag>,
-    pub query: Box<NestedEdgedCoreGraphQLQuery>,
+    pub artifact_definitions: Box<NestedPaginatedCoreArtifactDefinition>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -2776,17 +2825,17 @@ pub struct CoreUserValidator {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub completed_at: Option<Box<TextAttribute>>,
+    pub label: Option<Box<TextAttribute>>,
     pub state: Option<Box<TextAttribute>>,
     pub conclusion: Option<Box<TextAttribute>>,
+    pub completed_at: Option<Box<TextAttribute>>,
     pub started_at: Option<Box<TextAttribute>>,
-    pub label: Option<Box<TextAttribute>>,
-    pub repository: Box<NestedEdgedCoreGenericRepository>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub check_definition: Box<NestedEdgedCoreCheckDefinition>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub repository: Box<NestedEdgedCoreGenericRepository>,
     pub proposed_change: Box<NestedEdgedCoreProposedChange>,
     pub checks: Box<NestedPaginatedCoreCheck>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3555,6 +3604,26 @@ pub struct EdgedProfileIpamNamespace {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct EffectiveDateFormat {
+    pub value: Option<DateFormat>,
+    pub source: PreferenceSource,
+    pub inherited: Option<DateFormat>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct EffectivePreferencesType {
+    pub date_format: Box<EffectiveDateFormat>,
+    pub timezone: Box<EffectiveTimezone>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct EffectiveTimezone {
+    pub value: Option<String>,
+    pub source: PreferenceSource,
+    pub inherited: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EventNodes {
     pub node: Option<serde_json::Value>,
 }
@@ -3660,6 +3729,34 @@ pub struct GroupEvent {
     pub parent_id: Option<String>,
     pub members: Vec<RelatedNode>,
     pub ancestors: Vec<RelatedNode>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct HttpRequest {
+    pub url: String,
+    pub headers: serde_json::Value,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct HttpResponse {
+    pub status_code: Option<i64>,
+    pub body: Option<String>,
+    pub latency_ms: Option<f64>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct IPAddress {
+    pub is_default: Option<bool>,
+    pub is_protected: Option<bool>,
+    pub updated_at: Option<String>,
+    pub id: Option<String>,
+    pub is_from_profile: Option<bool>,
+    pub permissions: Option<Box<PermissionType>>,
+    pub value: Option<String>,
+    pub version: Option<i64>,
+    pub source: Option<serde_json::Value>,
+    pub owner: Option<serde_json::Value>,
+    pub updated_by: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3783,7 +3880,7 @@ pub struct InfrahubBranch {
     pub created_at: Option<String>,
     pub sync_with_git: Option<Box<NonRequiredBooleanValueField>>,
     pub is_default: Option<Box<NonRequiredBooleanValueField>>,
-    pub has_schema_changes: Option<Box<NonRequiredBooleanValueField>>,
+    pub schema_differs_from_default_branch: Option<Box<NonRequiredBooleanValueField>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3837,16 +3934,35 @@ pub struct InfrahubRelationshipMetadata {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InfrahubSetPreferences {
+    pub ok: Option<bool>,
+    pub date_format: Option<DateFormat>,
+    pub timezone: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InfrahubTaskCancel {
+    pub ok: Option<bool>,
+    pub task: Option<Box<TaskInfo>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InfrahubTaskRetry {
+    pub ok: Option<bool>,
+    pub task: Option<Box<TaskInfo>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct InternalAccountToken {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub expiration: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
     pub token: Option<Box<TextAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub expiration: Option<Box<TextAttribute>>,
     pub account: Box<NestedEdgedCoreGenericAccount>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3854,12 +3970,12 @@ pub struct InternalExternalIdentity {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
+    pub sub: Option<Box<TextAttribute>>,
     pub provider_name: Option<Box<TextAttribute>>,
     pub protocol: Option<Box<TextAttribute>>,
-    pub sub: Option<Box<TextAttribute>>,
+    pub account: Box<NestedEdgedCoreGenericAccount>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub account: Box<NestedEdgedCoreGenericAccount>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3867,22 +3983,22 @@ pub struct InternalIPPrefixAvailable {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub is_top_level: Option<Box<CheckboxAttribute>>,
-    pub utilization: Option<Box<NumberAttribute>>,
-    pub member_type: Option<Box<Dropdown>>,
-    pub broadcast_address: Option<Box<TextAttribute>>,
-    pub netmask: Option<Box<TextAttribute>>,
-    pub hostmask: Option<Box<TextAttribute>>,
     pub prefix: Option<Box<IPNetwork>>,
     pub description: Option<Box<TextAttribute>>,
-    pub network_address: Option<Box<TextAttribute>>,
+    pub member_type: Option<Box<Dropdown>>,
     pub is_pool: Option<Box<CheckboxAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub is_top_level: Option<Box<CheckboxAttribute>>,
+    pub utilization: Option<Box<NumberAttribute>>,
+    pub netmask: Option<Box<TextAttribute>>,
+    pub hostmask: Option<Box<TextAttribute>>,
+    pub network_address: Option<Box<TextAttribute>>,
+    pub broadcast_address: Option<Box<TextAttribute>>,
+    pub ip_namespace: Box<NestedEdgedBuiltinIPNamespace>,
     pub ip_addresses: Box<NestedPaginatedBuiltinIPAddress>,
     pub resource_pool: Box<NestedPaginatedCoreIPPool>,
-    pub ip_namespace: Box<NestedEdgedBuiltinIPNamespace>,
     pub profiles: Box<NestedPaginatedCoreProfile>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
     pub parent: Box<NestedEdgedBuiltinIPPrefix>,
     pub children: Box<NestedPaginatedBuiltinIPPrefix>,
     pub ancestors: Box<NestedPaginatedBuiltinIPPrefix>,
@@ -3894,14 +4010,14 @@ pub struct InternalIPRangeAvailable {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub description: Option<Box<TextAttribute>>,
     pub address: Option<Box<IPHost>>,
+    pub description: Option<Box<TextAttribute>>,
     pub last_address: Option<Box<IPHost>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub ip_namespace: Box<NestedEdgedBuiltinIPNamespace>,
     pub ip_prefix: Box<NestedEdgedBuiltinIPPrefix>,
     pub profiles: Box<NestedPaginatedCoreProfile>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -3920,14 +4036,14 @@ pub struct IpamNamespace {
     pub id: String,
     pub hfid: Option<Vec<String>>,
     pub display_label: Option<String>,
-    pub description: Option<Box<TextAttribute>>,
     pub name: Option<Box<TextAttribute>>,
+    pub description: Option<Box<TextAttribute>>,
     pub default: Option<Box<CheckboxAttribute>>,
-    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
-    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
     pub ip_prefixes: Box<NestedPaginatedBuiltinIPPrefix>,
     pub ip_addresses: Box<NestedPaginatedBuiltinIPAddress>,
     pub profiles: Box<NestedPaginatedCoreProfile>,
+    pub member_of_groups: Box<NestedPaginatedCoreGroup>,
+    pub subscriber_of_groups: Box<NestedPaginatedCoreGroup>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -4577,6 +4693,10 @@ pub struct Mutation {
     pub branch_validate: Option<Box<BranchValidate>>,
     #[serde(rename = "DiffUpdate")]
     pub diff_update: Option<Box<DiffUpdateMutation>>,
+    #[serde(rename = "InfrahubTaskRetry")]
+    pub infrahub_task_retry: Option<Box<InfrahubTaskRetry>>,
+    #[serde(rename = "InfrahubTaskCancel")]
+    pub infrahub_task_cancel: Option<Box<InfrahubTaskCancel>>,
     #[serde(rename = "InfrahubReadOnlyRepositoryImportLastCommit")]
     pub infrahub_read_only_repository_import_last_commit: Option<Box<ReadOnlyRepositoryImportLastCommit>>,
     #[serde(rename = "InfrahubRepositoryProcess")]
@@ -4611,6 +4731,8 @@ pub struct Mutation {
     pub core_proposed_change_check_for_approval_revoke: Option<Box<ProposedChangeCheckForApprovalRevoke>>,
     #[serde(rename = "InfrahubProfilesRefresh")]
     pub infrahub_profiles_refresh: Option<Box<InfrahubProfilesRefresh>>,
+    #[serde(rename = "InfrahubSetPreferences")]
+    pub infrahub_set_preferences: Option<Box<InfrahubSetPreferences>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -6865,8 +6987,8 @@ pub struct ProfileBuiltinIPAddress {
     pub display_label: Option<String>,
     pub profile_name: Option<Box<TextAttribute>>,
     pub profile_priority: Option<Box<NumberAttribute>>,
-    pub description: Option<Box<TextAttribute>>,
     pub address: Option<Box<IPHost>>,
+    pub description: Option<Box<TextAttribute>>,
     pub related_nodes: Box<NestedPaginatedBuiltinIPAddress>,
     pub ip_namespace: Box<NestedEdgedBuiltinIPNamespace>,
     pub member_of_groups: Box<NestedPaginatedCoreGroup>,
@@ -6903,9 +7025,9 @@ pub struct ProfileBuiltinIPPrefix {
     pub display_label: Option<String>,
     pub profile_name: Option<Box<TextAttribute>>,
     pub profile_priority: Option<Box<NumberAttribute>>,
-    pub member_type: Option<Box<Dropdown>>,
     pub prefix: Option<Box<IPNetwork>>,
     pub description: Option<Box<TextAttribute>>,
+    pub member_type: Option<Box<Dropdown>>,
     pub is_pool: Option<Box<CheckboxAttribute>>,
     pub related_nodes: Box<NestedPaginatedBuiltinIPPrefix>,
     pub ip_namespace: Box<NestedEdgedBuiltinIPNamespace>,
@@ -7132,6 +7254,12 @@ pub struct ProposedChangeThreadEvent {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RawPreferencesType {
+    pub date_format: Option<DateFormat>,
+    pub timezone: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ReachableNodeType {
     pub node: Box<PathNodeType>,
     pub depth: i64,
@@ -7291,6 +7419,20 @@ pub struct Subscription {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TaskAction {
+    pub action: TaskActionType,
+    pub available: bool,
+    pub unavailability_reason: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TaskError {
+    pub status_class: String,
+    pub message: String,
+    pub remediation: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TaskInfo {
     pub id: Option<String>,
 }
@@ -7331,11 +7473,13 @@ pub struct TaskNode {
     pub start_time: Option<String>,
     pub related_nodes: Option<Vec<TaskRelatedNode>>,
     pub logs: Option<Box<TaskLogEdge>>,
+    pub available_actions: Vec<TaskAction>,
+    pub error: Option<Box<TaskError>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TaskNodes {
-    pub node: Option<Box<TaskNode>>,
+    pub node: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7388,5 +7532,27 @@ pub struct ValidateRepositoryConnectivity {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ValueType {
     pub value: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WebhookDeliveryTask {
+    pub id: String,
+    pub title: String,
+    pub conclusion: String,
+    pub state: Option<StateType>,
+    pub progress: Option<f64>,
+    pub workflow: Option<String>,
+    pub branch: Option<String>,
+    pub created_at: String,
+    pub updated_at: String,
+    pub parameters: Option<serde_json::Value>,
+    pub tags: Option<Vec<String>>,
+    pub start_time: Option<String>,
+    pub related_nodes: Option<Vec<TaskRelatedNode>>,
+    pub logs: Option<Box<TaskLogEdge>>,
+    pub available_actions: Vec<TaskAction>,
+    pub error: Option<Box<TaskError>>,
+    pub http_request: Option<Box<HttpRequest>>,
+    pub http_response: Option<Box<HttpResponse>>,
 }
 

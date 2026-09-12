@@ -1,5 +1,13 @@
 # changelog
 
+## unreleased
+
+- ci: bump pinned Infrahub version from 1.10.6 to 1.11.2, refresh the schema snapshot, regenerate `test-client` (closes #59)
+- schema: nineteen new types, none removed. user preferences (`InfrahubSetPreferences`, `EffectivePreferencesType`, `RawPreferencesType`, `PreferenceSource`, `PreferenceWriteScope`, `DateFormat`, `EffectiveDateFormat`, `EffectiveTimezone`), task control (`InfrahubTaskRetry`, `InfrahubTaskCancel`, `TaskAction`, `TaskActionInput`, `TaskActionType`, `TaskError`, `TaskNodeInterface`, `WebhookDeliveryTask`), the `HttpRequest`/`HttpResponse` pair that reports a webhook delivery with secret headers masked, and an `IPAddress` attribute type
+- schema: 1.11.2 emits the types of `schema.graphql` in a different order than 1.10.6, so most of the snapshot and `test-client` diff is reordering rather than content. repeated fetches from one instance are byte-identical, so the codegen check in integration CI is unaffected
+- docs: compat table covers 1.11.x, and the `docs/local-infrahub.md` quickstart moves from 1.9.6 to the pinned 1.11.2
+- docs: correct the compat table for released versions. 0.2.0 pinned 1.8.2 and 0.2.1 pinned 1.8.5, which the single `0.2.x` row collapsed into 1.8.5, and 0.1.x claimed a v1.1.0 CI pin despite predating integration CI
+
 ## 0.4.3 - 2026-08-24
 
 - ci: bump pinned Infrahub version from 1.10.0 to 1.10.6, refresh the schema snapshot, regenerate `test-client`

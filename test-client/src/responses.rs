@@ -611,6 +611,24 @@ pub struct InfrahubPathTraversalResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InfrahubEffectivePreferencesResponse {
+    #[serde(rename = "InfrahubEffectivePreferences")]
+    pub infrahub_effective_preferences: Box<EffectivePreferencesType>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InfrahubUserPreferencesResponse {
+    #[serde(rename = "InfrahubUserPreferences")]
+    pub infrahub_user_preferences: Box<RawPreferencesType>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InfrahubGlobalPreferencesResponse {
+    #[serde(rename = "InfrahubGlobalPreferences")]
+    pub infrahub_global_preferences: Box<RawPreferencesType>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CoreProposedChangeAvailableActionsResponse {
     #[serde(rename = "CoreProposedChangeAvailableActions")]
     pub core_proposed_change_available_actions: Box<AvailableActions>,

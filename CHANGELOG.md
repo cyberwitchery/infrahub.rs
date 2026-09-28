@@ -1,5 +1,11 @@
 # changelog
 
+## unreleased
+
+- ci: bump pinned Infrahub version from 1.11.2 to 1.11.3 (closes #64). the 1.11.3 schema has the same types, fields, arguments, descriptions and deprecations as the 1.11.2 snapshot, so `schema/infrahub.graphql` and `test-client` are unchanged
+- schema: Infrahub prints `schema.graphql` in an order that varies between server processes (field and `implements` order), so a byte-level diff of a fresh fetch against the snapshot is not a content change. the 1.11.2 note above that repeated fetches are byte-identical holds only within one process
+- docs: compat table and the `docs/local-infrahub.md` quickstart move to 1.11.3
+
 ## 0.4.4 - 2026-09-12
 
 - ci: bump pinned Infrahub version from 1.10.6 to 1.11.2, refresh the schema snapshot, regenerate `test-client` (closes #59)

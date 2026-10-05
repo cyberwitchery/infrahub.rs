@@ -284,6 +284,15 @@ impl ClientConfig {
         }
         Ok(url)
     }
+
+    /// build the schema snapshot (`/api/schema`) url for a branch (or default branch if none provided)
+    pub(crate) fn schema_snapshot_url(&self, branch: Option<&str>) -> Result<Url> {
+        let mut url = self.base_url_with_path("/api/schema")?;
+        if let Some(branch) = self.resolve_branch(branch) {
+            url.query_pairs_mut().append_pair("branch", &branch);
+        }
+        Ok(url)
+    }
 }
 
 impl std::fmt::Debug for ClientConfig {
@@ -347,6 +356,26 @@ mod tests {
         let config = ClientConfig::new("https://infrahub.example.com", "token");
         let url = config.schema_url(None).unwrap();
         assert_eq!(url.as_str(), "https://infrahub.example.com/schema.graphql");
+    }
+
+    #[test]
+    fn test_schema_snapshot_url_branch() {
+        let config =
+            ClientConfig::new("https://infrahub.example.com", "token").with_default_branch("main");
+        let url = config.schema_snapshot_url(None).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/schema?branch=main"
+        );
+
+        let url = config.schema_snapshot_url(Some("feature/a&b")).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "https://infrahub.example.com/api/schema?branch=feature%2Fa%26b"
+        );
+
+        let url = config.schema_snapshot_url(Some("")).unwrap();
+        assert_eq!(url.as_str(), "https://infrahub.example.com/api/schema");
     }
 
     #[test]

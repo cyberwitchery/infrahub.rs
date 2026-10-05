@@ -144,6 +144,41 @@ impl Client {
         .await
     }
 
+    /// fetch `/api/schema` and deserialize the schema snapshot json.
+    pub async fn fetch_schema_snapshot<T: DeserializeOwned>(
+        &self,
+        branch: Option<&str>,
+    ) -> Result<T> {
+        let url = self.schema_snapshot_url(branch)?;
+        self.retry_loop(|| {
+            let url = url.clone();
+            async move {
+                let response = self.http.get(url).send().await?;
+                let status = response.status();
+                let retry_after = parse_retry_after(response.headers());
+                let text = response.text().await?;
+                parse_schema_snapshot_response(status, text).map_err(|e| RetryError {
+                    inner: e,
+                    retry_after,
+                })
+            }
+        })
+        .await
+    }
+
+    fn schema_snapshot_url(&self, branch: Option<&str>) -> Result<Url> {
+        let base = self.config.base_url.as_str().trim_end_matches('/');
+        let mut url = Url::parse(&format!("{base}/api/schema"))?;
+        let branch = branch
+            .map(str::to_owned)
+            .or_else(|| self.config.default_branch.clone())
+            .filter(|branch| !branch.is_empty());
+        if let Some(branch) = branch {
+            url.query_pairs_mut().append_pair("branch", &branch);
+        }
+        Ok(url)
+    }
+
     /// execute a graphql mutation with file uploads per the
     /// [graphql multipart request spec](https://github.com/jaydenseric/graphql-multipart-request-spec).
     ///
@@ -418,6 +453,19 @@ fn parse_schema_response(status: StatusCode, text: String) -> Result<String> {
     Ok(text)
 }
 
+fn parse_schema_snapshot_response<T: DeserializeOwned>(status: StatusCode, text: String) -> Result<T> {
+    if !status.is_success() {
+        return Err(Error::GraphQl {
+            status: Some(status.as_u16()),
+            errors: Vec::new(),
+            body: text,
+            message: format!("schema snapshot http error: {}", status),
+        });
+    }
+
+    Ok(serde_json::from_str(&text)?)
+}
+
 #[cfg(test)]
 impl Client {
     async fn execute_multipart_with<T: DeserializeOwned, F, Fut>(
@@ -606,6 +654,50 @@ mod tests {
             err,
             Error::GraphQl {
                 status: Some(404),
+                ..
+            }
+        ));
+    }
+
+    #[test]
+    fn test_schema_snapshot_url_uses_explicit_and_default_branch() {
+        let client = test_client(
+            ClientConfig::new("http://localhost:1234", "test-token").with_default_branch("main"),
+        );
+
+        let url = client.schema_snapshot_url(None).unwrap();
+        assert_eq!(url.as_str(), "http://localhost:1234/api/schema?branch=main");
+
+        let url = client.schema_snapshot_url(Some("feature/a&b")).unwrap();
+        assert_eq!(
+            url.as_str(),
+            "http://localhost:1234/api/schema?branch=feature%2Fa%26b"
+        );
+    }
+
+    #[test]
+    fn test_parse_schema_snapshot_response() {
+        #[derive(Debug, Deserialize, PartialEq)]
+        struct Snapshot {
+            version: u64,
+        }
+
+        let parsed = parse_schema_snapshot_response::<Snapshot>(
+            StatusCode::OK,
+            r#"{"version": 1}"#.to_string(),
+        )
+        .unwrap();
+        assert_eq!(parsed, Snapshot { version: 1 });
+
+        let err = parse_schema_snapshot_response::<Snapshot>(
+            StatusCode::TOO_MANY_REQUESTS,
+            "slow down".to_string(),
+        )
+        .unwrap_err();
+        assert!(matches!(
+            err,
+            Error::GraphQl {
+                status: Some(429),
                 ..
             }
         ));

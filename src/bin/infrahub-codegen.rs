@@ -1353,10 +1353,10 @@ fn to_rust_ident(name: &str) -> String {
 fn to_rust_field(name: &str) -> String {
     let out = to_snake(name);
 
-    if is_rust_keyword(&out) {
-        format!("r#{}", out)
-    } else {
-        out
+    match out.as_str() {
+        "_" | "crate" | "self" | "super" => format!("{}_", out),
+        _ if is_rust_keyword(&out) => format!("r#{}", out),
+        _ => out,
     }
 }
 
@@ -1404,6 +1404,20 @@ fn is_rust_keyword(name: &str) -> bool {
             | "async"
             | "await"
             | "dyn"
+            | "abstract"
+            | "become"
+            | "box"
+            | "do"
+            | "final"
+            | "gen"
+            | "macro"
+            | "override"
+            | "priv"
+            | "try"
+            | "typeof"
+            | "unsized"
+            | "virtual"
+            | "yield"
     )
 }
 
@@ -1455,7 +1469,26 @@ mod codegen_name_tests {
     #[test]
     fn test_to_rust_field_keyword_escaping() {
         assert_eq!(to_rust_field("type"), "r#type");
-        assert_eq!(to_rust_field("self"), "r#self");
+        assert_eq!(to_rust_field("yield"), "r#yield");
+        assert_eq!(to_rust_field("abstract"), "r#abstract");
+        assert_eq!(to_rust_field("try"), "r#try");
+        assert_eq!(to_rust_field("gen"), "r#gen");
+    }
+
+    #[test]
+    fn test_to_rust_field_non_raw_keywords_get_suffix() {
+        assert_eq!(to_rust_field("self"), "self_");
+        assert_eq!(to_rust_field("Self"), "self_");
+        assert_eq!(to_rust_field("super"), "super_");
+        assert_eq!(to_rust_field("crate"), "crate_");
+    }
+
+    #[test]
+    fn test_to_rust_field_leading_underscores() {
+        assert_eq!(to_rust_field("_"), "__");
+        assert_eq!(to_rust_field("__"), "__");
+        assert_eq!(to_rust_field("_1st"), "_1_st");
+        assert_eq!(to_rust_field("_updated_at"), "_updated_at");
     }
 
     #[test]

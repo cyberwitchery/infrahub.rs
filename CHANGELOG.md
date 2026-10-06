@@ -1,6 +1,6 @@
 # changelog
 
-## unreleased
+## 0.4.5 - 2026-10-06
 
 - ci: bump pinned Infrahub version from 1.11.3 to 1.11.4 (closes #66). the 1.11.4 schema has the same types, fields, arguments, descriptions and deprecations as the 1.11.3 snapshot, so `schema/infrahub.graphql` and `test-client` are unchanged
 - client: add `Client::fetch_schema_snapshot` for typed `GET /api/schema` reads using the configured client, branch selection, transient-error retries, and `Retry-After` handling

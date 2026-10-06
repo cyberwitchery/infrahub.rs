@@ -1,5 +1,9 @@
 # changelog
 
+## Unreleased
+
+- codegen: a schema field, argument or query named `self`, `Self`, `super`, `crate` or `_` now generates `self_`, `super_`, `crate_` or `__` instead of an identifier rustc rejects, and reserved keywords such as `yield`, `try`, `gen` and `abstract` are escaped as raw identifiers, so such schemas produce a client that compiles. names on the wire are unchanged
+
 ## 0.4.5 - 2026-10-06
 
 - ci: bump pinned Infrahub version from 1.11.3 to 1.11.4 (closes #66). the 1.11.4 schema has the same types, fields, arguments, descriptions and deprecations as the 1.11.3 snapshot, so `schema/infrahub.graphql` and `test-client` are unchanged

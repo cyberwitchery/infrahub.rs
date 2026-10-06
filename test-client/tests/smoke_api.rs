@@ -1,11 +1,12 @@
 //! integration smoke tests for the generated typed API
 //!
-//! these tests exercise list / get_by_id / paginate flows through the
-//! generated client crate. they require a live infrahub instance and are
-//! skipped when INFRAHUB_TOKEN is not set.
+//! these tests exercise create / list / get_by_id / paginate / delete flows
+//! through the generated client crate. they require a live infrahub instance
+//! and are skipped when INFRAHUB_TOKEN is not set.
 
 use infrahub::{Client, ClientConfig};
 use infrahub_test_client::api::ApiClient;
+use infrahub_test_client::inputs::{BuiltinTagCreateInput, DeleteInput, TextAttributeCreate};
 
 // ---------------------------------------------------------------------------
 // helpers
@@ -23,35 +24,45 @@ fn branch() -> Option<String> {
     std::env::var("INFRAHUB_BRANCH").ok()
 }
 
-/// create a BuiltinTag via raw graphql and return its id
+/// create a BuiltinTag and return its id
 async fn create_tag(client: &Client, name: &str) -> String {
-    let query = r#"mutation CreateTag($data: BuiltinTagCreateInput!) {
-        BuiltinTagCreate(data: $data) { ok object { id } }
-    }"#;
-    let vars = serde_json::json!({
-        "data": { "name": { "value": name } }
-    });
-    let resp: infrahub::GraphQlResponse<serde_json::Value> = client
-        .execute(query, Some(vars), branch().as_deref())
+    let data = BuiltinTagCreateInput {
+        id: None,
+        name: Some(TextAttributeCreate {
+            is_protected: None,
+            source: None,
+            owner: None,
+            value: Some(name.to_string()),
+        }),
+        description: None,
+        profiles: None,
+        member_of_groups: None,
+        subscriber_of_groups: None,
+    };
+    let tag = client
+        .api()
+        .builtin()
+        .tag()
+        .create(None, data, branch().as_deref())
         .await
         .expect("create tag");
-    let data = resp.data.expect("create tag data");
-    data["BuiltinTagCreate"]["object"]["id"]
-        .as_str()
-        .expect("tag id")
-        .to_string()
+    tag.id
 }
 
 /// delete a BuiltinTag by id
 async fn delete_tag(client: &Client, id: &str) {
-    let query = r#"mutation DeleteTag($data: DeleteInput!) {
-        BuiltinTagDelete(data: $data) { ok }
-    }"#;
-    let vars = serde_json::json!({ "data": { "id": id } });
-    let _: infrahub::GraphQlResponse<serde_json::Value> = client
-        .execute(query, Some(vars), branch().as_deref())
+    let data = DeleteInput {
+        id: Some(id.to_string()),
+        hfid: None,
+    };
+    let deleted = client
+        .api()
+        .builtin()
+        .tag()
+        .delete(None, data, branch().as_deref())
         .await
         .expect("delete tag");
+    assert!(deleted, "delete should report ok");
 }
 
 // ---------------------------------------------------------------------------
@@ -188,8 +199,15 @@ async fn tag_list_and_get_by_id() {
         .expect("tag name");
     assert_eq!(name_val, "smoke-test-tag");
 
-    // cleanup
     delete_tag(&client, &tag_id).await;
+    let gone = client
+        .api()
+        .builtin()
+        .tag()
+        .get_by_id(&tag_id, branch().as_deref())
+        .await
+        .expect("get_by_id after delete");
+    assert!(gone.is_none(), "deleted tag should be gone");
 }
 
 #[cfg_attr(miri, ignore)]

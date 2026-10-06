@@ -52,5 +52,5 @@ while let Some(page) = paginator.next_page().await? {
 
 notes:
 - exact namespace/model accessors depend on your schema snapshot.
-- for this repo's `schema/infrahub.graphql`, generated namespaces include `core`, `builtin`, `ipam`, `lineage`, and `profile`.
-- if your schema snapshot exposes create/update helpers in `api()`, they appear on the same model client alongside `list` and `get_by_id`.
+- for this repo's `schema/infrahub.graphql`, generated namespaces are `branch`, `builtin`, `core`, `infrahub`, `ipam`, `lineage`, and `profile`.
+- mutation helpers sit on the same model client as `list` and `get_by_id`, e.g. `client.api().builtin().tag().create(None, data, None)` returns the created `BuiltinTag` and `delete(None, data, None)` returns `ok`. a model whose mutation payload returns an interface-typed `object` has no `create`/`update`/`upsert` helper; call its mutation through `generated()` instead.

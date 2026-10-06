@@ -2,7 +2,7 @@
 
 #![allow(non_snake_case, unused_imports, unused_assignments, clippy::field_reassign_with_default)]
 
-use infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};
+use ::infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};
 use serde_json::Value;
 
 use crate::inputs::*;
@@ -175,7 +175,7 @@ impl<'a> LineageOwnerClient<'a> {
             }
             Ok(EdgePage { nodes: items, next_cursor: next })
         });
-        infrahub::Paginator::new(fetch, extract)
+        ::infrahub::Paginator::new(fetch, extract)
     }
 
     pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<serde_json::Value>> {
@@ -336,7 +336,7 @@ impl<'a> LineageSourceClient<'a> {
             }
             Ok(EdgePage { nodes: items, next_cursor: next })
         });
-        infrahub::Paginator::new(fetch, extract)
+        ::infrahub::Paginator::new(fetch, extract)
     }
 
     pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<serde_json::Value>> {

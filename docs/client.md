@@ -158,7 +158,7 @@ from your base client.
 the generated crate provides:
 
 - `generated()` for full surface graphql methods
-- `api()` for ergonomic, topic-grouped helpers (`list`, `get_by_id`, `paginate`, plus mutation helpers when available in your schema snapshot)
+- `api()` for ergonomic, topic-grouped helpers: `list`, `get_by_id` and `paginate` for each paginated model, plus `create`, `update`, `upsert` and `delete` from the model's `<Model>Create`/`Update`/`Upsert`/`Delete` mutations. `create`, `update` and `upsert` return the payload's `object`, so they are generated only when that field has a concrete type (not an interface); `delete` returns the payload's `ok`. every mutation, helper or not, is a method on `generated()`
 
 ## branches
 

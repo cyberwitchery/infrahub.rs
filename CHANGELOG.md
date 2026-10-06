@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- codegen: generated clients now include Infrahub's mutations. a schema with no `schema { ... }` block, which is how Infrahub serves `schema.graphql`, takes its mutation root from the type named `Mutation`, per the GraphQL spec's default root operation names; a `schema` block without `mutation:` still means no mutations. for this repo's snapshot that adds a `generated()` method for each of the 305 mutations and 244 `create`/`update`/`upsert`/`delete` helpers on `api()` model clients, plus new `branch` and `infrahub` api namespaces
+- codegen: `api()` gets a `create`, `update` or `upsert` helper only when the mutation's payload has a nullable `object` the generated query selects, and a `delete` helper only when it has a nullable `ok: Boolean`. mutations that match the name pattern but not the shape, such as `DiffUpdate`, `BranchUpdate`, or updates whose `object` is an interface, are left to `generated()` instead of producing a helper that does not compile or always reports `missing object`
+- codegen: generated code refers to the runtime crate as `::infrahub`, so a schema namespace named `Infrahub` no longer shadows it in `api/mod.rs`
+- tests: the live smoke tests create and delete their `BuiltinTag`s through the generated `create` and `delete` helpers instead of raw GraphQL
 - codegen: a schema field, argument or query named `self`, `Self`, `super`, `crate` or `_` now generates `self_`, `super_`, `crate_` or `__` instead of an identifier rustc rejects, and reserved keywords such as `yield`, `try`, `gen` and `abstract` are escaped as raw identifiers, so such schemas produce a client that compiles. names on the wire are unchanged
 
 ## 0.4.5 - 2026-10-06

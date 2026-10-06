@@ -2,7 +2,7 @@
 
 #![allow(non_snake_case, unused_imports, unused_assignments, clippy::field_reassign_with_default)]
 
-use infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};
+use ::infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};
 use serde_json::Value;
 
 use crate::inputs::*;
@@ -517,7 +517,7 @@ impl<'a> ProfileBuiltinIPAddressClient<'a> {
             }
             Ok(EdgePage { nodes: items, next_cursor: next })
         });
-        infrahub::Paginator::new(fetch, extract)
+        ::infrahub::Paginator::new(fetch, extract)
     }
 
     pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<ProfileBuiltinIPAddress>> {
@@ -525,6 +525,65 @@ impl<'a> ProfileBuiltinIPAddressClient<'a> {
         filters.ids = Some(vec![id.into()]);
         let mut items = self.list(Some(filters), request_branch).await?;
         Ok(items.pop())
+    }
+
+    pub async fn create(&self, context: Option<ContextInput>, data: ProfileBuiltinIPAddressCreateInput, request_branch: Option<&str>) -> Result<ProfileBuiltinIPAddress> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinIPAddressCreate($context: ContextInput, $data: ProfileBuiltinIPAddressCreateInput!) { ProfileBuiltinIPAddressCreate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } address { is_default is_protected updated_at id is_from_profile permissions { update_value } value ip hostmask netmask prefixlen version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileBuiltinIPAddressCreateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_ip_address_create.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn update(&self, context: Option<ContextInput>, data: ProfileBuiltinIPAddressUpdateInput, request_branch: Option<&str>) -> Result<ProfileBuiltinIPAddress> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinIPAddressUpdate($context: ContextInput, $data: ProfileBuiltinIPAddressUpdateInput!) { ProfileBuiltinIPAddressUpdate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } address { is_default is_protected updated_at id is_from_profile permissions { update_value } value ip hostmask netmask prefixlen version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileBuiltinIPAddressUpdateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_ip_address_update.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn upsert(&self, context: Option<ContextInput>, data: ProfileBuiltinIPAddressUpsertInput, request_branch: Option<&str>) -> Result<ProfileBuiltinIPAddress> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinIPAddressUpsert($context: ContextInput, $data: ProfileBuiltinIPAddressUpsertInput!) { ProfileBuiltinIPAddressUpsert(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } address { is_default is_protected updated_at id is_from_profile permissions { update_value } value ip hostmask netmask prefixlen version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileBuiltinIPAddressUpsertResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_ip_address_upsert.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn delete(&self, context: Option<ContextInput>, data: DeleteInput, request_branch: Option<&str>) -> Result<bool> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinIPAddressDelete($context: ContextInput, $data: DeleteInput!) { ProfileBuiltinIPAddressDelete(context: $context, data: $data) { ok } }"#;
+        let response = self.client.execute::<ProfileBuiltinIPAddressDeleteResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_ip_address_delete.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        Ok(payload.ok.unwrap_or(false))
     }
 
 }
@@ -1222,7 +1281,7 @@ impl<'a> ProfileBuiltinIPPrefixClient<'a> {
             }
             Ok(EdgePage { nodes: items, next_cursor: next })
         });
-        infrahub::Paginator::new(fetch, extract)
+        ::infrahub::Paginator::new(fetch, extract)
     }
 
     pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<ProfileBuiltinIPPrefix>> {
@@ -1230,6 +1289,65 @@ impl<'a> ProfileBuiltinIPPrefixClient<'a> {
         filters.ids = Some(vec![id.into()]);
         let mut items = self.list(Some(filters), request_branch).await?;
         Ok(items.pop())
+    }
+
+    pub async fn create(&self, context: Option<ContextInput>, data: ProfileBuiltinIPPrefixCreateInput, request_branch: Option<&str>) -> Result<ProfileBuiltinIPPrefix> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinIPPrefixCreate($context: ContextInput, $data: ProfileBuiltinIPPrefixCreateInput!) { ProfileBuiltinIPPrefixCreate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } prefix { is_default is_protected updated_at id is_from_profile permissions { update_value } value broadcast_address hostmask netmask prefixlen num_addresses version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_type { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } is_pool { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileBuiltinIPPrefixCreateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_ip_prefix_create.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn update(&self, context: Option<ContextInput>, data: ProfileBuiltinIPPrefixUpdateInput, request_branch: Option<&str>) -> Result<ProfileBuiltinIPPrefix> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinIPPrefixUpdate($context: ContextInput, $data: ProfileBuiltinIPPrefixUpdateInput!) { ProfileBuiltinIPPrefixUpdate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } prefix { is_default is_protected updated_at id is_from_profile permissions { update_value } value broadcast_address hostmask netmask prefixlen num_addresses version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_type { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } is_pool { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileBuiltinIPPrefixUpdateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_ip_prefix_update.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn upsert(&self, context: Option<ContextInput>, data: ProfileBuiltinIPPrefixUpsertInput, request_branch: Option<&str>) -> Result<ProfileBuiltinIPPrefix> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinIPPrefixUpsert($context: ContextInput, $data: ProfileBuiltinIPPrefixUpsertInput!) { ProfileBuiltinIPPrefixUpsert(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } prefix { is_default is_protected updated_at id is_from_profile permissions { update_value } value broadcast_address hostmask netmask prefixlen num_addresses version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_type { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } is_pool { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileBuiltinIPPrefixUpsertResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_ip_prefix_upsert.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn delete(&self, context: Option<ContextInput>, data: DeleteInput, request_branch: Option<&str>) -> Result<bool> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinIPPrefixDelete($context: ContextInput, $data: DeleteInput!) { ProfileBuiltinIPPrefixDelete(context: $context, data: $data) { ok } }"#;
+        let response = self.client.execute::<ProfileBuiltinIPPrefixDeleteResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_ip_prefix_delete.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        Ok(payload.ok.unwrap_or(false))
     }
 
 }
@@ -1635,7 +1753,7 @@ impl<'a> ProfileBuiltinTagClient<'a> {
             }
             Ok(EdgePage { nodes: items, next_cursor: next })
         });
-        infrahub::Paginator::new(fetch, extract)
+        ::infrahub::Paginator::new(fetch, extract)
     }
 
     pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<ProfileBuiltinTag>> {
@@ -1643,6 +1761,65 @@ impl<'a> ProfileBuiltinTagClient<'a> {
         filters.ids = Some(vec![id.into()]);
         let mut items = self.list(Some(filters), request_branch).await?;
         Ok(items.pop())
+    }
+
+    pub async fn create(&self, context: Option<ContextInput>, data: ProfileBuiltinTagCreateInput, request_branch: Option<&str>) -> Result<ProfileBuiltinTag> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinTagCreate($context: ContextInput, $data: ProfileBuiltinTagCreateInput!) { ProfileBuiltinTagCreate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileBuiltinTagCreateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_tag_create.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn update(&self, context: Option<ContextInput>, data: ProfileBuiltinTagUpdateInput, request_branch: Option<&str>) -> Result<ProfileBuiltinTag> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinTagUpdate($context: ContextInput, $data: ProfileBuiltinTagUpdateInput!) { ProfileBuiltinTagUpdate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileBuiltinTagUpdateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_tag_update.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn upsert(&self, context: Option<ContextInput>, data: ProfileBuiltinTagUpsertInput, request_branch: Option<&str>) -> Result<ProfileBuiltinTag> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinTagUpsert($context: ContextInput, $data: ProfileBuiltinTagUpsertInput!) { ProfileBuiltinTagUpsert(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileBuiltinTagUpsertResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_tag_upsert.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn delete(&self, context: Option<ContextInput>, data: DeleteInput, request_branch: Option<&str>) -> Result<bool> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileBuiltinTagDelete($context: ContextInput, $data: DeleteInput!) { ProfileBuiltinTagDelete(context: $context, data: $data) { ok } }"#;
+        let response = self.client.execute::<ProfileBuiltinTagDeleteResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_builtin_tag_delete.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        Ok(payload.ok.unwrap_or(false))
     }
 
 }
@@ -2348,7 +2525,7 @@ impl<'a> ProfileIpamNamespaceClient<'a> {
             }
             Ok(EdgePage { nodes: items, next_cursor: next })
         });
-        infrahub::Paginator::new(fetch, extract)
+        ::infrahub::Paginator::new(fetch, extract)
     }
 
     pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<ProfileIpamNamespace>> {
@@ -2356,6 +2533,65 @@ impl<'a> ProfileIpamNamespaceClient<'a> {
         filters.ids = Some(vec![id.into()]);
         let mut items = self.list(Some(filters), request_branch).await?;
         Ok(items.pop())
+    }
+
+    pub async fn create(&self, context: Option<ContextInput>, data: ProfileIpamNamespaceCreateInput, request_branch: Option<&str>) -> Result<ProfileIpamNamespace> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileIpamNamespaceCreate($context: ContextInput, $data: ProfileIpamNamespaceCreateInput!) { ProfileIpamNamespaceCreate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileIpamNamespaceCreateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_ipam_namespace_create.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn update(&self, context: Option<ContextInput>, data: ProfileIpamNamespaceUpdateInput, request_branch: Option<&str>) -> Result<ProfileIpamNamespace> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileIpamNamespaceUpdate($context: ContextInput, $data: ProfileIpamNamespaceUpdateInput!) { ProfileIpamNamespaceUpdate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileIpamNamespaceUpdateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_ipam_namespace_update.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn upsert(&self, context: Option<ContextInput>, data: ProfileIpamNamespaceUpsertInput, request_branch: Option<&str>) -> Result<ProfileIpamNamespace> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileIpamNamespaceUpsert($context: ContextInput, $data: ProfileIpamNamespaceUpsertInput!) { ProfileIpamNamespaceUpsert(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<ProfileIpamNamespaceUpsertResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_ipam_namespace_upsert.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn delete(&self, context: Option<ContextInput>, data: DeleteInput, request_branch: Option<&str>) -> Result<bool> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation ProfileIpamNamespaceDelete($context: ContextInput, $data: DeleteInput!) { ProfileIpamNamespaceDelete(context: $context, data: $data) { ok } }"#;
+        let response = self.client.execute::<ProfileIpamNamespaceDeleteResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.profile_ipam_namespace_delete.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        Ok(payload.ok.unwrap_or(false))
     }
 
 }

@@ -287,14 +287,19 @@ async fn tag_update_keeps_group_membership() {
         parent: None,
         children: None,
     };
-    let group = client
-        .api()
-        .core()
-        .standard_group()
-        .create(None, data, branch().as_deref())
+    // the typed create selects `parent { node_metadata }`, which infrahub nulls without a parent
+    let query = r#"mutation CreateGroup($data: CoreStandardGroupCreateInput!) {
+        CoreStandardGroupCreate(data: $data) { ok object { id members { count } } }
+    }"#;
+    let vars = serde_json::json!({ "data": data });
+    let resp: infrahub::GraphQlResponse<serde_json::Value> = client
+        .execute(query, Some(vars), branch().as_deref())
         .await
         .expect("create group");
-    assert_eq!(group.members.count, 1, "group should hold the tag");
+    let created = resp.data.expect("create group data");
+    let group = &created["CoreStandardGroupCreate"]["object"];
+    assert_eq!(group["members"]["count"], 1, "group should hold the tag");
+    let group_id = group["id"].as_str().expect("group id").to_string();
 
     let data = BuiltinTagUpdateInput {
         id: Some(tag_id.clone()),
@@ -336,7 +341,7 @@ async fn tag_update_keeps_group_membership() {
 
     // cleanup
     let data = DeleteInput {
-        id: Some(group.id),
+        id: Some(group_id),
         hfid: None,
     };
     let deleted = client

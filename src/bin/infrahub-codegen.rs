@@ -396,6 +396,9 @@ fn render_inputs(ctx: &SchemaContext) -> String {
             out.push_str(&format!("pub struct {} {{\n", name));
             for field in fields {
                 let ty = rust_type(&field.value_type, ctx, true);
+                if is_optional(&field.value_type) {
+                    out.push_str("    #[serde(skip_serializing_if = \"Option::is_none\")]\n");
+                }
                 push_struct_field(&mut out, field.name.as_str(), &ty);
             }
             out.push_str("}\n\n");
@@ -1772,6 +1775,32 @@ mod codegen_name_tests {
     }
 
     #[test]
+    fn test_nullable_input_fields_skip_serializing_none() {
+        let schema = r#"
+            type Query { ping: String }
+            input WidgetInput { id: String! name: String tags: [String!] }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let inputs_rs = render_inputs(&ctx);
+        let skip = "    #[serde(skip_serializing_if = \"Option::is_none\")]\n";
+        for field in [
+            "pub name: Option<String>,",
+            "pub tags: Option<Vec<String>>,",
+        ] {
+            assert!(
+                inputs_rs.contains(&format!("{skip}    {field}")),
+                "got:\n{inputs_rs}"
+            );
+        }
+        assert!(inputs_rs.contains("pub id: String,"));
+        assert!(
+            !inputs_rs.contains(&format!("{skip}    pub id:")),
+            "got:\n{inputs_rs}"
+        );
+    }
+
+    #[test]
     fn test_mutation_root_defaults_without_schema_definition() {
         let schema = r#"
             type Query { ping: String }
@@ -1857,10 +1886,14 @@ mod codegen_name_tests {
                 GadgetCreate(data: String!): GadgetCreate
                 GadgetDelete(data: String!): GadgetDelete
                 GizmoUpdate(data: String!): GizmoUpdate
+                SprocketDelete(data: String!): SprocketDelete
+                CogDelete(data: String!): CogDelete
                 DiffUpdate(data: String!): DiffUpdateMutation
             }
             interface Gizmo { id: String! }
             type GizmoUpdate { ok: Boolean object: Gizmo }
+            type SprocketDelete { ok: String }
+            type CogDelete { ok: [Boolean] }
             type Widget { id: String! }
             type Gadget { id: String! }
             type WidgetCreate { ok: Boolean object: Widget }
@@ -1884,6 +1917,8 @@ mod codegen_name_tests {
             !models.contains_key("Gizmo"),
             "unselected interface `object`"
         );
+        assert!(!models.contains_key("Sprocket"), "non-Boolean `ok`");
+        assert!(!models.contains_key("Cog"), "list `ok`");
         assert!(!models.contains_key("Diff"));
 
         let modules = render_api_modules(&ctx);
@@ -1901,6 +1936,8 @@ mod codegen_name_tests {
             "gadget_create",
             "gadget_delete",
             "gizmo_update",
+            "sprocket_delete",
+            "cog_delete",
             "diff_update",
         ] {
             assert!(client.contains(&format!("pub async fn {raw}(")), "{raw}");

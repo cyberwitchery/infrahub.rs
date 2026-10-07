@@ -1,12 +1,15 @@
 //! integration smoke tests for the generated typed API
 //!
-//! these tests exercise create / list / get_by_id / paginate / delete flows
-//! through the generated client crate. they require a live infrahub instance
-//! and are skipped when INFRAHUB_TOKEN is not set.
+//! these tests exercise create / list / get_by_id / paginate / update / delete
+//! flows through the generated client crate. they require a live infrahub
+//! instance and are skipped when INFRAHUB_TOKEN is not set.
 
 use infrahub::{Client, ClientConfig};
 use infrahub_test_client::api::ApiClient;
-use infrahub_test_client::inputs::{BuiltinTagCreateInput, DeleteInput, TextAttributeCreate};
+use infrahub_test_client::inputs::{
+    BuiltinTagCreateInput, BuiltinTagUpdateInput, CoreStandardGroupCreateInput, DeleteInput,
+    RelatedNodeInput, TextAttributeCreate, TextAttributeUpdate,
+};
 
 // ---------------------------------------------------------------------------
 // helpers
@@ -250,6 +253,101 @@ async fn tag_paginate_with_limit() {
     for id in &ids {
         delete_tag(&client, id).await;
     }
+}
+
+#[cfg_attr(miri, ignore)]
+#[tokio::test]
+async fn tag_update_keeps_group_membership() {
+    let Some(client) = make_client() else {
+        return;
+    };
+    let tag_id = create_tag(&client, "smoke-update-tag").await;
+
+    let data = CoreStandardGroupCreateInput {
+        id: None,
+        name: Some(TextAttributeCreate {
+            is_protected: None,
+            source: None,
+            owner: None,
+            value: Some("smoke-update-group".to_string()),
+        }),
+        label: None,
+        description: None,
+        group_type: None,
+        members: Some(vec![RelatedNodeInput {
+            id: Some(tag_id.clone()),
+            hfid: None,
+            kind: None,
+            from_pool: None,
+            _relation_is_protected: None,
+            _relation_owner: None,
+            _relation_source: None,
+        }]),
+        subscribers: None,
+        parent: None,
+        children: None,
+    };
+    let group = client
+        .api()
+        .core()
+        .standard_group()
+        .create(None, data, branch().as_deref())
+        .await
+        .expect("create group");
+    assert_eq!(group.members.count, 1, "group should hold the tag");
+
+    let data = BuiltinTagUpdateInput {
+        id: Some(tag_id.clone()),
+        hfid: None,
+        name: Some(TextAttributeUpdate {
+            is_default: None,
+            is_protected: None,
+            source: None,
+            owner: None,
+            value: Some("smoke-update-tag-renamed".to_string()),
+        }),
+        description: None,
+        profiles: None,
+        member_of_groups: None,
+        subscriber_of_groups: None,
+    };
+    client
+        .api()
+        .builtin()
+        .tag()
+        .update(None, data, branch().as_deref())
+        .await
+        .expect("rename tag");
+
+    let tag = client
+        .api()
+        .builtin()
+        .tag()
+        .get_by_id(&tag_id, branch().as_deref())
+        .await
+        .expect("get_by_id after rename")
+        .expect("tag should be found");
+    let name_val = tag.name.as_ref().and_then(|n| n.value.as_deref());
+    assert_eq!(name_val, Some("smoke-update-tag-renamed"));
+    assert_eq!(
+        tag.member_of_groups.count, 1,
+        "rename should keep the tag in its group"
+    );
+
+    // cleanup
+    let data = DeleteInput {
+        id: Some(group.id),
+        hfid: None,
+    };
+    let deleted = client
+        .api()
+        .core()
+        .standard_group()
+        .delete(None, data, branch().as_deref())
+        .await
+        .expect("delete group");
+    assert!(deleted, "delete should report ok");
+    delete_tag(&client, &tag_id).await;
 }
 
 #[cfg_attr(miri, ignore)]

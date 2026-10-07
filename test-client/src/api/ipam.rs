@@ -2,7 +2,7 @@
 
 #![allow(non_snake_case, unused_imports, unused_assignments, clippy::field_reassign_with_default)]
 
-use infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};
+use ::infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};
 use serde_json::Value;
 
 use crate::inputs::*;
@@ -704,7 +704,7 @@ impl<'a> IpamNamespaceClient<'a> {
             }
             Ok(EdgePage { nodes: items, next_cursor: next })
         });
-        infrahub::Paginator::new(fetch, extract)
+        ::infrahub::Paginator::new(fetch, extract)
     }
 
     pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<IpamNamespace>> {
@@ -712,6 +712,65 @@ impl<'a> IpamNamespaceClient<'a> {
         filters.ids = Some(vec![id.into()]);
         let mut items = self.list(Some(filters), request_branch).await?;
         Ok(items.pop())
+    }
+
+    pub async fn create(&self, context: Option<ContextInput>, data: IpamNamespaceCreateInput, request_branch: Option<&str>) -> Result<IpamNamespace> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation IpamNamespaceCreate($context: ContextInput, $data: IpamNamespaceCreateInput!) { IpamNamespaceCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default { is_default is_protected updated_at id is_from_profile permissions { update_value } value } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<IpamNamespaceCreateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.ipam_namespace_create.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn update(&self, context: Option<ContextInput>, data: IpamNamespaceUpdateInput, request_branch: Option<&str>) -> Result<IpamNamespace> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation IpamNamespaceUpdate($context: ContextInput, $data: IpamNamespaceUpdateInput!) { IpamNamespaceUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default { is_default is_protected updated_at id is_from_profile permissions { update_value } value } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<IpamNamespaceUpdateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.ipam_namespace_update.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn upsert(&self, context: Option<ContextInput>, data: IpamNamespaceUpsertInput, request_branch: Option<&str>) -> Result<IpamNamespace> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation IpamNamespaceUpsert($context: ContextInput, $data: IpamNamespaceUpsertInput!) { IpamNamespaceUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default { is_default is_protected updated_at id is_from_profile permissions { update_value } value } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<IpamNamespaceUpsertResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.ipam_namespace_upsert.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn delete(&self, context: Option<ContextInput>, data: DeleteInput, request_branch: Option<&str>) -> Result<bool> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation IpamNamespaceDelete($context: ContextInput, $data: DeleteInput!) { IpamNamespaceDelete(context: $context, data: $data) { ok } }"#;
+        let response = self.client.execute::<IpamNamespaceDeleteResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.ipam_namespace_delete.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        Ok(payload.ok.unwrap_or(false))
     }
 
 }

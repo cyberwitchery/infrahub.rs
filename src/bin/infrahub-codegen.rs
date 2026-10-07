@@ -205,6 +205,7 @@ impl<'a> SchemaContext<'a> {
         let mut scalars = BTreeSet::new();
         let mut query_type = "Query".to_string();
         let mut mutation_type = None;
+        let mut has_schema_definition = false;
 
         for def in &doc.definitions {
             if let Definition::TypeDefinition(ty) = def {
@@ -233,11 +234,16 @@ impl<'a> SchemaContext<'a> {
                 };
                 types.insert(name, ty.clone());
             } else if let Definition::SchemaDefinition(schema) = def {
+                has_schema_definition = true;
                 if let Some(query) = &schema.query {
                     query_type = query.to_string();
                 }
                 mutation_type = schema.mutation.as_ref().map(|m| m.to_string());
             }
+        }
+
+        if !has_schema_definition && objects.contains("Mutation") {
+            mutation_type = Some("Mutation".to_string());
         }
 
         Self {
@@ -390,6 +396,9 @@ fn render_inputs(ctx: &SchemaContext) -> String {
             out.push_str(&format!("pub struct {} {{\n", name));
             for field in fields {
                 let ty = rust_type(&field.value_type, ctx, true);
+                if is_optional(&field.value_type) {
+                    out.push_str("    #[serde(skip_serializing_if = \"Option::is_none\")]\n");
+                }
                 push_struct_field(&mut out, field.name.as_str(), &ty);
             }
             out.push_str("}\n\n");
@@ -441,7 +450,7 @@ fn render_client(ctx: &SchemaContext) -> String {
     let mut out = String::new();
     out.push_str("//! generated client\n\n");
     out.push_str("#![allow(non_snake_case, clippy::too_many_arguments, clippy::field_reassign_with_default)]\n\n");
-    out.push_str("use infrahub::{Client, GraphQlResponse, Result};\n");
+    out.push_str("use ::infrahub::{Client, GraphQlResponse, Result};\n");
     out.push_str("use serde_json::Value;\n\n");
     out.push_str("use crate::inputs::*;\n");
     out.push_str("use crate::responses::*;\n");
@@ -494,7 +503,7 @@ fn render_api_mod<'a>(ctx: &SchemaContext<'a>) -> String {
 
     let mut out = String::new();
     out.push_str("//! generated ergonomic api\n\n");
-    out.push_str("use infrahub::Client;\n\n");
+    out.push_str("use ::infrahub::Client;\n\n");
     for ns in &namespaces {
         out.push_str(&format!("pub mod {};\n", ns));
     }
@@ -555,7 +564,7 @@ fn render_api_module<'a>(
     out.push_str("//! generated api module\n\n");
     out.push_str("#![allow(non_snake_case, unused_imports, unused_assignments, clippy::field_reassign_with_default)]\n\n");
     out.push_str(
-        "use infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};\n",
+        "use ::infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};\n",
     );
     out.push_str("use serde_json::Value;\n\n");
     out.push_str("use crate::inputs::*;\n");
@@ -771,7 +780,7 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
         }
         out.push_str("            Ok(EdgePage { nodes: items, next_cursor: next })\n");
         out.push_str("        });\n");
-        out.push_str("        infrahub::Paginator::new(fetch, extract)\n");
+        out.push_str("        ::infrahub::Paginator::new(fetch, extract)\n");
         out.push_str("    }\n\n");
 
         if query_field.arguments.iter().any(|arg| arg.name == "ids") {
@@ -924,6 +933,9 @@ fn collect_models<'a>(ctx: &SchemaContext<'a>) -> BTreeMap<String, ModelInfo<'a>
                 } else {
                     continue;
                 };
+                if !mutation_fits_slot(field, slot, ctx) {
+                    continue;
+                }
                 let namespace = namespace_from_type(&model);
                 let (node_type, node_boxed) = node_type_for_model(&model, ctx);
                 let entry = models.entry(model.clone()).or_insert(ModelInfo {
@@ -950,6 +962,26 @@ fn collect_models<'a>(ctx: &SchemaContext<'a>) -> BTreeMap<String, ModelInfo<'a>
     }
 
     models
+}
+
+/// whether the payload has the nullable `object` (or `ok: Boolean` for delete) the helper reads.
+fn mutation_fits_slot(field: &Field<String>, slot: &str, ctx: &SchemaContext) -> bool {
+    let Type::NamedType(payload) = &field.field_type else {
+        return false;
+    };
+    let Some(TypeDefinition::Object(obj)) = ctx.types.get(payload) else {
+        return false;
+    };
+    let wanted = if slot == "delete" { "ok" } else { "object" };
+    obj.fields.iter().any(|f| {
+        f.name == wanted
+            && is_selected(f, ctx)
+            && match &f.field_type {
+                Type::NonNullType(_) => false,
+                Type::NamedType(name) => slot != "delete" || name == "Boolean",
+                Type::ListType(_) => slot != "delete",
+            }
+    })
 }
 
 fn namespace_from_type(name: &str) -> String {
@@ -1192,7 +1224,7 @@ fn selection_for_type(
     let mut fields = Vec::new();
     if let Some(TypeDefinition::Object(obj)) = ctx.types.get(type_name) {
         for field in &obj.fields {
-            if has_required_args(field) || should_skip_field(field) {
+            if !is_selected(field, ctx) {
                 continue;
             }
             let field_base = base_type_name(&field.field_type);
@@ -1224,6 +1256,19 @@ fn selection_for_type(
     } else {
         format!("{{ {} }}", fields.join(" "))
     }
+}
+
+/// whether `selection_for_type` selects this field.
+fn is_selected(field: &Field<String>, ctx: &SchemaContext) -> bool {
+    if has_required_args(field) || should_skip_field(field) {
+        return false;
+    }
+    let base = base_type_name(&field.field_type);
+    is_scalar_type(&base)
+        || ctx.enums.contains(&base)
+        || ctx.scalars.contains(&base)
+        || ctx.objects.contains(&base)
+        || ctx.unions.contains(&base)
 }
 
 fn base_type_name(ty: &Type<String>) -> String {
@@ -1727,5 +1772,175 @@ mod codegen_name_tests {
             !inputs_rs.contains("FixedGenericScalar"),
             "FixedGenericScalar should not appear as a raw type name"
         );
+    }
+
+    #[test]
+    fn test_nullable_input_fields_skip_serializing_none() {
+        let schema = r#"
+            type Query { ping: String }
+            input WidgetInput { id: String! name: String tags: [String!] }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let inputs_rs = render_inputs(&ctx);
+        let skip = "    #[serde(skip_serializing_if = \"Option::is_none\")]\n";
+        for field in [
+            "pub name: Option<String>,",
+            "pub tags: Option<Vec<String>>,",
+        ] {
+            assert!(
+                inputs_rs.contains(&format!("{skip}    {field}")),
+                "got:\n{inputs_rs}"
+            );
+        }
+        assert!(inputs_rs.contains("pub id: String,"));
+        assert!(
+            !inputs_rs.contains(&format!("{skip}    pub id:")),
+            "got:\n{inputs_rs}"
+        );
+    }
+
+    #[test]
+    fn test_mutation_root_defaults_without_schema_definition() {
+        let schema = r#"
+            type Query { ping: String }
+            type Mutation { pong: String }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        assert_eq!(ctx.query_type, "Query");
+        assert_eq!(ctx.mutation_type.as_deref(), Some("Mutation"));
+        assert!(render_client(&ctx).contains("pub async fn pong("));
+    }
+
+    #[test]
+    fn test_no_mutation_root_without_mutation_type() {
+        let doc = parse_schema::<String>("type Query { ping: String }").unwrap();
+        let ctx = SchemaContext::new(&doc);
+        assert_eq!(ctx.mutation_type, None);
+    }
+
+    #[test]
+    fn test_schema_definition_without_mutation_has_no_mutation_root() {
+        let schema = r#"
+            schema { query: Query }
+            type Query { ping: String }
+            type Mutation { pong: String }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        assert_eq!(ctx.mutation_type, None);
+        assert!(!render_client(&ctx).contains("pub async fn pong("));
+    }
+
+    #[test]
+    fn test_schema_definition_with_custom_root_names() {
+        let schema = r#"
+            schema { query: RootQuery mutation: RootMutation }
+            type RootQuery { ping: String }
+            type RootMutation { pong: String }
+            type Mutation { decoy: String }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        assert_eq!(ctx.query_type, "RootQuery");
+        assert_eq!(ctx.mutation_type.as_deref(), Some("RootMutation"));
+        let client = render_client(&ctx);
+        assert!(client.contains("pub async fn ping("));
+        assert!(client.contains("pub async fn pong("));
+        assert!(!client.contains("pub async fn decoy("));
+    }
+
+    #[test]
+    fn test_runtime_crate_paths_survive_an_infrahub_namespace() {
+        let schema = r#"
+            type Query { InfrahubWidget(ids: [ID]): PaginatedInfrahubWidget }
+            type PaginatedInfrahubWidget { edges: [EdgedInfrahubWidget!]! }
+            type EdgedInfrahubWidget { node: InfrahubWidget }
+            type InfrahubWidget { id: String! }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let api_mod = render_api_mod(&ctx);
+        assert!(api_mod.contains("pub mod infrahub;"));
+        assert!(api_mod.contains("use ::infrahub::Client;"));
+        let modules = render_api_modules(&ctx);
+        let module = &modules["infrahub"];
+        assert!(module.contains("use ::infrahub::{"));
+        assert!(module.contains(" ::infrahub::Paginator::new("));
+        assert!(!module.contains(" infrahub::Paginator"));
+        for generated in [api_mod.as_str(), module.as_str(), &render_client(&ctx)] {
+            assert!(!generated.contains("use infrahub::"), "got:\n{generated}");
+        }
+    }
+
+    #[test]
+    fn test_mutation_slots_require_the_payload_shape_helpers_read() {
+        let schema = r#"
+            type Query { ping: String }
+            type Mutation {
+                WidgetCreate(data: String!): WidgetCreate
+                WidgetUpdate(data: String!): WidgetUpdate
+                WidgetUpsert(data: String!): WidgetUpsert!
+                WidgetDelete(data: String!): WidgetDelete
+                GadgetCreate(data: String!): GadgetCreate
+                GadgetDelete(data: String!): GadgetDelete
+                GizmoUpdate(data: String!): GizmoUpdate
+                SprocketDelete(data: String!): SprocketDelete
+                CogDelete(data: String!): CogDelete
+                DiffUpdate(data: String!): DiffUpdateMutation
+            }
+            interface Gizmo { id: String! }
+            type GizmoUpdate { ok: Boolean object: Gizmo }
+            type SprocketDelete { ok: String }
+            type CogDelete { ok: [Boolean] }
+            type Widget { id: String! }
+            type Gadget { id: String! }
+            type WidgetCreate { ok: Boolean object: Widget }
+            type WidgetUpdate { ok: Boolean object: Widget! }
+            type WidgetUpsert { ok: Boolean object: Widget }
+            type WidgetDelete { ok: Boolean }
+            type GadgetCreate { ok: Boolean object: Gadget @deprecated(reason: "gone") }
+            type GadgetDelete { ok: Boolean! }
+            type DiffUpdateMutation { ok: Boolean task: String }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let models = collect_models(&ctx);
+        let widget = &models["Widget"];
+        assert!(widget.create.is_some());
+        assert!(widget.update.is_none(), "non-null `object`");
+        assert!(widget.upsert.is_none(), "non-null payload");
+        assert!(widget.delete.is_some());
+        assert!(!models.contains_key("Gadget"));
+        assert!(
+            !models.contains_key("Gizmo"),
+            "unselected interface `object`"
+        );
+        assert!(!models.contains_key("Sprocket"), "non-Boolean `ok`");
+        assert!(!models.contains_key("Cog"), "list `ok`");
+        assert!(!models.contains_key("Diff"));
+
+        let modules = render_api_modules(&ctx);
+        assert_eq!(modules.keys().collect::<Vec<_>>(), ["widget"]);
+        let widget_rs = &modules["widget"];
+        assert!(widget_rs.contains("pub async fn create("));
+        assert!(widget_rs.contains("pub async fn delete("));
+        assert!(!widget_rs.contains("pub async fn update("));
+        assert!(!widget_rs.contains("pub async fn upsert("));
+
+        let client = render_client(&ctx);
+        for raw in [
+            "widget_update",
+            "widget_upsert",
+            "gadget_create",
+            "gadget_delete",
+            "gizmo_update",
+            "sprocket_delete",
+            "cog_delete",
+            "diff_update",
+        ] {
+            assert!(client.contains(&format!("pub async fn {raw}(")), "{raw}");
+        }
     }
 }

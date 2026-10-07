@@ -1,9 +1,11 @@
 //! generated ergonomic api
 
-use infrahub::Client;
+use ::infrahub::Client;
 
+pub mod branch;
 pub mod builtin;
 pub mod core;
+pub mod infrahub;
 pub mod ipam;
 pub mod lineage;
 pub mod profile;
@@ -23,11 +25,17 @@ impl ApiClient for Client {
 }
 
 impl<'a> Api<'a> {
+    pub fn branch(&self) -> branch::BranchApi<'a> {
+        branch::BranchApi::new(self.client)
+    }
     pub fn builtin(&self) -> builtin::BuiltinApi<'a> {
         builtin::BuiltinApi::new(self.client)
     }
     pub fn core(&self) -> core::CoreApi<'a> {
         core::CoreApi::new(self.client)
+    }
+    pub fn infrahub(&self) -> infrahub::InfrahubApi<'a> {
+        infrahub::InfrahubApi::new(self.client)
     }
     pub fn ipam(&self) -> ipam::IpamApi<'a> {
         ipam::IpamApi::new(self.client)

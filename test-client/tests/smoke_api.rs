@@ -1,11 +1,15 @@
 //! integration smoke tests for the generated typed API
 //!
-//! these tests exercise list / get_by_id / paginate flows through the
-//! generated client crate. they require a live infrahub instance and are
-//! skipped when INFRAHUB_TOKEN is not set.
+//! these tests exercise create / list / get_by_id / paginate / update / delete
+//! flows through the generated client crate. they require a live infrahub
+//! instance and are skipped when INFRAHUB_TOKEN is not set.
 
 use infrahub::{Client, ClientConfig};
 use infrahub_test_client::api::ApiClient;
+use infrahub_test_client::inputs::{
+    BuiltinTagCreateInput, BuiltinTagUpdateInput, CoreStandardGroupCreateInput, DeleteInput,
+    RelatedNodeInput, TextAttributeCreate, TextAttributeUpdate,
+};
 
 // ---------------------------------------------------------------------------
 // helpers
@@ -23,35 +27,45 @@ fn branch() -> Option<String> {
     std::env::var("INFRAHUB_BRANCH").ok()
 }
 
-/// create a BuiltinTag via raw graphql and return its id
+/// create a BuiltinTag and return its id
 async fn create_tag(client: &Client, name: &str) -> String {
-    let query = r#"mutation CreateTag($data: BuiltinTagCreateInput!) {
-        BuiltinTagCreate(data: $data) { ok object { id } }
-    }"#;
-    let vars = serde_json::json!({
-        "data": { "name": { "value": name } }
-    });
-    let resp: infrahub::GraphQlResponse<serde_json::Value> = client
-        .execute(query, Some(vars), branch().as_deref())
+    let data = BuiltinTagCreateInput {
+        id: None,
+        name: Some(TextAttributeCreate {
+            is_protected: None,
+            source: None,
+            owner: None,
+            value: Some(name.to_string()),
+        }),
+        description: None,
+        profiles: None,
+        member_of_groups: None,
+        subscriber_of_groups: None,
+    };
+    let tag = client
+        .api()
+        .builtin()
+        .tag()
+        .create(None, data, branch().as_deref())
         .await
         .expect("create tag");
-    let data = resp.data.expect("create tag data");
-    data["BuiltinTagCreate"]["object"]["id"]
-        .as_str()
-        .expect("tag id")
-        .to_string()
+    tag.id
 }
 
 /// delete a BuiltinTag by id
 async fn delete_tag(client: &Client, id: &str) {
-    let query = r#"mutation DeleteTag($data: DeleteInput!) {
-        BuiltinTagDelete(data: $data) { ok }
-    }"#;
-    let vars = serde_json::json!({ "data": { "id": id } });
-    let _: infrahub::GraphQlResponse<serde_json::Value> = client
-        .execute(query, Some(vars), branch().as_deref())
+    let data = DeleteInput {
+        id: Some(id.to_string()),
+        hfid: None,
+    };
+    let deleted = client
+        .api()
+        .builtin()
+        .tag()
+        .delete(None, data, branch().as_deref())
         .await
         .expect("delete tag");
+    assert!(deleted, "delete should report ok");
 }
 
 // ---------------------------------------------------------------------------
@@ -188,8 +202,15 @@ async fn tag_list_and_get_by_id() {
         .expect("tag name");
     assert_eq!(name_val, "smoke-test-tag");
 
-    // cleanup
     delete_tag(&client, &tag_id).await;
+    let gone = client
+        .api()
+        .builtin()
+        .tag()
+        .get_by_id(&tag_id, branch().as_deref())
+        .await
+        .expect("get_by_id after delete");
+    assert!(gone.is_none(), "deleted tag should be gone");
 }
 
 #[cfg_attr(miri, ignore)]
@@ -232,6 +253,106 @@ async fn tag_paginate_with_limit() {
     for id in &ids {
         delete_tag(&client, id).await;
     }
+}
+
+#[cfg_attr(miri, ignore)]
+#[tokio::test]
+async fn tag_update_keeps_group_membership() {
+    let Some(client) = make_client() else {
+        return;
+    };
+    let tag_id = create_tag(&client, "smoke-update-tag").await;
+
+    let data = CoreStandardGroupCreateInput {
+        id: None,
+        name: Some(TextAttributeCreate {
+            is_protected: None,
+            source: None,
+            owner: None,
+            value: Some("smoke-update-group".to_string()),
+        }),
+        label: None,
+        description: None,
+        group_type: None,
+        members: Some(vec![RelatedNodeInput {
+            id: Some(tag_id.clone()),
+            hfid: None,
+            kind: None,
+            from_pool: None,
+            _relation_is_protected: None,
+            _relation_owner: None,
+            _relation_source: None,
+        }]),
+        subscribers: None,
+        parent: None,
+        children: None,
+    };
+    // the typed create selects `parent { node_metadata }`, which infrahub nulls without a parent
+    let query = r#"mutation CreateGroup($data: CoreStandardGroupCreateInput!) {
+        CoreStandardGroupCreate(data: $data) { ok object { id members { count } } }
+    }"#;
+    let vars = serde_json::json!({ "data": data });
+    let resp: infrahub::GraphQlResponse<serde_json::Value> = client
+        .execute(query, Some(vars), branch().as_deref())
+        .await
+        .expect("create group");
+    let created = resp.data.expect("create group data");
+    let group = &created["CoreStandardGroupCreate"]["object"];
+    assert_eq!(group["members"]["count"], 1, "group should hold the tag");
+    let group_id = group["id"].as_str().expect("group id").to_string();
+
+    let data = BuiltinTagUpdateInput {
+        id: Some(tag_id.clone()),
+        hfid: None,
+        name: Some(TextAttributeUpdate {
+            is_default: None,
+            is_protected: None,
+            source: None,
+            owner: None,
+            value: Some("smoke-update-tag-renamed".to_string()),
+        }),
+        description: None,
+        profiles: None,
+        member_of_groups: None,
+        subscriber_of_groups: None,
+    };
+    client
+        .api()
+        .builtin()
+        .tag()
+        .update(None, data, branch().as_deref())
+        .await
+        .expect("rename tag");
+
+    let tag = client
+        .api()
+        .builtin()
+        .tag()
+        .get_by_id(&tag_id, branch().as_deref())
+        .await
+        .expect("get_by_id after rename")
+        .expect("tag should be found");
+    let name_val = tag.name.as_ref().and_then(|n| n.value.as_deref());
+    assert_eq!(name_val, Some("smoke-update-tag-renamed"));
+    assert_eq!(
+        tag.member_of_groups.count, 1,
+        "rename should keep the tag in its group"
+    );
+
+    // cleanup
+    let data = DeleteInput {
+        id: Some(group_id),
+        hfid: None,
+    };
+    let deleted = client
+        .api()
+        .core()
+        .standard_group()
+        .delete(None, data, branch().as_deref())
+        .await
+        .expect("delete group");
+    assert!(deleted, "delete should report ok");
+    delete_tag(&client, &tag_id).await;
 }
 
 #[cfg_attr(miri, ignore)]

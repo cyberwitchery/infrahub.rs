@@ -2,7 +2,7 @@
 
 #![allow(non_snake_case, unused_imports, unused_assignments, clippy::field_reassign_with_default)]
 
-use infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};
+use ::infrahub::{BoxExtract, BoxFetch, BoxFutureResult, Client, DynPaginator, EdgePage, Error, Result};
 use serde_json::Value;
 
 use crate::inputs::*;
@@ -693,7 +693,7 @@ impl<'a> BuiltinIPAddressClient<'a> {
             }
             Ok(EdgePage { nodes: items, next_cursor: next })
         });
-        infrahub::Paginator::new(fetch, extract)
+        ::infrahub::Paginator::new(fetch, extract)
     }
 
     pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<serde_json::Value>> {
@@ -1362,7 +1362,7 @@ impl<'a> BuiltinIPNamespaceClient<'a> {
             }
             Ok(EdgePage { nodes: items, next_cursor: next })
         });
-        infrahub::Paginator::new(fetch, extract)
+        ::infrahub::Paginator::new(fetch, extract)
     }
 
     pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<serde_json::Value>> {
@@ -2515,7 +2515,7 @@ impl<'a> BuiltinIPPrefixClient<'a> {
             }
             Ok(EdgePage { nodes: items, next_cursor: next })
         });
-        infrahub::Paginator::new(fetch, extract)
+        ::infrahub::Paginator::new(fetch, extract)
     }
 
     pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<serde_json::Value>> {
@@ -2904,7 +2904,7 @@ impl<'a> BuiltinTagClient<'a> {
             }
             Ok(EdgePage { nodes: items, next_cursor: next })
         });
-        infrahub::Paginator::new(fetch, extract)
+        ::infrahub::Paginator::new(fetch, extract)
     }
 
     pub async fn get_by_id(&self, id: impl Into<String>, request_branch: Option<&str>) -> Result<Option<BuiltinTag>> {
@@ -2912,6 +2912,65 @@ impl<'a> BuiltinTagClient<'a> {
         filters.ids = Some(vec![id.into()]);
         let mut items = self.list(Some(filters), request_branch).await?;
         Ok(items.pop())
+    }
+
+    pub async fn create(&self, context: Option<ContextInput>, data: BuiltinTagCreateInput, request_branch: Option<&str>) -> Result<BuiltinTag> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation BuiltinTagCreate($context: ContextInput, $data: BuiltinTagCreateInput!) { BuiltinTagCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<BuiltinTagCreateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.builtin_tag_create.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn update(&self, context: Option<ContextInput>, data: BuiltinTagUpdateInput, request_branch: Option<&str>) -> Result<BuiltinTag> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation BuiltinTagUpdate($context: ContextInput, $data: BuiltinTagUpdateInput!) { BuiltinTagUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<BuiltinTagUpdateResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.builtin_tag_update.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn upsert(&self, context: Option<ContextInput>, data: BuiltinTagUpsertInput, request_branch: Option<&str>) -> Result<BuiltinTag> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation BuiltinTagUpsert($context: ContextInput, $data: BuiltinTagUpsertInput!) { BuiltinTagUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let response = self.client.execute::<BuiltinTagUpsertResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.builtin_tag_upsert.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        let object = payload.object.ok_or_else(|| Error::Config("missing object".to_string()))?;
+        Ok(*object)
+    }
+
+    pub async fn delete(&self, context: Option<ContextInput>, data: DeleteInput, request_branch: Option<&str>) -> Result<bool> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let vars = Value::Object(vars);
+        let query = r#"mutation BuiltinTagDelete($context: ContextInput, $data: DeleteInput!) { BuiltinTagDelete(context: $context, data: $data) { ok } }"#;
+        let response = self.client.execute::<BuiltinTagDeleteResponse>(query, Some(vars), request_branch).await?;
+        let data = response.data.ok_or_else(|| Error::Config("missing data".to_string()))?;
+        let payload = data.builtin_tag_delete.ok_or_else(|| Error::Config("missing payload".to_string()))?;
+        Ok(payload.ok.unwrap_or(false))
     }
 
 }

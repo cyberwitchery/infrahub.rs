@@ -2,7 +2,7 @@
 
 #![allow(non_snake_case, clippy::too_many_arguments, clippy::field_reassign_with_default)]
 
-use infrahub::{Client, GraphQlResponse, Result};
+use ::infrahub::{Client, GraphQlResponse, Result};
 use serde_json::Value;
 
 use crate::inputs::*;
@@ -37615,6 +37615,3346 @@ impl<'a> GeneratedClientImpl<'a> {
             vars.insert("order".to_string(), serde_json::to_value(value)?);
         }
         let query = r#"query InfrahubEvent($limit: Int, $offset: Int, $level: Int, $has_children: Boolean, $event_type: [String!], $event_type_filter: EventTypeFilter, $primary_node__ids: [String!], $related_node__ids: [String!], $parent__ids: [String!], $since: DateTime, $until: DateTime, $branches: [String!], $account__ids: [String!], $ids: [String!], $order: EventSortOrder) { InfrahubEvent(limit: $limit, offset: $offset, level: $level, has_children: $has_children, event_type: $event_type, event_type_filter: $event_type_filter, primary_node__ids: $primary_node__ids, related_node__ids: $related_node__ids, parent__ids: $parent__ids, since: $since, until: $until, branches: $branches, account__ids: $account__ids, ids: $ids, order: $order) { edges  count } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_menu_item_create(&self, context: Option<ContextInput>, data: CoreMenuItemCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreMenuItemCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreMenuItemCreate($context: ContextInput, $data: CoreMenuItemCreateInput!) { CoreMenuItemCreate(context: $context, data: $data) { ok object { id hfid display_label namespace { is_default is_protected updated_at id is_from_profile permissions { update_value } value } name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } icon { is_default is_protected updated_at id is_from_profile permissions { update_value } value } protected { is_default is_protected updated_at id is_from_profile permissions { update_value } value } order_weight { is_default is_protected updated_at id is_from_profile permissions { update_value } value } required_permissions { is_default is_protected updated_at id is_from_profile permissions { update_value } value } section { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_menu_item_update(&self, context: Option<ContextInput>, data: CoreMenuItemUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreMenuItemUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreMenuItemUpdate($context: ContextInput, $data: CoreMenuItemUpdateInput!) { CoreMenuItemUpdate(context: $context, data: $data) { ok object { id hfid display_label namespace { is_default is_protected updated_at id is_from_profile permissions { update_value } value } name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } icon { is_default is_protected updated_at id is_from_profile permissions { update_value } value } protected { is_default is_protected updated_at id is_from_profile permissions { update_value } value } order_weight { is_default is_protected updated_at id is_from_profile permissions { update_value } value } required_permissions { is_default is_protected updated_at id is_from_profile permissions { update_value } value } section { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_menu_item_upsert(&self, context: Option<ContextInput>, data: CoreMenuItemUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreMenuItemUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreMenuItemUpsert($context: ContextInput, $data: CoreMenuItemUpsertInput!) { CoreMenuItemUpsert(context: $context, data: $data) { ok object { id hfid display_label namespace { is_default is_protected updated_at id is_from_profile permissions { update_value } value } name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } icon { is_default is_protected updated_at id is_from_profile permissions { update_value } value } protected { is_default is_protected updated_at id is_from_profile permissions { update_value } value } order_weight { is_default is_protected updated_at id is_from_profile permissions { update_value } value } required_permissions { is_default is_protected updated_at id is_from_profile permissions { update_value } value } section { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_menu_item_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreMenuItemDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreMenuItemDelete($context: ContextInput, $data: DeleteInput!) { CoreMenuItemDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_group_action_create(&self, context: Option<ContextInput>, data: CoreGroupActionCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGroupActionCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGroupActionCreate($context: ContextInput, $data: CoreGroupActionCreateInput!) { CoreGroupActionCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_action { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } group { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } triggers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_group_action_update(&self, context: Option<ContextInput>, data: CoreGroupActionUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGroupActionUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGroupActionUpdate($context: ContextInput, $data: CoreGroupActionUpdateInput!) { CoreGroupActionUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_action { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } group { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } triggers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_group_action_upsert(&self, context: Option<ContextInput>, data: CoreGroupActionUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGroupActionUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGroupActionUpsert($context: ContextInput, $data: CoreGroupActionUpsertInput!) { CoreGroupActionUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_action { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } group { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } triggers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_group_action_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGroupActionDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGroupActionDelete($context: ContextInput, $data: DeleteInput!) { CoreGroupActionDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_group_create(&self, context: Option<ContextInput>, data: CoreStandardGroupCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardGroupCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardGroupCreate($context: ContextInput, $data: CoreStandardGroupCreateInput!) { CoreStandardGroupCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_group_update(&self, context: Option<ContextInput>, data: CoreStandardGroupUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardGroupUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardGroupUpdate($context: ContextInput, $data: CoreStandardGroupUpdateInput!) { CoreStandardGroupUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_group_upsert(&self, context: Option<ContextInput>, data: CoreStandardGroupUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardGroupUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardGroupUpsert($context: ContextInput, $data: CoreStandardGroupUpsertInput!) { CoreStandardGroupUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_group_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardGroupDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardGroupDelete($context: ContextInput, $data: DeleteInput!) { CoreStandardGroupDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_group_create(&self, context: Option<ContextInput>, data: CoreGeneratorGroupCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorGroupCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorGroupCreate($context: ContextInput, $data: CoreGeneratorGroupCreateInput!) { CoreGeneratorGroupCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_group_update(&self, context: Option<ContextInput>, data: CoreGeneratorGroupUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorGroupUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorGroupUpdate($context: ContextInput, $data: CoreGeneratorGroupUpdateInput!) { CoreGeneratorGroupUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_group_upsert(&self, context: Option<ContextInput>, data: CoreGeneratorGroupUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorGroupUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorGroupUpsert($context: ContextInput, $data: CoreGeneratorGroupUpsertInput!) { CoreGeneratorGroupUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_group_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorGroupDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorGroupDelete($context: ContextInput, $data: DeleteInput!) { CoreGeneratorGroupDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_aware_group_create(&self, context: Option<ContextInput>, data: CoreGeneratorAwareGroupCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorAwareGroupCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorAwareGroupCreate($context: ContextInput, $data: CoreGeneratorAwareGroupCreateInput!) { CoreGeneratorAwareGroupCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_aware_group_update(&self, context: Option<ContextInput>, data: CoreGeneratorAwareGroupUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorAwareGroupUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorAwareGroupUpdate($context: ContextInput, $data: CoreGeneratorAwareGroupUpdateInput!) { CoreGeneratorAwareGroupUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_aware_group_upsert(&self, context: Option<ContextInput>, data: CoreGeneratorAwareGroupUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorAwareGroupUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorAwareGroupUpsert($context: ContextInput, $data: CoreGeneratorAwareGroupUpsertInput!) { CoreGeneratorAwareGroupUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_aware_group_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorAwareGroupDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorAwareGroupDelete($context: ContextInput, $data: DeleteInput!) { CoreGeneratorAwareGroupDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_graph_ql_query_group_create(&self, context: Option<ContextInput>, data: CoreGraphQLQueryGroupCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGraphQLQueryGroupCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGraphQLQueryGroupCreate($context: ContextInput, $data: CoreGraphQLQueryGroupCreateInput!) { CoreGraphQLQueryGroupCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_graph_ql_query_group_update(&self, context: Option<ContextInput>, data: CoreGraphQLQueryGroupUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGraphQLQueryGroupUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGraphQLQueryGroupUpdate($context: ContextInput, $data: CoreGraphQLQueryGroupUpdateInput!) { CoreGraphQLQueryGroupUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_graph_ql_query_group_upsert(&self, context: Option<ContextInput>, data: CoreGraphQLQueryGroupUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGraphQLQueryGroupUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGraphQLQueryGroupUpsert($context: ContextInput, $data: CoreGraphQLQueryGroupUpsertInput!) { CoreGraphQLQueryGroupUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_graph_ql_query_group_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGraphQLQueryGroupDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGraphQLQueryGroupDelete($context: ContextInput, $data: DeleteInput!) { CoreGraphQLQueryGroupDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_group_create(&self, context: Option<ContextInput>, data: CoreRepositoryGroupCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryGroupCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryGroupCreate($context: ContextInput, $data: CoreRepositoryGroupCreateInput!) { CoreRepositoryGroupCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } content { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_group_update(&self, context: Option<ContextInput>, data: CoreRepositoryGroupUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryGroupUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryGroupUpdate($context: ContextInput, $data: CoreRepositoryGroupUpdateInput!) { CoreRepositoryGroupUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } content { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_group_upsert(&self, context: Option<ContextInput>, data: CoreRepositoryGroupUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryGroupUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryGroupUpsert($context: ContextInput, $data: CoreRepositoryGroupUpsertInput!) { CoreRepositoryGroupUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } content { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_group_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryGroupDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryGroupDelete($context: ContextInput, $data: DeleteInput!) { CoreRepositoryGroupDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn builtin_tag_create(&self, context: Option<ContextInput>, data: BuiltinTagCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<BuiltinTagCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation BuiltinTagCreate($context: ContextInput, $data: BuiltinTagCreateInput!) { BuiltinTagCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn builtin_tag_update(&self, context: Option<ContextInput>, data: BuiltinTagUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<BuiltinTagUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation BuiltinTagUpdate($context: ContextInput, $data: BuiltinTagUpdateInput!) { BuiltinTagUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn builtin_tag_upsert(&self, context: Option<ContextInput>, data: BuiltinTagUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<BuiltinTagUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation BuiltinTagUpsert($context: ContextInput, $data: BuiltinTagUpsertInput!) { BuiltinTagUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn builtin_tag_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<BuiltinTagDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation BuiltinTagDelete($context: ContextInput, $data: DeleteInput!) { BuiltinTagDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_create(&self, context: Option<ContextInput>, data: CoreAccountCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountCreate($context: ContextInput, $data: CoreAccountCreateInput!) { CoreAccountCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } password { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } account_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } is_externally_managed } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_update(&self, context: Option<ContextInput>, data: CoreAccountUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountUpdate($context: ContextInput, $data: CoreAccountUpdateInput!) { CoreAccountUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } password { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } account_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } is_externally_managed } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_upsert(&self, context: Option<ContextInput>, data: CoreAccountUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountUpsert($context: ContextInput, $data: CoreAccountUpsertInput!) { CoreAccountUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } password { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } account_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } is_externally_managed } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountDelete($context: ContextInput, $data: DeleteInput!) { CoreAccountDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_action_create(&self, context: Option<ContextInput>, data: CoreGeneratorActionCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorActionCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorActionCreate($context: ContextInput, $data: CoreGeneratorActionCreateInput!) { CoreGeneratorActionCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } generator { node { id hfid display_label name { __typename } description { __typename } parameters { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } execute_in_proposed_change { __typename } execute_after_merge { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } query { __typename } repository { __typename } targets { __typename } instances { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } triggers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_action_update(&self, context: Option<ContextInput>, data: CoreGeneratorActionUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorActionUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorActionUpdate($context: ContextInput, $data: CoreGeneratorActionUpdateInput!) { CoreGeneratorActionUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } generator { node { id hfid display_label name { __typename } description { __typename } parameters { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } execute_in_proposed_change { __typename } execute_after_merge { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } query { __typename } repository { __typename } targets { __typename } instances { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } triggers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_action_upsert(&self, context: Option<ContextInput>, data: CoreGeneratorActionUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorActionUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorActionUpsert($context: ContextInput, $data: CoreGeneratorActionUpsertInput!) { CoreGeneratorActionUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } generator { node { id hfid display_label name { __typename } description { __typename } parameters { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } execute_in_proposed_change { __typename } execute_after_merge { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } query { __typename } repository { __typename } targets { __typename } instances { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } triggers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_action_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorActionDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorActionDelete($context: ContextInput, $data: DeleteInput!) { CoreGeneratorActionDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_group_trigger_rule_create(&self, context: Option<ContextInput>, data: CoreGroupTriggerRuleCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGroupTriggerRuleCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGroupTriggerRuleCreate($context: ContextInput, $data: CoreGroupTriggerRuleCreateInput!) { CoreGroupTriggerRuleCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } member_update { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } group { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } action { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_group_trigger_rule_update(&self, context: Option<ContextInput>, data: CoreGroupTriggerRuleUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGroupTriggerRuleUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGroupTriggerRuleUpdate($context: ContextInput, $data: CoreGroupTriggerRuleUpdateInput!) { CoreGroupTriggerRuleUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } member_update { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } group { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } action { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_group_trigger_rule_upsert(&self, context: Option<ContextInput>, data: CoreGroupTriggerRuleUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGroupTriggerRuleUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGroupTriggerRuleUpsert($context: ContextInput, $data: CoreGroupTriggerRuleUpsertInput!) { CoreGroupTriggerRuleUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } member_update { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } group { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } action { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_group_trigger_rule_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGroupTriggerRuleDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGroupTriggerRuleDelete($context: ContextInput, $data: DeleteInput!) { CoreGroupTriggerRuleDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_rule_create(&self, context: Option<ContextInput>, data: CoreNodeTriggerRuleCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerRuleCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerRuleCreate($context: ContextInput, $data: CoreNodeTriggerRuleCreateInput!) { CoreNodeTriggerRuleCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } node_kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } mutation_action { is_default is_protected updated_at id is_from_profile permissions { update_value } value } matches { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } action { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_rule_update(&self, context: Option<ContextInput>, data: CoreNodeTriggerRuleUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerRuleUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerRuleUpdate($context: ContextInput, $data: CoreNodeTriggerRuleUpdateInput!) { CoreNodeTriggerRuleUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } node_kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } mutation_action { is_default is_protected updated_at id is_from_profile permissions { update_value } value } matches { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } action { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_rule_upsert(&self, context: Option<ContextInput>, data: CoreNodeTriggerRuleUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerRuleUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerRuleUpsert($context: ContextInput, $data: CoreNodeTriggerRuleUpsertInput!) { CoreNodeTriggerRuleUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } node_kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } mutation_action { is_default is_protected updated_at id is_from_profile permissions { update_value } value } matches { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } action { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_rule_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerRuleDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerRuleDelete($context: ContextInput, $data: DeleteInput!) { CoreNodeTriggerRuleDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_attribute_match_create(&self, context: Option<ContextInput>, data: CoreNodeTriggerAttributeMatchCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerAttributeMatchCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerAttributeMatchCreate($context: ContextInput, $data: CoreNodeTriggerAttributeMatchCreateInput!) { CoreNodeTriggerAttributeMatchCreate(context: $context, data: $data) { ok object { id hfid display_label attribute_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value_previous { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value_match { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } trigger { node { id hfid display_label name { __typename } description { __typename } active { __typename } branch_scope { __typename } node_kind { __typename } mutation_action { __typename } matches { __typename } action { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_attribute_match_update(&self, context: Option<ContextInput>, data: CoreNodeTriggerAttributeMatchUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerAttributeMatchUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerAttributeMatchUpdate($context: ContextInput, $data: CoreNodeTriggerAttributeMatchUpdateInput!) { CoreNodeTriggerAttributeMatchUpdate(context: $context, data: $data) { ok object { id hfid display_label attribute_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value_previous { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value_match { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } trigger { node { id hfid display_label name { __typename } description { __typename } active { __typename } branch_scope { __typename } node_kind { __typename } mutation_action { __typename } matches { __typename } action { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_attribute_match_upsert(&self, context: Option<ContextInput>, data: CoreNodeTriggerAttributeMatchUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerAttributeMatchUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerAttributeMatchUpsert($context: ContextInput, $data: CoreNodeTriggerAttributeMatchUpsertInput!) { CoreNodeTriggerAttributeMatchUpsert(context: $context, data: $data) { ok object { id hfid display_label attribute_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value_previous { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value_match { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } trigger { node { id hfid display_label name { __typename } description { __typename } active { __typename } branch_scope { __typename } node_kind { __typename } mutation_action { __typename } matches { __typename } action { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_attribute_match_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerAttributeMatchDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerAttributeMatchDelete($context: ContextInput, $data: DeleteInput!) { CoreNodeTriggerAttributeMatchDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_relationship_match_create(&self, context: Option<ContextInput>, data: CoreNodeTriggerRelationshipMatchCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerRelationshipMatchCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerRelationshipMatchCreate($context: ContextInput, $data: CoreNodeTriggerRelationshipMatchCreateInput!) { CoreNodeTriggerRelationshipMatchCreate(context: $context, data: $data) { ok object { id hfid display_label relationship_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } modification_type { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } peer { is_default is_protected updated_at id is_from_profile permissions { update_value } value } trigger { node { id hfid display_label name { __typename } description { __typename } active { __typename } branch_scope { __typename } node_kind { __typename } mutation_action { __typename } matches { __typename } action { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_relationship_match_update(&self, context: Option<ContextInput>, data: CoreNodeTriggerRelationshipMatchUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerRelationshipMatchUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerRelationshipMatchUpdate($context: ContextInput, $data: CoreNodeTriggerRelationshipMatchUpdateInput!) { CoreNodeTriggerRelationshipMatchUpdate(context: $context, data: $data) { ok object { id hfid display_label relationship_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } modification_type { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } peer { is_default is_protected updated_at id is_from_profile permissions { update_value } value } trigger { node { id hfid display_label name { __typename } description { __typename } active { __typename } branch_scope { __typename } node_kind { __typename } mutation_action { __typename } matches { __typename } action { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_relationship_match_upsert(&self, context: Option<ContextInput>, data: CoreNodeTriggerRelationshipMatchUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerRelationshipMatchUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerRelationshipMatchUpsert($context: ContextInput, $data: CoreNodeTriggerRelationshipMatchUpsertInput!) { CoreNodeTriggerRelationshipMatchUpsert(context: $context, data: $data) { ok object { id hfid display_label relationship_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } modification_type { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } peer { is_default is_protected updated_at id is_from_profile permissions { update_value } value } trigger { node { id hfid display_label name { __typename } description { __typename } active { __typename } branch_scope { __typename } node_kind { __typename } mutation_action { __typename } matches { __typename } action { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_relationship_match_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerRelationshipMatchDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerRelationshipMatchDelete($context: ContextInput, $data: DeleteInput!) { CoreNodeTriggerRelationshipMatchDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_password_credential_create(&self, context: Option<ContextInput>, data: CorePasswordCredentialCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CorePasswordCredentialCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CorePasswordCredentialCreate($context: ContextInput, $data: CorePasswordCredentialCreateInput!) { CorePasswordCredentialCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } username { is_default is_protected updated_at id is_from_profile permissions { update_value } value } password { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_password_credential_update(&self, context: Option<ContextInput>, data: CorePasswordCredentialUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CorePasswordCredentialUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CorePasswordCredentialUpdate($context: ContextInput, $data: CorePasswordCredentialUpdateInput!) { CorePasswordCredentialUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } username { is_default is_protected updated_at id is_from_profile permissions { update_value } value } password { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_password_credential_upsert(&self, context: Option<ContextInput>, data: CorePasswordCredentialUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CorePasswordCredentialUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CorePasswordCredentialUpsert($context: ContextInput, $data: CorePasswordCredentialUpsertInput!) { CorePasswordCredentialUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } username { is_default is_protected updated_at id is_from_profile permissions { update_value } value } password { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_password_credential_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CorePasswordCredentialDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CorePasswordCredentialDelete($context: ContextInput, $data: DeleteInput!) { CorePasswordCredentialDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_proposed_change_create(&self, context: Option<ContextInput>, data: CoreProposedChangeCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreProposedChangeCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreProposedChangeCreate($context: ContextInput, $data: CoreProposedChangeCreateInput!) { CoreProposedChangeCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } source_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } destination_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } is_draft { is_default is_protected updated_at id is_from_profile permissions { update_value } value } total_comments { is_default is_protected updated_at id is_from_profile permissions { update_value } value } approved_by { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } rejected_by { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } reviewers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } threads { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } validations { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_proposed_change_update(&self, context: Option<ContextInput>, data: CoreProposedChangeUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreProposedChangeUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreProposedChangeUpdate($context: ContextInput, $data: CoreProposedChangeUpdateInput!) { CoreProposedChangeUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } source_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } destination_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } is_draft { is_default is_protected updated_at id is_from_profile permissions { update_value } value } total_comments { is_default is_protected updated_at id is_from_profile permissions { update_value } value } approved_by { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } rejected_by { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } reviewers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } threads { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } validations { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_proposed_change_upsert(&self, context: Option<ContextInput>, data: CoreProposedChangeUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreProposedChangeUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreProposedChangeUpsert($context: ContextInput, $data: CoreProposedChangeUpsertInput!) { CoreProposedChangeUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } source_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } destination_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } is_draft { is_default is_protected updated_at id is_from_profile permissions { update_value } value } total_comments { is_default is_protected updated_at id is_from_profile permissions { update_value } value } approved_by { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } rejected_by { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } reviewers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } threads { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } validations { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_proposed_change_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreProposedChangeDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreProposedChangeDelete($context: ContextInput, $data: DeleteInput!) { CoreProposedChangeDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_change_thread_create(&self, context: Option<ContextInput>, data: CoreChangeThreadCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreChangeThreadCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreChangeThreadCreate($context: ContextInput, $data: CoreChangeThreadCreateInput!) { CoreChangeThreadCreate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_change_thread_update(&self, context: Option<ContextInput>, data: CoreChangeThreadUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreChangeThreadUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreChangeThreadUpdate($context: ContextInput, $data: CoreChangeThreadUpdateInput!) { CoreChangeThreadUpdate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_change_thread_upsert(&self, context: Option<ContextInput>, data: CoreChangeThreadUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreChangeThreadUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreChangeThreadUpsert($context: ContextInput, $data: CoreChangeThreadUpsertInput!) { CoreChangeThreadUpsert(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_change_thread_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreChangeThreadDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreChangeThreadDelete($context: ContextInput, $data: DeleteInput!) { CoreChangeThreadDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_file_thread_create(&self, context: Option<ContextInput>, data: CoreFileThreadCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreFileThreadCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreFileThreadCreate($context: ContextInput, $data: CoreFileThreadCreateInput!) { CoreFileThreadCreate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } line_number { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node { id hfid display_label name { __typename } description { __typename } location { __typename } internal_status { __typename } operational_status { __typename } sync_status { __typename } default_branch { __typename } commit { __typename } credential { __typename } tags { __typename } transformations { __typename } queries { __typename } checks { __typename } generators { __typename } groups_objects { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_file_thread_update(&self, context: Option<ContextInput>, data: CoreFileThreadUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreFileThreadUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreFileThreadUpdate($context: ContextInput, $data: CoreFileThreadUpdateInput!) { CoreFileThreadUpdate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } line_number { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node { id hfid display_label name { __typename } description { __typename } location { __typename } internal_status { __typename } operational_status { __typename } sync_status { __typename } default_branch { __typename } commit { __typename } credential { __typename } tags { __typename } transformations { __typename } queries { __typename } checks { __typename } generators { __typename } groups_objects { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_file_thread_upsert(&self, context: Option<ContextInput>, data: CoreFileThreadUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreFileThreadUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreFileThreadUpsert($context: ContextInput, $data: CoreFileThreadUpsertInput!) { CoreFileThreadUpsert(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } line_number { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node { id hfid display_label name { __typename } description { __typename } location { __typename } internal_status { __typename } operational_status { __typename } sync_status { __typename } default_branch { __typename } commit { __typename } credential { __typename } tags { __typename } transformations { __typename } queries { __typename } checks { __typename } generators { __typename } groups_objects { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_file_thread_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreFileThreadDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreFileThreadDelete($context: ContextInput, $data: DeleteInput!) { CoreFileThreadDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_thread_create(&self, context: Option<ContextInput>, data: CoreArtifactThreadCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactThreadCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactThreadCreate($context: ContextInput, $data: CoreArtifactThreadCreateInput!) { CoreArtifactThreadCreate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } artifact_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } storage_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } line_number { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_thread_update(&self, context: Option<ContextInput>, data: CoreArtifactThreadUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactThreadUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactThreadUpdate($context: ContextInput, $data: CoreArtifactThreadUpdateInput!) { CoreArtifactThreadUpdate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } artifact_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } storage_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } line_number { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_thread_upsert(&self, context: Option<ContextInput>, data: CoreArtifactThreadUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactThreadUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactThreadUpsert($context: ContextInput, $data: CoreArtifactThreadUpsertInput!) { CoreArtifactThreadUpsert(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } artifact_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } storage_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } line_number { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_thread_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactThreadDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactThreadDelete($context: ContextInput, $data: DeleteInput!) { CoreArtifactThreadDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_object_thread_create(&self, context: Option<ContextInput>, data: CoreObjectThreadCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreObjectThreadCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreObjectThreadCreate($context: ContextInput, $data: CoreObjectThreadCreateInput!) { CoreObjectThreadCreate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } object_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_object_thread_update(&self, context: Option<ContextInput>, data: CoreObjectThreadUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreObjectThreadUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreObjectThreadUpdate($context: ContextInput, $data: CoreObjectThreadUpdateInput!) { CoreObjectThreadUpdate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } object_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_object_thread_upsert(&self, context: Option<ContextInput>, data: CoreObjectThreadUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreObjectThreadUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreObjectThreadUpsert($context: ContextInput, $data: CoreObjectThreadUpsertInput!) { CoreObjectThreadUpsert(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resolved { is_default is_protected updated_at id is_from_profile permissions { update_value } value } object_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } comments { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_object_thread_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreObjectThreadDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreObjectThreadDelete($context: ContextInput, $data: DeleteInput!) { CoreObjectThreadDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_change_comment_create(&self, context: Option<ContextInput>, data: CoreChangeCommentCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreChangeCommentCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreChangeCommentCreate($context: ContextInput, $data: CoreChangeCommentCreateInput!) { CoreChangeCommentCreate(context: $context, data: $data) { ok object { id hfid display_label text { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_change_comment_update(&self, context: Option<ContextInput>, data: CoreChangeCommentUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreChangeCommentUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreChangeCommentUpdate($context: ContextInput, $data: CoreChangeCommentUpdateInput!) { CoreChangeCommentUpdate(context: $context, data: $data) { ok object { id hfid display_label text { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_change_comment_upsert(&self, context: Option<ContextInput>, data: CoreChangeCommentUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreChangeCommentUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreChangeCommentUpsert($context: ContextInput, $data: CoreChangeCommentUpsertInput!) { CoreChangeCommentUpsert(context: $context, data: $data) { ok object { id hfid display_label text { is_default is_protected updated_at id is_from_profile permissions { update_value } value } change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_change_comment_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreChangeCommentDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreChangeCommentDelete($context: ContextInput, $data: DeleteInput!) { CoreChangeCommentDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_thread_comment_create(&self, context: Option<ContextInput>, data: CoreThreadCommentCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreThreadCommentCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreThreadCommentCreate($context: ContextInput, $data: CoreThreadCommentCreateInput!) { CoreThreadCommentCreate(context: $context, data: $data) { ok object { id hfid display_label text { is_default is_protected updated_at id is_from_profile permissions { update_value } value } thread { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_thread_comment_update(&self, context: Option<ContextInput>, data: CoreThreadCommentUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreThreadCommentUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreThreadCommentUpdate($context: ContextInput, $data: CoreThreadCommentUpdateInput!) { CoreThreadCommentUpdate(context: $context, data: $data) { ok object { id hfid display_label text { is_default is_protected updated_at id is_from_profile permissions { update_value } value } thread { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_thread_comment_upsert(&self, context: Option<ContextInput>, data: CoreThreadCommentUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreThreadCommentUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreThreadCommentUpsert($context: ContextInput, $data: CoreThreadCommentUpsertInput!) { CoreThreadCommentUpsert(context: $context, data: $data) { ok object { id hfid display_label text { is_default is_protected updated_at id is_from_profile permissions { update_value } value } thread { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_thread_comment_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreThreadCommentDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreThreadCommentDelete($context: ContextInput, $data: DeleteInput!) { CoreThreadCommentDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_create(&self, context: Option<ContextInput>, data: CoreRepositoryCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryCreate($context: ContextInput, $data: CoreRepositoryCreateInput!) { CoreRepositoryCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } location { is_default is_protected updated_at id is_from_profile permissions { update_value } value } internal_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } operational_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } sync_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } default_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } credential { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } transformations { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } queries { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } checks { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } generators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } groups_objects { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_update(&self, context: Option<ContextInput>, data: CoreRepositoryUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryUpdate($context: ContextInput, $data: CoreRepositoryUpdateInput!) { CoreRepositoryUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } location { is_default is_protected updated_at id is_from_profile permissions { update_value } value } internal_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } operational_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } sync_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } default_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } credential { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } transformations { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } queries { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } checks { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } generators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } groups_objects { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_upsert(&self, context: Option<ContextInput>, data: CoreRepositoryUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryUpsert($context: ContextInput, $data: CoreRepositoryUpsertInput!) { CoreRepositoryUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } location { is_default is_protected updated_at id is_from_profile permissions { update_value } value } internal_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } operational_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } sync_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } default_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } credential { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } transformations { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } queries { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } checks { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } generators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } groups_objects { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryDelete($context: ContextInput, $data: DeleteInput!) { CoreRepositoryDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_read_only_repository_create(&self, context: Option<ContextInput>, data: CoreReadOnlyRepositoryCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreReadOnlyRepositoryCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreReadOnlyRepositoryCreate($context: ContextInput, $data: CoreReadOnlyRepositoryCreateInput!) { CoreReadOnlyRepositoryCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } location { is_default is_protected updated_at id is_from_profile permissions { update_value } value } internal_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } operational_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } sync_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } ref { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } credential { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } transformations { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } queries { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } checks { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } generators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } groups_objects { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_read_only_repository_update(&self, context: Option<ContextInput>, data: CoreReadOnlyRepositoryUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreReadOnlyRepositoryUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreReadOnlyRepositoryUpdate($context: ContextInput, $data: CoreReadOnlyRepositoryUpdateInput!) { CoreReadOnlyRepositoryUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } location { is_default is_protected updated_at id is_from_profile permissions { update_value } value } internal_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } operational_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } sync_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } ref { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } credential { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } transformations { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } queries { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } checks { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } generators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } groups_objects { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_read_only_repository_upsert(&self, context: Option<ContextInput>, data: CoreReadOnlyRepositoryUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreReadOnlyRepositoryUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreReadOnlyRepositoryUpsert($context: ContextInput, $data: CoreReadOnlyRepositoryUpsertInput!) { CoreReadOnlyRepositoryUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } location { is_default is_protected updated_at id is_from_profile permissions { update_value } value } internal_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } operational_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } sync_status { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } ref { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } credential { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } transformations { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } queries { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } checks { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } generators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } groups_objects { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_read_only_repository_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreReadOnlyRepositoryDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreReadOnlyRepositoryDelete($context: ContextInput, $data: DeleteInput!) { CoreReadOnlyRepositoryDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_transform_jinja2_create(&self, context: Option<ContextInput>, data: CoreTransformJinja2CreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreTransformJinja2CreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreTransformJinja2Create($context: ContextInput, $data: CoreTransformJinja2CreateInput!) { CoreTransformJinja2Create(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } timeout { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies_complete { is_default is_protected updated_at id is_from_profile permissions { update_value } value } template_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } artifact_definitions { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_transform_jinja2_update(&self, context: Option<ContextInput>, data: CoreTransformJinja2UpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreTransformJinja2UpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreTransformJinja2Update($context: ContextInput, $data: CoreTransformJinja2UpdateInput!) { CoreTransformJinja2Update(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } timeout { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies_complete { is_default is_protected updated_at id is_from_profile permissions { update_value } value } template_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } artifact_definitions { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_transform_jinja2_upsert(&self, context: Option<ContextInput>, data: CoreTransformJinja2UpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreTransformJinja2UpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreTransformJinja2Upsert($context: ContextInput, $data: CoreTransformJinja2UpsertInput!) { CoreTransformJinja2Upsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } timeout { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies_complete { is_default is_protected updated_at id is_from_profile permissions { update_value } value } template_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } artifact_definitions { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_transform_jinja2_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreTransformJinja2DeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreTransformJinja2Delete($context: ContextInput, $data: DeleteInput!) { CoreTransformJinja2Delete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_data_check_create(&self, context: Option<ContextInput>, data: CoreDataCheckCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreDataCheckCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreDataCheckCreate($context: ContextInput, $data: CoreDataCheckCreateInput!) { CoreDataCheckCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conflicts { is_default is_protected updated_at id is_from_profile permissions { update_value } value } keep_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } enriched_conflict_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_data_check_update(&self, context: Option<ContextInput>, data: CoreDataCheckUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreDataCheckUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreDataCheckUpdate($context: ContextInput, $data: CoreDataCheckUpdateInput!) { CoreDataCheckUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conflicts { is_default is_protected updated_at id is_from_profile permissions { update_value } value } keep_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } enriched_conflict_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_data_check_upsert(&self, context: Option<ContextInput>, data: CoreDataCheckUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreDataCheckUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreDataCheckUpsert($context: ContextInput, $data: CoreDataCheckUpsertInput!) { CoreDataCheckUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conflicts { is_default is_protected updated_at id is_from_profile permissions { update_value } value } keep_branch { is_default is_protected updated_at id is_from_profile permissions { update_value } value } enriched_conflict_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_data_check_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreDataCheckDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreDataCheckDelete($context: ContextInput, $data: DeleteInput!) { CoreDataCheckDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_check_create(&self, context: Option<ContextInput>, data: CoreStandardCheckCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardCheckCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardCheckCreate($context: ContextInput, $data: CoreStandardCheckCreateInput!) { CoreStandardCheckCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_check_update(&self, context: Option<ContextInput>, data: CoreStandardCheckUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardCheckUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardCheckUpdate($context: ContextInput, $data: CoreStandardCheckUpdateInput!) { CoreStandardCheckUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_check_upsert(&self, context: Option<ContextInput>, data: CoreStandardCheckUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardCheckUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardCheckUpsert($context: ContextInput, $data: CoreStandardCheckUpsertInput!) { CoreStandardCheckUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_check_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardCheckDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardCheckDelete($context: ContextInput, $data: DeleteInput!) { CoreStandardCheckDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_schema_check_create(&self, context: Option<ContextInput>, data: CoreSchemaCheckCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreSchemaCheckCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreSchemaCheckCreate($context: ContextInput, $data: CoreSchemaCheckCreateInput!) { CoreSchemaCheckCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conflicts { is_default is_protected updated_at id is_from_profile permissions { update_value } value } enriched_conflict_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_schema_check_update(&self, context: Option<ContextInput>, data: CoreSchemaCheckUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreSchemaCheckUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreSchemaCheckUpdate($context: ContextInput, $data: CoreSchemaCheckUpdateInput!) { CoreSchemaCheckUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conflicts { is_default is_protected updated_at id is_from_profile permissions { update_value } value } enriched_conflict_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_schema_check_upsert(&self, context: Option<ContextInput>, data: CoreSchemaCheckUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreSchemaCheckUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreSchemaCheckUpsert($context: ContextInput, $data: CoreSchemaCheckUpsertInput!) { CoreSchemaCheckUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conflicts { is_default is_protected updated_at id is_from_profile permissions { update_value } value } enriched_conflict_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_schema_check_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreSchemaCheckDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreSchemaCheckDelete($context: ContextInput, $data: DeleteInput!) { CoreSchemaCheckDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_file_check_create(&self, context: Option<ContextInput>, data: CoreFileCheckCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreFileCheckCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreFileCheckCreate($context: ContextInput, $data: CoreFileCheckCreateInput!) { CoreFileCheckCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } files { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_file_check_update(&self, context: Option<ContextInput>, data: CoreFileCheckUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreFileCheckUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreFileCheckUpdate($context: ContextInput, $data: CoreFileCheckUpdateInput!) { CoreFileCheckUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } files { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_file_check_upsert(&self, context: Option<ContextInput>, data: CoreFileCheckUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreFileCheckUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreFileCheckUpsert($context: ContextInput, $data: CoreFileCheckUpsertInput!) { CoreFileCheckUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } files { is_default is_protected updated_at id is_from_profile permissions { update_value } value } commit { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_file_check_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreFileCheckDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreFileCheckDelete($context: ContextInput, $data: DeleteInput!) { CoreFileCheckDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_check_create(&self, context: Option<ContextInput>, data: CoreArtifactCheckCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactCheckCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactCheckCreate($context: ContextInput, $data: CoreArtifactCheckCreateInput!) { CoreArtifactCheckCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } changed { is_default is_protected updated_at id is_from_profile permissions { update_value } value } checksum { is_default is_protected updated_at id is_from_profile permissions { update_value } value } artifact_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } storage_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } line_number { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_check_update(&self, context: Option<ContextInput>, data: CoreArtifactCheckUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactCheckUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactCheckUpdate($context: ContextInput, $data: CoreArtifactCheckUpdateInput!) { CoreArtifactCheckUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } changed { is_default is_protected updated_at id is_from_profile permissions { update_value } value } checksum { is_default is_protected updated_at id is_from_profile permissions { update_value } value } artifact_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } storage_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } line_number { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_check_upsert(&self, context: Option<ContextInput>, data: CoreArtifactCheckUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactCheckUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactCheckUpsert($context: ContextInput, $data: CoreArtifactCheckUpsertInput!) { CoreArtifactCheckUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } changed { is_default is_protected updated_at id is_from_profile permissions { update_value } value } checksum { is_default is_protected updated_at id is_from_profile permissions { update_value } value } artifact_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } storage_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } line_number { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_check_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactCheckDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactCheckDelete($context: ContextInput, $data: DeleteInput!) { CoreArtifactCheckDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_check_create(&self, context: Option<ContextInput>, data: CoreGeneratorCheckCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorCheckCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorCheckCreate($context: ContextInput, $data: CoreGeneratorCheckCreateInput!) { CoreGeneratorCheckCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } instance { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_check_update(&self, context: Option<ContextInput>, data: CoreGeneratorCheckUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorCheckUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorCheckUpdate($context: ContextInput, $data: CoreGeneratorCheckUpdateInput!) { CoreGeneratorCheckUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } instance { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_check_upsert(&self, context: Option<ContextInput>, data: CoreGeneratorCheckUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorCheckUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorCheckUpsert($context: ContextInput, $data: CoreGeneratorCheckUpsertInput!) { CoreGeneratorCheckUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } message { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } severity { is_default is_protected updated_at id is_from_profile permissions { update_value } value } created_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } instance { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validator { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_check_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorCheckDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorCheckDelete($context: ContextInput, $data: DeleteInput!) { CoreGeneratorCheckDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_data_validator_create(&self, context: Option<ContextInput>, data: CoreDataValidatorCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreDataValidatorCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreDataValidatorCreate($context: ContextInput, $data: CoreDataValidatorCreateInput!) { CoreDataValidatorCreate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_data_validator_update(&self, context: Option<ContextInput>, data: CoreDataValidatorUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreDataValidatorUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreDataValidatorUpdate($context: ContextInput, $data: CoreDataValidatorUpdateInput!) { CoreDataValidatorUpdate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_data_validator_upsert(&self, context: Option<ContextInput>, data: CoreDataValidatorUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreDataValidatorUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreDataValidatorUpsert($context: ContextInput, $data: CoreDataValidatorUpsertInput!) { CoreDataValidatorUpsert(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_data_validator_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreDataValidatorDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreDataValidatorDelete($context: ContextInput, $data: DeleteInput!) { CoreDataValidatorDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_validator_create(&self, context: Option<ContextInput>, data: CoreRepositoryValidatorCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryValidatorCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryValidatorCreate($context: ContextInput, $data: CoreRepositoryValidatorCreateInput!) { CoreRepositoryValidatorCreate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_validator_update(&self, context: Option<ContextInput>, data: CoreRepositoryValidatorUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryValidatorUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryValidatorUpdate($context: ContextInput, $data: CoreRepositoryValidatorUpdateInput!) { CoreRepositoryValidatorUpdate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_validator_upsert(&self, context: Option<ContextInput>, data: CoreRepositoryValidatorUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryValidatorUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryValidatorUpsert($context: ContextInput, $data: CoreRepositoryValidatorUpsertInput!) { CoreRepositoryValidatorUpsert(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_repository_validator_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreRepositoryValidatorDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreRepositoryValidatorDelete($context: ContextInput, $data: DeleteInput!) { CoreRepositoryValidatorDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_user_validator_create(&self, context: Option<ContextInput>, data: CoreUserValidatorCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreUserValidatorCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreUserValidatorCreate($context: ContextInput, $data: CoreUserValidatorCreateInput!) { CoreUserValidatorCreate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } check_definition { node { id hfid display_label name { __typename } description { __typename } file_path { __typename } class_name { __typename } timeout { __typename } parameters { __typename } repository { __typename } query { __typename } targets { __typename } tags { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_user_validator_update(&self, context: Option<ContextInput>, data: CoreUserValidatorUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreUserValidatorUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreUserValidatorUpdate($context: ContextInput, $data: CoreUserValidatorUpdateInput!) { CoreUserValidatorUpdate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } check_definition { node { id hfid display_label name { __typename } description { __typename } file_path { __typename } class_name { __typename } timeout { __typename } parameters { __typename } repository { __typename } query { __typename } targets { __typename } tags { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_user_validator_upsert(&self, context: Option<ContextInput>, data: CoreUserValidatorUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreUserValidatorUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreUserValidatorUpsert($context: ContextInput, $data: CoreUserValidatorUpsertInput!) { CoreUserValidatorUpsert(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } check_definition { node { id hfid display_label name { __typename } description { __typename } file_path { __typename } class_name { __typename } timeout { __typename } parameters { __typename } repository { __typename } query { __typename } targets { __typename } tags { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_user_validator_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreUserValidatorDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreUserValidatorDelete($context: ContextInput, $data: DeleteInput!) { CoreUserValidatorDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_schema_validator_create(&self, context: Option<ContextInput>, data: CoreSchemaValidatorCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreSchemaValidatorCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreSchemaValidatorCreate($context: ContextInput, $data: CoreSchemaValidatorCreateInput!) { CoreSchemaValidatorCreate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_schema_validator_update(&self, context: Option<ContextInput>, data: CoreSchemaValidatorUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreSchemaValidatorUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreSchemaValidatorUpdate($context: ContextInput, $data: CoreSchemaValidatorUpdateInput!) { CoreSchemaValidatorUpdate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_schema_validator_upsert(&self, context: Option<ContextInput>, data: CoreSchemaValidatorUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreSchemaValidatorUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreSchemaValidatorUpsert($context: ContextInput, $data: CoreSchemaValidatorUpsertInput!) { CoreSchemaValidatorUpsert(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_schema_validator_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreSchemaValidatorDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreSchemaValidatorDelete($context: ContextInput, $data: DeleteInput!) { CoreSchemaValidatorDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_validator_create(&self, context: Option<ContextInput>, data: CoreArtifactValidatorCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactValidatorCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactValidatorCreate($context: ContextInput, $data: CoreArtifactValidatorCreateInput!) { CoreArtifactValidatorCreate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } definition { node { id hfid display_label name { __typename } artifact_name { __typename } description { __typename } parameters { __typename } content_type { __typename } fingerprint { __typename } targets { __typename } transformation { __typename } artifacts { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_validator_update(&self, context: Option<ContextInput>, data: CoreArtifactValidatorUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactValidatorUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactValidatorUpdate($context: ContextInput, $data: CoreArtifactValidatorUpdateInput!) { CoreArtifactValidatorUpdate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } definition { node { id hfid display_label name { __typename } artifact_name { __typename } description { __typename } parameters { __typename } content_type { __typename } fingerprint { __typename } targets { __typename } transformation { __typename } artifacts { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_validator_upsert(&self, context: Option<ContextInput>, data: CoreArtifactValidatorUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactValidatorUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactValidatorUpsert($context: ContextInput, $data: CoreArtifactValidatorUpsertInput!) { CoreArtifactValidatorUpsert(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } definition { node { id hfid display_label name { __typename } artifact_name { __typename } description { __typename } parameters { __typename } content_type { __typename } fingerprint { __typename } targets { __typename } transformation { __typename } artifacts { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_validator_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactValidatorDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactValidatorDelete($context: ContextInput, $data: DeleteInput!) { CoreArtifactValidatorDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_validator_create(&self, context: Option<ContextInput>, data: CoreGeneratorValidatorCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorValidatorCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorValidatorCreate($context: ContextInput, $data: CoreGeneratorValidatorCreateInput!) { CoreGeneratorValidatorCreate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } definition { node { id hfid display_label name { __typename } description { __typename } parameters { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } execute_in_proposed_change { __typename } execute_after_merge { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } query { __typename } repository { __typename } targets { __typename } instances { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_validator_update(&self, context: Option<ContextInput>, data: CoreGeneratorValidatorUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorValidatorUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorValidatorUpdate($context: ContextInput, $data: CoreGeneratorValidatorUpdateInput!) { CoreGeneratorValidatorUpdate(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } definition { node { id hfid display_label name { __typename } description { __typename } parameters { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } execute_in_proposed_change { __typename } execute_after_merge { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } query { __typename } repository { __typename } targets { __typename } instances { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_validator_upsert(&self, context: Option<ContextInput>, data: CoreGeneratorValidatorUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorValidatorUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorValidatorUpsert($context: ContextInput, $data: CoreGeneratorValidatorUpsertInput!) { CoreGeneratorValidatorUpsert(context: $context, data: $data) { ok object { id hfid display_label label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } state { is_default is_protected updated_at id is_from_profile permissions { update_value } value } conclusion { is_default is_protected updated_at id is_from_profile permissions { update_value } value } completed_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } started_at { is_default is_protected updated_at id is_from_profile permissions { update_value } value } definition { node { id hfid display_label name { __typename } description { __typename } parameters { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } execute_in_proposed_change { __typename } execute_after_merge { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } query { __typename } repository { __typename } targets { __typename } instances { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } proposed_change { node { id hfid display_label name { __typename } description { __typename } source_branch { __typename } destination_branch { __typename } state { __typename } is_draft { __typename } total_comments { __typename } approved_by { __typename } rejected_by { __typename } reviewers { __typename } comments { __typename } threads { __typename } validations { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } checks { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_validator_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorValidatorDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorValidatorDelete($context: ContextInput, $data: DeleteInput!) { CoreGeneratorValidatorDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_check_definition_create(&self, context: Option<ContextInput>, data: CoreCheckDefinitionCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreCheckDefinitionCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreCheckDefinitionCreate($context: ContextInput, $data: CoreCheckDefinitionCreateInput!) { CoreCheckDefinitionCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } class_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } timeout { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } targets { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } validators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_check_definition_update(&self, context: Option<ContextInput>, data: CoreCheckDefinitionUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreCheckDefinitionUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreCheckDefinitionUpdate($context: ContextInput, $data: CoreCheckDefinitionUpdateInput!) { CoreCheckDefinitionUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } class_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } timeout { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } targets { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } validators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_check_definition_upsert(&self, context: Option<ContextInput>, data: CoreCheckDefinitionUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreCheckDefinitionUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreCheckDefinitionUpsert($context: ContextInput, $data: CoreCheckDefinitionUpsertInput!) { CoreCheckDefinitionUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } class_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } timeout { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } targets { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } validators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_check_definition_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreCheckDefinitionDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreCheckDefinitionDelete($context: ContextInput, $data: DeleteInput!) { CoreCheckDefinitionDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_transform_python_create(&self, context: Option<ContextInput>, data: CoreTransformPythonCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreTransformPythonCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreTransformPythonCreate($context: ContextInput, $data: CoreTransformPythonCreateInput!) { CoreTransformPythonCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } timeout { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies_complete { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } class_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } convert_query_response { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } artifact_definitions { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_transform_python_update(&self, context: Option<ContextInput>, data: CoreTransformPythonUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreTransformPythonUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreTransformPythonUpdate($context: ContextInput, $data: CoreTransformPythonUpdateInput!) { CoreTransformPythonUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } timeout { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies_complete { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } class_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } convert_query_response { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } artifact_definitions { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_transform_python_upsert(&self, context: Option<ContextInput>, data: CoreTransformPythonUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreTransformPythonUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreTransformPythonUpsert($context: ContextInput, $data: CoreTransformPythonUpsertInput!) { CoreTransformPythonUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } timeout { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies_complete { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } class_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } convert_query_response { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } artifact_definitions { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_transform_python_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreTransformPythonDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreTransformPythonDelete($context: ContextInput, $data: DeleteInput!) { CoreTransformPythonDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_graph_ql_query_create(&self, context: Option<ContextInput>, data: CoreGraphQLQueryCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGraphQLQueryCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGraphQLQueryCreate($context: ContextInput, $data: CoreGraphQLQueryCreateInput!) { CoreGraphQLQueryCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } variables { is_default is_protected updated_at id is_from_profile permissions { update_value } value } operations { is_default is_protected updated_at id is_from_profile permissions { update_value } value } models { is_default is_protected updated_at id is_from_profile permissions { update_value } value } depth { is_default is_protected updated_at id is_from_profile permissions { update_value } value } height { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } query_groups { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_graph_ql_query_update(&self, context: Option<ContextInput>, data: CoreGraphQLQueryUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGraphQLQueryUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGraphQLQueryUpdate($context: ContextInput, $data: CoreGraphQLQueryUpdateInput!) { CoreGraphQLQueryUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } variables { is_default is_protected updated_at id is_from_profile permissions { update_value } value } operations { is_default is_protected updated_at id is_from_profile permissions { update_value } value } models { is_default is_protected updated_at id is_from_profile permissions { update_value } value } depth { is_default is_protected updated_at id is_from_profile permissions { update_value } value } height { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } query_groups { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_graph_ql_query_upsert(&self, context: Option<ContextInput>, data: CoreGraphQLQueryUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGraphQLQueryUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGraphQLQueryUpsert($context: ContextInput, $data: CoreGraphQLQueryUpsertInput!) { CoreGraphQLQueryUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } variables { is_default is_protected updated_at id is_from_profile permissions { update_value } value } operations { is_default is_protected updated_at id is_from_profile permissions { update_value } value } models { is_default is_protected updated_at id is_from_profile permissions { update_value } value } depth { is_default is_protected updated_at id is_from_profile permissions { update_value } value } height { is_default is_protected updated_at id is_from_profile permissions { update_value } value } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } tags { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } query_groups { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_graph_ql_query_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGraphQLQueryDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGraphQLQueryDelete($context: ContextInput, $data: DeleteInput!) { CoreGraphQLQueryDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_create(&self, context: Option<ContextInput>, data: CoreArtifactCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactCreate($context: ContextInput, $data: CoreArtifactCreateInput!) { CoreArtifactCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } status { is_default is_protected updated_at id is_from_profile permissions { update_value } value } content_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } checksum { is_default is_protected updated_at id is_from_profile permissions { update_value } value } storage_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } object { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } definition { node { id hfid display_label name { __typename } artifact_name { __typename } description { __typename } parameters { __typename } content_type { __typename } fingerprint { __typename } targets { __typename } transformation { __typename } artifacts { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_update(&self, context: Option<ContextInput>, data: CoreArtifactUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactUpdate($context: ContextInput, $data: CoreArtifactUpdateInput!) { CoreArtifactUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } status { is_default is_protected updated_at id is_from_profile permissions { update_value } value } content_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } checksum { is_default is_protected updated_at id is_from_profile permissions { update_value } value } storage_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } object { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } definition { node { id hfid display_label name { __typename } artifact_name { __typename } description { __typename } parameters { __typename } content_type { __typename } fingerprint { __typename } targets { __typename } transformation { __typename } artifacts { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_upsert(&self, context: Option<ContextInput>, data: CoreArtifactUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactUpsert($context: ContextInput, $data: CoreArtifactUpsertInput!) { CoreArtifactUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } status { is_default is_protected updated_at id is_from_profile permissions { update_value } value } content_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } checksum { is_default is_protected updated_at id is_from_profile permissions { update_value } value } storage_id { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } object { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } definition { node { id hfid display_label name { __typename } artifact_name { __typename } description { __typename } parameters { __typename } content_type { __typename } fingerprint { __typename } targets { __typename } transformation { __typename } artifacts { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactDelete($context: ContextInput, $data: DeleteInput!) { CoreArtifactDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_definition_create(&self, context: Option<ContextInput>, data: CoreArtifactDefinitionCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactDefinitionCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactDefinitionCreate($context: ContextInput, $data: CoreArtifactDefinitionCreateInput!) { CoreArtifactDefinitionCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } artifact_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } content_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } targets { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } transformation { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } artifacts { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } validators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_definition_update(&self, context: Option<ContextInput>, data: CoreArtifactDefinitionUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactDefinitionUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactDefinitionUpdate($context: ContextInput, $data: CoreArtifactDefinitionUpdateInput!) { CoreArtifactDefinitionUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } artifact_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } content_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } targets { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } transformation { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } artifacts { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } validators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_definition_upsert(&self, context: Option<ContextInput>, data: CoreArtifactDefinitionUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactDefinitionUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactDefinitionUpsert($context: ContextInput, $data: CoreArtifactDefinitionUpsertInput!) { CoreArtifactDefinitionUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } artifact_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } content_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } targets { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } transformation { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } artifacts { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } validators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_definition_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactDefinitionDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactDefinitionDelete($context: ContextInput, $data: DeleteInput!) { CoreArtifactDefinitionDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_definition_create(&self, context: Option<ContextInput>, data: CoreGeneratorDefinitionCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorDefinitionCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorDefinitionCreate($context: ContextInput, $data: CoreGeneratorDefinitionCreateInput!) { CoreGeneratorDefinitionCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } class_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } convert_query_response { is_default is_protected updated_at id is_from_profile permissions { update_value } value } execute_in_proposed_change { is_default is_protected updated_at id is_from_profile permissions { update_value } value } execute_after_merge { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies_complete { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } targets { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } instances { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } validators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_definition_update(&self, context: Option<ContextInput>, data: CoreGeneratorDefinitionUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorDefinitionUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorDefinitionUpdate($context: ContextInput, $data: CoreGeneratorDefinitionUpdateInput!) { CoreGeneratorDefinitionUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } class_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } convert_query_response { is_default is_protected updated_at id is_from_profile permissions { update_value } value } execute_in_proposed_change { is_default is_protected updated_at id is_from_profile permissions { update_value } value } execute_after_merge { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies_complete { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } targets { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } instances { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } validators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_definition_upsert(&self, context: Option<ContextInput>, data: CoreGeneratorDefinitionUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorDefinitionUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorDefinitionUpsert($context: ContextInput, $data: CoreGeneratorDefinitionUpsertInput!) { CoreGeneratorDefinitionUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } parameters { is_default is_protected updated_at id is_from_profile permissions { update_value } value } file_path { is_default is_protected updated_at id is_from_profile permissions { update_value } value } class_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } convert_query_response { is_default is_protected updated_at id is_from_profile permissions { update_value } value } execute_in_proposed_change { is_default is_protected updated_at id is_from_profile permissions { update_value } value } execute_after_merge { is_default is_protected updated_at id is_from_profile permissions { update_value } value } fingerprint { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies { is_default is_protected updated_at id is_from_profile permissions { update_value } value } dependencies_complete { is_default is_protected updated_at id is_from_profile permissions { update_value } value } query { node { id hfid display_label name { __typename } description { __typename } query { __typename } fingerprint { __typename } variables { __typename } operations { __typename } models { __typename } depth { __typename } height { __typename } repository { __typename } tags { __typename } query_groups { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } repository { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } targets { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } instances { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } validators { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_definition_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorDefinitionDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorDefinitionDelete($context: ContextInput, $data: DeleteInput!) { CoreGeneratorDefinitionDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_instance_create(&self, context: Option<ContextInput>, data: CoreGeneratorInstanceCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorInstanceCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorInstanceCreate($context: ContextInput, $data: CoreGeneratorInstanceCreateInput!) { CoreGeneratorInstanceCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } status { is_default is_protected updated_at id is_from_profile permissions { update_value } value } object { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } definition { node { id hfid display_label name { __typename } description { __typename } parameters { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } execute_in_proposed_change { __typename } execute_after_merge { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } query { __typename } repository { __typename } targets { __typename } instances { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_instance_update(&self, context: Option<ContextInput>, data: CoreGeneratorInstanceUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorInstanceUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorInstanceUpdate($context: ContextInput, $data: CoreGeneratorInstanceUpdateInput!) { CoreGeneratorInstanceUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } status { is_default is_protected updated_at id is_from_profile permissions { update_value } value } object { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } definition { node { id hfid display_label name { __typename } description { __typename } parameters { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } execute_in_proposed_change { __typename } execute_after_merge { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } query { __typename } repository { __typename } targets { __typename } instances { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_instance_upsert(&self, context: Option<ContextInput>, data: CoreGeneratorInstanceUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorInstanceUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorInstanceUpsert($context: ContextInput, $data: CoreGeneratorInstanceUpsertInput!) { CoreGeneratorInstanceUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } status { is_default is_protected updated_at id is_from_profile permissions { update_value } value } object { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } definition { node { id hfid display_label name { __typename } description { __typename } parameters { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } execute_in_proposed_change { __typename } execute_after_merge { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } query { __typename } repository { __typename } targets { __typename } instances { __typename } validators { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_instance_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorInstanceDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGeneratorInstanceDelete($context: ContextInput, $data: DeleteInput!) { CoreGeneratorInstanceDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_static_key_value_create(&self, context: Option<ContextInput>, data: CoreStaticKeyValueCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStaticKeyValueCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStaticKeyValueCreate($context: ContextInput, $data: CoreStaticKeyValueCreateInput!) { CoreStaticKeyValueCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_static_key_value_update(&self, context: Option<ContextInput>, data: CoreStaticKeyValueUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStaticKeyValueUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStaticKeyValueUpdate($context: ContextInput, $data: CoreStaticKeyValueUpdateInput!) { CoreStaticKeyValueUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_static_key_value_upsert(&self, context: Option<ContextInput>, data: CoreStaticKeyValueUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStaticKeyValueUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStaticKeyValueUpsert($context: ContextInput, $data: CoreStaticKeyValueUpsertInput!) { CoreStaticKeyValueUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_static_key_value_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStaticKeyValueDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStaticKeyValueDelete($context: ContextInput, $data: DeleteInput!) { CoreStaticKeyValueDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_env_key_value_create(&self, context: Option<ContextInput>, data: CoreEnvKeyValueCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreEnvKeyValueCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreEnvKeyValueCreate($context: ContextInput, $data: CoreEnvKeyValueCreateInput!) { CoreEnvKeyValueCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_env_key_value_update(&self, context: Option<ContextInput>, data: CoreEnvKeyValueUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreEnvKeyValueUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreEnvKeyValueUpdate($context: ContextInput, $data: CoreEnvKeyValueUpdateInput!) { CoreEnvKeyValueUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_env_key_value_upsert(&self, context: Option<ContextInput>, data: CoreEnvKeyValueUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreEnvKeyValueUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreEnvKeyValueUpsert($context: ContextInput, $data: CoreEnvKeyValueUpsertInput!) { CoreEnvKeyValueUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } value { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_env_key_value_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreEnvKeyValueDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreEnvKeyValueDelete($context: ContextInput, $data: DeleteInput!) { CoreEnvKeyValueDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_webhook_create(&self, context: Option<ContextInput>, data: CoreStandardWebhookCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardWebhookCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardWebhookCreate($context: ContextInput, $data: CoreStandardWebhookCreateInput!) { CoreStandardWebhookCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } event_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } node_kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } url { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validate_certificates { is_default is_protected updated_at id is_from_profile permissions { update_value } value } shared_key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } headers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_webhook_update(&self, context: Option<ContextInput>, data: CoreStandardWebhookUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardWebhookUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardWebhookUpdate($context: ContextInput, $data: CoreStandardWebhookUpdateInput!) { CoreStandardWebhookUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } event_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } node_kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } url { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validate_certificates { is_default is_protected updated_at id is_from_profile permissions { update_value } value } shared_key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } headers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_webhook_upsert(&self, context: Option<ContextInput>, data: CoreStandardWebhookUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardWebhookUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardWebhookUpsert($context: ContextInput, $data: CoreStandardWebhookUpsertInput!) { CoreStandardWebhookUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } event_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } node_kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } url { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validate_certificates { is_default is_protected updated_at id is_from_profile permissions { update_value } value } shared_key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } headers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_standard_webhook_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreStandardWebhookDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreStandardWebhookDelete($context: ContextInput, $data: DeleteInput!) { CoreStandardWebhookDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_custom_webhook_create(&self, context: Option<ContextInput>, data: CoreCustomWebhookCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreCustomWebhookCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreCustomWebhookCreate($context: ContextInput, $data: CoreCustomWebhookCreateInput!) { CoreCustomWebhookCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } event_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } node_kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } url { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validate_certificates { is_default is_protected updated_at id is_from_profile permissions { update_value } value } shared_key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } transformation { node { id hfid display_label name { __typename } label { __typename } description { __typename } timeout { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } query { __typename } repository { __typename } tags { __typename } artifact_definitions { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } headers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_custom_webhook_update(&self, context: Option<ContextInput>, data: CoreCustomWebhookUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreCustomWebhookUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreCustomWebhookUpdate($context: ContextInput, $data: CoreCustomWebhookUpdateInput!) { CoreCustomWebhookUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } event_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } node_kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } url { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validate_certificates { is_default is_protected updated_at id is_from_profile permissions { update_value } value } shared_key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } transformation { node { id hfid display_label name { __typename } label { __typename } description { __typename } timeout { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } query { __typename } repository { __typename } tags { __typename } artifact_definitions { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } headers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_custom_webhook_upsert(&self, context: Option<ContextInput>, data: CoreCustomWebhookUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreCustomWebhookUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreCustomWebhookUpsert($context: ContextInput, $data: CoreCustomWebhookUpsertInput!) { CoreCustomWebhookUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } event_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } active { is_default is_protected updated_at id is_from_profile permissions { update_value } value } branch_scope { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } node_kind { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } url { is_default is_protected updated_at id is_from_profile permissions { update_value } value } validate_certificates { is_default is_protected updated_at id is_from_profile permissions { update_value } value } shared_key { is_default is_protected updated_at id is_from_profile permissions { update_value } value } transformation { node { id hfid display_label name { __typename } label { __typename } description { __typename } timeout { __typename } fingerprint { __typename } dependencies { __typename } dependencies_complete { __typename } file_path { __typename } class_name { __typename } convert_query_response { __typename } query { __typename } repository { __typename } tags { __typename } artifact_definitions { __typename } member_of_groups { __typename } subscriber_of_groups { __typename } } node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } headers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_custom_webhook_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreCustomWebhookDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreCustomWebhookDelete($context: ContextInput, $data: DeleteInput!) { CoreCustomWebhookDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn ipam_namespace_create(&self, context: Option<ContextInput>, data: IpamNamespaceCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<IpamNamespaceCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation IpamNamespaceCreate($context: ContextInput, $data: IpamNamespaceCreateInput!) { IpamNamespaceCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default { is_default is_protected updated_at id is_from_profile permissions { update_value } value } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn ipam_namespace_update(&self, context: Option<ContextInput>, data: IpamNamespaceUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<IpamNamespaceUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation IpamNamespaceUpdate($context: ContextInput, $data: IpamNamespaceUpdateInput!) { IpamNamespaceUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default { is_default is_protected updated_at id is_from_profile permissions { update_value } value } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn ipam_namespace_upsert(&self, context: Option<ContextInput>, data: IpamNamespaceUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<IpamNamespaceUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation IpamNamespaceUpsert($context: ContextInput, $data: IpamNamespaceUpsertInput!) { IpamNamespaceUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default { is_default is_protected updated_at id is_from_profile permissions { update_value } value } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } profiles { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn ipam_namespace_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<IpamNamespaceDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation IpamNamespaceDelete($context: ContextInput, $data: DeleteInput!) { IpamNamespaceDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_ip_prefix_pool_create(&self, context: Option<ContextInput>, data: CoreIPPrefixPoolCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreIPPrefixPoolCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreIPPrefixPoolCreate($context: ContextInput, $data: CoreIPPrefixPoolCreateInput!) { CoreIPPrefixPoolCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_prefix_length { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_member_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_prefix_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resources { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_ip_prefix_pool_update(&self, context: Option<ContextInput>, data: CoreIPPrefixPoolUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreIPPrefixPoolUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreIPPrefixPoolUpdate($context: ContextInput, $data: CoreIPPrefixPoolUpdateInput!) { CoreIPPrefixPoolUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_prefix_length { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_member_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_prefix_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resources { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_ip_prefix_pool_upsert(&self, context: Option<ContextInput>, data: CoreIPPrefixPoolUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreIPPrefixPoolUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreIPPrefixPoolUpsert($context: ContextInput, $data: CoreIPPrefixPoolUpsertInput!) { CoreIPPrefixPoolUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_prefix_length { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_member_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_prefix_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resources { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_ip_prefix_pool_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreIPPrefixPoolDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreIPPrefixPoolDelete($context: ContextInput, $data: DeleteInput!) { CoreIPPrefixPoolDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_ip_address_pool_create(&self, context: Option<ContextInput>, data: CoreIPAddressPoolCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreIPAddressPoolCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreIPAddressPoolCreate($context: ContextInput, $data: CoreIPAddressPoolCreateInput!) { CoreIPAddressPoolCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_address_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_prefix_length { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resources { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_ip_address_pool_update(&self, context: Option<ContextInput>, data: CoreIPAddressPoolUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreIPAddressPoolUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreIPAddressPoolUpdate($context: ContextInput, $data: CoreIPAddressPoolUpdateInput!) { CoreIPAddressPoolUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_address_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_prefix_length { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resources { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_ip_address_pool_upsert(&self, context: Option<ContextInput>, data: CoreIPAddressPoolUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreIPAddressPoolUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreIPAddressPoolUpsert($context: ContextInput, $data: CoreIPAddressPoolUpsertInput!) { CoreIPAddressPoolUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_address_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } default_prefix_length { is_default is_protected updated_at id is_from_profile permissions { update_value } value } resources { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_ip_address_pool_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreIPAddressPoolDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreIPAddressPoolDelete($context: ContextInput, $data: DeleteInput!) { CoreIPAddressPoolDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_number_pool_create(&self, context: Option<ContextInput>, data: CoreNumberPoolCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNumberPoolCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNumberPoolCreate($context: ContextInput, $data: CoreNumberPoolCreateInput!) { CoreNumberPoolCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } node { is_default is_protected updated_at id is_from_profile permissions { update_value } value } node_attribute { is_default is_protected updated_at id is_from_profile permissions { update_value } value } start_range { is_default is_protected updated_at id is_from_profile permissions { update_value } value } end_range { is_default is_protected updated_at id is_from_profile permissions { update_value } value } pool_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_number_pool_update(&self, context: Option<ContextInput>, data: CoreNumberPoolUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNumberPoolUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNumberPoolUpdate($context: ContextInput, $data: CoreNumberPoolUpdateInput!) { CoreNumberPoolUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } node { is_default is_protected updated_at id is_from_profile permissions { update_value } value } node_attribute { is_default is_protected updated_at id is_from_profile permissions { update_value } value } start_range { is_default is_protected updated_at id is_from_profile permissions { update_value } value } end_range { is_default is_protected updated_at id is_from_profile permissions { update_value } value } pool_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_number_pool_upsert(&self, context: Option<ContextInput>, data: CoreNumberPoolUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNumberPoolUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNumberPoolUpsert($context: ContextInput, $data: CoreNumberPoolUpsertInput!) { CoreNumberPoolUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } node { is_default is_protected updated_at id is_from_profile permissions { update_value } value } node_attribute { is_default is_protected updated_at id is_from_profile permissions { update_value } value } start_range { is_default is_protected updated_at id is_from_profile permissions { update_value } value } end_range { is_default is_protected updated_at id is_from_profile permissions { update_value } value } pool_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_number_pool_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNumberPoolDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNumberPoolDelete($context: ContextInput, $data: DeleteInput!) { CoreNumberPoolDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_global_permission_create(&self, context: Option<ContextInput>, data: CoreGlobalPermissionCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGlobalPermissionCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGlobalPermissionCreate($context: ContextInput, $data: CoreGlobalPermissionCreateInput!) { CoreGlobalPermissionCreate(context: $context, data: $data) { ok object { id hfid display_label description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } identifier { is_default is_protected updated_at id is_from_profile permissions { update_value } value } action { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } decision { is_default is_protected updated_at id is_from_profile permissions { update_value } value } roles { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_global_permission_update(&self, context: Option<ContextInput>, data: CoreGlobalPermissionUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGlobalPermissionUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGlobalPermissionUpdate($context: ContextInput, $data: CoreGlobalPermissionUpdateInput!) { CoreGlobalPermissionUpdate(context: $context, data: $data) { ok object { id hfid display_label description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } identifier { is_default is_protected updated_at id is_from_profile permissions { update_value } value } action { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } decision { is_default is_protected updated_at id is_from_profile permissions { update_value } value } roles { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_global_permission_upsert(&self, context: Option<ContextInput>, data: CoreGlobalPermissionUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGlobalPermissionUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGlobalPermissionUpsert($context: ContextInput, $data: CoreGlobalPermissionUpsertInput!) { CoreGlobalPermissionUpsert(context: $context, data: $data) { ok object { id hfid display_label description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } identifier { is_default is_protected updated_at id is_from_profile permissions { update_value } value } action { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } decision { is_default is_protected updated_at id is_from_profile permissions { update_value } value } roles { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_global_permission_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGlobalPermissionDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGlobalPermissionDelete($context: ContextInput, $data: DeleteInput!) { CoreGlobalPermissionDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_object_permission_create(&self, context: Option<ContextInput>, data: CoreObjectPermissionCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreObjectPermissionCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreObjectPermissionCreate($context: ContextInput, $data: CoreObjectPermissionCreateInput!) { CoreObjectPermissionCreate(context: $context, data: $data) { ok object { id hfid display_label description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } identifier { is_default is_protected updated_at id is_from_profile permissions { update_value } value } namespace { is_default is_protected updated_at id is_from_profile permissions { update_value } value } name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } action { is_default is_protected updated_at id is_from_profile permissions { update_value } value } decision { is_default is_protected updated_at id is_from_profile permissions { update_value } value } roles { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_object_permission_update(&self, context: Option<ContextInput>, data: CoreObjectPermissionUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreObjectPermissionUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreObjectPermissionUpdate($context: ContextInput, $data: CoreObjectPermissionUpdateInput!) { CoreObjectPermissionUpdate(context: $context, data: $data) { ok object { id hfid display_label description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } identifier { is_default is_protected updated_at id is_from_profile permissions { update_value } value } namespace { is_default is_protected updated_at id is_from_profile permissions { update_value } value } name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } action { is_default is_protected updated_at id is_from_profile permissions { update_value } value } decision { is_default is_protected updated_at id is_from_profile permissions { update_value } value } roles { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_object_permission_upsert(&self, context: Option<ContextInput>, data: CoreObjectPermissionUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreObjectPermissionUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreObjectPermissionUpsert($context: ContextInput, $data: CoreObjectPermissionUpsertInput!) { CoreObjectPermissionUpsert(context: $context, data: $data) { ok object { id hfid display_label description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } identifier { is_default is_protected updated_at id is_from_profile permissions { update_value } value } namespace { is_default is_protected updated_at id is_from_profile permissions { update_value } value } name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } action { is_default is_protected updated_at id is_from_profile permissions { update_value } value } decision { is_default is_protected updated_at id is_from_profile permissions { update_value } value } roles { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_object_permission_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreObjectPermissionDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreObjectPermissionDelete($context: ContextInput, $data: DeleteInput!) { CoreObjectPermissionDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_role_create(&self, context: Option<ContextInput>, data: CoreAccountRoleCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountRoleCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountRoleCreate($context: ContextInput, $data: CoreAccountRoleCreateInput!) { CoreAccountRoleCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } groups { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } permissions { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_role_update(&self, context: Option<ContextInput>, data: CoreAccountRoleUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountRoleUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountRoleUpdate($context: ContextInput, $data: CoreAccountRoleUpdateInput!) { CoreAccountRoleUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } groups { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } permissions { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_role_upsert(&self, context: Option<ContextInput>, data: CoreAccountRoleUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountRoleUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountRoleUpsert($context: ContextInput, $data: CoreAccountRoleUpsertInput!) { CoreAccountRoleUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } groups { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } permissions { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_role_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountRoleDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountRoleDelete($context: ContextInput, $data: DeleteInput!) { CoreAccountRoleDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_group_create(&self, context: Option<ContextInput>, data: CoreAccountGroupCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountGroupCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountGroupCreate($context: ContextInput, $data: CoreAccountGroupCreateInput!) { CoreAccountGroupCreate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } roles { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_group_update(&self, context: Option<ContextInput>, data: CoreAccountGroupUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountGroupUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountGroupUpdate($context: ContextInput, $data: CoreAccountGroupUpdateInput!) { CoreAccountGroupUpdate(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } roles { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_group_upsert(&self, context: Option<ContextInput>, data: CoreAccountGroupUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountGroupUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountGroupUpsert($context: ContextInput, $data: CoreAccountGroupUpsertInput!) { CoreAccountGroupUpsert(context: $context, data: $data) { ok object { id hfid display_label name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } label { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } group_type { is_default is_protected updated_at id is_from_profile permissions { update_value } value } origin { is_default is_protected updated_at id is_from_profile permissions { update_value } value } roles { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } members { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscribers { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } parent { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } children { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ancestors { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } descendants { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_account_group_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreAccountGroupDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreAccountGroupDelete($context: ContextInput, $data: DeleteInput!) { CoreAccountGroupDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_profile_update(&self, context: Option<ContextInput>, data: CoreProfileUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreProfileUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreProfileUpdate($context: ContextInput, $data: CoreProfileUpdateInput!) { CoreProfileUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_action_update(&self, context: Option<ContextInput>, data: CoreActionUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreActionUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreActionUpdate($context: ContextInput, $data: CoreActionUpdateInput!) { CoreActionUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_trigger_rule_update(&self, context: Option<ContextInput>, data: CoreTriggerRuleUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreTriggerRuleUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreTriggerRuleUpdate($context: ContextInput, $data: CoreTriggerRuleUpdateInput!) { CoreTriggerRuleUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_trigger_match_update(&self, context: Option<ContextInput>, data: CoreNodeTriggerMatchUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeTriggerMatchUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeTriggerMatchUpdate($context: ContextInput, $data: CoreNodeTriggerMatchUpdateInput!) { CoreNodeTriggerMatchUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_node_update(&self, context: Option<ContextInput>, data: CoreNodeUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreNodeUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreNodeUpdate($context: ContextInput, $data: CoreNodeUpdateInput!) { CoreNodeUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_comment_update(&self, context: Option<ContextInput>, data: CoreCommentUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreCommentUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreCommentUpdate($context: ContextInput, $data: CoreCommentUpdateInput!) { CoreCommentUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_thread_update(&self, context: Option<ContextInput>, data: CoreThreadUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreThreadUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreThreadUpdate($context: ContextInput, $data: CoreThreadUpdateInput!) { CoreThreadUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_group_update(&self, context: Option<ContextInput>, data: CoreGroupUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGroupUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGroupUpdate($context: ContextInput, $data: CoreGroupUpdateInput!) { CoreGroupUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_validator_update(&self, context: Option<ContextInput>, data: CoreValidatorUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreValidatorUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreValidatorUpdate($context: ContextInput, $data: CoreValidatorUpdateInput!) { CoreValidatorUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_check_update(&self, context: Option<ContextInput>, data: CoreCheckUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreCheckUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreCheckUpdate($context: ContextInput, $data: CoreCheckUpdateInput!) { CoreCheckUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_transformation_update(&self, context: Option<ContextInput>, data: CoreTransformationUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreTransformationUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreTransformationUpdate($context: ContextInput, $data: CoreTransformationUpdateInput!) { CoreTransformationUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_artifact_target_update(&self, context: Option<ContextInput>, data: CoreArtifactTargetUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreArtifactTargetUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreArtifactTargetUpdate($context: ContextInput, $data: CoreArtifactTargetUpdateInput!) { CoreArtifactTargetUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_file_object_update(&self, context: Option<ContextInput>, data: CoreFileObjectUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreFileObjectUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreFileObjectUpdate($context: ContextInput, $data: CoreFileObjectUpdateInput!) { CoreFileObjectUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_task_target_update(&self, context: Option<ContextInput>, data: CoreTaskTargetUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreTaskTargetUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreTaskTargetUpdate($context: ContextInput, $data: CoreTaskTargetUpdateInput!) { CoreTaskTargetUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_key_value_update(&self, context: Option<ContextInput>, data: CoreKeyValueUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreKeyValueUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreKeyValueUpdate($context: ContextInput, $data: CoreKeyValueUpdateInput!) { CoreKeyValueUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_webhook_update(&self, context: Option<ContextInput>, data: CoreWebhookUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreWebhookUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreWebhookUpdate($context: ContextInput, $data: CoreWebhookUpdateInput!) { CoreWebhookUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generic_repository_update(&self, context: Option<ContextInput>, data: CoreGenericRepositoryUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGenericRepositoryUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGenericRepositoryUpdate($context: ContextInput, $data: CoreGenericRepositoryUpdateInput!) { CoreGenericRepositoryUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn builtin_ip_namespace_update(&self, context: Option<ContextInput>, data: BuiltinIPNamespaceUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<BuiltinIPNamespaceUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation BuiltinIPNamespaceUpdate($context: ContextInput, $data: BuiltinIPNamespaceUpdateInput!) { BuiltinIPNamespaceUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn builtin_ip_prefix_update(&self, context: Option<ContextInput>, data: BuiltinIPPrefixUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<BuiltinIPPrefixUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation BuiltinIPPrefixUpdate($context: ContextInput, $data: BuiltinIPPrefixUpdateInput!) { BuiltinIPPrefixUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn builtin_ip_address_update(&self, context: Option<ContextInput>, data: BuiltinIPAddressUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<BuiltinIPAddressUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation BuiltinIPAddressUpdate($context: ContextInput, $data: BuiltinIPAddressUpdateInput!) { BuiltinIPAddressUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_resource_pool_update(&self, context: Option<ContextInput>, data: CoreResourcePoolUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreResourcePoolUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreResourcePoolUpdate($context: ContextInput, $data: CoreResourcePoolUpdateInput!) { CoreResourcePoolUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_weighted_pool_resource_update(&self, context: Option<ContextInput>, data: CoreWeightedPoolResourceUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreWeightedPoolResourceUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreWeightedPoolResourceUpdate($context: ContextInput, $data: CoreWeightedPoolResourceUpdateInput!) { CoreWeightedPoolResourceUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_ip_pool_update(&self, context: Option<ContextInput>, data: CoreIPPoolUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreIPPoolUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreIPPoolUpdate($context: ContextInput, $data: CoreIPPoolUpdateInput!) { CoreIPPoolUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generic_account_update(&self, context: Option<ContextInput>, data: CoreGenericAccountUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGenericAccountUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreGenericAccountUpdate($context: ContextInput, $data: CoreGenericAccountUpdateInput!) { CoreGenericAccountUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_base_permission_update(&self, context: Option<ContextInput>, data: CoreBasePermissionUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreBasePermissionUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreBasePermissionUpdate($context: ContextInput, $data: CoreBasePermissionUpdateInput!) { CoreBasePermissionUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_credential_update(&self, context: Option<ContextInput>, data: CoreCredentialUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreCredentialUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreCredentialUpdate($context: ContextInput, $data: CoreCredentialUpdateInput!) { CoreCredentialUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_object_template_update(&self, context: Option<ContextInput>, data: CoreObjectTemplateUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreObjectTemplateUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreObjectTemplateUpdate($context: ContextInput, $data: CoreObjectTemplateUpdateInput!) { CoreObjectTemplateUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_object_component_template_update(&self, context: Option<ContextInput>, data: CoreObjectComponentTemplateUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreObjectComponentTemplateUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreObjectComponentTemplateUpdate($context: ContextInput, $data: CoreObjectComponentTemplateUpdateInput!) { CoreObjectComponentTemplateUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_menu_update(&self, context: Option<ContextInput>, data: CoreMenuUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreMenuUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreMenuUpdate($context: ContextInput, $data: CoreMenuUpdateInput!) { CoreMenuUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_tag_create(&self, context: Option<ContextInput>, data: ProfileBuiltinTagCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinTagCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinTagCreate($context: ContextInput, $data: ProfileBuiltinTagCreateInput!) { ProfileBuiltinTagCreate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_tag_update(&self, context: Option<ContextInput>, data: ProfileBuiltinTagUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinTagUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinTagUpdate($context: ContextInput, $data: ProfileBuiltinTagUpdateInput!) { ProfileBuiltinTagUpdate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_tag_upsert(&self, context: Option<ContextInput>, data: ProfileBuiltinTagUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinTagUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinTagUpsert($context: ContextInput, $data: ProfileBuiltinTagUpsertInput!) { ProfileBuiltinTagUpsert(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_tag_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinTagDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinTagDelete($context: ContextInput, $data: DeleteInput!) { ProfileBuiltinTagDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_ipam_namespace_create(&self, context: Option<ContextInput>, data: ProfileIpamNamespaceCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileIpamNamespaceCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileIpamNamespaceCreate($context: ContextInput, $data: ProfileIpamNamespaceCreateInput!) { ProfileIpamNamespaceCreate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_ipam_namespace_update(&self, context: Option<ContextInput>, data: ProfileIpamNamespaceUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileIpamNamespaceUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileIpamNamespaceUpdate($context: ContextInput, $data: ProfileIpamNamespaceUpdateInput!) { ProfileIpamNamespaceUpdate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_ipam_namespace_upsert(&self, context: Option<ContextInput>, data: ProfileIpamNamespaceUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileIpamNamespaceUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileIpamNamespaceUpsert($context: ContextInput, $data: ProfileIpamNamespaceUpsertInput!) { ProfileIpamNamespaceUpsert(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node { __typename } node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } permissions { count edges { __typename } } } ip_prefixes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_addresses { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_ipam_namespace_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileIpamNamespaceDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileIpamNamespaceDelete($context: ContextInput, $data: DeleteInput!) { ProfileIpamNamespaceDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_ip_prefix_create(&self, context: Option<ContextInput>, data: ProfileBuiltinIPPrefixCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinIPPrefixCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinIPPrefixCreate($context: ContextInput, $data: ProfileBuiltinIPPrefixCreateInput!) { ProfileBuiltinIPPrefixCreate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } prefix { is_default is_protected updated_at id is_from_profile permissions { update_value } value broadcast_address hostmask netmask prefixlen num_addresses version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_type { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } is_pool { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_ip_prefix_update(&self, context: Option<ContextInput>, data: ProfileBuiltinIPPrefixUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinIPPrefixUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinIPPrefixUpdate($context: ContextInput, $data: ProfileBuiltinIPPrefixUpdateInput!) { ProfileBuiltinIPPrefixUpdate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } prefix { is_default is_protected updated_at id is_from_profile permissions { update_value } value broadcast_address hostmask netmask prefixlen num_addresses version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_type { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } is_pool { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_ip_prefix_upsert(&self, context: Option<ContextInput>, data: ProfileBuiltinIPPrefixUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinIPPrefixUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinIPPrefixUpsert($context: ContextInput, $data: ProfileBuiltinIPPrefixUpsertInput!) { ProfileBuiltinIPPrefixUpsert(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } prefix { is_default is_protected updated_at id is_from_profile permissions { update_value } value broadcast_address hostmask netmask prefixlen num_addresses version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } member_type { is_default is_protected updated_at value label color description id is_from_profile permissions { update_value } } is_pool { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_ip_prefix_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinIPPrefixDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinIPPrefixDelete($context: ContextInput, $data: DeleteInput!) { ProfileBuiltinIPPrefixDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_ip_address_create(&self, context: Option<ContextInput>, data: ProfileBuiltinIPAddressCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinIPAddressCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinIPAddressCreate($context: ContextInput, $data: ProfileBuiltinIPAddressCreateInput!) { ProfileBuiltinIPAddressCreate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } address { is_default is_protected updated_at id is_from_profile permissions { update_value } value ip hostmask netmask prefixlen version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_ip_address_update(&self, context: Option<ContextInput>, data: ProfileBuiltinIPAddressUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinIPAddressUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinIPAddressUpdate($context: ContextInput, $data: ProfileBuiltinIPAddressUpdateInput!) { ProfileBuiltinIPAddressUpdate(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } address { is_default is_protected updated_at id is_from_profile permissions { update_value } value ip hostmask netmask prefixlen version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_ip_address_upsert(&self, context: Option<ContextInput>, data: ProfileBuiltinIPAddressUpsertInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinIPAddressUpsertResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinIPAddressUpsert($context: ContextInput, $data: ProfileBuiltinIPAddressUpsertInput!) { ProfileBuiltinIPAddressUpsert(context: $context, data: $data) { ok object { id hfid display_label profile_name { is_default is_protected updated_at id is_from_profile permissions { update_value } value } profile_priority { is_default is_protected updated_at id is_from_profile permissions { update_value } value } address { is_default is_protected updated_at id is_from_profile permissions { update_value } value ip hostmask netmask prefixlen version with_hostmask with_netmask } description { is_default is_protected updated_at id is_from_profile permissions { update_value } value } related_nodes { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } ip_namespace { node_metadata { created_at updated_at } properties { is_protected updated_at } relationship_metadata { created_at updated_at } } member_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } subscriber_of_groups { count edges { node_metadata { __typename } properties { __typename } relationship_metadata { __typename } } } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn profile_builtin_ip_address_delete(&self, context: Option<ContextInput>, data: DeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ProfileBuiltinIPAddressDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ProfileBuiltinIPAddressDelete($context: ContextInput, $data: DeleteInput!) { ProfileBuiltinIPAddressDelete(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_account_token_create(&self, data: InfrahubAccountTokenCreateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubAccountTokenCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubAccountTokenCreate($data: InfrahubAccountTokenCreateInput!) { InfrahubAccountTokenCreate(data: $data) { ok object { id token { value } } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_account_self_update(&self, data: InfrahubAccountUpdateSelfInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubAccountSelfUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubAccountSelfUpdate($data: InfrahubAccountUpdateSelfInput!) { InfrahubAccountSelfUpdate(data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_account_token_delete(&self, data: InfrahubAccountTokenDeleteInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubAccountTokenDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubAccountTokenDelete($data: InfrahubAccountTokenDeleteInput!) { InfrahubAccountTokenDelete(data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_proposed_change_run_check(&self, data: ProposedChangeRequestRunCheckInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreProposedChangeRunCheckResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreProposedChangeRunCheck($data: ProposedChangeRequestRunCheckInput!) { CoreProposedChangeRunCheck(data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_proposed_change_merge(&self, data: ProposedChangeMergeInput, wait_until_completion: Option<bool> , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreProposedChangeMergeResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        if let Some(value) = wait_until_completion {
+            vars.insert("wait_until_completion".to_string(), serde_json::to_value(value)?);
+        }
+        let query = r#"mutation CoreProposedChangeMerge($data: ProposedChangeMergeInput!, $wait_until_completion: Boolean) { CoreProposedChangeMerge(data: $data, wait_until_completion: $wait_until_completion) { ok task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_proposed_change_review(&self, data: ProposedChangeReviewInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreProposedChangeReviewResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreProposedChangeReview($data: ProposedChangeReviewInput!) { CoreProposedChangeReview(data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_generator_definition_run(&self, context: Option<ContextInput>, data: GeneratorDefinitionRequestRunInput, wait_until_completion: Option<bool> , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreGeneratorDefinitionRunResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        if let Some(value) = wait_until_completion {
+            vars.insert("wait_until_completion".to_string(), serde_json::to_value(value)?);
+        }
+        let query = r#"mutation CoreGeneratorDefinitionRun($context: ContextInput, $data: GeneratorDefinitionRequestRunInput!, $wait_until_completion: Boolean) { CoreGeneratorDefinitionRun(context: $context, data: $data, wait_until_completion: $wait_until_completion) { ok task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_ip_prefix_pool_get_resource(&self, data: IPPrefixPoolGetResourceInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubIPPrefixPoolGetResourceResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubIPPrefixPoolGetResource($data: IPPrefixPoolGetResourceInput!) { InfrahubIPPrefixPoolGetResource(data: $data) { ok node { id display_label kind branch identifier } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_ip_address_pool_get_resource(&self, data: IPAddressPoolGetResourceInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubIPAddressPoolGetResourceResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubIPAddressPoolGetResource($data: IPAddressPoolGetResourceInput!) { InfrahubIPAddressPoolGetResource(data: $data) { ok node { id display_label kind branch identifier } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn branch_create(&self, background_execution: Option<bool>, context: Option<ContextInput>, data: BranchCreateInput, wait_until_completion: Option<bool> , request_branch: Option<&str>) -> Result<GraphQlResponse<BranchCreateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = background_execution {
+            vars.insert("background_execution".to_string(), serde_json::to_value(value)?);
+        }
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        if let Some(value) = wait_until_completion {
+            vars.insert("wait_until_completion".to_string(), serde_json::to_value(value)?);
+        }
+        let query = r#"mutation BranchCreate($background_execution: Boolean, $context: ContextInput, $data: BranchCreateInput!, $wait_until_completion: Boolean) { BranchCreate(background_execution: $background_execution, context: $context, data: $data, wait_until_completion: $wait_until_completion) { ok object { id name description origin_branch branched_from status graph_version created_at sync_with_git is_default schema_differs_from_default_branch } task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn branch_delete(&self, context: Option<ContextInput>, data: BranchDeleteInput, wait_until_completion: Option<bool> , request_branch: Option<&str>) -> Result<GraphQlResponse<BranchDeleteResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        if let Some(value) = wait_until_completion {
+            vars.insert("wait_until_completion".to_string(), serde_json::to_value(value)?);
+        }
+        let query = r#"mutation BranchDelete($context: ContextInput, $data: BranchDeleteInput!, $wait_until_completion: Boolean) { BranchDelete(context: $context, data: $data, wait_until_completion: $wait_until_completion) { ok task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn branch_rebase(&self, context: Option<ContextInput>, data: BranchNameInput, wait_until_completion: Option<bool> , request_branch: Option<&str>) -> Result<GraphQlResponse<BranchRebaseResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        if let Some(value) = wait_until_completion {
+            vars.insert("wait_until_completion".to_string(), serde_json::to_value(value)?);
+        }
+        let query = r#"mutation BranchRebase($context: ContextInput, $data: BranchNameInput!, $wait_until_completion: Boolean) { BranchRebase(context: $context, data: $data, wait_until_completion: $wait_until_completion) { ok object { id name description origin_branch branched_from status graph_version created_at sync_with_git is_default schema_differs_from_default_branch } task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn branch_merge(&self, context: Option<ContextInput>, data: BranchNameInput, wait_until_completion: Option<bool> , request_branch: Option<&str>) -> Result<GraphQlResponse<BranchMergeResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        if let Some(value) = wait_until_completion {
+            vars.insert("wait_until_completion".to_string(), serde_json::to_value(value)?);
+        }
+        let query = r#"mutation BranchMerge($context: ContextInput, $data: BranchNameInput!, $wait_until_completion: Boolean) { BranchMerge(context: $context, data: $data, wait_until_completion: $wait_until_completion) { ok object { id name description origin_branch branched_from status graph_version created_at sync_with_git is_default schema_differs_from_default_branch } task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn branch_update(&self, context: Option<ContextInput>, data: BranchUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<BranchUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation BranchUpdate($context: ContextInput, $data: BranchUpdateInput!) { BranchUpdate(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn branch_validate(&self, context: Option<ContextInput>, data: BranchNameInput, wait_until_completion: Option<bool> , request_branch: Option<&str>) -> Result<GraphQlResponse<BranchValidateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        if let Some(value) = wait_until_completion {
+            vars.insert("wait_until_completion".to_string(), serde_json::to_value(value)?);
+        }
+        let query = r#"mutation BranchValidate($context: ContextInput, $data: BranchNameInput!, $wait_until_completion: Boolean) { BranchValidate(context: $context, data: $data, wait_until_completion: $wait_until_completion) { ok object { id name description origin_branch branched_from status graph_version created_at sync_with_git is_default schema_differs_from_default_branch } task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn diff_update(&self, context: Option<ContextInput>, data: DiffUpdateInput, wait_until_completion: Option<bool> , request_branch: Option<&str>) -> Result<GraphQlResponse<DiffUpdateResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        if let Some(value) = wait_until_completion {
+            vars.insert("wait_until_completion".to_string(), serde_json::to_value(value)?);
+        }
+        let query = r#"mutation DiffUpdate($context: ContextInput, $data: DiffUpdateInput!, $wait_until_completion: Boolean) { DiffUpdate(context: $context, data: $data, wait_until_completion: $wait_until_completion) { ok task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_task_retry(&self, data: TaskActionInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubTaskRetryResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubTaskRetry($data: TaskActionInput!) { InfrahubTaskRetry(data: $data) { ok task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_task_cancel(&self, data: TaskActionInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubTaskCancelResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubTaskCancel($data: TaskActionInput!) { InfrahubTaskCancel(data: $data) { ok task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_read_only_repository_import_last_commit(&self, data: IdentifierInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubReadOnlyRepositoryImportLastCommitResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubReadOnlyRepositoryImportLastCommit($data: IdentifierInput!) { InfrahubReadOnlyRepositoryImportLastCommit(data: $data) { ok task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_repository_process(&self, data: IdentifierInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubRepositoryProcessResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubRepositoryProcess($data: IdentifierInput!) { InfrahubRepositoryProcess(data: $data) { ok task { id } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_repository_connectivity(&self, data: IdentifierInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubRepositoryConnectivityResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubRepositoryConnectivity($data: IdentifierInput!) { InfrahubRepositoryConnectivity(data: $data) { ok message } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_update_computed_attribute(&self, context: Option<ContextInput>, data: InfrahubComputedAttributeUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubUpdateComputedAttributeResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubUpdateComputedAttribute($context: ContextInput, $data: InfrahubComputedAttributeUpdateInput!) { InfrahubUpdateComputedAttribute(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_update_display_label(&self, context: Option<ContextInput>, data: InfrahubDisplayLabelUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubUpdateDisplayLabelResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubUpdateDisplayLabel($context: ContextInput, $data: InfrahubDisplayLabelUpdateInput!) { InfrahubUpdateDisplayLabel(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_update_hfid(&self, context: Option<ContextInput>, data: InfrahubHFIDUpdateInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubUpdateHFIDResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubUpdateHFID($context: ContextInput, $data: InfrahubHFIDUpdateInput!) { InfrahubUpdateHFID(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_recompute_computed_attribute(&self, context: Option<ContextInput>, data: InfrahubComputedAttributeRecomputeInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubRecomputeComputedAttributeResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubRecomputeComputedAttribute($context: ContextInput, $data: InfrahubComputedAttributeRecomputeInput!) { InfrahubRecomputeComputedAttribute(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn relationship_add(&self, context: Option<ContextInput>, data: RelationshipNodesInput , request_branch: Option<&str>) -> Result<GraphQlResponse<RelationshipAddResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation RelationshipAdd($context: ContextInput, $data: RelationshipNodesInput!) { RelationshipAdd(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn relationship_remove(&self, context: Option<ContextInput>, data: RelationshipNodesInput , request_branch: Option<&str>) -> Result<GraphQlResponse<RelationshipRemoveResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation RelationshipRemove($context: ContextInput, $data: RelationshipNodesInput!) { RelationshipRemove(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn schema_dropdown_add(&self, context: Option<ContextInput>, data: SchemaDropdownAddInput , request_branch: Option<&str>) -> Result<GraphQlResponse<SchemaDropdownAddResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation SchemaDropdownAdd($context: ContextInput, $data: SchemaDropdownAddInput!) { SchemaDropdownAdd(context: $context, data: $data) { ok object { value label color description } } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn schema_dropdown_remove(&self, context: Option<ContextInput>, data: SchemaDropdownRemoveInput , request_branch: Option<&str>) -> Result<GraphQlResponse<SchemaDropdownRemoveResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation SchemaDropdownRemove($context: ContextInput, $data: SchemaDropdownRemoveInput!) { SchemaDropdownRemove(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn schema_enum_add(&self, context: Option<ContextInput>, data: SchemaEnumInput , request_branch: Option<&str>) -> Result<GraphQlResponse<SchemaEnumAddResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation SchemaEnumAdd($context: ContextInput, $data: SchemaEnumInput!) { SchemaEnumAdd(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn schema_enum_remove(&self, context: Option<ContextInput>, data: SchemaEnumInput , request_branch: Option<&str>) -> Result<GraphQlResponse<SchemaEnumRemoveResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation SchemaEnumRemove($context: ContextInput, $data: SchemaEnumInput!) { SchemaEnumRemove(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn resolve_diff_conflict(&self, context: Option<ContextInput>, data: ResolveDiffConflictInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ResolveDiffConflictResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ResolveDiffConflict($context: ContextInput, $data: ResolveDiffConflictInput!) { ResolveDiffConflict(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn convert_object_type(&self, data: ConvertObjectTypeInput , request_branch: Option<&str>) -> Result<GraphQlResponse<ConvertObjectTypeResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation ConvertObjectType($data: ConvertObjectTypeInput!) { ConvertObjectType(data: $data) { ok node } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn core_proposed_change_check_for_approval_revoke(&self, data: ProposedChangeCheckForApprovalRevokeInput , request_branch: Option<&str>) -> Result<GraphQlResponse<CoreProposedChangeCheckForApprovalRevokeResponse>> {
+        let mut vars = serde_json::Map::new();
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation CoreProposedChangeCheckForApprovalRevoke($data: ProposedChangeCheckForApprovalRevokeInput!) { CoreProposedChangeCheckForApprovalRevoke(data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_profiles_refresh(&self, context: Option<ContextInput>, data: ProfilesRefreshInput , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubProfilesRefreshResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = context {
+            vars.insert("context".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("data".to_string(), serde_json::to_value(data)?);
+        let query = r#"mutation InfrahubProfilesRefresh($context: ContextInput, $data: ProfilesRefreshInput!) { InfrahubProfilesRefresh(context: $context, data: $data) { ok } }"#;
+        let vars = Value::Object(vars);
+        self.client.execute(query, Some(vars), request_branch).await
+    }
+
+    pub async fn infrahub_set_preferences(&self, date_format: Option<DateFormat>, scope: PreferenceWriteScope, timezone: Option<String> , request_branch: Option<&str>) -> Result<GraphQlResponse<InfrahubSetPreferencesResponse>> {
+        let mut vars = serde_json::Map::new();
+        if let Some(value) = date_format {
+            vars.insert("date_format".to_string(), serde_json::to_value(value)?);
+        }
+        vars.insert("scope".to_string(), serde_json::to_value(scope)?);
+        if let Some(value) = timezone {
+            vars.insert("timezone".to_string(), serde_json::to_value(value)?);
+        }
+        let query = r#"mutation InfrahubSetPreferences($date_format: DateFormat, $scope: PreferenceWriteScope!, $timezone: String) { InfrahubSetPreferences(date_format: $date_format, scope: $scope, timezone: $timezone) { ok date_format timezone } }"#;
         let vars = Value::Object(vars);
         self.client.execute(query, Some(vars), request_branch).await
     }

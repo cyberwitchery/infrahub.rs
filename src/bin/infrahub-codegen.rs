@@ -177,6 +177,7 @@ struct SchemaContext<'a> {
     enums: BTreeSet<String>,
     inputs: BTreeSet<String>,
     objects: BTreeSet<String>,
+    interfaces: BTreeSet<String>,
     unions: BTreeSet<String>,
     scalars: BTreeSet<String>,
 }
@@ -201,6 +202,7 @@ impl<'a> SchemaContext<'a> {
         let mut enums = BTreeSet::new();
         let mut inputs = BTreeSet::new();
         let mut objects = BTreeSet::new();
+        let mut interfaces = BTreeSet::new();
         let mut unions = BTreeSet::new();
         let mut scalars = BTreeSet::new();
         let mut query_type = "Query".to_string();
@@ -222,6 +224,10 @@ impl<'a> SchemaContext<'a> {
                         objects.insert(obj.name.clone());
                         obj.name.clone()
                     }
+                    TypeDefinition::Interface(iface) => {
+                        interfaces.insert(iface.name.clone());
+                        iface.name.clone()
+                    }
                     TypeDefinition::Union(union_ty) => {
                         unions.insert(union_ty.name.clone());
                         union_ty.name.clone()
@@ -230,7 +236,6 @@ impl<'a> SchemaContext<'a> {
                         scalars.insert(scalar_ty.name.clone());
                         scalar_ty.name.clone()
                     }
-                    _ => continue,
                 };
                 types.insert(name, ty.clone());
             } else if let Definition::SchemaDefinition(schema) = def {
@@ -253,6 +258,7 @@ impl<'a> SchemaContext<'a> {
             enums,
             inputs,
             objects,
+            interfaces,
             unions,
             scalars,
         }
@@ -364,13 +370,28 @@ fn render_types(ctx: &SchemaContext) -> String {
                 if should_skip_field(field) {
                     continue;
                 }
-                let ty = rust_type(&field.field_type, ctx, false);
-                let ty = if nulled_on_empty_edge(obj, field) {
-                    format!("Option<{ty}>")
-                } else {
-                    ty
-                };
-                push_struct_field(&mut out, field.name.as_str(), &ty);
+                push_struct_field(
+                    &mut out,
+                    field.name.as_str(),
+                    &field_rust_type(obj, field, ctx),
+                );
+            }
+            out.push_str("}\n\n");
+        }
+    }
+
+    for iface_name in &ctx.interfaces {
+        if let Some(TypeDefinition::Interface(iface)) = ctx.types.get(iface_name) {
+            out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
+            out.push_str(&format!("pub struct {} {{\n", iface_name));
+            out.push_str("    #[serde(rename = \"__typename\")]\n");
+            out.push_str("    pub typename: Option<String>,\n");
+            for field in &iface.fields {
+                if !identifies_peer(field, ctx) {
+                    continue;
+                }
+                let ty = rust_type_nonnull(&field.field_type, ctx, false, false);
+                push_struct_field(&mut out, field.name.as_str(), &format!("Option<{ty}>"));
             }
             out.push_str("}\n\n");
         }
@@ -1057,8 +1078,7 @@ fn node_type_for_model<'a>(model: &str, ctx: &SchemaContext<'a>) -> (String, boo
     let edge_type = format!("Edged{}", model);
     if let Some(TypeDefinition::Object(obj)) = ctx.types.get(&edge_type) {
         if let Some(node_field) = obj.fields.iter().find(|f| f.name == "node") {
-            let rust = rust_type(&node_field.field_type, ctx, false);
-            return strip_option_box(&rust);
+            return strip_option_box(&field_rust_type(obj, node_field, ctx));
         }
     }
     ("serde_json::Value".to_string(), false)
@@ -1247,6 +1267,12 @@ fn selection_for_type(
                 continue;
             }
 
+            if ctx.interfaces.contains(&field_base) {
+                let peer = peer_selection(&field_base, ctx);
+                fields.push(format!("{} {}", field.name, peer));
+                continue;
+            }
+
             if ctx.unions.contains(&field_base) {
                 fields.push(format!("{} {{ __typename }}", field.name));
                 continue;
@@ -1274,6 +1300,34 @@ fn is_selected(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaCont
         || ctx.scalars.contains(&base)
         || ctx.objects.contains(&base)
         || ctx.unions.contains(&base)
+        || is_interface_peer(obj, field, ctx)
+}
+
+/// an edge's `node` whose peer is an interface, which is selected and typed by its identity fields.
+fn is_interface_peer(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaContext) -> bool {
+    field.name == "node"
+        && ctx.interfaces.contains(&base_type_name(&field.field_type))
+        && obj.fields.iter().any(|f| f.name == "node_metadata")
+}
+
+/// whether a field of an interface goes into the struct and selection of its peers.
+fn identifies_peer(field: &Field<String>, ctx: &SchemaContext) -> bool {
+    let base = base_type_name(&field.field_type);
+    !has_required_args(field)
+        && !should_skip_field(field)
+        && (is_scalar_type(&base) || ctx.enums.contains(&base) || ctx.scalars.contains(&base))
+}
+
+fn peer_selection(iface_name: &str, ctx: &SchemaContext) -> String {
+    let mut fields = vec!["__typename".to_string()];
+    if let Some(TypeDefinition::Interface(iface)) = ctx.types.get(iface_name) {
+        for field in &iface.fields {
+            if identifies_peer(field, ctx) {
+                fields.push(field.name.clone());
+            }
+        }
+    }
+    format!("{{ {} }}", fields.join(" "))
 }
 
 /// a non-null `node_metadata` beside a nullable `node`, which infrahub leaves null on an empty edge.
@@ -1331,6 +1385,35 @@ fn is_scalar_type(name: &str) -> bool {
             | "FixedGenericScalar"
             | "Upload"
     )
+}
+
+/// the type `render_types` declares for `field` of `obj`.
+fn field_rust_type(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaContext) -> String {
+    let ty = if is_interface_peer(obj, field, ctx) {
+        let peer = peer_rust_type_nonnull(&field.field_type, false);
+        if is_optional(&field.field_type) {
+            format!("Option<{peer}>")
+        } else {
+            peer
+        }
+    } else {
+        rust_type(&field.field_type, ctx, false)
+    };
+    if nulled_on_empty_edge(obj, field) {
+        format!("Option<{ty}>")
+    } else {
+        ty
+    }
+}
+
+/// `rust_type_nonnull` for an interface peer, which is boxed like an object.
+fn peer_rust_type_nonnull(ty: &Type<String>, in_list: bool) -> String {
+    match ty {
+        Type::ListType(inner) => format!("Vec<{}>", peer_rust_type_nonnull(inner, true)),
+        Type::NonNullType(inner) => peer_rust_type_nonnull(inner, in_list),
+        Type::NamedType(name) if in_list => name.clone(),
+        Type::NamedType(name) => format!("Box<{name}>"),
+    }
 }
 
 fn rust_type(ty: &Type<String>, ctx: &SchemaContext, input: bool) -> String {
@@ -1988,7 +2071,7 @@ mod codegen_name_tests {
         let select = |name: &str| selection_for_type(name, &ctx, &mut BTreeSet::new(), 0);
         assert_eq!(
             select("NestedEdgedGroup"),
-            "{ cursor properties { is_protected } }"
+            "{ cursor node { __typename id } properties { is_protected } }"
         );
         assert_eq!(
             select("NestedEdgedGadget"),
@@ -2001,7 +2084,7 @@ mod codegen_name_tests {
         assert_eq!(
             select("WidgetCreate"),
             "{ ok object { id name node_metadata { created_at } \
-             parent { cursor properties { is_protected } } \
+             parent { cursor node { __typename id } properties { is_protected } } \
              gadget { node { id } node_metadata { created_at } properties { is_protected } } \
              branch { node { id } node_metadata { created_at } } } }"
         );
@@ -2029,7 +2112,133 @@ mod codegen_name_tests {
 
         let widget_rs = &render_api_modules(&ctx)["widget"];
         assert!(widget_rs.contains("pub async fn create("));
-        assert!(widget_rs.contains("parent { cursor properties { is_protected } }"));
+        assert!(widget_rs
+            .contains("parent { cursor node { __typename id } properties { is_protected } }"));
         assert!(!widget_rs.contains("parent { node_metadata"));
+    }
+
+    #[test]
+    fn test_interface_peer_edges_select_and_type_the_peer_identity() {
+        let schema = r#"
+            type Query { Widget(ids: [ID]): PaginatedWidget Group(ids: [ID]): PaginatedGroup }
+            type Mutation {
+                WidgetCreate(data: String!): WidgetCreate
+                GroupUpdate(data: String!): GroupUpdate
+            }
+            enum Kind { STANDARD }
+            interface Account { id: String }
+            interface Group {
+                id: String
+                hfid: [String!]
+                kind: Kind!
+                managed: Boolean!
+                name: TextAttribute
+                label(lang: String!): String
+                legacy: String @deprecated(reason: "gone")
+            }
+            type Meta { created_at: String }
+            type Props { is_protected: Boolean }
+            type TextAttribute { value: String source: Account }
+            type NestedEdgedGroup { node: Group node_metadata: Meta! properties: Props created_by: Account }
+            type NestedPaginatedGroup { count: Int! edges: [NestedEdgedGroup!] }
+            type PinnedGroupEdge { node: Group! node_metadata: Meta! }
+            type GroupListEdge { node: [Group!] node_metadata: Meta }
+            type GroupNodes { node: Group }
+            union Thing = Meta
+            type ThingEdge { node: Thing node_metadata: Meta }
+            type Widget {
+                id: String!
+                name: TextAttribute
+                parent: NestedEdgedGroup!
+                member_of_groups(offset: Int): NestedPaginatedGroup!
+            }
+            type EdgedWidget { node: Widget node_metadata: Meta }
+            type PaginatedWidget { count: Int! edges: [EdgedWidget!]! }
+            type EdgedGroup { node: Group node_metadata: Meta }
+            type PaginatedGroup { count: Int! edges: [EdgedGroup!]! }
+            type WidgetCreate { ok: Boolean object: Widget }
+            type GroupUpdate { ok: Boolean object: Group }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let peer = "node { __typename id hfid kind managed }";
+        let select =
+            |name: &str, depth| selection_for_type(name, &ctx, &mut BTreeSet::new(), depth);
+        assert_eq!(
+            select("NestedEdgedGroup", 0),
+            format!("{{ {peer} properties {{ is_protected }} }}")
+        );
+        assert_eq!(
+            select("NestedEdgedGroup", 3),
+            format!("{{ {peer} properties {{ __typename }} }}")
+        );
+        assert_eq!(select("NestedEdgedGroup", 4), "{ __typename }");
+        assert_eq!(
+            select("PaginatedGroup", 0),
+            format!("{{ count edges {{ {peer} node_metadata {{ created_at }} }} }}")
+        );
+        assert_eq!(select("GroupNodes", 0), "");
+        assert_eq!(select("TextAttribute", 0), "{ value }");
+        assert_eq!(select("GroupUpdate", 0), "{ ok }");
+
+        let types = render_types(&ctx);
+        let struct_of = |name: &str| {
+            let start = types.find(&format!("pub struct {name} {{")).unwrap();
+            types[start..start + types[start..].find('}').unwrap() + 1].to_string()
+        };
+        assert_eq!(
+            struct_of("Group"),
+            "pub struct Group {\n    \
+             #[serde(rename = \"__typename\")]\n    \
+             pub typename: Option<String>,\n    \
+             pub id: Option<String>,\n    \
+             pub hfid: Option<Vec<String>>,\n    \
+             pub kind: Option<Kind>,\n    \
+             pub managed: Option<bool>,\n}"
+        );
+        let field_of = |name: &str, field: &str| {
+            let body = struct_of(name);
+            let line = body.lines().find(|l| l.contains(&format!(" {field}:")));
+            line.unwrap().trim().to_string()
+        };
+        for (edge, ty) in [
+            ("NestedEdgedGroup", "Option<Box<Group>>"),
+            ("EdgedGroup", "Option<Box<Group>>"),
+            ("PinnedGroupEdge", "Box<Group>"),
+            ("GroupListEdge", "Option<Vec<Group>>"),
+            ("GroupNodes", "Option<serde_json::Value>"),
+            ("ThingEdge", "Option<Thing>"),
+        ] {
+            assert_eq!(field_of(edge, "node"), format!("pub node: {ty},"), "{edge}");
+        }
+        for (name, field) in [
+            ("NestedEdgedGroup", "created_by"),
+            ("TextAttribute", "source"),
+            ("GroupUpdate", "object"),
+        ] {
+            assert_eq!(
+                field_of(name, field),
+                format!("pub {field}: Option<serde_json::Value>,"),
+                "{name}"
+            );
+        }
+
+        let models = collect_models(&ctx);
+        assert!(models["Group"].update.is_none(), "interface `object`");
+        let modules = render_api_modules(&ctx);
+        let group_rs = &modules["group"];
+        assert!(group_rs.contains("-> Result<Vec<Group>> {"));
+        assert!(group_rs.contains("-> Result<Option<Group>> {"));
+        assert!(group_rs.contains("items.push(*node);"));
+        assert!(!group_rs.contains("pub async fn update("));
+        let widget_rs = &modules["widget"];
+        assert!(widget_rs.contains(&format!(
+            "parent {{ {peer} properties {{ __typename }} }} \
+             member_of_groups {{ count edges {{ __typename }} }}"
+        )));
+        assert!(widget_rs.contains(&format!(
+            "parent {{ {peer} properties {{ is_protected }} }} \
+             member_of_groups {{ count edges {{ {peer} properties {{ __typename }} }} }}"
+        )));
     }
 }

@@ -159,6 +159,7 @@ the generated crate provides:
 
 - `generated()` for full surface graphql methods
 - `api()` for ergonomic, topic-grouped helpers: `list`, `get_by_id` and `paginate` for each paginated model, plus `create`, `update`, `upsert` and `delete` from the model's `<Model>Create`/`Update`/`Upsert`/`Delete` mutations. `create`, `update` and `upsert` return the payload's `object`, so they are generated only when that field has a concrete type (not an interface); `delete` returns the payload's `ok`. every mutation, helper or not, is a method on `generated()`
+- a struct per interface (an infrahub generic such as `CoreGroup`) with the peer's `typename`, `id`, `hfid` and `display_label`, all optional. a relationship whose peer is an interface, such as a group's `parent` or a node's `member_of_groups`, returns its peer as that struct, and so do `list`, `get_by_id` and `paginate` of a generic model
 - input structs that leave `None` fields out of the request, so an `update` or `upsert` changes only the fields you set. they cannot send an explicit `null` (raw graphql can), and `Some(vec![])` still clears a relationship
 
 ## branches

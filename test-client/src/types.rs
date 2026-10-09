@@ -4738,7 +4738,7 @@ pub struct Mutation {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedBuiltinIPAddress {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -4746,7 +4746,7 @@ pub struct NestedEdgedBuiltinIPAddress {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedBuiltinIPNamespace {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -4754,7 +4754,7 @@ pub struct NestedEdgedBuiltinIPNamespace {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedBuiltinIPPrefix {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -4794,7 +4794,7 @@ pub struct NestedEdgedCoreAccountRole {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreAction {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -4826,7 +4826,7 @@ pub struct NestedEdgedCoreArtifactDefinition {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreArtifactTarget {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -4850,7 +4850,7 @@ pub struct NestedEdgedCoreArtifactValidator {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreBasePermission {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -4874,7 +4874,7 @@ pub struct NestedEdgedCoreChangeThread {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreCheck {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -4890,7 +4890,7 @@ pub struct NestedEdgedCoreCheckDefinition {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreComment {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -4898,7 +4898,7 @@ pub struct NestedEdgedCoreComment {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreCredential {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -4946,7 +4946,7 @@ pub struct NestedEdgedCoreFileCheck {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreFileObject {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5018,7 +5018,7 @@ pub struct NestedEdgedCoreGeneratorValidator {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGenericAccount {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5026,7 +5026,7 @@ pub struct NestedEdgedCoreGenericAccount {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGenericRepository {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5058,7 +5058,7 @@ pub struct NestedEdgedCoreGraphQLQueryGroup {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGroup {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5090,7 +5090,7 @@ pub struct NestedEdgedCoreIPAddressPool {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreIPPool {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5106,7 +5106,7 @@ pub struct NestedEdgedCoreIPPrefixPool {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreKeyValue {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5114,7 +5114,7 @@ pub struct NestedEdgedCoreKeyValue {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreMenu {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5130,7 +5130,7 @@ pub struct NestedEdgedCoreMenuItem {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreNode {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5146,7 +5146,7 @@ pub struct NestedEdgedCoreNodeTriggerAttributeMatch {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreNodeTriggerMatch {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5178,7 +5178,7 @@ pub struct NestedEdgedCoreNumberPool {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreObjectComponentTemplate {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5194,7 +5194,7 @@ pub struct NestedEdgedCoreObjectPermission {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreObjectTemplate {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5218,7 +5218,7 @@ pub struct NestedEdgedCorePasswordCredential {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreProfile {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5266,7 +5266,7 @@ pub struct NestedEdgedCoreRepositoryValidator {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreResourcePool {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5322,7 +5322,7 @@ pub struct NestedEdgedCoreStaticKeyValue {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreTaskTarget {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5330,7 +5330,7 @@ pub struct NestedEdgedCoreTaskTarget {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreThread {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5362,7 +5362,7 @@ pub struct NestedEdgedCoreTransformPython {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreTransformation {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5370,7 +5370,7 @@ pub struct NestedEdgedCoreTransformation {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreTriggerRule {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5386,7 +5386,7 @@ pub struct NestedEdgedCoreUserValidator {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreValidator {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5394,7 +5394,7 @@ pub struct NestedEdgedCoreValidator {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreWebhook {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5402,7 +5402,7 @@ pub struct NestedEdgedCoreWebhook {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreWeightedPoolResource {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5458,7 +5458,7 @@ pub struct NestedEdgedIpamNamespace {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedLineageOwner {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }
@@ -5466,7 +5466,7 @@ pub struct NestedEdgedLineageOwner {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedLineageSource {
     pub node: Option<serde_json::Value>,
-    pub node_metadata: Box<InfrahubNodeMetadata>,
+    pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
 }

@@ -10,6 +10,7 @@ use infrahub_test_client::inputs::{
     BuiltinTagCreateInput, BuiltinTagUpdateInput, CoreStandardGroupCreateInput, DeleteInput,
     RelatedNodeInput, TextAttributeCreate, TextAttributeUpdate,
 };
+use infrahub_test_client::types::CoreStandardGroup;
 
 // ---------------------------------------------------------------------------
 // helpers
@@ -65,6 +66,53 @@ async fn delete_tag(client: &Client, id: &str) {
         .delete(None, data, branch().as_deref())
         .await
         .expect("delete tag");
+    assert!(deleted, "delete should report ok");
+}
+
+/// create a CoreStandardGroup with no parent
+async fn create_group(
+    client: &Client,
+    name: &str,
+    members: Option<Vec<RelatedNodeInput>>,
+) -> CoreStandardGroup {
+    let data = CoreStandardGroupCreateInput {
+        id: None,
+        name: Some(TextAttributeCreate {
+            is_protected: None,
+            source: None,
+            owner: None,
+            value: Some(name.to_string()),
+        }),
+        label: None,
+        description: None,
+        group_type: None,
+        members,
+        subscribers: None,
+        parent: None,
+        children: None,
+    };
+    client
+        .api()
+        .core()
+        .standard_group()
+        .create(None, data, branch().as_deref())
+        .await
+        .expect("create group")
+}
+
+/// delete a CoreStandardGroup by id
+async fn delete_group(client: &Client, id: &str) {
+    let data = DeleteInput {
+        id: Some(id.to_string()),
+        hfid: None,
+    };
+    let deleted = client
+        .api()
+        .core()
+        .standard_group()
+        .delete(None, data, branch().as_deref())
+        .await
+        .expect("delete group");
     assert!(deleted, "delete should report ok");
 }
 
@@ -263,43 +311,17 @@ async fn tag_update_keeps_group_membership() {
     };
     let tag_id = create_tag(&client, "smoke-update-tag").await;
 
-    let data = CoreStandardGroupCreateInput {
-        id: None,
-        name: Some(TextAttributeCreate {
-            is_protected: None,
-            source: None,
-            owner: None,
-            value: Some("smoke-update-group".to_string()),
-        }),
-        label: None,
-        description: None,
-        group_type: None,
-        members: Some(vec![RelatedNodeInput {
-            id: Some(tag_id.clone()),
-            hfid: None,
-            kind: None,
-            from_pool: None,
-            _relation_is_protected: None,
-            _relation_owner: None,
-            _relation_source: None,
-        }]),
-        subscribers: None,
-        parent: None,
-        children: None,
+    let member = RelatedNodeInput {
+        id: Some(tag_id.clone()),
+        hfid: None,
+        kind: None,
+        from_pool: None,
+        _relation_is_protected: None,
+        _relation_owner: None,
+        _relation_source: None,
     };
-    // the typed create selects `parent { node_metadata }`, which infrahub nulls without a parent
-    let query = r#"mutation CreateGroup($data: CoreStandardGroupCreateInput!) {
-        CoreStandardGroupCreate(data: $data) { ok object { id members { count } } }
-    }"#;
-    let vars = serde_json::json!({ "data": data });
-    let resp: infrahub::GraphQlResponse<serde_json::Value> = client
-        .execute(query, Some(vars), branch().as_deref())
-        .await
-        .expect("create group");
-    let created = resp.data.expect("create group data");
-    let group = &created["CoreStandardGroupCreate"]["object"];
-    assert_eq!(group["members"]["count"], 1, "group should hold the tag");
-    let group_id = group["id"].as_str().expect("group id").to_string();
+    let group = create_group(&client, "smoke-update-group", Some(vec![member])).await;
+    assert_eq!(group.members.count, 1, "group should hold the tag");
 
     let data = BuiltinTagUpdateInput {
         id: Some(tag_id.clone()),
@@ -340,19 +362,45 @@ async fn tag_update_keeps_group_membership() {
     );
 
     // cleanup
-    let data = DeleteInput {
-        id: Some(group_id),
-        hfid: None,
+    delete_group(&client, &group.id).await;
+    delete_tag(&client, &tag_id).await;
+}
+
+#[cfg_attr(miri, ignore)]
+#[tokio::test]
+async fn group_without_parent_list_and_get_by_id() {
+    let Some(client) = make_client() else {
+        return;
     };
-    let deleted = client
+    let group_id = create_group(&client, "smoke-parentless-group", None)
+        .await
+        .id;
+
+    let groups = client
         .api()
         .core()
         .standard_group()
-        .delete(None, data, branch().as_deref())
+        .list(None, branch().as_deref())
         .await
-        .expect("delete group");
-    assert!(deleted, "delete should report ok");
-    delete_tag(&client, &tag_id).await;
+        .expect("list groups");
+    assert!(
+        groups.iter().any(|g| g.id == group_id),
+        "created group should appear in list"
+    );
+
+    let group = client
+        .api()
+        .core()
+        .standard_group()
+        .get_by_id(&group_id, branch().as_deref())
+        .await
+        .expect("get_by_id")
+        .expect("group should be found");
+    assert_eq!(group.id, group_id);
+    let name_val = group.name.as_ref().and_then(|n| n.value.as_deref());
+    assert_eq!(name_val, Some("smoke-parentless-group"));
+
+    delete_group(&client, &group_id).await;
 }
 
 #[cfg_attr(miri, ignore)]

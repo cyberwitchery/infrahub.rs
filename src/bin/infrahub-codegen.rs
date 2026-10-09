@@ -10,8 +10,8 @@
 pub const CLI_HELP: &str = include_str!("infrahub-codegen-help.txt");
 
 use graphql_parser::schema::{
-    parse_schema, Definition, Document, EnumValue, Field, InputObjectType, InputValue, Type,
-    TypeDefinition, UnionType,
+    parse_schema, Definition, Document, EnumValue, Field, InputObjectType, InputValue, ObjectType,
+    Type, TypeDefinition, UnionType,
 };
 use reqwest::blocking::Client as BlockingClient;
 use reqwest::header::{HeaderMap, HeaderValue};
@@ -365,6 +365,11 @@ fn render_types(ctx: &SchemaContext) -> String {
                     continue;
                 }
                 let ty = rust_type(&field.field_type, ctx, false);
+                let ty = if nulled_on_empty_edge(obj, field) {
+                    format!("Option<{ty}>")
+                } else {
+                    ty
+                };
                 push_struct_field(&mut out, field.name.as_str(), &ty);
             }
             out.push_str("}\n\n");
@@ -975,7 +980,7 @@ fn mutation_fits_slot(field: &Field<String>, slot: &str, ctx: &SchemaContext) ->
     let wanted = if slot == "delete" { "ok" } else { "object" };
     obj.fields.iter().any(|f| {
         f.name == wanted
-            && is_selected(f, ctx)
+            && is_selected(obj, f, ctx)
             && match &f.field_type {
                 Type::NonNullType(_) => false,
                 Type::NamedType(name) => slot != "delete" || name == "Boolean",
@@ -1224,7 +1229,7 @@ fn selection_for_type(
     let mut fields = Vec::new();
     if let Some(TypeDefinition::Object(obj)) = ctx.types.get(type_name) {
         for field in &obj.fields {
-            if !is_selected(field, ctx) {
+            if !is_selected(obj, field, ctx) {
                 continue;
             }
             let field_base = base_type_name(&field.field_type);
@@ -1258,9 +1263,9 @@ fn selection_for_type(
     }
 }
 
-/// whether `selection_for_type` selects this field.
-fn is_selected(field: &Field<String>, ctx: &SchemaContext) -> bool {
-    if has_required_args(field) || should_skip_field(field) {
+/// whether `selection_for_type` selects this field of `obj`.
+fn is_selected(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaContext) -> bool {
+    if has_required_args(field) || should_skip_field(field) || nulled_on_empty_edge(obj, field) {
         return false;
     }
     let base = base_type_name(&field.field_type);
@@ -1269,6 +1274,16 @@ fn is_selected(field: &Field<String>, ctx: &SchemaContext) -> bool {
         || ctx.scalars.contains(&base)
         || ctx.objects.contains(&base)
         || ctx.unions.contains(&base)
+}
+
+/// a non-null `node_metadata` beside a nullable `node`, which infrahub leaves null on an empty edge.
+fn nulled_on_empty_edge(obj: &ObjectType<String>, field: &Field<String>) -> bool {
+    field.name == "node_metadata"
+        && !is_optional(&field.field_type)
+        && obj
+            .fields
+            .iter()
+            .any(|f| f.name == "node" && is_optional(&f.field_type))
 }
 
 fn base_type_name(ty: &Type<String>) -> String {
@@ -1942,5 +1957,79 @@ mod codegen_name_tests {
         ] {
             assert!(client.contains(&format!("pub async fn {raw}(")), "{raw}");
         }
+    }
+
+    #[test]
+    fn test_empty_edge_node_metadata_is_optional_and_unselected() {
+        let schema = r#"
+            type Query { Widget: PaginatedWidget }
+            type Mutation { WidgetCreate(data: String!): WidgetCreate }
+            interface Group { id: String! }
+            type Gadget { id: String! }
+            type Meta { created_at: String }
+            type Props { is_protected: Boolean }
+            type NestedEdgedGroup { cursor: String! node: Group node_metadata: Meta! properties: Props }
+            type NestedEdgedGadget { node: Gadget node_metadata: Meta properties: Props }
+            type BranchEdge { node: Gadget! node_metadata: Meta! }
+            type Widget {
+                id: String!
+                name: String
+                node_metadata: Meta!
+                parent: NestedEdgedGroup!
+                gadget: NestedEdgedGadget!
+                branch: BranchEdge!
+            }
+            type EdgedWidget { node: Widget node_metadata: Meta }
+            type PaginatedWidget { count: Int! edges: [EdgedWidget!]! }
+            type WidgetCreate { ok: Boolean object: Widget }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let select = |name: &str| selection_for_type(name, &ctx, &mut BTreeSet::new(), 0);
+        assert_eq!(
+            select("NestedEdgedGroup"),
+            "{ cursor properties { is_protected } }"
+        );
+        assert_eq!(
+            select("NestedEdgedGadget"),
+            "{ node { id } node_metadata { created_at } properties { is_protected } }"
+        );
+        assert_eq!(
+            select("BranchEdge"),
+            "{ node { id } node_metadata { created_at } }"
+        );
+        assert_eq!(
+            select("WidgetCreate"),
+            "{ ok object { id name node_metadata { created_at } \
+             parent { cursor properties { is_protected } } \
+             gadget { node { id } node_metadata { created_at } properties { is_protected } } \
+             branch { node { id } node_metadata { created_at } } } }"
+        );
+
+        let types = render_types(&ctx);
+        let node_metadata_of = |name: &str| {
+            let start = types.find(&format!("pub struct {name} {{")).unwrap();
+            let body = &types[start..start + types[start..].find('}').unwrap()];
+            let line = body.lines().find(|l| l.contains(" node_metadata:"));
+            line.unwrap().trim().to_string()
+        };
+        assert_eq!(
+            node_metadata_of("NestedEdgedGroup"),
+            "pub node_metadata: Option<Box<Meta>>,"
+        );
+        assert_eq!(
+            node_metadata_of("NestedEdgedGadget"),
+            "pub node_metadata: Option<Box<Meta>>,"
+        );
+        assert_eq!(
+            node_metadata_of("BranchEdge"),
+            "pub node_metadata: Box<Meta>,"
+        );
+        assert_eq!(node_metadata_of("Widget"), "pub node_metadata: Box<Meta>,");
+
+        let widget_rs = &render_api_modules(&ctx)["widget"];
+        assert!(widget_rs.contains("pub async fn create("));
+        assert!(widget_rs.contains("parent { cursor properties { is_protected } }"));
+        assert!(!widget_rs.contains("parent { node_metadata"));
     }
 }

@@ -1,0 +1,71 @@
+type Query {
+  ping(requestBranch: String, vars: String, request_branch: Int, nodeId: String, node_id: String, self: String, Self: String): String
+  pong(vars: String!, requestBranch: String!): String
+  InfraType(ids: [ID], offset: Int, After: String, after: String, nodeId: String, node_id: String, Type: String, type: String): PaginatedInfraType!
+  PolicyMatch(ids: [ID]): PaginatedPolicyMatch!
+  InfraNew(ids: [ID]): PaginatedInfraNew!
+  Infra(ids: [ID]): PaginatedInfra!
+  InfraInfra(ids: [ID]): PaginatedInfraInfra!
+  TypeWidget(ids: [ID]): PaginatedTypeWidget!
+  SelfWidget(ids: [ID]): PaginatedSelfWidget!
+  CrateWidget(ids: [ID]): PaginatedCrateWidget!
+  IPAMPrefix(ids: [ID]): PaginatedIPAMPrefix!
+  IpamPrefix(ids: [ID]): PaginatedIpamPrefix!
+}
+
+type Mutation {
+  InfraTypeCreate(data: WidgetInput!, requestBranch: String, vars: String): InfraTypeCreate
+  InfraTypeDelete(data: WidgetInput!, request_branch: String): InfraTypeDelete
+}
+
+input WidgetInput {
+  nodeId: String
+  node_id: String
+  self: String
+  Self: String
+  Type: String
+  type: String
+}
+
+type InfraTypeCreate { ok: Boolean object: InfraType }
+type InfraTypeDelete { ok: Boolean }
+
+type InfraType { id: ID! }
+type PaginatedInfraType { edges: [EdgedInfraType!]! }
+type EdgedInfraType { node: InfraType cursor: String }
+
+type PolicyMatch { id: ID! }
+type PaginatedPolicyMatch { edges: [EdgedPolicyMatch!]! }
+type EdgedPolicyMatch { node: PolicyMatch }
+
+type InfraNew { id: ID! }
+type PaginatedInfraNew { edges: [EdgedInfraNew!]! }
+type EdgedInfraNew { node: InfraNew }
+
+type Infra { id: ID! }
+type PaginatedInfra { edges: [EdgedInfra!]! }
+type EdgedInfra { node: Infra }
+
+type InfraInfra { id: ID! }
+type PaginatedInfraInfra { edges: [EdgedInfraInfra!]! }
+type EdgedInfraInfra { node: InfraInfra }
+
+type TypeWidget { id: ID! }
+type PaginatedTypeWidget { edges: [EdgedTypeWidget!]! }
+type EdgedTypeWidget { node: TypeWidget }
+
+type SelfWidget { id: ID! }
+type PaginatedSelfWidget { edges: [EdgedSelfWidget!]! }
+type EdgedSelfWidget { node: SelfWidget }
+
+type CrateWidget { id: ID! }
+type PaginatedCrateWidget { edges: [EdgedCrateWidget!]! }
+type EdgedCrateWidget { node: CrateWidget }
+
+type IPAMPrefix { id: ID! }
+type PaginatedIPAMPrefix { edges: [EdgedIPAMPrefix!]! }
+type EdgedIPAMPrefix { node: IPAMPrefix }
+
+type IpamPrefix { id: ID! }
+type PaginatedIpamPrefix { edges: [EdgedIpamPrefix!]! }
+type EdgedIpamPrefix { node: IpamPrefix }

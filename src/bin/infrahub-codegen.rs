@@ -325,7 +325,10 @@ fn render_lib() -> String {
 /// emit a struct field, prefixed with `#[serde(rename = "...")]` when the rust
 /// identifier diverges from the schema field name.
 fn push_struct_field(out: &mut String, schema_name: &str, ty: &str) {
-    let rust_name = to_rust_field(schema_name);
+    push_named_field(out, &to_rust_field(schema_name), schema_name, ty);
+}
+
+fn push_named_field(out: &mut String, rust_name: &str, schema_name: &str, ty: &str) {
     if rust_name != schema_name {
         out.push_str(&format!("    #[serde(rename = \"{}\")]\n", schema_name));
     }
@@ -399,12 +402,13 @@ fn render_inputs(ctx: &SchemaContext) -> String {
         {
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
             out.push_str(&format!("pub struct {} {{\n", name));
-            for field in fields {
+            let names = scope_names(fields.iter().map(|field| field.name.as_str()), &[]);
+            for (field, rust_name) in fields.iter().zip(&names) {
                 let ty = rust_type(&field.value_type, ctx, true);
                 if is_optional(&field.value_type) {
                     out.push_str("    #[serde(skip_serializing_if = \"Option::is_none\")]\n");
                 }
-                push_struct_field(&mut out, field.name.as_str(), &ty);
+                push_named_field(&mut out, rust_name, field.name.as_str(), &ty);
             }
             out.push_str("}\n\n");
         }
@@ -477,21 +481,18 @@ fn render_client(ctx: &SchemaContext) -> String {
 
     out.push_str("impl<'a> GeneratedClientImpl<'a> {\n");
 
-    if let Some(query) = ctx.types.get(&ctx.query_type).and_then(|ty| match ty {
-        TypeDefinition::Object(obj) => Some(obj),
-        _ => None,
-    }) {
-        for field in &query.fields {
-            out.push_str(&render_field_method(field, ctx, false));
-        }
+    let mut fields = Vec::new();
+    if let Some(TypeDefinition::Object(query)) = ctx.types.get(&ctx.query_type) {
+        fields.extend(query.fields.iter().map(|field| (field, false)));
     }
-
     if let Some(mutation_name) = &ctx.mutation_type {
         if let Some(TypeDefinition::Object(mutation)) = ctx.types.get(mutation_name) {
-            for field in &mutation.fields {
-                out.push_str(&render_field_method(field, ctx, true));
-            }
+            fields.extend(mutation.fields.iter().map(|field| (field, true)));
         }
+    }
+    let names = scope_names(fields.iter().map(|(field, _)| field.name.as_str()), &[]);
+    for ((field, is_mutation), name) in fields.into_iter().zip(&names) {
+        out.push_str(&render_field_method(field, name, ctx, is_mutation));
     }
 
     out.push_str("}\n");
@@ -500,16 +501,12 @@ fn render_client(ctx: &SchemaContext) -> String {
 }
 
 fn render_api_mod<'a>(ctx: &SchemaContext<'a>) -> String {
-    let models = collect_models(ctx);
-    let mut namespaces: BTreeSet<String> = BTreeSet::new();
-    for model in models.values() {
-        namespaces.insert(to_snake(&model.namespace));
-    }
+    let namespaces = api_namespaces(ctx);
 
     let mut out = String::new();
     out.push_str("//! generated ergonomic api\n\n");
     out.push_str("use ::infrahub::Client;\n\n");
-    for ns in &namespaces {
+    for (ns, _) in namespaces.values() {
         out.push_str(&format!("pub mod {};\n", ns));
     }
     out.push('\n');
@@ -525,8 +522,8 @@ fn render_api_mod<'a>(ctx: &SchemaContext<'a>) -> String {
     out.push_str("    }\n");
     out.push_str("}\n\n");
     out.push_str("impl<'a> Api<'a> {\n");
-    for ns in &namespaces {
-        let struct_name = format!("{}Api", to_rust_ident(ns));
+    for (snake, (ns, _)) in &namespaces {
+        let struct_name = format!("{}Api", to_rust_ident(snake));
         out.push_str(&format!(
             "    pub fn {}(&self) -> {}::{}<'a> {{\n",
             ns, ns, struct_name
@@ -541,20 +538,30 @@ fn render_api_mod<'a>(ctx: &SchemaContext<'a>) -> String {
     out
 }
 
-fn render_api_modules<'a>(ctx: &SchemaContext<'a>) -> BTreeMap<String, String> {
-    let models = collect_models(ctx);
+/// the api modules' identifiers, and the models in each, keyed by `to_snake` of the namespace.
+fn api_namespaces<'a>(ctx: &SchemaContext<'a>) -> BTreeMap<String, (String, Vec<ModelInfo<'a>>)> {
     let mut by_ns: BTreeMap<String, Vec<ModelInfo<'a>>> = BTreeMap::new();
-    for model in models.values() {
+    for model in collect_models(ctx).into_values() {
         by_ns
             .entry(to_snake(&model.namespace))
             .or_default()
-            .push(model.clone());
+            .push(model);
     }
+    let idents = scope_names(by_ns.keys().map(String::as_str), &[]);
+    by_ns
+        .into_iter()
+        .zip(idents)
+        .map(|((snake, models), ident)| (snake, (ident, models)))
+        .collect()
+}
 
+/// each api module's source, keyed by its file stem.
+fn render_api_modules<'a>(ctx: &SchemaContext<'a>) -> BTreeMap<String, String> {
     let mut out = BTreeMap::new();
-    for (ns, mut models) in by_ns {
+    for (snake, (ns, mut models)) in api_namespaces(ctx) {
         models.sort_by(|a, b| a.name.cmp(&b.name));
-        out.insert(ns.clone(), render_api_module(&ns, &models, ctx));
+        let stem = ns.trim_start_matches("r#").to_string();
+        out.insert(stem, render_api_module(&snake, &models, ctx));
     }
     out
 }
@@ -583,8 +590,12 @@ fn render_api_module<'a>(
     out.push_str("    pub(crate) fn new(client: &'a Client) -> Self {\n");
     out.push_str("        Self { client }\n");
     out.push_str("    }\n\n");
-    for model in models {
-        let accessor = model_accessor_name(&model.name, &model.namespace);
+    let accessors = models
+        .iter()
+        .map(|model| model_accessor_name(&model.name, &model.namespace))
+        .collect::<Vec<_>>();
+    let accessors = scope_names(accessors.iter().map(String::as_str), &["new"]);
+    for (model, accessor) in models.iter().zip(&accessors) {
         let client_struct = format!("{}Client", model.name);
         out.push_str(&format!(
             "    pub fn {}(&self) -> {}<'a> {{\n",
@@ -610,12 +621,12 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
 
     if let Some(query_field) = &model.query_field {
         let args = &query_field.arguments;
+        let names = scope_names(args.iter().map(|arg| arg.name.as_str()), &[]);
         out.push_str(&format!(
             "#[derive(Debug, Clone, Default)]\npub struct {} {{\n",
             filters_struct
         ));
-        for arg in args {
-            let rust_name = to_rust_field(&arg.name);
+        for (arg, rust_name) in args.iter().zip(&names) {
             let inner = rust_type_nonnull(&arg.value_type, ctx, true, false);
             out.push_str(&format!("    pub {}: Option<{}>,\n", rust_name, inner));
         }
@@ -623,8 +634,7 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
         out.push_str(&format!("impl {} {{\n", filters_struct));
         out.push_str("    fn to_vars(&self) -> Result<Value> {\n");
         out.push_str("        let mut vars = serde_json::Map::new();\n");
-        for arg in args {
-            let rust_name = to_rust_field(&arg.name);
+        for (arg, rust_name) in args.iter().zip(&names) {
             out.push_str(&format!(
                 "        if let Some(value) = &self.{rust_name} {{\n"
             ));
@@ -837,8 +847,11 @@ fn render_mutation_helpers<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -
         };
 
         let mut method_args = Vec::new();
-        for arg in &field.arguments {
-            let rust_name = to_rust_field(&arg.name);
+        for (arg, rust_name) in field
+            .arguments
+            .iter()
+            .zip(method_arg_names(&field.arguments))
+        {
             let ty = rust_type(&arg.value_type, ctx, true);
             method_args.push(format!("{rust_name}: {ty}"));
         }
@@ -1093,9 +1106,13 @@ fn strip_wrapped<'a>(value: &'a str, prefix: &str, suffix: &str) -> &'a str {
     }
 }
 
-fn render_field_method(field: &Field<String>, ctx: &SchemaContext, is_mutation: bool) -> String {
+fn render_field_method(
+    field: &Field<String>,
+    method_name: &str,
+    ctx: &SchemaContext,
+    is_mutation: bool,
+) -> String {
     let mut out = String::new();
-    let method_name = to_rust_field(field.name.as_str());
     let op_name = if is_mutation { "mutation" } else { "query" };
     let query_name = to_rust_ident(field.name.as_str());
     let response_name = format!("{}Response", query_name);
@@ -1133,8 +1150,7 @@ fn render_field_method(field: &Field<String>, ctx: &SchemaContext, is_mutation: 
 
 fn render_args(args: &[InputValue<String>], ctx: &SchemaContext) -> MethodArgs {
     let mut signature_parts = Vec::new();
-    for arg in args {
-        let rust_name = to_rust_field(&arg.name);
+    for (arg, rust_name) in args.iter().zip(method_arg_names(args)) {
         let ty = rust_type(&arg.value_type, ctx, true);
         signature_parts.push(format!("{}: {}", rust_name, ty));
     }
@@ -1149,8 +1165,7 @@ fn render_args(args: &[InputValue<String>], ctx: &SchemaContext) -> MethodArgs {
 
 fn render_vars_builder(args: &[InputValue<String>]) -> String {
     let mut out = String::new();
-    for arg in args {
-        let rust_name = to_rust_field(&arg.name);
+    for (arg, rust_name) in args.iter().zip(method_arg_names(args)) {
         let var_name = &arg.name;
         if is_optional(&arg.value_type) {
             out.push_str(&format!("        if let Some(value) = {} {{\n", rust_name));
@@ -1411,13 +1426,44 @@ fn to_rust_ident(name: &str) -> String {
 }
 
 fn to_rust_field(name: &str) -> String {
-    let out = to_snake(name);
+    escape_keyword(&to_snake(name))
+}
 
-    match out.as_str() {
-        "_" | "crate" | "self" | "super" => format!("{}_", out),
-        _ if is_rust_keyword(&out) => format!("r#{}", out),
-        _ => out,
+fn escape_keyword(snake: &str) -> String {
+    match snake {
+        "_" | "crate" | "self" | "super" => format!("{}_", snake),
+        _ if is_rust_keyword(snake) => format!("r#{}", snake),
+        _ => snake.to_string(),
     }
+}
+
+/// `to_rust_field` for every name in one scope, in order, without duplicates or `reserved` names.
+/// a name already in snake case keeps its identifier; the others append `_` until free.
+fn scope_names<'n>(names: impl IntoIterator<Item = &'n str>, reserved: &[&str]) -> Vec<String> {
+    let names: Vec<&str> = names.into_iter().collect();
+    let mut taken: BTreeSet<String> = reserved.iter().map(|name| name.to_string()).collect();
+    let mut out = vec![String::new(); names.len()];
+    let (snake, rest): (Vec<usize>, Vec<usize>) =
+        (0..names.len()).partition(|&i| to_snake(names[i]) == names[i]);
+    for i in snake.into_iter().chain(rest) {
+        let mut base = to_snake(names[i]);
+        out[i] = loop {
+            let ident = escape_keyword(&base);
+            if taken.insert(ident.clone()) {
+                break ident;
+            }
+            base.push('_');
+        };
+    }
+    out
+}
+
+/// `scope_names` for a generated method's arguments, beside its own `request_branch` and `vars`.
+fn method_arg_names(args: &[InputValue<String>]) -> Vec<String> {
+    scope_names(
+        args.iter().map(|arg| arg.name.as_str()),
+        &["request_branch", "vars"],
+    )
 }
 
 struct MethodArgs {
@@ -1479,6 +1525,142 @@ fn is_rust_keyword(name: &str) -> bool {
             | "virtual"
             | "yield"
     )
+}
+
+#[cfg(test)]
+mod scope_name_tests {
+    use super::*;
+    use graphql_parser::schema::parse_schema;
+
+    const COLLIDING: &str = include_str!("../../tests/fixtures/colliding_names.graphql");
+
+    #[test]
+    fn test_scope_names_prefer_names_already_in_snake_case() {
+        assert_eq!(
+            scope_names(["nodeId", "node_id", "Self", "self", "Type", "type"], &[]),
+            ["node_id_", "node_id", "self__", "self_", "type_", "r#type"]
+        );
+        assert_eq!(scope_names(["_", "__"], &[]), ["__", "___"]);
+    }
+
+    #[test]
+    fn test_scope_names_step_around_reserved_names() {
+        assert_eq!(
+            scope_names(
+                ["requestBranch", "request_branch", "vars", "query"],
+                &["request_branch", "vars"]
+            ),
+            ["request_branch__", "request_branch_", "vars_", "query"]
+        );
+    }
+
+    #[test]
+    fn test_namespace_modules_are_keyword_safe() {
+        let doc = parse_schema::<String>(COLLIDING).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let api_mod = render_api_mod(&ctx);
+        for line in [
+            "pub mod crate_;",
+            "pub mod self_;",
+            "pub mod r#type;",
+            "    pub fn self_(&self) -> self_::SelfTypeApi<'a> {",
+            "    pub fn r#type(&self) -> r#type::TypeTypeApi<'a> {",
+            "        r#type::TypeTypeApi::new(self.client)",
+        ] {
+            assert!(api_mod.contains(line), "missing `{line}` in:\n{api_mod}");
+        }
+        let stems: Vec<_> = render_api_modules(&ctx).into_keys().collect();
+        assert_eq!(
+            stems,
+            ["crate_", "infra", "ipam", "policy", "self_", "type"]
+        );
+    }
+
+    #[test]
+    fn test_model_accessors_are_keyword_safe_and_distinct() {
+        let doc = parse_schema::<String>(COLLIDING).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let modules = render_api_modules(&ctx);
+        let accessors = |stem: &str| {
+            modules[stem]
+                .lines()
+                .filter(|line| line.starts_with("    pub fn ") && line.contains("(&self) -> "))
+                .map(str::trim)
+                .collect::<Vec<_>>()
+        };
+        assert_eq!(
+            accessors("infra"),
+            [
+                "pub fn infra(&self) -> InfraClient<'a> {",
+                "pub fn infra_(&self) -> InfraInfraClient<'a> {",
+                "pub fn new_(&self) -> InfraNewClient<'a> {",
+                "pub fn r#type(&self) -> InfraTypeClient<'a> {",
+            ]
+        );
+        assert_eq!(
+            accessors("ipam"),
+            [
+                "pub fn prefix(&self) -> IPAMPrefixClient<'a> {",
+                "pub fn prefix_(&self) -> IpamPrefixClient<'a> {",
+            ]
+        );
+        assert_eq!(
+            accessors("policy"),
+            ["pub fn r#match(&self) -> PolicyMatchClient<'a> {"]
+        );
+    }
+
+    #[test]
+    fn test_method_arguments_step_around_request_branch_and_vars() {
+        let doc = parse_schema::<String>(COLLIDING).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let client = render_client(&ctx);
+        for line in [
+            "    pub async fn pong(&self, vars_: String, request_branch_: String , request_branch: Option<&str>)",
+            "        vars.insert(\"vars\".to_string(), serde_json::to_value(vars_)?);",
+            "        vars.insert(\"requestBranch\".to_string(), serde_json::to_value(request_branch_)?);",
+        ] {
+            assert!(client.contains(line), "missing `{line}` in:\n{client}");
+        }
+        let infra = &render_api_modules(&ctx)["infra"];
+        assert!(infra.contains(
+            "    pub async fn create(&self, data: WidgetInput, request_branch_: Option<String>, vars_: Option<String>, request_branch: Option<&str>)"
+        ));
+        assert!(infra.contains("        if let Some(value) = vars_ {\n"));
+    }
+
+    #[test]
+    fn test_root_methods_are_distinct() {
+        let doc = parse_schema::<String>(COLLIDING).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let client = render_client(&ctx);
+        assert!(client.contains("    pub async fn ipam_prefix(&self, ids: Option<Vec<String>> , request_branch: Option<&str>) -> Result<GraphQlResponse<IPAMPrefixResponse>>"));
+        assert!(client.contains("    pub async fn ipam_prefix_(&self, ids: Option<Vec<String>> , request_branch: Option<&str>) -> Result<GraphQlResponse<IpamPrefixResponse>>"));
+    }
+
+    #[test]
+    fn test_struct_fields_are_distinct_and_keep_their_wire_names() {
+        let doc = parse_schema::<String>(COLLIDING).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let infra = &render_api_modules(&ctx)["infra"];
+        for line in [
+            "        if let Some(value) = &self.after_ {\n            vars.insert(\"After\"",
+            "        if let Some(value) = &self.after {\n            vars.insert(\"after\"",
+            "        if let Some(value) = &self.type_ {\n            vars.insert(\"Type\"",
+            "            page_filters.after = cursor.clone();\n",
+        ] {
+            assert!(infra.contains(line), "missing `{line}` in infra");
+        }
+        let inputs = render_inputs(&ctx);
+        for line in [
+            "    #[serde(rename = \"nodeId\")]\n    pub node_id_: Option<String>,",
+            "    pub node_id: Option<String>,",
+            "    #[serde(rename = \"Self\")]\n    pub self__: Option<String>,",
+            "    #[serde(rename = \"self\")]\n    pub self_: Option<String>,",
+        ] {
+            assert!(inputs.contains(line), "missing `{line}` in:\n{inputs}");
+        }
+    }
 }
 
 #[cfg(test)]

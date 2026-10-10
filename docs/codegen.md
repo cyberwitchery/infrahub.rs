@@ -68,6 +68,17 @@ let _all = paginator.collect_all().await?;
   need to query a deprecated field explicitly.
 - **`Upload` scalar**: mapped to `Vec<u8>` in generated code. mutations that
   accept `Upload` arguments should be called via `Client::execute_multipart`.
+- **interfaces**: each interface (an infrahub generic such as `CoreGroup`) gets a
+  struct named after it that holds its scalar and enum fields plus `typename`
+  (the peer's concrete type, from `__typename`), all optional. an edge whose
+  `node` is an interface selects exactly those fields and returns the peer as
+  that struct; use the concrete model's `get_by_id` for the rest of the peer.
+  other interface-typed fields, such as an attribute's `source` and `owner`, are
+  not selected and stay `serde_json::Value`.
+- **selection depth**: objects more than three levels below the root field are
+  selected as `{ __typename }` only; interface peers are exempt. in `list`,
+  `get_by_id` and `paginate` that leaves a cardinality-many relationship with its
+  `count` and empty `edges`.
 
 for a full generated `api()` walkthrough, see:
 - [`examples/generated_api.md`](../examples/generated_api.md)

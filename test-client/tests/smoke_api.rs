@@ -69,11 +69,24 @@ async fn delete_tag(client: &Client, id: &str) {
     assert!(deleted, "delete should report ok");
 }
 
-/// create a CoreStandardGroup with no parent
+fn related(id: &str) -> RelatedNodeInput {
+    RelatedNodeInput {
+        id: Some(id.to_string()),
+        hfid: None,
+        kind: None,
+        from_pool: None,
+        _relation_is_protected: None,
+        _relation_owner: None,
+        _relation_source: None,
+    }
+}
+
+/// create a CoreStandardGroup
 async fn create_group(
     client: &Client,
     name: &str,
     members: Option<Vec<RelatedNodeInput>>,
+    parent: Option<RelatedNodeInput>,
 ) -> CoreStandardGroup {
     let data = CoreStandardGroupCreateInput {
         id: None,
@@ -88,7 +101,7 @@ async fn create_group(
         group_type: None,
         members,
         subscribers: None,
-        parent: None,
+        parent,
         children: None,
     };
     client
@@ -311,17 +324,21 @@ async fn tag_update_keeps_group_membership() {
     };
     let tag_id = create_tag(&client, "smoke-update-tag").await;
 
-    let member = RelatedNodeInput {
-        id: Some(tag_id.clone()),
-        hfid: None,
-        kind: None,
-        from_pool: None,
-        _relation_is_protected: None,
-        _relation_owner: None,
-        _relation_source: None,
-    };
-    let group = create_group(&client, "smoke-update-group", Some(vec![member])).await;
+    let members = Some(vec![related(&tag_id)]);
+    let group = create_group(&client, "smoke-update-group", members, None).await;
     assert_eq!(group.members.count, 1, "group should hold the tag");
+    let member_ids: Vec<_> = group
+        .members
+        .edges
+        .iter()
+        .flatten()
+        .filter_map(|edge| edge.node.as_ref()?.id.clone())
+        .collect();
+    assert_eq!(
+        member_ids,
+        [tag_id.as_str()],
+        "create should return the member"
+    );
 
     let data = BuiltinTagUpdateInput {
         id: Some(tag_id.clone()),
@@ -338,13 +355,25 @@ async fn tag_update_keeps_group_membership() {
         member_of_groups: None,
         subscriber_of_groups: None,
     };
-    client
+    let renamed = client
         .api()
         .builtin()
         .tag()
         .update(None, data, branch().as_deref())
         .await
         .expect("rename tag");
+    let group_ids: Vec<_> = renamed
+        .member_of_groups
+        .edges
+        .iter()
+        .flatten()
+        .filter_map(|edge| edge.node.as_ref()?.id.clone())
+        .collect();
+    assert_eq!(
+        group_ids,
+        [group.id.as_str()],
+        "update should return the group"
+    );
 
     let tag = client
         .api()
@@ -372,7 +401,7 @@ async fn group_without_parent_list_and_get_by_id() {
     let Some(client) = make_client() else {
         return;
     };
-    let group_id = create_group(&client, "smoke-parentless-group", None)
+    let group_id = create_group(&client, "smoke-parentless-group", None, None)
         .await
         .id;
 
@@ -401,6 +430,76 @@ async fn group_without_parent_list_and_get_by_id() {
     assert_eq!(name_val, Some("smoke-parentless-group"));
 
     delete_group(&client, &group_id).await;
+}
+
+#[cfg_attr(miri, ignore)]
+#[tokio::test]
+async fn group_parent_comes_back_with_its_peer() {
+    let Some(client) = make_client() else {
+        return;
+    };
+    let parent = create_group(&client, "smoke-parent-group", None, None).await;
+    let child = create_group(
+        &client,
+        "smoke-child-group",
+        None,
+        Some(related(&parent.id)),
+    )
+    .await;
+    let created = child
+        .parent
+        .node
+        .as_ref()
+        .expect("create returns the parent");
+    assert_eq!(created.id.as_deref(), Some(parent.id.as_str()));
+
+    let groups = client
+        .api()
+        .core()
+        .standard_group()
+        .list(None, branch().as_deref())
+        .await
+        .expect("list groups");
+    let listed = groups
+        .iter()
+        .find(|g| g.id == child.id)
+        .expect("child should appear in list");
+    let peer = listed
+        .parent
+        .node
+        .as_ref()
+        .expect("list returns the parent");
+    assert_eq!(peer.id.as_deref(), Some(parent.id.as_str()));
+    assert_eq!(peer.typename.as_deref(), Some("CoreStandardGroup"));
+
+    let found = client
+        .api()
+        .core()
+        .standard_group()
+        .get_by_id(&child.id, branch().as_deref())
+        .await
+        .expect("get_by_id")
+        .expect("child should be found");
+    let peer = found
+        .parent
+        .node
+        .as_ref()
+        .expect("get_by_id returns the parent");
+    assert_eq!(peer.id.as_deref(), Some(parent.id.as_str()));
+
+    let generic = client
+        .api()
+        .core()
+        .group()
+        .get_by_id(&parent.id, branch().as_deref())
+        .await
+        .expect("generic get_by_id")
+        .expect("parent should be found as a CoreGroup");
+    assert_eq!(generic.id.as_deref(), Some(parent.id.as_str()));
+    assert_eq!(generic.typename.as_deref(), Some("CoreStandardGroup"));
+
+    delete_group(&client, &child.id).await;
+    delete_group(&client, &parent.id).await;
 }
 
 #[cfg_attr(miri, ignore)]

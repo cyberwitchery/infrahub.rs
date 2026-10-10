@@ -1,0 +1,54 @@
+type Query {
+  InfraApi(ids: [ID]): PaginatedInfraApi!
+  InfraDevice(ids: [ID]): PaginatedInfraDevice!
+  InfraDeviceClient(ids: [ID]): PaginatedInfraDeviceClient!
+  InfraDeviceFilters(ids: [ID]): PaginatedInfraDeviceFilters!
+  Error(ids: [ID]): PaginatedError!
+  ModThing(ids: [ID]): PaginatedModThing!
+  ping(value: Value): PingResponse
+  fooBar: String
+  foo_bar: String
+  infra_device: String
+  InfraDeviceCreate: String
+}
+
+type Mutation {
+  ping: String
+  InfraDeviceCreate(data: Value!): InfraDeviceCreate
+}
+
+input Value { name: String }
+
+type PingResponse { ok: Boolean }
+type InfraDeviceCreate { ok: Boolean object: InfraDevice }
+
+enum Self { IN_PROGRESS InProgress ACTIVE active }
+
+union Box = InfraApi | Error
+
+interface Result { id: ID! typename: String nodeId: String node_id: String }
+type NestedEdgedResult { node: Result node_metadata: String }
+
+type InfraApi { id: ID! }
+type PaginatedInfraApi { edges: [EdgedInfraApi!]! }
+type EdgedInfraApi { node: InfraApi }
+
+type InfraDevice implements Result { id: ID! typename: String nodeId: String node_id: String status: Self peers: [Box] }
+type PaginatedInfraDevice { edges: [EdgedInfraDevice!]! }
+type EdgedInfraDevice { node: InfraDevice }
+
+type InfraDeviceClient { id: ID! }
+type PaginatedInfraDeviceClient { edges: [EdgedInfraDeviceClient!]! }
+type EdgedInfraDeviceClient { node: InfraDeviceClient }
+
+type InfraDeviceFilters { id: ID! }
+type PaginatedInfraDeviceFilters { edges: [EdgedInfraDeviceFilters!]! }
+type EdgedInfraDeviceFilters { node: InfraDeviceFilters }
+
+type Error { id: ID! }
+type PaginatedError { edges: [EdgedError!]! }
+type EdgedError { node: Error }
+
+type ModThing { id: ID! }
+type PaginatedModThing { edges: [EdgedModThing!]! }
+type EdgedModThing { node: ModThing }

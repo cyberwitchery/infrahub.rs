@@ -180,7 +180,36 @@ struct SchemaContext<'a> {
     interfaces: BTreeSet<String>,
     unions: BTreeSet<String>,
     scalars: BTreeSet<String>,
+    type_idents: BTreeMap<String, String>,
+    helper_idents: BTreeMap<String, String>,
+    response_idents: BTreeMap<(bool, String), String>,
 }
+
+/// names the generated code uses unqualified beside the schema's types.
+const RESERVED_TYPE_NAMES: &[&str] = &[
+    "Box",
+    "BoxExtract",
+    "BoxFetch",
+    "BoxFutureResult",
+    "Client",
+    "Deserialize",
+    "DynPaginator",
+    "EdgePage",
+    "Error",
+    "GeneratedClient",
+    "GeneratedClientImpl",
+    "GraphQlResponse",
+    "Into",
+    "None",
+    "Ok",
+    "Option",
+    "Result",
+    "Serialize",
+    "Some",
+    "String",
+    "Value",
+    "Vec",
+];
 
 #[derive(Clone, Debug)]
 struct ModelInfo<'a> {
@@ -251,7 +280,15 @@ impl<'a> SchemaContext<'a> {
             mutation_type = Some("Mutation".to_string());
         }
 
-        Self {
+        let mut taken = RESERVED_TYPE_NAMES
+            .iter()
+            .map(|name| name.to_string())
+            .collect();
+        let type_idents = types
+            .keys()
+            .map(|name| (name.clone(), claim(&mut taken, name)))
+            .collect();
+        let mut ctx = Self {
             types,
             query_type,
             mutation_type,
@@ -261,7 +298,66 @@ impl<'a> SchemaContext<'a> {
             interfaces,
             unions,
             scalars,
+            type_idents,
+            helper_idents: BTreeMap::new(),
+            response_idents: BTreeMap::new(),
+        };
+        ctx.claim_helper_idents(taken);
+        ctx
+    }
+
+    /// names the generated structs from what the schema's types left in `taken`.
+    fn claim_helper_idents(&mut self, mut taken: BTreeSet<String>) {
+        let models = collect_models(self);
+        let namespaces: BTreeSet<String> = models
+            .values()
+            .map(|model| to_snake(&model.namespace))
+            .collect();
+        let mut helpers: Vec<String> = namespaces
+            .iter()
+            .map(|ns| format!("{}Api", to_rust_ident(ns)))
+            .collect();
+        for model in models.keys() {
+            helpers.push(format!("{model}Client"));
+            helpers.push(format!("{model}Filters"));
         }
+        let mut root_fields = Vec::new();
+        for (is_mutation, root) in [
+            (false, Some(&self.query_type)),
+            (true, self.mutation_type.as_ref()),
+        ] {
+            if let Some(TypeDefinition::Object(root)) = root.and_then(|root| self.types.get(root)) {
+                root_fields.extend(
+                    root.fields
+                        .iter()
+                        .map(|field| (is_mutation, field.name.clone())),
+                );
+            }
+        }
+        for name in helpers {
+            let ident = claim(&mut taken, &name);
+            self.helper_idents.insert(name, ident);
+        }
+        root_fields.sort_by_key(|(_, field)| to_snake(field) != *field);
+        for (is_mutation, field) in root_fields {
+            let ident = claim(&mut taken, &format!("{}Response", to_rust_ident(&field)));
+            self.response_idents.insert((is_mutation, field), ident);
+        }
+    }
+
+    /// the rust identifier of a schema type.
+    fn type_ident(&self, name: &str) -> &str {
+        &self.type_idents[name]
+    }
+
+    /// the identifier of a generated struct, by the name it takes when that is free.
+    fn helper_ident(&self, name: &str) -> &str {
+        &self.helper_idents[name]
+    }
+
+    /// the identifier of a root field's response struct.
+    fn response_ident(&self, is_mutation: bool, field: &str) -> &str {
+        &self.response_idents[&(is_mutation, field.to_string())]
     }
 }
 
@@ -349,12 +445,19 @@ fn render_types(ctx: &SchemaContext) -> String {
     for enum_name in &ctx.enums {
         if let Some(TypeDefinition::Enum(enum_ty)) = ctx.types.get(enum_name) {
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]\n");
-            out.push_str(&format!("pub enum {} {{\n", enum_name));
-            for value in &enum_ty.values {
-                if is_enum_value_deprecated(value) {
-                    continue;
-                }
-                let variant = to_rust_ident(&value.name);
+            out.push_str(&format!("pub enum {} {{\n", ctx.type_ident(enum_name)));
+            let values: Vec<_> = enum_ty
+                .values
+                .iter()
+                .filter(|value| !is_enum_value_deprecated(value))
+                .collect();
+            let variants = scope_idents(
+                values.iter().map(|value| value.name.as_str()),
+                &[],
+                to_rust_ident,
+                str::to_string,
+            );
+            for (value, variant) in values.iter().zip(&variants) {
                 out.push_str(&format!("    #[serde(rename = \"{}\")]\n", value.name));
                 out.push_str(&format!("    {},\n", variant));
             }
@@ -368,13 +471,17 @@ fn render_types(ctx: &SchemaContext) -> String {
         }
         if let Some(TypeDefinition::Object(obj)) = ctx.types.get(obj_name) {
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
-            out.push_str(&format!("pub struct {} {{\n", obj_name));
-            for field in &obj.fields {
-                if should_skip_field(field) {
-                    continue;
-                }
-                push_struct_field(
+            out.push_str(&format!("pub struct {} {{\n", ctx.type_ident(obj_name)));
+            let fields: Vec<_> = obj
+                .fields
+                .iter()
+                .filter(|field| !should_skip_field(field))
+                .collect();
+            let names = scope_names(fields.iter().map(|field| field.name.as_str()), &[]);
+            for (field, rust_name) in fields.iter().zip(&names) {
+                push_named_field(
                     &mut out,
+                    rust_name,
                     field.name.as_str(),
                     &field_rust_type(obj, field, ctx),
                 );
@@ -386,15 +493,26 @@ fn render_types(ctx: &SchemaContext) -> String {
     for iface_name in &ctx.interfaces {
         if let Some(TypeDefinition::Interface(iface)) = ctx.types.get(iface_name) {
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
-            out.push_str(&format!("pub struct {} {{\n", iface_name));
+            out.push_str(&format!("pub struct {} {{\n", ctx.type_ident(iface_name)));
             out.push_str("    #[serde(rename = \"__typename\")]\n");
             out.push_str("    pub typename: Option<String>,\n");
-            for field in &iface.fields {
-                if !identifies_peer(field, ctx) {
-                    continue;
-                }
+            let fields: Vec<_> = iface
+                .fields
+                .iter()
+                .filter(|field| identifies_peer(field, ctx))
+                .collect();
+            let names = scope_names(
+                fields.iter().map(|field| field.name.as_str()),
+                &["typename"],
+            );
+            for (field, rust_name) in fields.iter().zip(&names) {
                 let ty = rust_type_nonnull(&field.field_type, ctx, false, false);
-                push_struct_field(&mut out, field.name.as_str(), &format!("Option<{ty}>"));
+                push_named_field(
+                    &mut out,
+                    rust_name,
+                    field.name.as_str(),
+                    &format!("Option<{ty}>"),
+                );
             }
             out.push_str("}\n\n");
         }
@@ -403,7 +521,10 @@ fn render_types(ctx: &SchemaContext) -> String {
     for union_name in &ctx.unions {
         if let Some(TypeDefinition::Union(UnionType { name, .. })) = ctx.types.get(union_name) {
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
-            out.push_str(&format!("pub struct {}(pub serde_json::Value);\n\n", name));
+            out.push_str(&format!(
+                "pub struct {}(pub serde_json::Value);\n\n",
+                ctx.type_ident(name)
+            ));
         }
     }
 
@@ -422,7 +543,7 @@ fn render_inputs(ctx: &SchemaContext) -> String {
             ctx.types.get(input_name)
         {
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
-            out.push_str(&format!("pub struct {} {{\n", name));
+            out.push_str(&format!("pub struct {} {{\n", ctx.type_ident(name)));
             let names = scope_names(fields.iter().map(|field| field.name.as_str()), &[]);
             for (field, rust_name) in fields.iter().zip(&names) {
                 let ty = rust_type(&field.value_type, ctx, true);
@@ -451,7 +572,7 @@ fn render_responses(ctx: &SchemaContext) -> String {
 
     if let Some(query) = query {
         for field in &query.fields {
-            let resp_name = format!("{}Response", to_rust_ident(field.name.as_str()));
+            let resp_name = ctx.response_ident(false, &field.name);
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
             out.push_str(&format!("pub struct {} {{\n", resp_name));
             let ty = rust_type(&field.field_type, ctx, false);
@@ -463,7 +584,7 @@ fn render_responses(ctx: &SchemaContext) -> String {
     if let Some(mutation_name) = &ctx.mutation_type {
         if let Some(TypeDefinition::Object(mutation)) = ctx.types.get(mutation_name) {
             for field in &mutation.fields {
-                let resp_name = format!("{}Response", to_rust_ident(field.name.as_str()));
+                let resp_name = ctx.response_ident(true, &field.name);
                 out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
                 out.push_str(&format!("pub struct {} {{\n", resp_name));
                 let ty = rust_type(&field.field_type, ctx, false);
@@ -544,7 +665,7 @@ fn render_api_mod<'a>(ctx: &SchemaContext<'a>) -> String {
     out.push_str("}\n\n");
     out.push_str("impl<'a> Api<'a> {\n");
     for (snake, (ns, _)) in &namespaces {
-        let struct_name = format!("{}Api", to_rust_ident(snake));
+        let struct_name = ctx.helper_ident(&format!("{}Api", to_rust_ident(snake)));
         out.push_str(&format!(
             "    pub fn {}(&self) -> {}::{}<'a> {{\n",
             ns, ns, struct_name
@@ -568,7 +689,7 @@ fn api_namespaces<'a>(ctx: &SchemaContext<'a>) -> BTreeMap<String, (String, Vec<
             .or_default()
             .push(model);
     }
-    let idents = scope_names(by_ns.keys().map(String::as_str), &[]);
+    let idents = scope_names(by_ns.keys().map(String::as_str), &["r#mod"]);
     by_ns
         .into_iter()
         .zip(idents)
@@ -592,7 +713,7 @@ fn render_api_module<'a>(
     models: &[ModelInfo<'a>],
     ctx: &SchemaContext<'a>,
 ) -> String {
-    let struct_name = format!("{}Api", to_rust_ident(namespace));
+    let struct_name = ctx.helper_ident(&format!("{}Api", to_rust_ident(namespace)));
     let mut out = String::new();
     out.push_str("//! generated api module\n\n");
     out.push_str("#![allow(non_snake_case, unused_imports, unused_assignments, clippy::field_reassign_with_default)]\n\n");
@@ -617,7 +738,7 @@ fn render_api_module<'a>(
         .collect::<Vec<_>>();
     let accessors = scope_names(accessors.iter().map(String::as_str), &["new"]);
     for (model, accessor) in models.iter().zip(&accessors) {
-        let client_struct = format!("{}Client", model.name);
+        let client_struct = ctx.helper_ident(&format!("{}Client", model.name));
         out.push_str(&format!(
             "    pub fn {}(&self) -> {}<'a> {{\n",
             accessor, client_struct
@@ -636,8 +757,8 @@ fn render_api_module<'a>(
 
 fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> String {
     let mut out = String::new();
-    let client_struct = format!("{}Client", model.name);
-    let filters_struct = format!("{}Filters", model.name);
+    let client_struct = ctx.helper_ident(&format!("{}Client", model.name));
+    let filters_struct = ctx.helper_ident(&format!("{}Filters", model.name));
     let model_field = to_rust_field(model.name.as_str());
 
     if let Some(query_field) = &model.query_field {
@@ -680,7 +801,7 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
 
     if let Some(query_field) = &model.query_field {
         let query_name = query_field.name.clone();
-        let response_type = format!("{}Response", to_rust_ident(&query_name));
+        let response_type = ctx.response_ident(false, &query_name);
         let vars_def = render_variable_defs(&query_field.arguments);
         let field_args = render_field_args(&query_field.arguments);
         let has_after = query_field.arguments.iter().any(|arg| arg.name == "after");
@@ -698,7 +819,6 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
 
         out.push_str(&format!(
             "    pub async fn list(&self, filters: Option<{filters_struct}>, request_branch: Option<&str>) -> Result<Vec<{model_type}>> {{\n",
-            filters_struct = format_args!("{}Filters", model.name),
             model_type = model.node_type
         ));
         out.push_str("        let vars = filters.map(|f| f.to_vars()).transpose()?.unwrap_or_else(|| Value::Object(serde_json::Map::new()));\n");
@@ -732,7 +852,6 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
 
         out.push_str(&format!(
             "    pub fn paginate(&self, filters: Option<{filters_struct}>, request_branch: Option<&str>) -> DynPaginator<'a, {model_type}, String, ({response_type}, i64)> {{\n",
-            filters_struct = format_args!("{}Filters", model.name),
             model_type = model.node_type,
             response_type = response_type,
         ));
@@ -747,9 +866,9 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
             sel = selection
         ));
         out.push_str("        let fetch: BoxFetch<'a, String, (");
-        out.push_str(&response_type);
+        out.push_str(response_type);
         out.push_str(", i64)> = Box::new(move |cursor: Option<String>| -> BoxFutureResult<'a, (");
-        out.push_str(&response_type);
+        out.push_str(response_type);
         out.push_str(", i64)> {\n");
         out.push_str("            let mut page_filters = base_filters.clone();\n");
         out.push_str("            let branch = request_branch.clone();\n");
@@ -778,9 +897,9 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
         out.push_str("        let extract: BoxExtract<'a, ");
         out.push_str(&model.node_type);
         out.push_str(", String, (");
-        out.push_str(&response_type);
+        out.push_str(response_type);
         out.push_str(", i64)> = Box::new(move |(data, current_offset): (");
-        out.push_str(&response_type);
+        out.push_str(response_type);
         out.push_str(", i64)| -> Result<EdgePage<");
         out.push_str(&model.node_type);
         out.push_str(", String>> {\n");
@@ -825,8 +944,8 @@ fn render_model_client<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -> St
                 model.node_type
             ));
             out.push_str(&format!(
-                "        let mut filters = {}Filters::default();\n",
-                model.name
+                "        let mut filters = {}::default();\n",
+                filters_struct
             ));
             out.push_str("        filters.ids = Some(vec![id.into()]);\n");
             out.push_str(
@@ -859,7 +978,7 @@ fn render_mutation_helpers<'a>(model: &ModelInfo<'a>, ctx: &SchemaContext<'a>) -
         let return_type = base_type_name(&field.field_type);
         let selection = selection_for_type(&return_type, ctx, &mut BTreeSet::new(), 0);
         let (object_type, object_boxed) = object_type_for_return(&return_type, ctx);
-        let response_type = format!("{}Response", to_rust_ident(&field_name));
+        let response_type = ctx.response_ident(true, &field_name);
         let response_field = to_rust_field(&field_name);
         let op_header = if vars_def.is_empty() {
             format!("mutation {}", field_name)
@@ -1135,7 +1254,7 @@ fn render_field_method(
     let mut out = String::new();
     let op_name = if is_mutation { "mutation" } else { "query" };
     let query_name = to_rust_ident(field.name.as_str());
-    let response_name = format!("{}Response", query_name);
+    let response_name = ctx.response_ident(is_mutation, &field.name);
 
     let args = render_args(&field.arguments, ctx);
     let vars_builder = render_vars_builder(&field.arguments);
@@ -1405,7 +1524,7 @@ fn is_scalar_type(name: &str) -> bool {
 /// the type `render_types` declares for `field` of `obj`.
 fn field_rust_type(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaContext) -> String {
     let ty = if is_interface_peer(obj, field, ctx) {
-        let peer = peer_rust_type_nonnull(&field.field_type, false);
+        let peer = peer_rust_type_nonnull(&field.field_type, ctx, false);
         if is_optional(&field.field_type) {
             format!("Option<{peer}>")
         } else {
@@ -1422,12 +1541,12 @@ fn field_rust_type(obj: &ObjectType<String>, field: &Field<String>, ctx: &Schema
 }
 
 /// `rust_type_nonnull` for an interface peer, which is boxed like an object.
-fn peer_rust_type_nonnull(ty: &Type<String>, in_list: bool) -> String {
+fn peer_rust_type_nonnull(ty: &Type<String>, ctx: &SchemaContext, in_list: bool) -> String {
     match ty {
-        Type::ListType(inner) => format!("Vec<{}>", peer_rust_type_nonnull(inner, true)),
-        Type::NonNullType(inner) => peer_rust_type_nonnull(inner, in_list),
-        Type::NamedType(name) if in_list => name.clone(),
-        Type::NamedType(name) => format!("Box<{name}>"),
+        Type::ListType(inner) => format!("Vec<{}>", peer_rust_type_nonnull(inner, ctx, true)),
+        Type::NonNullType(inner) => peer_rust_type_nonnull(inner, ctx, in_list),
+        Type::NamedType(name) if in_list => ctx.type_ident(name).to_string(),
+        Type::NamedType(name) => format!("Box<{}>", ctx.type_ident(name)),
     }
 }
 
@@ -1454,16 +1573,16 @@ fn rust_type_nonnull(ty: &Type<String>, ctx: &SchemaContext, input: bool, in_lis
                 if ctx.enums.contains(name)
                     || ctx.inputs.contains(name)
                     || ctx.scalars.contains(name)
+                    || ctx.unions.contains(name)
                 {
-                    name.clone()
+                    ctx.type_ident(name).to_string()
                 } else if ctx.objects.contains(name) {
+                    let ident = ctx.type_ident(name);
                     if input || in_list {
-                        name.clone()
+                        ident.to_string()
                     } else {
-                        format!("Box<{}>", name)
+                        format!("Box<{ident}>")
                     }
-                } else if ctx.unions.contains(name) {
-                    name.to_string()
                 } else {
                     "serde_json::Value".to_string()
                 }
@@ -1523,15 +1642,25 @@ fn escape_keyword(snake: &str) -> String {
 /// `to_rust_field` for every name in one scope, in order, without duplicates or `reserved` names.
 /// a name already in snake case keeps its identifier; the others append `_` until free.
 fn scope_names<'n>(names: impl IntoIterator<Item = &'n str>, reserved: &[&str]) -> Vec<String> {
+    scope_idents(names, reserved, to_snake, escape_keyword)
+}
+
+/// `scope_names` with another case conversion and keyword escape.
+fn scope_idents<'n>(
+    names: impl IntoIterator<Item = &'n str>,
+    reserved: &[&str],
+    convert: fn(&str) -> String,
+    escape: fn(&str) -> String,
+) -> Vec<String> {
     let names: Vec<&str> = names.into_iter().collect();
     let mut taken: BTreeSet<String> = reserved.iter().map(|name| name.to_string()).collect();
     let mut out = vec![String::new(); names.len()];
-    let (snake, rest): (Vec<usize>, Vec<usize>) =
-        (0..names.len()).partition(|&i| to_snake(names[i]) == names[i]);
-    for i in snake.into_iter().chain(rest) {
-        let mut base = to_snake(names[i]);
+    let (converted, rest): (Vec<usize>, Vec<usize>) =
+        (0..names.len()).partition(|&i| convert(names[i]) == names[i]);
+    for i in converted.into_iter().chain(rest) {
+        let mut base = convert(names[i]);
         out[i] = loop {
-            let ident = escape_keyword(&base);
+            let ident = escape(&base);
             if taken.insert(ident.clone()) {
                 break ident;
             }
@@ -1539,6 +1668,15 @@ fn scope_names<'n>(names: impl IntoIterator<Item = &'n str>, reserved: &[&str]) 
         };
     }
     out
+}
+
+/// the first of `name`, `name_`, `name__`, … that is neither a keyword nor in `taken`, added to `taken`.
+fn claim(taken: &mut BTreeSet<String>, name: &str) -> String {
+    let mut ident = name.to_string();
+    while is_rust_keyword(&ident) || !taken.insert(ident.clone()) {
+        ident.push('_');
+    }
+    ident
 }
 
 /// `scope_names` for a generated method's arguments, beside its own `request_branch` and `vars`.
@@ -1743,6 +1881,212 @@ mod scope_name_tests {
         ] {
             assert!(inputs.contains(line), "missing `{line}` in:\n{inputs}");
         }
+    }
+}
+
+#[cfg(test)]
+mod type_name_tests {
+    use super::*;
+    use graphql_parser::schema::parse_schema;
+
+    const COLLIDING_TYPES: &str = include_str!("../../tests/fixtures/colliding_type_names.graphql");
+
+    fn assert_contains(source: &str, lines: &[&str]) {
+        for line in lines {
+            assert!(source.contains(line), "missing `{line}` in:\n{source}");
+        }
+    }
+
+    #[test]
+    fn test_claim_skips_keywords_and_taken_names() {
+        let mut taken = BTreeSet::from(["Error".to_string()]);
+        assert_eq!(claim(&mut taken, "Error"), "Error_");
+        assert_eq!(claim(&mut taken, "Error"), "Error__");
+        assert_eq!(claim(&mut taken, "Self"), "Self_");
+        assert_eq!(claim(&mut taken, "type"), "type_");
+        assert_eq!(claim(&mut taken, "Device"), "Device");
+    }
+
+    #[test]
+    fn test_unqualified_names_beside_schema_types_are_reserved() {
+        let doc = parse_schema::<String>(COLLIDING_TYPES).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let declared: BTreeSet<&str> = ctx
+            .type_idents
+            .values()
+            .chain(ctx.helper_idents.values())
+            .chain(ctx.response_idents.values())
+            .map(String::as_str)
+            .collect();
+        let mut sources = vec![
+            render_inputs(&ctx),
+            render_responses(&ctx),
+            render_client(&ctx),
+        ];
+        sources.extend(render_api_modules(&ctx).into_values());
+        for source in sources {
+            let mut code = String::new();
+            let mut rest = source.as_str();
+            while let Some(quote) = rest.find('"') {
+                code.push_str(&rest[..quote]);
+                let close = if code.ends_with("r#") { "\"#" } else { "\"" };
+                rest = &rest[quote + 1..];
+                rest = &rest[rest.find(close).unwrap() + close.len()..];
+            }
+            code.push_str(rest);
+            for (i, part) in code.split("::").enumerate() {
+                let part = if i == 0 {
+                    part
+                } else {
+                    part.trim_start_matches(|c: char| c.is_ascii_alphanumeric() || c == '_')
+                };
+                for name in part
+                    .split(|c: char| !(c.is_ascii_alphanumeric() || c == '_'))
+                    .filter(|name| name.starts_with(|c: char| c.is_ascii_uppercase()))
+                {
+                    assert!(
+                        declared.contains(name)
+                            || RESERVED_TYPE_NAMES.contains(&name)
+                            || ["Clone", "Debug", "Default", "Self"].contains(&name),
+                        "`{name}` is neither declared nor reserved"
+                    );
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn test_helper_structs_yield_to_schema_types() {
+        let doc = parse_schema::<String>(COLLIDING_TYPES).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        assert_contains(
+            &render_api_mod(&ctx),
+            &[
+                "    pub fn infra(&self) -> infra::InfraApi_<'a> {",
+                "        infra::InfraApi_::new(self.client)",
+            ],
+        );
+        assert_contains(
+            &render_api_modules(&ctx)["infra"],
+            &[
+                "pub struct InfraApi_<'a> {",
+                "impl<'a> InfraApi_<'a> {",
+                "    pub fn device(&self) -> InfraDeviceClient_<'a> {\n        InfraDeviceClient_::new(self.client)",
+                "pub struct InfraDeviceFilters_ {",
+                "impl InfraDeviceFilters_ {",
+                "pub struct InfraDeviceClient_<'a> {",
+                "impl<'a> InfraDeviceClient_<'a> {",
+                "    pub async fn list(&self, filters: Option<InfraDeviceFilters_>, request_branch: Option<&str>) -> Result<Vec<InfraDevice>> {",
+                "    pub fn paginate(&self, filters: Option<InfraDeviceFilters_>, ",
+                "        let mut filters = InfraDeviceFilters_::default();",
+                "request_branch: Option<&str>) -> Result<Vec<InfraApi>> {",
+                "request_branch: Option<&str>) -> Result<Vec<InfraDeviceClient>> {",
+                "request_branch: Option<&str>) -> Result<Vec<InfraDeviceFilters>> {",
+            ],
+        );
+    }
+
+    #[test]
+    fn test_schema_types_step_around_reserved_names_and_keywords() {
+        let doc = parse_schema::<String>(COLLIDING_TYPES).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        assert_contains(
+            &render_types(&ctx),
+            &[
+                "pub struct Error_ {",
+                "pub struct EdgedError {\n    pub node: Option<Box<Error_>>,",
+                "pub enum Self_ {",
+                "    pub status: Option<Self_>,",
+                "pub struct Box_(pub serde_json::Value);",
+                "    pub peers: Option<Vec<Box_>>,",
+                "pub struct NestedEdgedResult {\n    pub node: Option<Box<Result_>>,",
+            ],
+        );
+        assert_contains(&render_inputs(&ctx), &["pub struct Value_ {"]);
+        let modules = render_api_modules(&ctx);
+        assert_contains(
+            &modules["error"],
+            &["request_branch: Option<&str>) -> Result<Vec<Error_>> {"],
+        );
+        assert_contains(
+            &modules["infra"],
+            &["    pub async fn create(&self, data: Value_, request_branch: Option<&str>)"],
+        );
+    }
+
+    #[test]
+    fn test_root_fields_get_distinct_response_structs() {
+        let doc = parse_schema::<String>(COLLIDING_TYPES).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        assert_contains(
+            &render_responses(&ctx),
+            &[
+                "pub struct PingResponse_ {\n    pub ping: Option<Box<PingResponse>>,\n}",
+                "pub struct PingResponse__ {\n    pub ping: Option<String>,\n}",
+                "pub struct FooBarResponse {\n    pub foo_bar: Option<String>,\n}",
+                "pub struct FooBarResponse_ {\n    #[serde(rename = \"fooBar\")]\n    pub foo_bar: Option<String>,\n}",
+                "pub struct InfraDeviceResponse {\n    pub infra_device: Option<String>,\n}",
+                "pub struct InfraDeviceResponse_ {\n    #[serde(rename = \"InfraDevice\")]\n",
+                "pub struct InfraDeviceCreateResponse {\n    #[serde(rename = \"InfraDeviceCreate\")]\n    pub infra_device_create: Option<String>,\n}",
+                "pub struct InfraDeviceCreateResponse_ {\n    #[serde(rename = \"InfraDeviceCreate\")]\n    pub infra_device_create: Option<Box<InfraDeviceCreate>>,\n}",
+            ],
+        );
+        let infra = &render_api_modules(&ctx)["infra"];
+        assert_contains(
+            infra,
+            &[
+                "        let response = self.client.execute::<InfraDeviceResponse_>(query, Some(vars), request_branch).await?;",
+                "DynPaginator<'a, InfraDevice, String, (InfraDeviceResponse_, i64)>",
+                "        let response = self.client.execute::<InfraDeviceCreateResponse_>(query, Some(vars), request_branch).await?;",
+            ],
+        );
+        assert_contains(
+            &render_client(&ctx),
+            &[
+                "    pub async fn ping(&self, value: Option<Value_> , request_branch: Option<&str>) -> Result<GraphQlResponse<PingResponse_>> {",
+                "    pub async fn ping_(&self , request_branch: Option<&str>) -> Result<GraphQlResponse<PingResponse__>> {",
+                "    pub async fn foo_bar(&self , request_branch: Option<&str>) -> Result<GraphQlResponse<FooBarResponse>> {",
+                "    pub async fn foo_bar_(&self , request_branch: Option<&str>) -> Result<GraphQlResponse<FooBarResponse_>> {",
+            ],
+        );
+    }
+
+    #[test]
+    fn test_object_and_interface_fields_are_distinct() {
+        let doc = parse_schema::<String>(COLLIDING_TYPES).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        assert_contains(
+            &render_types(&ctx),
+            &[
+                "pub struct InfraDevice {\n    pub id: String,\n    pub typename: Option<String>,\n    #[serde(rename = \"nodeId\")]\n    pub node_id_: Option<String>,\n    pub node_id: Option<String>,\n",
+                "pub struct Result_ {\n    #[serde(rename = \"__typename\")]\n    pub typename: Option<String>,\n    pub id: Option<String>,\n    #[serde(rename = \"typename\")]\n    pub typename_: Option<String>,\n    #[serde(rename = \"nodeId\")]\n    pub node_id_: Option<String>,\n    pub node_id: Option<String>,\n}",
+            ],
+        );
+    }
+
+    #[test]
+    fn test_enum_variants_are_distinct() {
+        let doc = parse_schema::<String>(COLLIDING_TYPES).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        assert_contains(
+            &render_types(&ctx),
+            &["pub enum Self_ {\n    #[serde(rename = \"IN_PROGRESS\")]\n    InProgress_,\n    #[serde(rename = \"InProgress\")]\n    InProgress,\n    #[serde(rename = \"ACTIVE\")]\n    Active,\n    #[serde(rename = \"active\")]\n    Active_,\n}"],
+        );
+    }
+
+    #[test]
+    fn test_namespace_mod_keeps_the_api_root_file() {
+        let doc = parse_schema::<String>(COLLIDING_TYPES).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        assert_contains(
+            &render_api_mod(&ctx),
+            &[
+                "pub mod mod_;",
+                "    pub fn mod_(&self) -> mod_::ModApi<'a> {",
+            ],
+        );
+        let stems: Vec<_> = render_api_modules(&ctx).into_keys().collect();
+        assert_eq!(stems, ["error", "infra", "mod_"]);
     }
 }
 

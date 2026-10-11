@@ -1259,4 +1259,68 @@ mod tests {
             "with max_retries=0 should only try once"
         );
     }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_retry_loop_does_not_retry_invalid_content_type() {
+        let config = ClientConfig::new("http://localhost:1234", "test-token").with_max_retries(3);
+        let client = test_client(config);
+        let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
+        let count = call_count.clone();
+        let result = client
+            .retry_loop(|| {
+                let count = count.clone();
+                async move {
+                    count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                    let file = FileUpload::new("test.txt", "text", b"hello".to_vec());
+                    build_multipart_form("mutation", None, vec![("file", file)])
+                        .map_err(RetryError::from)
+                }
+            })
+            .await;
+        assert!(matches!(result, Err(Error::Http(ref err)) if err.is_builder()));
+        assert_eq!(
+            call_count.load(std::sync::atomic::Ordering::SeqCst),
+            1,
+            "builder errors should not be retried"
+        );
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_redirect_loop_not_retried() {
+        use std::io::{BufRead, Write};
+
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let addr = listener.local_addr().unwrap();
+        let requests = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
+        let seen = requests.clone();
+        std::thread::spawn(move || {
+            for stream in listener.incoming().flatten() {
+                seen.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                let mut reader = std::io::BufReader::new(&stream);
+                let mut line = String::new();
+                while reader.read_line(&mut line).is_ok_and(|n| n > 2) {
+                    line.clear();
+                }
+                let _ = write!(
+                    &stream,
+                    "HTTP/1.1 302 Found\r\nLocation: http://{addr}/\r\nContent-Length: 0\r\nConnection: close\r\n\r\n"
+                );
+            }
+        });
+
+        let config = ClientConfig::new(format!("http://{addr}"), "test-token").with_max_retries(3);
+        let client = test_client(config);
+        let err = client.fetch_schema(None).await.unwrap_err();
+        assert!(
+            matches!(err, Error::Http(ref e) if e.is_redirect()),
+            "{err}"
+        );
+        assert_eq!(
+            requests.load(std::sync::atomic::Ordering::SeqCst),
+            11,
+            "one attempt of 1 request + 10 redirects"
+        );
+    }
 }

@@ -60,14 +60,14 @@ impl Error {
                 status: Some(401 | 403),
                 ..
             }
-        ) || matches!(self, Error::Http(err) if err.status() == Some(reqwest::StatusCode::UNAUTHORIZED))
+        )
     }
 
     /// true if the error is transient and the request may succeed on retry
     ///
-    /// config, url, and parse errors are permanent. http errors retry on
-    /// any 5xx, 429, and network-level failures; graphql errors retry only
-    /// on 429, 500, 502, 503, and 504.
+    /// config, url, and parse errors are permanent. http errors retry unless
+    /// the request could not be built or the redirect policy rejected it;
+    /// graphql errors retry only on 429, 500, 502, 503, and 504.
     pub fn is_retryable(&self) -> bool {
         match self {
             Error::Config(_)
@@ -75,18 +75,7 @@ impl Error {
             | Error::Json(_)
             | Error::PaginationStalled { .. }
             | Error::PaginationLimit { .. } => false,
-            Error::Http(err) => {
-                if err.is_timeout() || err.is_connect() {
-                    return true;
-                }
-                match err.status() {
-                    Some(status) => {
-                        status.is_server_error() || status == reqwest::StatusCode::TOO_MANY_REQUESTS
-                    }
-                    // no status usually means a network-level failure
-                    None => true,
-                }
-            }
+            Error::Http(err) => !(err.is_builder() || err.is_redirect()),
             Error::GraphQl { status, .. } => {
                 status.is_some_and(|s| RETRYABLE_STATUSES.contains(&s))
             }
@@ -206,5 +195,34 @@ mod tests {
             .unwrap_err()
             .into();
         assert!(!json_err.is_retryable());
+    }
+
+    #[test]
+    fn test_builder_error_not_retryable() {
+        let err: Error = reqwest::multipart::Part::bytes(vec![])
+            .mime_str("text")
+            .unwrap_err()
+            .into();
+        assert!(!err.is_retryable());
+        assert!(!err.is_auth_error());
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_connect_error_is_retryable() {
+        let addr = std::net::TcpListener::bind("127.0.0.1:0")
+            .unwrap()
+            .local_addr()
+            .unwrap();
+        let err: Error = reqwest::Client::builder()
+            .no_proxy()
+            .build()
+            .unwrap()
+            .get(format!("http://{addr}"))
+            .send()
+            .await
+            .unwrap_err()
+            .into();
+        assert!(err.is_retryable());
     }
 }

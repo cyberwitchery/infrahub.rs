@@ -3,7 +3,7 @@ members = ["test-client"]
 
 [package]
 name = "infrahub"
-version = "0.4.5"
+version = "0.5.0"
 edition = "2021"
 license = "MIT"
 description = "small graphql client for infrahub"

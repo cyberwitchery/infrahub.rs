@@ -50,7 +50,7 @@ println!("{:?}", response.data);
 
 ```toml
 [dependencies]
-infrahub = "0.4"
+infrahub = "0.5"
 tokio = { version = "1", features = ["full"] }
 ```
 
@@ -287,7 +287,7 @@ then add it as a path dependency:
 
 ```toml
 [dependencies]
-infrahub = "0.4"
+infrahub = "0.5"
 infrahub-generated = { path = "/tmp/infrahub-generated" }
 ```
 

@@ -24,7 +24,7 @@ add to `Cargo.toml`:
 
 ```toml
 [dependencies]
-infrahub = "0.4"
+infrahub = "0.5"
 tokio = { version = "1", features = ["full"] }
 ```
 

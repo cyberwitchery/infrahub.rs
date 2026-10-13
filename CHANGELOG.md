@@ -1,5 +1,9 @@
 # changelog
 
+## Unreleased
+
+- codegen: `generated()`'s `account_profile`, `infrahub_task`, `infrahub_task_branch_status` and `infrahub_event` now send queries Infrahub accepts, instead of failing every call with "must have a selection of subfields". a root field whose type is an interface, and an interface-typed `node` with no `node_metadata` beside it, are now selected and typed like relationship peers since 0.5.0: `AccountProfileResponse.account_profile` is `Option<Box<CoreGenericAccount>>`, `TaskNodes.node` is `Option<Box<TaskNodeInterface>>` and `EventNodes.node` is `Option<Box<EventNodeInterface>>`, instead of `Option<serde_json::Value>`. for other schemas, an object with nothing to select is selected as `{ __typename }` instead of with an empty selection, and a non-null field the generated query leaves out is an `Option`
+
 ## 0.5.0 - 2026-10-12
 
 - codegen: a relationship whose peer is an interface (an Infrahub generic) now comes back with that peer instead of `node: None`. each interface gets a struct named after it, with the peer's `typename` (its concrete type), `id`, `hfid` and `display_label`, all optional, and the edge's `node` is typed with it, e.g. `NestedEdgedCoreGroup.node: Option<Box<CoreGroup>>`. that fills a group's `parent` in `list`, `get_by_id`, `paginate`, `create`, `update` and `upsert`; a group's `members`, `subscribers` and `children` and a node's `member_of_groups` and `subscriber_of_groups` in `create`, `update` and `upsert` (in `list` these still return only their `count`); and the rows of the generic models' own `list`, `get_by_id` and `paginate`, which now return `CoreGroup`, `CoreNode` and so on instead of an always-empty list of `serde_json::Value`. an attribute's `source` and `owner` stay unselected, and an update whose `object` is an interface still gets no helper

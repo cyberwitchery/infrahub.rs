@@ -3625,7 +3625,7 @@ pub struct EffectiveTimezone {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EventNodes {
-    pub node: Option<serde_json::Value>,
+    pub node: Option<Box<EventNodeInterface>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7479,7 +7479,7 @@ pub struct TaskNode {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TaskNodes {
-    pub node: Option<serde_json::Value>,
+    pub node: Option<Box<TaskNodeInterface>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

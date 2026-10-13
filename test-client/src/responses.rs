@@ -499,7 +499,7 @@ pub struct CoreGenericAccountResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AccountProfileResponse {
     #[serde(rename = "AccountProfile")]
-    pub account_profile: Option<serde_json::Value>,
+    pub account_profile: Option<Box<CoreGenericAccount>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

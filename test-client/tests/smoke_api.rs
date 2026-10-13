@@ -11,6 +11,7 @@ use infrahub_test_client::inputs::{
     RelatedNodeInput, TextAttributeCreate, TextAttributeUpdate,
 };
 use infrahub_test_client::types::CoreStandardGroup;
+use infrahub_test_client::GeneratedClient;
 
 // ---------------------------------------------------------------------------
 // helpers
@@ -218,6 +219,37 @@ async fn account_paginate() {
         .expect("should return at least one page");
 
     assert!(!page.is_empty(), "first page should have items");
+}
+
+#[cfg_attr(miri, ignore)]
+#[tokio::test]
+async fn account_profile_returns_the_token_account() {
+    let Some(client) = make_client() else {
+        return;
+    };
+    let profile = client
+        .generated()
+        .account_profile(branch().as_deref())
+        .await
+        .expect("account profile")
+        .data
+        .and_then(|data| data.account_profile)
+        .expect("the token should belong to an account");
+
+    let accounts = client
+        .api()
+        .core()
+        .account()
+        .list(None, branch().as_deref())
+        .await
+        .expect("list accounts");
+    let admin = accounts
+        .iter()
+        .find(|a| a.name.as_ref().and_then(|n| n.value.as_deref()) == Some("admin"))
+        .expect("admin account should exist");
+
+    assert_eq!(profile.id.as_deref(), Some(admin.id.as_str()));
+    assert_eq!(profile.typename.as_deref(), Some("CoreAccount"));
 }
 
 // ---------------------------------------------------------------------------
@@ -517,4 +549,98 @@ async fn tag_get_by_id_missing() {
         .expect("get_by_id non-existent");
 
     assert!(result.is_none(), "non-existent id should return None");
+}
+
+// ---------------------------------------------------------------------------
+// InfrahubTask / InfrahubEvent — connections whose nodes are interfaces
+// ---------------------------------------------------------------------------
+
+#[cfg_attr(miri, ignore)]
+#[tokio::test]
+async fn infrahub_task_lists_task_nodes() {
+    let Some(client) = make_client() else {
+        return;
+    };
+    let tasks = client
+        .generated()
+        .infrahub_task(
+            Some(5),
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            branch().as_deref(),
+        )
+        .await
+        .expect("InfrahubTask")
+        .data
+        .expect("InfrahubTask data")
+        .infrahub_task;
+
+    assert!(tasks.edges.len() as i64 <= tasks.count);
+    for node in tasks.edges.iter().filter_map(|edge| edge.node.as_ref()) {
+        assert!(node.id.is_some() && node.typename.is_some(), "{node:?}");
+    }
+}
+
+#[cfg_attr(miri, ignore)]
+#[tokio::test]
+async fn infrahub_task_branch_status_lists_task_nodes() {
+    let Some(client) = make_client() else {
+        return;
+    };
+    let name = branch().unwrap_or_else(|| "main".to_string());
+    let tasks = client
+        .generated()
+        .infrahub_task_branch_status(Some(name), branch().as_deref())
+        .await
+        .expect("InfrahubTaskBranchStatus")
+        .data
+        .expect("InfrahubTaskBranchStatus data")
+        .infrahub_task_branch_status;
+
+    assert!(tasks.edges.len() as i64 <= tasks.count);
+}
+
+#[cfg_attr(miri, ignore)]
+#[tokio::test]
+async fn infrahub_event_lists_event_nodes() {
+    let Some(client) = make_client() else {
+        return;
+    };
+    let events = client
+        .generated()
+        .infrahub_event(
+            Some(5),
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            branch().as_deref(),
+        )
+        .await
+        .expect("InfrahubEvent")
+        .data
+        .expect("InfrahubEvent data")
+        .infrahub_event;
+
+    assert!(events.edges.len() as i64 <= events.count);
+    for node in events.edges.iter().filter_map(|edge| edge.node.as_ref()) {
+        assert!(node.id.is_some() && node.typename.is_some(), "{node:?}");
+    }
 }

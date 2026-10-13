@@ -575,7 +575,7 @@ fn render_responses(ctx: &SchemaContext) -> String {
             let resp_name = ctx.response_ident(false, &field.name);
             out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
             out.push_str(&format!("pub struct {} {{\n", resp_name));
-            let ty = rust_type(&field.field_type, ctx, false);
+            let ty = root_rust_type(field, ctx);
             push_struct_field(&mut out, field.name.as_str(), &ty);
             out.push_str("}\n\n");
         }
@@ -587,7 +587,7 @@ fn render_responses(ctx: &SchemaContext) -> String {
                 let resp_name = ctx.response_ident(true, &field.name);
                 out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
                 out.push_str(&format!("pub struct {} {{\n", resp_name));
-                let ty = rust_type(&field.field_type, ctx, false);
+                let ty = root_rust_type(field, ctx);
                 push_struct_field(&mut out, field.name.as_str(), &ty);
                 out.push_str("}\n\n");
             }
@@ -1349,14 +1349,12 @@ fn selection_for_field(field: &Field<String>, ctx: &SchemaContext) -> String {
     if is_scalar_type(&base) || ctx.enums.contains(&base) || ctx.scalars.contains(&base) {
         return String::new();
     }
+    if ctx.interfaces.contains(&base) {
+        return format!(" {}", peer_selection(&base, ctx));
+    }
 
     let mut stack = BTreeSet::new();
-    let selection = selection_for_type(&base, ctx, &mut stack, 0);
-    if selection.is_empty() {
-        String::new()
-    } else {
-        format!(" {}", selection)
-    }
+    format!(" {}", selection_for_type(&base, ctx, &mut stack, 0))
 }
 
 fn selection_for_type(
@@ -1417,7 +1415,7 @@ fn selection_for_type(
     stack.remove(type_name);
 
     if fields.is_empty() {
-        String::new()
+        "{ __typename }".to_string()
     } else {
         format!("{{ {} }}", fields.join(" "))
     }
@@ -1434,14 +1432,12 @@ fn is_selected(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaCont
         || ctx.scalars.contains(&base)
         || ctx.objects.contains(&base)
         || ctx.unions.contains(&base)
-        || is_interface_peer(obj, field, ctx)
+        || is_interface_peer(field, ctx)
 }
 
 /// an edge's `node` whose peer is an interface, which is selected and typed by its identity fields.
-fn is_interface_peer(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaContext) -> bool {
-    field.name == "node"
-        && ctx.interfaces.contains(&base_type_name(&field.field_type))
-        && obj.fields.iter().any(|f| f.name == "node_metadata")
+fn is_interface_peer(field: &Field<String>, ctx: &SchemaContext) -> bool {
+    field.name == "node" && ctx.interfaces.contains(&base_type_name(&field.field_type))
 }
 
 /// whether a field of an interface goes into the struct and selection of its peers.
@@ -1523,20 +1519,36 @@ fn is_scalar_type(name: &str) -> bool {
 
 /// the type `render_types` declares for `field` of `obj`.
 fn field_rust_type(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaContext) -> String {
-    let ty = if is_interface_peer(obj, field, ctx) {
-        let peer = peer_rust_type_nonnull(&field.field_type, ctx, false);
+    let ty = rust_type(&field.field_type, ctx, false);
+    if !is_selected(obj, field, ctx) {
         if is_optional(&field.field_type) {
-            format!("Option<{peer}>")
+            ty
         } else {
-            peer
+            format!("Option<{ty}>")
         }
-    } else {
-        rust_type(&field.field_type, ctx, false)
-    };
-    if nulled_on_empty_edge(obj, field) {
-        format!("Option<{ty}>")
+    } else if is_interface_peer(field, ctx) {
+        peer_rust_type(&field.field_type, ctx)
     } else {
         ty
+    }
+}
+
+/// the type `render_responses` declares for a root field.
+fn root_rust_type(field: &Field<String>, ctx: &SchemaContext) -> String {
+    if ctx.interfaces.contains(&base_type_name(&field.field_type)) {
+        peer_rust_type(&field.field_type, ctx)
+    } else {
+        rust_type(&field.field_type, ctx, false)
+    }
+}
+
+/// `rust_type` for an interface peer, which is typed by the interface's struct.
+fn peer_rust_type(ty: &Type<String>, ctx: &SchemaContext) -> String {
+    let peer = peer_rust_type_nonnull(ty, ctx, false);
+    if is_optional(ty) {
+        format!("Option<{peer}>")
+    } else {
+        peer
     }
 }
 
@@ -2670,6 +2682,7 @@ mod codegen_name_tests {
             type PinnedGroupEdge { node: Group! node_metadata: Meta! }
             type GroupListEdge { node: [Group!] node_metadata: Meta }
             type GroupNodes { node: Group }
+            type GroupConnection { edges: [GroupNodes!]! count: Int! }
             union Thing = Meta
             type ThingEdge { node: Thing node_metadata: Meta }
             type Widget {
@@ -2703,7 +2716,10 @@ mod codegen_name_tests {
             select("PaginatedGroup", 0),
             format!("{{ count edges {{ {peer} node_metadata {{ created_at }} }} }}")
         );
-        assert_eq!(select("GroupNodes", 0), "");
+        assert_eq!(
+            select("GroupConnection", 0),
+            format!("{{ edges {{ {peer} }} count }}")
+        );
         assert_eq!(select("TextAttribute", 0), "{ value }");
         assert_eq!(select("GroupUpdate", 0), "{ ok }");
 
@@ -2732,7 +2748,7 @@ mod codegen_name_tests {
             ("EdgedGroup", "Option<Box<Group>>"),
             ("PinnedGroupEdge", "Box<Group>"),
             ("GroupListEdge", "Option<Vec<Group>>"),
-            ("GroupNodes", "Option<serde_json::Value>"),
+            ("GroupNodes", "Option<Box<Group>>"),
             ("ThingEdge", "Option<Thing>"),
         ] {
             assert_eq!(field_of(edge, "node"), format!("pub node: {ty},"), "{edge}");
@@ -2766,5 +2782,168 @@ mod codegen_name_tests {
             "parent {{ {peer} properties {{ is_protected }} }} \
              member_of_groups {{ count edges {{ {peer} properties {{ __typename }} }} }}"
         )));
+    }
+
+    fn struct_field(types: &str, name: &str, field: &str) -> String {
+        let start = types.find(&format!("pub struct {name} {{")).unwrap();
+        let body = &types[start..start + types[start..].find('}').unwrap()];
+        let line = body.lines().find(|l| l.contains(&format!(" {field}:")));
+        line.unwrap().trim().to_string()
+    }
+
+    #[test]
+    fn test_root_interface_fields_select_and_type_the_peer_identity() {
+        let schema = r#"
+            type Query { Me: Account Accounts(limit: Int): [Account!]! }
+            type Mutation { Touch(id: String!): Account! }
+            interface Account {
+                id: String!
+                name: String
+                groups(limit: Int!): String
+                profile: Profile
+            }
+            type Profile { theme: String }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let client = render_client(&ctx);
+        for query in [
+            "query Me { Me { __typename id name } }",
+            "query Accounts($limit: Int) { Accounts(limit: $limit) { __typename id name } }",
+            "mutation Touch($id: String!) { Touch(id: $id) { __typename id name } }",
+        ] {
+            assert!(client.contains(&format!("r#\"{query}\"#")), "{query}");
+        }
+
+        let responses = render_responses(&ctx);
+        assert_eq!(
+            struct_field(&responses, "MeResponse", "me"),
+            "pub me: Option<Box<Account>>,"
+        );
+        assert_eq!(
+            struct_field(&responses, "AccountsResponse", "accounts"),
+            "pub accounts: Vec<Account>,"
+        );
+        assert_eq!(
+            struct_field(&responses, "TouchResponse", "touch"),
+            "pub touch: Box<Account>,"
+        );
+    }
+
+    #[test]
+    fn test_objects_without_selectable_fields_select_their_typename() {
+        let schema = r#"
+            type Query { Bare: Bare Holder: Holder! Version: String }
+            type Bare {
+                size(unit: String!): Int!
+                label(lang: String!): String
+                legacy: String @deprecated(reason: "gone")
+            }
+            type Holder { bare: Bare! nested: Nested count: Int! }
+            type Nested { bare: Bare! }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let select = |name: &str| selection_for_type(name, &ctx, &mut BTreeSet::new(), 0);
+        assert_eq!(select("Bare"), "{ __typename }");
+        assert_eq!(select("Nested"), "{ bare { __typename } }");
+        assert_eq!(
+            select("Holder"),
+            "{ bare { __typename } nested { bare { __typename } } count }"
+        );
+        let client = render_client(&ctx);
+        assert!(client.contains("r#\"query Bare { Bare { __typename } }\"#"));
+        assert!(client.contains("r#\"query Version { Version }\"#"));
+
+        let types = render_types(&ctx);
+        assert_eq!(
+            struct_field(&types, "Bare", "size"),
+            "pub size: Option<i64>,"
+        );
+        assert_eq!(
+            struct_field(&types, "Bare", "label"),
+            "pub label: Option<String>,"
+        );
+        assert_eq!(
+            struct_field(&types, "Holder", "bare"),
+            "pub bare: Box<Bare>,"
+        );
+    }
+
+    fn assert_selections_match_the_schema(
+        ctx: &SchemaContext,
+        parent: &str,
+        set: &graphql_parser::query::SelectionSet<String>,
+        path: &str,
+    ) {
+        use graphql_parser::query::Selection;
+        for item in &set.items {
+            let Selection::Field(field) = item else {
+                panic!("{path}: unexpected fragment");
+            };
+            let path = format!("{path}.{}", field.name);
+            let selected = !field.selection_set.items.is_empty();
+            if field.name == "__typename" {
+                assert!(!selected, "{path}");
+                continue;
+            }
+            let fields = match ctx.types.get(parent) {
+                Some(TypeDefinition::Object(obj)) => &obj.fields,
+                Some(TypeDefinition::Interface(iface)) => &iface.fields,
+                _ => panic!("{path}: {parent} has no fields"),
+            };
+            let Some(def) = fields.iter().find(|f| f.name == field.name) else {
+                panic!("{path}: no such field on {parent}");
+            };
+            let base = base_type_name(&def.field_type);
+            let composite = ctx.objects.contains(&base)
+                || ctx.interfaces.contains(&base)
+                || ctx.unions.contains(&base);
+            assert_eq!(selected, composite, "{path}: {base}");
+            assert_selections_match_the_schema(ctx, &base, &field.selection_set, &path);
+        }
+    }
+
+    #[test]
+    fn test_every_generated_document_selects_exactly_its_composite_fields() {
+        use graphql_parser::query::{parse_query, Definition, OperationDefinition};
+        let doc = parse_schema::<String>(include_str!("../../schema/infrahub.graphql")).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let mut sources = vec![render_client(&ctx)];
+        sources.extend(render_api_modules(&ctx).into_values());
+
+        let mut operations = BTreeSet::new();
+        for source in &sources {
+            for literal in source.split("r#\"").skip(1) {
+                let text = &literal[..literal.find("\"#").unwrap()];
+                let query = parse_query::<String>(text).unwrap_or_else(|e| panic!("{e}: {text}"));
+                for def in &query.definitions {
+                    let (root, name, set) = match def {
+                        Definition::Operation(OperationDefinition::Query(q)) => {
+                            (&ctx.query_type, &q.name, &q.selection_set)
+                        }
+                        Definition::Operation(OperationDefinition::Mutation(m)) => (
+                            ctx.mutation_type.as_ref().unwrap(),
+                            &m.name,
+                            &m.selection_set,
+                        ),
+                        _ => panic!("unexpected definition in {text}"),
+                    };
+                    let name = name.clone().unwrap();
+                    assert_selections_match_the_schema(&ctx, root, set, &name);
+                    operations.insert(name);
+                }
+            }
+        }
+        for name in [
+            "AccountProfile",
+            "InfrahubTask",
+            "InfrahubTaskBranchStatus",
+            "InfrahubEvent",
+            "CoreAccount",
+            "CoreAccountCreate",
+        ] {
+            assert!(operations.contains(name), "{name}");
+        }
     }
 }

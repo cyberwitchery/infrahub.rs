@@ -34197,7 +34197,7 @@ impl<'a> GeneratedClientImpl<'a> {
 
     pub async fn account_profile(&self , request_branch: Option<&str>) -> Result<GraphQlResponse<AccountProfileResponse>> {
         let vars = serde_json::Map::new();
-        let query = r#"query AccountProfile { AccountProfile }"#;
+        let query = r#"query AccountProfile { AccountProfile { __typename id hfid display_label is_externally_managed } }"#;
         let vars = Value::Object(vars);
         self.client.execute(query, Some(vars), request_branch).await
     }
@@ -37477,7 +37477,7 @@ impl<'a> GeneratedClientImpl<'a> {
         if let Some(value) = log_offset {
             vars.insert("log_offset".to_string(), serde_json::to_value(value)?);
         }
-        let query = r#"query InfrahubTask($limit: Int, $offset: Int, $related_node__ids: [String], $branch: String, $state: [StateType], $workflow: [String], $ids: [String], $q: String, $log_limit: Int, $log_offset: Int) { InfrahubTask(limit: $limit, offset: $offset, related_node__ids: $related_node__ids, branch: $branch, state: $state, workflow: $workflow, ids: $ids, q: $q, log_limit: $log_limit, log_offset: $log_offset) { edges  count } }"#;
+        let query = r#"query InfrahubTask($limit: Int, $offset: Int, $related_node__ids: [String], $branch: String, $state: [StateType], $workflow: [String], $ids: [String], $q: String, $log_limit: Int, $log_offset: Int) { InfrahubTask(limit: $limit, offset: $offset, related_node__ids: $related_node__ids, branch: $branch, state: $state, workflow: $workflow, ids: $ids, q: $q, log_limit: $log_limit, log_offset: $log_offset) { edges { node { __typename id title conclusion state progress workflow branch created_at updated_at parameters tags start_time } } count } }"#;
         let vars = Value::Object(vars);
         self.client.execute(query, Some(vars), request_branch).await
     }
@@ -37487,7 +37487,7 @@ impl<'a> GeneratedClientImpl<'a> {
         if let Some(value) = branch {
             vars.insert("branch".to_string(), serde_json::to_value(value)?);
         }
-        let query = r#"query InfrahubTaskBranchStatus($branch: String) { InfrahubTaskBranchStatus(branch: $branch) { edges  count } }"#;
+        let query = r#"query InfrahubTaskBranchStatus($branch: String) { InfrahubTaskBranchStatus(branch: $branch) { edges { node { __typename id title conclusion state progress workflow branch created_at updated_at parameters tags start_time } } count } }"#;
         let vars = Value::Object(vars);
         self.client.execute(query, Some(vars), request_branch).await
     }
@@ -37614,7 +37614,7 @@ impl<'a> GeneratedClientImpl<'a> {
         if let Some(value) = order {
             vars.insert("order".to_string(), serde_json::to_value(value)?);
         }
-        let query = r#"query InfrahubEvent($limit: Int, $offset: Int, $level: Int, $has_children: Boolean, $event_type: [String!], $event_type_filter: EventTypeFilter, $primary_node__ids: [String!], $related_node__ids: [String!], $parent__ids: [String!], $since: DateTime, $until: DateTime, $branches: [String!], $account__ids: [String!], $ids: [String!], $order: EventSortOrder) { InfrahubEvent(limit: $limit, offset: $offset, level: $level, has_children: $has_children, event_type: $event_type, event_type_filter: $event_type_filter, primary_node__ids: $primary_node__ids, related_node__ids: $related_node__ids, parent__ids: $parent__ids, since: $since, until: $until, branches: $branches, account__ids: $account__ids, ids: $ids, order: $order) { edges  count } }"#;
+        let query = r#"query InfrahubEvent($limit: Int, $offset: Int, $level: Int, $has_children: Boolean, $event_type: [String!], $event_type_filter: EventTypeFilter, $primary_node__ids: [String!], $related_node__ids: [String!], $parent__ids: [String!], $since: DateTime, $until: DateTime, $branches: [String!], $account__ids: [String!], $ids: [String!], $order: EventSortOrder) { InfrahubEvent(limit: $limit, offset: $offset, level: $level, has_children: $has_children, event_type: $event_type, event_type_filter: $event_type_filter, primary_node__ids: $primary_node__ids, related_node__ids: $related_node__ids, parent__ids: $parent__ids, since: $since, until: $until, branches: $branches, account__ids: $account__ids, ids: $ids, order: $order) { edges { node { __typename id event branch account_id occurred_at level has_children parent_id } } count } }"#;
         let vars = Value::Object(vars);
         self.client.execute(query, Some(vars), request_branch).await
     }

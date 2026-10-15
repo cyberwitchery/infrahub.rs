@@ -17,7 +17,7 @@ use reqwest::blocking::Client as BlockingClient;
 use reqwest::header::{HeaderMap, HeaderValue};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::Duration;
 use url::Url;
 
@@ -363,12 +363,18 @@ impl<'a> SchemaContext<'a> {
 
 fn generate_client(args: &Args, ctx: &SchemaContext) -> Result<(), String> {
     let out_dir = &args.out_dir;
+    let manifest_path = out_dir.join("Cargo.toml");
+    let crate_name = match &args.crate_name {
+        Some(name) => Some(name.as_str()),
+        None if manifest_path.exists() => None,
+        None => Some(default_crate_name(out_dir)?),
+    };
     let src_dir = out_dir.join("src");
     let api_dir = src_dir.join("api");
     fs::create_dir_all(&src_dir).map_err(|err| err.to_string())?;
     fs::create_dir_all(&api_dir).map_err(|err| err.to_string())?;
 
-    if let Some(crate_name) = &args.crate_name {
+    if let Some(crate_name) = crate_name {
         let mut cargo = String::new();
         cargo.push_str("[package]\n");
         cargo.push_str(&format!("name = \"{}\"\n", crate_name));
@@ -382,7 +388,7 @@ fn generate_client(args: &Args, ctx: &SchemaContext) -> Result<(), String> {
         }
         cargo.push_str("serde = { version = \"1\", features = [\"derive\"] }\n");
         cargo.push_str("serde_json = \"1\"\n");
-        fs::write(out_dir.join("Cargo.toml"), cargo).map_err(|err| err.to_string())?;
+        fs::write(manifest_path, cargo).map_err(|err| err.to_string())?;
     }
 
     let types_rs = render_types(ctx);
@@ -409,6 +415,25 @@ fn generate_client(args: &Args, ctx: &SchemaContext) -> Result<(), String> {
     fs::write(src_dir.join("lib.rs"), lib_rs).map_err(|err| err.to_string())?;
 
     Ok(())
+}
+
+fn default_crate_name(out_dir: &Path) -> Result<&str, String> {
+    let name = out_dir
+        .file_name()
+        .and_then(|name| name.to_str())
+        .unwrap_or("");
+    let mut chars = name.chars();
+    let valid = chars
+        .next()
+        .is_some_and(|c| c.is_ascii_alphabetic() || c == '_')
+        && chars.all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_');
+    if valid {
+        Ok(name)
+    } else {
+        Err(format!(
+            "the last component of --out {out_dir:?} is not a valid package name; pass --crate-name"
+        ))
+    }
 }
 
 fn render_lib() -> String {
@@ -2945,5 +2970,45 @@ mod codegen_name_tests {
         ] {
             assert!(operations.contains(name), "{name}");
         }
+    }
+
+    #[test]
+    fn test_cargo_toml_is_written_with_crate_name_or_when_missing() {
+        let doc = parse_schema::<String>("type Query { ok: Boolean }").unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let root = std::env::temp_dir().join(format!("infrahub-codegen-{}", std::process::id()));
+        let hand_made = "[package]\nname = \"hand-made\"\npublish = false\n";
+        for (dir, crate_name, existing, package) in [
+            ("gen", None, None, Some("gen")),
+            ("kept", None, Some(hand_made), Some("hand-made")),
+            ("flag", Some("custom"), Some(hand_made), Some("custom")),
+            ("gen.d", None, None, None),
+        ] {
+            let out_dir = root.join(dir);
+            fs::create_dir_all(&out_dir).unwrap();
+            if let Some(existing) = existing {
+                fs::write(out_dir.join("Cargo.toml"), existing).unwrap();
+            }
+            let args = Args {
+                url: None,
+                token: None,
+                branch: None,
+                schema_path: None,
+                out_dir: out_dir.clone(),
+                crate_name: crate_name.map(String::from),
+                infrahub_path: None,
+            };
+            let result = generate_client(&args, &ctx);
+            let manifest = fs::read_to_string(out_dir.join("Cargo.toml")).ok();
+            match package {
+                Some(package) => {
+                    assert_eq!(result, Ok(()), "{dir}");
+                    let name_line = format!("\nname = \"{package}\"\n");
+                    assert!(manifest.unwrap().contains(&name_line), "{dir}");
+                }
+                None => assert!(result.is_err() && manifest.is_none(), "{dir}"),
+            }
+        }
+        fs::remove_dir_all(&root).unwrap();
     }
 }

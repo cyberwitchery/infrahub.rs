@@ -32,7 +32,7 @@ INFRAHUB_TOKEN=... cargo run --bin infrahub-codegen -- \
 - `--token <token>`: api token for schema fetch
 - `--branch <name>`: optional branch for schema fetch
 - `--out <path>`: output directory for the generated crate
-- `--crate-name <name>`: optional crate name (defaults to directory name)
+- `--crate-name <name>`: package name for the generated `Cargo.toml`, which then replaces any existing one. without it, a `Cargo.toml` is written only if `--out` has none yet, named after the last component of `--out`; codegen fails if that is not a valid package name
 - `--infrahub-path <path>`: use a path dependency for `infrahub`
 
 ## add the generated crate

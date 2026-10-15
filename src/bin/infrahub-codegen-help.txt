@@ -28,7 +28,10 @@ OPTIONS
       Output directory for the generated crate. (required)
 
   --crate-name <name>
-      Optional Cargo package name for generated Cargo.toml.
+      Package name for the generated Cargo.toml, which then replaces any
+      existing one. Without it, a Cargo.toml is written only if --out has
+      none yet, named after the last component of --out; codegen fails if
+      that is not a valid package name.
 
   --infrahub-path <path>
       Use a local path dependency for `infrahub` in generated Cargo.toml.

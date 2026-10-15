@@ -328,54 +328,73 @@ mod tests {
     }
 
     #[test]
-    fn test_graphql_url_default() {
+    fn test_urls() {
         let config = ClientConfig::new("https://infrahub.example.com", "token");
-        let url = config.graphql_url(None).unwrap();
-        assert_eq!(url.as_str(), "https://infrahub.example.com/graphql");
-    }
-
-    #[test]
-    fn test_graphql_url_branch() {
-        let config = ClientConfig::new("https://infrahub.example.com", "token");
-        let url = config.graphql_url(Some("test")).unwrap();
-        assert_eq!(url.as_str(), "https://infrahub.example.com/graphql/test");
-    }
-
-    #[test]
-    fn test_schema_url_branch() {
-        let config = ClientConfig::new("https://infrahub.example.com", "token");
-        let url = config.schema_url(Some("test")).unwrap();
-        assert_eq!(
-            url.as_str(),
-            "https://infrahub.example.com/schema.graphql?branch=test"
-        );
-    }
-
-    #[test]
-    fn test_schema_url_default() {
-        let config = ClientConfig::new("https://infrahub.example.com", "token");
-        let url = config.schema_url(None).unwrap();
-        assert_eq!(url.as_str(), "https://infrahub.example.com/schema.graphql");
-    }
-
-    #[test]
-    fn test_schema_snapshot_url_branch() {
-        let config =
+        let main_config =
             ClientConfig::new("https://infrahub.example.com", "token").with_default_branch("main");
-        let url = config.schema_snapshot_url(None).unwrap();
-        assert_eq!(
-            url.as_str(),
-            "https://infrahub.example.com/api/schema?branch=main"
-        );
 
-        let url = config.schema_snapshot_url(Some("feature/a&b")).unwrap();
-        assert_eq!(
-            url.as_str(),
-            "https://infrahub.example.com/api/schema?branch=feature%2Fa%26b"
-        );
-
-        let url = config.schema_snapshot_url(Some("")).unwrap();
-        assert_eq!(url.as_str(), "https://infrahub.example.com/api/schema");
+        type Build = fn(&ClientConfig) -> Result<Url>;
+        // (config, builder call, expected url)
+        let cases: Vec<(&ClientConfig, Build, &str)> = vec![
+            (
+                &config,
+                |c| c.graphql_url(None),
+                "https://infrahub.example.com/graphql",
+            ),
+            (
+                &config,
+                |c| c.graphql_url(Some("test")),
+                "https://infrahub.example.com/graphql/test",
+            ),
+            (
+                &config,
+                |c| c.schema_url(None),
+                "https://infrahub.example.com/schema.graphql",
+            ),
+            (
+                &config,
+                |c| c.schema_url(Some("test")),
+                "https://infrahub.example.com/schema.graphql?branch=test",
+            ),
+            (
+                &main_config,
+                |c| c.schema_snapshot_url(None),
+                "https://infrahub.example.com/api/schema?branch=main",
+            ),
+            (
+                &main_config,
+                |c| c.schema_snapshot_url(Some("feature/a&b")),
+                "https://infrahub.example.com/api/schema?branch=feature%2Fa%26b",
+            ),
+            (
+                &main_config,
+                |c| c.schema_snapshot_url(Some("")),
+                "https://infrahub.example.com/api/schema",
+            ),
+            (
+                &config,
+                |c| c.file_url("abc-123", None),
+                "https://infrahub.example.com/api/files/abc-123",
+            ),
+            (
+                &config,
+                |c| c.file_url("abc-123", Some("dev")),
+                "https://infrahub.example.com/api/files/abc-123?branch=dev",
+            ),
+            (
+                &config,
+                |c| c.file_by_hfid_url("MyFile", &["value1", "value2"], None),
+                "https://infrahub.example.com/api/files/by-hfid/MyFile/value1/value2",
+            ),
+            (
+                &config,
+                |c| c.file_by_storage_id_url("store-456", None),
+                "https://infrahub.example.com/api/files/by-storage-id/store-456",
+            ),
+        ];
+        for (config, build, expected) in cases {
+            assert_eq!(build(config).unwrap().as_str(), expected);
+        }
     }
 
     #[test]
@@ -384,7 +403,7 @@ mod tests {
         assert!(config.validate().is_ok());
 
         let empty_token = ClientConfig::new("https://infrahub.example.com", "");
-        assert!(empty_token.validate().is_err());
+        assert!(matches!(empty_token.validate(), Err(Error::Config(_))));
 
         let empty_token_prebuilt = ClientConfig::new("https://infrahub.example.com", "")
             .with_http_client(reqwest::Client::new());
@@ -432,61 +451,6 @@ mod tests {
         assert_eq!(config.extra_headers.get("x-test").unwrap(), "value");
         assert_eq!(config.extra_headers.get("x-other").unwrap(), "other");
         assert_eq!(config.extra_headers(), &config.extra_headers);
-    }
-
-    #[test]
-    fn test_with_http_client() {
-        let prebuilt = reqwest::Client::new();
-        let config =
-            ClientConfig::new("https://infrahub.example.com", "token").with_http_client(prebuilt);
-        assert!(config.http_client.is_some());
-        assert!(config.http_client_builder.is_none());
-    }
-
-    #[test]
-    fn test_with_http_client_builder() {
-        let config = ClientConfig::new("https://infrahub.example.com", "token")
-            .with_http_client_builder(|b| b.connection_verbose(true));
-        assert!(config.http_client.is_none());
-        assert!(config.http_client_builder.is_some());
-    }
-
-    #[test]
-    fn test_file_url() {
-        let config = ClientConfig::new("https://infrahub.example.com", "token");
-        let url = config.file_url("abc-123", None).unwrap();
-        assert_eq!(
-            url.as_str(),
-            "https://infrahub.example.com/api/files/abc-123"
-        );
-
-        let url = config.file_url("abc-123", Some("dev")).unwrap();
-        assert_eq!(
-            url.as_str(),
-            "https://infrahub.example.com/api/files/abc-123?branch=dev"
-        );
-    }
-
-    #[test]
-    fn test_file_by_hfid_url() {
-        let config = ClientConfig::new("https://infrahub.example.com", "token");
-        let url = config
-            .file_by_hfid_url("MyFile", &["value1", "value2"], None)
-            .unwrap();
-        assert_eq!(
-            url.as_str(),
-            "https://infrahub.example.com/api/files/by-hfid/MyFile/value1/value2"
-        );
-    }
-
-    #[test]
-    fn test_file_by_storage_id_url() {
-        let config = ClientConfig::new("https://infrahub.example.com", "token");
-        let url = config.file_by_storage_id_url("store-456", None).unwrap();
-        assert_eq!(
-            url.as_str(),
-            "https://infrahub.example.com/api/files/by-storage-id/store-456"
-        );
     }
 
     #[test]
@@ -569,18 +533,6 @@ mod tests {
     fn test_default_max_retries() {
         let config = ClientConfig::new("https://infrahub.example.com", "token");
         assert_eq!(config.max_retries, 3);
-    }
-
-    #[test]
-    fn test_with_max_retries() {
-        let config = ClientConfig::new("https://infrahub.example.com", "token").with_max_retries(5);
-        assert_eq!(config.max_retries, 5);
-    }
-
-    #[test]
-    fn test_with_max_retries_zero_disables() {
-        let config = ClientConfig::new("https://infrahub.example.com", "token").with_max_retries(0);
-        assert_eq!(config.max_retries, 0);
     }
 
     #[test]

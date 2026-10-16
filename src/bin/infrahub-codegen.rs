@@ -2979,7 +2979,7 @@ mod codegen_name_tests {
         let root = std::env::temp_dir().join(format!("infrahub-codegen-{}", std::process::id()));
         let hand_made = "[package]\nname = \"hand-made\"\npublish = false\n";
         for (dir, crate_name, existing, package) in [
-            ("gen", None, None, Some("gen")),
+            ("infrahub-generated", None, None, Some("infrahub-generated")),
             ("kept", None, Some(hand_made), Some("hand-made")),
             ("flag", Some("custom"), Some(hand_made), Some("custom")),
             ("gen.d", None, None, None),

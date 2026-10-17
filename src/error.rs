@@ -94,81 +94,67 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_is_auth_error() {
-        let err = Error::GraphQl {
-            status: Some(401),
-            errors: vec![],
-            body: String::new(),
-            message: "unauthorized".to_string(),
-        };
-        assert!(err.is_auth_error());
+    fn test_is_retryable_and_is_auth_error() {
+        fn graphql(status: u16) -> Error {
+            Error::GraphQl {
+                status: Some(status),
+                errors: vec![],
+                body: String::new(),
+                message: String::new(),
+            }
+        }
 
-        let err = Error::GraphQl {
-            status: Some(403),
-            errors: vec![],
-            body: String::new(),
-            message: "forbidden".to_string(),
-        };
-        assert!(err.is_auth_error());
-
-        let err = Error::GraphQl {
-            status: Some(500),
-            errors: vec![],
-            body: String::new(),
-            message: "server error".to_string(),
-        };
-        assert!(!err.is_auth_error());
-    }
-
-    #[test]
-    fn test_non_graphql_errors_not_auth() {
-        let config_err = Error::Config("bad".into());
-        assert!(!config_err.is_auth_error());
-
-        let url_err: Error = url::Url::parse(":::").unwrap_err().into();
-        assert!(!url_err.is_auth_error());
-
-        let json_err: Error = serde_json::from_str::<serde_json::Value>("!!!")
+        let builder: Error = reqwest::multipart::Part::bytes(vec![])
+            .mime_str("text")
             .unwrap_err()
             .into();
-        assert!(!json_err.is_auth_error());
-    }
 
-    #[test]
-    fn test_is_retryable_server_errors() {
-        for status in [429, 500, 502, 503, 504] {
-            let err = Error::GraphQl {
-                status: Some(status),
-                errors: vec![],
-                body: String::new(),
-                message: "server error".to_string(),
-            };
-            assert!(err.is_retryable(), "status {status} should be retryable");
+        // (label, error, is_retryable, is_auth_error)
+        let cases: Vec<(&str, Error, bool, bool)> = vec![
+            ("graphql 401", graphql(401), false, true),
+            ("graphql 403", graphql(403), false, true),
+            ("graphql 429", graphql(429), true, false),
+            ("graphql 500", graphql(500), true, false),
+            ("graphql 502", graphql(502), true, false),
+            ("graphql 503", graphql(503), true, false),
+            ("graphql 504", graphql(504), true, false),
+            ("graphql 400", graphql(400), false, false),
+            ("graphql 404", graphql(404), false, false),
+            ("graphql 422", graphql(422), false, false),
+            ("config", Error::Config("bad".into()), false, false),
+            (
+                "url",
+                url::Url::parse(":::").unwrap_err().into(),
+                false,
+                false,
+            ),
+            (
+                "json",
+                serde_json::from_str::<serde_json::Value>("!!!")
+                    .unwrap_err()
+                    .into(),
+                false,
+                false,
+            ),
+            (
+                "pagination stalled",
+                Error::PaginationStalled { pages: 3 },
+                false,
+                false,
+            ),
+            (
+                "pagination limit",
+                Error::PaginationLimit { max_pages: 10 },
+                false,
+                false,
+            ),
+            ("http builder", builder, false, false),
+        ];
+
+        for (label, err, retryable, auth) in cases {
+            assert_eq!(err.is_retryable(), retryable, "{label}: is_retryable");
+            assert_eq!(err.is_auth_error(), auth, "{label}: is_auth_error");
         }
-    }
-
-    #[test]
-    fn test_is_not_retryable_client_errors() {
-        for status in [400, 401, 403, 404, 422] {
-            let err = Error::GraphQl {
-                status: Some(status),
-                errors: vec![],
-                body: String::new(),
-                message: "client error".to_string(),
-            };
-            assert!(
-                !err.is_retryable(),
-                "status {status} should not be retryable"
-            );
-        }
-    }
-
-    #[test]
-    fn test_pagination_errors_not_retryable() {
-        assert!(!Error::PaginationStalled { pages: 3 }.is_retryable());
-        assert!(!Error::PaginationLimit { max_pages: 10 }.is_retryable());
-        assert!(!Error::PaginationStalled { pages: 3 }.is_auth_error());
-        assert!(!Error::PaginationLimit { max_pages: 10 }.is_auth_error());
     }
 
     #[test]
@@ -181,30 +167,6 @@ mod tests {
             Error::PaginationLimit { max_pages: 7 }.to_string(),
             "pagination error: exceeded max_pages limit of 7"
         );
-    }
-
-    #[test]
-    fn test_is_not_retryable_config_url_json() {
-        let config_err = Error::Config("bad".into());
-        assert!(!config_err.is_retryable());
-
-        let url_err: Error = url::Url::parse(":::").unwrap_err().into();
-        assert!(!url_err.is_retryable());
-
-        let json_err: Error = serde_json::from_str::<serde_json::Value>("!!!")
-            .unwrap_err()
-            .into();
-        assert!(!json_err.is_retryable());
-    }
-
-    #[test]
-    fn test_builder_error_not_retryable() {
-        let err: Error = reqwest::multipart::Part::bytes(vec![])
-            .mime_str("text")
-            .unwrap_err()
-            .into();
-        assert!(!err.is_retryable());
-        assert!(!err.is_auth_error());
     }
 
     #[cfg_attr(miri, ignore)]

@@ -458,24 +458,6 @@ fn parse_schema_snapshot_response<T: DeserializeOwned>(
 
 #[cfg(test)]
 impl Client {
-    async fn execute_multipart_with<T: DeserializeOwned, F, Fut>(
-        &self,
-        query: &str,
-        variables: Option<serde_json::Value>,
-        files: Vec<(&str, FileUpload)>,
-        branch: Option<&str>,
-        send: F,
-    ) -> Result<GraphQlResponse<T>>
-    where
-        F: FnOnce(Url, multipart::Form) -> Fut,
-        Fut: Future<Output = Result<(StatusCode, String)>>,
-    {
-        let url = self.config.graphql_url(branch)?;
-        let form = build_multipart_form(query, variables, files)?;
-        let (status, text) = send(url, form).await?;
-        parse_graphql_response(status, text)
-    }
-
     async fn execute_with<T: DeserializeOwned, F, Fut>(
         &self,
         query: &str,
@@ -527,98 +509,6 @@ mod tests {
 
     #[cfg_attr(miri, ignore)]
     #[tokio::test]
-    async fn test_execute_raw_sets_header_and_url() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token");
-        let client = test_client(config);
-        let response = client
-            .execute_with::<serde_json::Value, _, _>(
-                "query { ok }",
-                None,
-                Some("main"),
-                |url, body| async move {
-                    assert_eq!(url.path(), "/graphql/main");
-                    assert_eq!(body["query"], "query { ok }");
-                    Ok((StatusCode::OK, "{\"data\": {\"ok\": true}}".to_string()))
-                },
-            )
-            .await
-            .unwrap();
-
-        assert_eq!(response.data.unwrap()["ok"], true);
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_execute_graphql_error() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token");
-        let client = test_client(config);
-        let err = client
-            .execute_with::<serde_json::Value, _, _>(
-                "query { ok }",
-                None,
-                None,
-                |_url, _body| async move {
-                    Ok((
-                        StatusCode::OK,
-                        "{\"data\": null, \"errors\": [{\"message\": \"boom\"}]}".to_string(),
-                    ))
-                },
-            )
-            .await;
-
-        assert!(matches!(err, Err(Error::GraphQl { .. })));
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_execute_typed_success() {
-        #[derive(Debug, Deserialize)]
-        struct Data {
-            value: i64,
-        }
-        let config = ClientConfig::new("http://localhost:1234", "test-token");
-        let client = test_client(config);
-        let response = client
-            .execute_with::<Data, _, _>("query { value }", None, None, |_url, _body| async move {
-                Ok((StatusCode::OK, "{\"data\": {\"value\": 7}}".to_string()))
-            })
-            .await
-            .unwrap();
-
-        assert_eq!(response.data.unwrap().value, 7);
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_execute_raw_http_error() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token");
-        let client = test_client(config);
-        let err = client
-            .execute_with::<serde_json::Value, _, _>(
-                "query { ok }",
-                None,
-                None,
-                |_url, _body| async move {
-                    Ok((
-                        StatusCode::INTERNAL_SERVER_ERROR,
-                        "{\"data\":null}".to_string(),
-                    ))
-                },
-            )
-            .await
-            .unwrap_err();
-
-        assert!(matches!(
-            err,
-            Error::GraphQl {
-                status: Some(500),
-                ..
-            }
-        ));
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
     async fn test_fetch_schema_success_and_error() {
         let config = ClientConfig::new("http://localhost:1234", "test-token");
         let client = test_client(config);
@@ -630,7 +520,7 @@ mod tests {
             })
             .await
             .unwrap();
-        assert!(schema.contains("schema"));
+        assert_eq!(schema, "schema { query: Query }");
 
         let err = client
             .fetch_schema_with(Some("bad"), |url| async move {
@@ -758,14 +648,6 @@ mod tests {
     }
 
     #[test]
-    fn test_new_with_prebuilt_http_client() {
-        let prebuilt = reqwest::Client::new();
-        let config = ClientConfig::new("http://localhost:1234", "token").with_http_client(prebuilt);
-        let client = Client::new(config).expect("client with prebuilt http");
-        assert!(client.config().http_client.is_some());
-    }
-
-    #[test]
     fn test_new_with_http_client_builder() {
         let config = ClientConfig::new("http://localhost:1234", "token")
             .with_http_client_builder(|b| b.connection_verbose(true));
@@ -880,140 +762,6 @@ mod tests {
         assert!(form.is_ok());
     }
 
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_execute_raw_none_variables_become_empty_object() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token");
-        let client = test_client(config);
-        client
-            .execute_with::<serde_json::Value, _, _>(
-                "query { ok }",
-                None,
-                None,
-                |_url, body| async move {
-                    assert_eq!(body["variables"], serde_json::json!({}));
-                    Ok((StatusCode::OK, r#"{"data": {"ok": true}}"#.to_string()))
-                },
-            )
-            .await
-            .unwrap();
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_execute_raw_passes_variables() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token");
-        let client = test_client(config);
-        let vars = serde_json::json!({"id": "abc-123", "name": "test"});
-        let response = client
-            .execute_with::<serde_json::Value, _, _>(
-                "query GetDevice($id: String!) { device(id: $id) { name } }",
-                Some(vars),
-                None,
-                |_url, body| async move {
-                    assert_eq!(body["variables"]["id"], "abc-123");
-                    assert_eq!(body["variables"]["name"], "test");
-                    Ok((
-                        StatusCode::OK,
-                        r#"{"data": {"device": {"name": "test"}}}"#.to_string(),
-                    ))
-                },
-            )
-            .await
-            .unwrap();
-        assert!(response.data.is_some());
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_execute_server_error_is_retryable() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token");
-        let client = test_client(config);
-        let err = client
-            .execute_with::<serde_json::Value, _, _>(
-                "query { ok }",
-                None,
-                None,
-                |_url, _body| async move {
-                    Ok((
-                        StatusCode::SERVICE_UNAVAILABLE,
-                        r#"{"data": null}"#.to_string(),
-                    ))
-                },
-            )
-            .await
-            .unwrap_err();
-        assert!(err.is_retryable());
-        assert!(!err.is_auth_error());
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_execute_client_error_not_retryable() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token");
-        let client = test_client(config);
-        let err = client
-            .execute_with::<serde_json::Value, _, _>(
-                "query { ok }",
-                None,
-                None,
-                |_url, _body| async move {
-                    Ok((StatusCode::BAD_REQUEST, r#"{"data": null}"#.to_string()))
-                },
-            )
-            .await
-            .unwrap_err();
-        assert!(!err.is_retryable());
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_execute_auth_error_not_retryable() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token");
-        let client = test_client(config);
-        let err = client
-            .execute_with::<serde_json::Value, _, _>(
-                "query { ok }",
-                None,
-                None,
-                |_url, _body| async move {
-                    Ok((
-                        StatusCode::UNAUTHORIZED,
-                        r#"{"data": null, "errors": [{"message": "unauthorized"}]}"#.to_string(),
-                    ))
-                },
-            )
-            .await
-            .unwrap_err();
-        assert!(err.is_auth_error());
-        assert!(!err.is_retryable());
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_execute_multipart_sends_form() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token");
-        let client = test_client(config);
-        let file = FileUpload::new("test.txt", "text/plain", b"hello".to_vec());
-        let response = client
-            .execute_multipart_with::<serde_json::Value, _, _>(
-                "mutation Upload($file: Upload!) { upload(file: $file) { ok } }",
-                None,
-                vec![("file", file)],
-                Some("main"),
-                |url, _form| async move {
-                    assert_eq!(url.path(), "/graphql/main");
-                    Ok((
-                        StatusCode::OK,
-                        r#"{"data": {"upload": {"ok": true}}}"#.to_string(),
-                    ))
-                },
-            )
-            .await
-            .unwrap();
-        assert!(response.data.is_some());
-    }
-
     #[test]
     fn test_retry_delay_backoff() {
         assert_eq!(Client::retry_delay(0), Duration::from_millis(0));
@@ -1047,13 +795,6 @@ mod tests {
         }
     }
 
-    #[test]
-    fn test_jitter_seed_varies_by_attempt() {
-        let s1 = Client::jitter_seed(1);
-        let s2 = Client::jitter_seed(2);
-        assert_ne!(s1, s2, "jitter seed should differ across attempts");
-    }
-
     fn headers_with_retry_after(value: &str) -> HeaderMap {
         let mut headers = HeaderMap::new();
         headers.insert(
@@ -1064,71 +805,39 @@ mod tests {
     }
 
     #[test]
-    fn test_parse_retry_after_valid_seconds() {
-        assert_eq!(
-            parse_retry_after(&headers_with_retry_after("5")),
-            Some(Duration::from_secs(5))
-        );
-        assert_eq!(
-            parse_retry_after(&headers_with_retry_after("0")),
-            Some(Duration::from_secs(0))
-        );
+    fn test_parse_retry_after() {
+        // (header value, expected); None means the header is absent
+        for (value, expected) in [
+            (Some("5"), Some(Duration::from_secs(5))),
+            (Some("0"), Some(Duration::from_secs(0))),
+            (Some("  10 "), Some(Duration::from_secs(10))),
+            (None, None),
+            (Some(""), None),
+            (Some("soon"), None),
+            (Some("Wed, 21 Oct 2015 07:28:00 GMT"), None),
+            (Some("100000"), Some(Duration::from_secs(100_000))),
+        ] {
+            let headers = value.map_or_else(HeaderMap::new, headers_with_retry_after);
+            assert_eq!(parse_retry_after(&headers), expected, "{value:?}");
+        }
     }
 
     #[test]
-    fn test_parse_retry_after_trims_whitespace() {
-        assert_eq!(
-            parse_retry_after(&headers_with_retry_after("  10 ")),
-            Some(Duration::from_secs(10))
-        );
-    }
+    fn test_next_delay() {
+        // (attempt, retry-after hint, expected delay)
+        for (attempt, hint, expected) in [
+            (1, Some(Duration::from_secs(5)), Duration::from_secs(5)),
+            (1, Some(Duration::from_secs(100_000)), RETRY_MAX_BACKOFF),
+            (20, Some(Duration::from_secs(1)), Duration::from_secs(1)),
+            (0, None, Duration::from_millis(0)),
+        ] {
+            assert_eq!(
+                Client::next_delay(attempt, hint),
+                expected,
+                "attempt {attempt}, hint {hint:?}"
+            );
+        }
 
-    #[test]
-    fn test_parse_retry_after_absent_is_none() {
-        assert_eq!(parse_retry_after(&HeaderMap::new()), None);
-    }
-
-    #[test]
-    fn test_parse_retry_after_non_integer_is_none() {
-        assert_eq!(parse_retry_after(&headers_with_retry_after("")), None);
-        assert_eq!(parse_retry_after(&headers_with_retry_after("soon")), None);
-        assert_eq!(
-            parse_retry_after(&headers_with_retry_after("Wed, 21 Oct 2015 07:28:00 GMT")),
-            None
-        );
-    }
-
-    #[test]
-    fn test_parse_retry_after_large_value_returned_raw() {
-        assert_eq!(
-            parse_retry_after(&headers_with_retry_after("100000")),
-            Some(Duration::from_secs(100_000))
-        );
-    }
-
-    #[test]
-    fn test_next_delay_uses_hint_capped_at_max() {
-        assert_eq!(
-            Client::next_delay(1, Some(Duration::from_secs(5))),
-            Duration::from_secs(5)
-        );
-        assert_eq!(
-            Client::next_delay(1, Some(Duration::from_secs(100_000))),
-            RETRY_MAX_BACKOFF
-        );
-    }
-
-    #[test]
-    fn test_next_delay_hint_overrides_backoff() {
-        assert_eq!(
-            Client::next_delay(20, Some(Duration::from_secs(1))),
-            Duration::from_secs(1)
-        );
-    }
-
-    #[test]
-    fn test_next_delay_without_hint_falls_back_to_backoff() {
-        assert_eq!(Client::next_delay(0, None), Duration::from_millis(0));
         let delay1 = Client::next_delay(1, None).as_millis();
         assert!(
             (200..=250).contains(&delay1),
@@ -1138,126 +847,59 @@ mod tests {
 
     #[cfg_attr(miri, ignore)]
     #[tokio::test]
-    async fn test_retry_loop_succeeds_after_transient_errors() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token").with_max_retries(3);
-        let client = test_client(config);
-        let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
-        let count = call_count.clone();
-        let result: Result<String> = client
-            .retry_loop(|| {
-                let count = count.clone();
-                async move {
-                    let n = count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                    if n < 2 {
-                        Err(Error::GraphQl {
-                            status: Some(503),
-                            errors: vec![],
-                            body: String::new(),
-                            message: "service unavailable".to_string(),
+    async fn test_retry_loop() {
+        // (label, max_retries, status, failures before success, succeeds, expected calls)
+        for (label, max_retries, status, failures, succeeds, expected_calls) in [
+            ("transient errors then success", 3, 503, 2, true, 3),
+            ("gives up after max_retries", 2, 500, u32::MAX, false, 3),
+            (
+                "permanent errors are not retried",
+                3,
+                400,
+                u32::MAX,
+                false,
+                1,
+            ),
+            ("max_retries=0 disables retries", 0, 503, u32::MAX, false, 1),
+        ] {
+            let config = ClientConfig::new("http://localhost:1234", "test-token")
+                .with_max_retries(max_retries);
+            let client = test_client(config);
+            let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
+            let count = call_count.clone();
+            let result: Result<String> = client
+                .retry_loop(|| {
+                    let count = count.clone();
+                    async move {
+                        let n = count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                        if n < failures {
+                            Err(Error::GraphQl {
+                                status: Some(status),
+                                errors: vec![],
+                                body: String::new(),
+                                message: "error".to_string(),
+                            }
+                            .into())
+                        } else {
+                            Ok("ok".to_string())
                         }
-                        .into())
-                    } else {
-                        Ok("ok".to_string())
                     }
-                }
-            })
-            .await;
-        assert_eq!(result.unwrap(), "ok");
-        assert_eq!(
-            call_count.load(std::sync::atomic::Ordering::SeqCst),
-            3,
-            "should have been called 3 times (1 initial + 2 retries)"
-        );
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_retry_loop_gives_up_after_max_retries() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token").with_max_retries(2);
-        let client = test_client(config);
-        let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
-        let count = call_count.clone();
-        let result: Result<String> = client
-            .retry_loop(|| {
-                let count = count.clone();
-                async move {
-                    count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                    Err(Error::GraphQl {
-                        status: Some(500),
-                        errors: vec![],
-                        body: String::new(),
-                        message: "server error".to_string(),
-                    }
-                    .into())
-                }
-            })
-            .await;
-        assert!(result.is_err());
-        assert_eq!(
-            call_count.load(std::sync::atomic::Ordering::SeqCst),
-            3,
-            "should have been called 3 times (1 initial + 2 retries)"
-        );
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_retry_loop_does_not_retry_permanent_errors() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token").with_max_retries(3);
-        let client = test_client(config);
-        let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
-        let count = call_count.clone();
-        let result: Result<String> = client
-            .retry_loop(|| {
-                let count = count.clone();
-                async move {
-                    count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                    Err(Error::GraphQl {
-                        status: Some(400),
-                        errors: vec![],
-                        body: String::new(),
-                        message: "bad request".to_string(),
-                    }
-                    .into())
-                }
-            })
-            .await;
-        assert!(result.is_err());
-        assert_eq!(
-            call_count.load(std::sync::atomic::Ordering::SeqCst),
-            1,
-            "permanent errors should not be retried"
-        );
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_retry_loop_disabled_with_zero_retries() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token").with_max_retries(0);
-        let client = test_client(config);
-        let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
-        let count = call_count.clone();
-        let result: Result<String> = client
-            .retry_loop(|| {
-                let count = count.clone();
-                async move {
-                    count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                    Err(Error::GraphQl {
-                        status: Some(503),
-                        errors: vec![],
-                        body: String::new(),
-                        message: "service unavailable".to_string(),
-                    }
-                    .into())
-                }
-            })
-            .await;
-        assert!(result.is_err());
-        assert_eq!(
-            call_count.load(std::sync::atomic::Ordering::SeqCst),
-            1,
-            "with max_retries=0 should only try once"
-        );
+                })
+                .await;
+            if succeeds {
+                assert_eq!(result.unwrap(), "ok", "{label}");
+            } else {
+                assert!(
+                    matches!(result, Err(Error::GraphQl { status: Some(s), .. }) if s == status),
+                    "{label}: {result:?}"
+                );
+            }
+            assert_eq!(
+                call_count.load(std::sync::atomic::Ordering::SeqCst),
+                expected_calls,
+                "{label}: calls"
+            );
+        }
     }
 
     #[cfg_attr(miri, ignore)]

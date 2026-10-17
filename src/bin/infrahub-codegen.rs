@@ -2116,108 +2116,87 @@ mod codegen_name_tests {
     }
 
     #[test]
-    fn test_to_snake_handles_acronyms() {
-        assert_eq!(to_snake("IPAM"), "ipam");
-        assert_eq!(to_snake("GraphQLQuery"), "graph_ql_query");
-        assert_eq!(to_snake("IPAddressPool"), "ip_address_pool");
+    fn test_to_snake() {
+        for (input, expected) in [
+            // acronyms
+            ("IPAM", "ipam"),
+            ("GraphQLQuery", "graph_ql_query"),
+            ("IPAddressPool", "ip_address_pool"),
+            // digit to alpha boundary
+            ("CoreTransformJinja2Create", "core_transform_jinja2_create"),
+            ("CoreTransformJinja2Update", "core_transform_jinja2_update"),
+            ("Http2Client", "http2_client"),
+            ("V2Api", "v2_api"),
+            ("route53Zone", "route53_zone"),
+        ] {
+            assert_eq!(to_snake(input), expected, "to_snake({input:?})");
+        }
     }
 
     #[test]
-    fn test_to_snake_handles_digit_to_alpha_boundary() {
-        assert_eq!(
-            to_snake("CoreTransformJinja2Create"),
-            "core_transform_jinja2_create"
-        );
-        assert_eq!(
-            to_snake("CoreTransformJinja2Update"),
-            "core_transform_jinja2_update"
-        );
-        assert_eq!(to_snake("Http2Client"), "http2_client");
-        assert_eq!(to_snake("V2Api"), "v2_api");
-        assert_eq!(to_snake("route53Zone"), "route53_zone");
+    fn test_to_rust_field() {
+        for (input, expected) in [
+            // acronyms
+            ("nodeID", "node_id"),
+            ("hFID", "h_fid"),
+            ("ipAddress", "ip_address"),
+            ("nodeUUID", "node_uuid"),
+            ("simple", "simple"),
+            ("camelCase", "camel_case"),
+            // keywords that can be raw identifiers
+            ("type", "r#type"),
+            ("yield", "r#yield"),
+            ("abstract", "r#abstract"),
+            ("try", "r#try"),
+            ("gen", "r#gen"),
+            // keywords that cannot be raw identifiers get a suffix
+            ("self", "self_"),
+            ("Self", "self_"),
+            ("super", "super_"),
+            ("crate", "crate_"),
+            // leading underscores
+            ("_", "__"),
+            ("__", "__"),
+            ("_1st", "_1_st"),
+            ("_updated_at", "_updated_at"),
+        ] {
+            assert_eq!(to_rust_field(input), expected, "to_rust_field({input:?})");
+        }
     }
 
     #[test]
-    fn test_to_rust_field_handles_acronyms() {
-        assert_eq!(to_rust_field("nodeID"), "node_id");
-        assert_eq!(to_rust_field("hFID"), "h_fid");
-        assert_eq!(to_rust_field("ipAddress"), "ip_address");
-        assert_eq!(to_rust_field("nodeUUID"), "node_uuid");
-        assert_eq!(to_rust_field("simple"), "simple");
-        assert_eq!(to_rust_field("camelCase"), "camel_case");
-    }
-
-    #[test]
-    fn test_to_rust_field_keyword_escaping() {
-        assert_eq!(to_rust_field("type"), "r#type");
-        assert_eq!(to_rust_field("yield"), "r#yield");
-        assert_eq!(to_rust_field("abstract"), "r#abstract");
-        assert_eq!(to_rust_field("try"), "r#try");
-        assert_eq!(to_rust_field("gen"), "r#gen");
-    }
-
-    #[test]
-    fn test_to_rust_field_non_raw_keywords_get_suffix() {
-        assert_eq!(to_rust_field("self"), "self_");
-        assert_eq!(to_rust_field("Self"), "self_");
-        assert_eq!(to_rust_field("super"), "super_");
-        assert_eq!(to_rust_field("crate"), "crate_");
-    }
-
-    #[test]
-    fn test_to_rust_field_leading_underscores() {
-        assert_eq!(to_rust_field("_"), "__");
-        assert_eq!(to_rust_field("__"), "__");
-        assert_eq!(to_rust_field("_1st"), "_1_st");
-        assert_eq!(to_rust_field("_updated_at"), "_updated_at");
-    }
-
-    #[test]
-    fn test_to_rust_ident_all_caps_enum_variants() {
-        assert_eq!(to_rust_ident("DENY"), "Deny");
-        assert_eq!(to_rust_ident("ALLOW_DEFAULT"), "AllowDefault");
-        assert_eq!(to_rust_ident("NEED_UPGRADE_REBASE"), "NeedUpgradeRebase");
-        assert_eq!(to_rust_ident("BASE_BRANCH"), "BaseBranch");
-        assert_eq!(to_rust_ident("ASC"), "Asc");
-    }
-
-    #[test]
-    fn test_to_rust_ident_pascal_case_passthrough() {
-        assert_eq!(to_rust_ident("CoreMenuItem"), "CoreMenuItem");
-        assert_eq!(to_rust_ident("InfrahubTask"), "InfrahubTask");
-    }
-
-    #[test]
-    fn test_to_rust_ident_preserves_uppercase_clusters() {
-        assert_eq!(to_rust_ident("BuiltinIPAddress"), "BuiltinIPAddress");
-        assert_eq!(to_rust_ident("CoreGraphQLQuery"), "CoreGraphQLQuery");
-        assert_eq!(to_rust_ident("CoreIPAddressPool"), "CoreIPAddressPool");
-        assert_eq!(to_rust_ident("JSONAttribute"), "JSONAttribute");
-        assert_eq!(to_rust_ident("UpdateHFID"), "UpdateHFID");
-    }
-
-    #[test]
-    fn test_to_rust_ident_digit_boundaries() {
-        assert_eq!(
-            to_rust_ident("CoreTransformJinja2Create"),
-            "CoreTransformJinja2Create"
-        );
-        assert_eq!(to_rust_ident("Http2Client"), "Http2Client");
-        assert_eq!(to_rust_ident("V2Api"), "V2Api");
-    }
-
-    #[test]
-    fn test_to_rust_ident_reserved_words() {
-        assert_eq!(to_rust_ident("Self"), "SelfType");
-        assert_eq!(to_rust_ident("Type"), "TypeType");
-        assert_eq!(to_rust_ident("Box"), "BoxType");
-        assert_eq!(to_rust_ident("Result"), "ResultType");
-    }
-
-    #[test]
-    fn test_to_rust_ident_lowercase_input() {
-        assert_eq!(to_rust_ident("core"), "Core");
-        assert_eq!(to_rust_ident("builtin"), "Builtin");
+    fn test_to_rust_ident() {
+        for (input, expected) in [
+            // all-caps enum variants
+            ("DENY", "Deny"),
+            ("ALLOW_DEFAULT", "AllowDefault"),
+            ("NEED_UPGRADE_REBASE", "NeedUpgradeRebase"),
+            ("BASE_BRANCH", "BaseBranch"),
+            ("ASC", "Asc"),
+            // pascal case passes through
+            ("CoreMenuItem", "CoreMenuItem"),
+            ("InfrahubTask", "InfrahubTask"),
+            // uppercase clusters are preserved
+            ("BuiltinIPAddress", "BuiltinIPAddress"),
+            ("CoreGraphQLQuery", "CoreGraphQLQuery"),
+            ("CoreIPAddressPool", "CoreIPAddressPool"),
+            ("JSONAttribute", "JSONAttribute"),
+            ("UpdateHFID", "UpdateHFID"),
+            // digit boundaries
+            ("CoreTransformJinja2Create", "CoreTransformJinja2Create"),
+            ("Http2Client", "Http2Client"),
+            ("V2Api", "V2Api"),
+            // reserved words
+            ("Self", "SelfType"),
+            ("Type", "TypeType"),
+            ("Box", "BoxType"),
+            ("Result", "ResultType"),
+            // lowercase input
+            ("core", "Core"),
+            ("builtin", "Builtin"),
+        ] {
+            assert_eq!(to_rust_ident(input), expected, "to_rust_ident({input:?})");
+        }
     }
 
     #[test]

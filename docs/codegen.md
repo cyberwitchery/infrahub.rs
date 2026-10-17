@@ -32,8 +32,24 @@ INFRAHUB_TOKEN=... cargo run --bin infrahub-codegen -- \
 - `--token <token>`: api token for schema fetch
 - `--branch <name>`: optional branch for schema fetch
 - `--out <path>`: output directory for the generated crate
-- `--crate-name <name>`: optional crate name (defaults to directory name)
+- `--crate-name <name>`: package name for the generated `Cargo.toml`, which then replaces any existing one. without it, a `Cargo.toml` is written only if `--out` has none yet, named after the last component of `--out`; codegen fails if that is not a valid package name
 - `--infrahub-path <path>`: use a path dependency for `infrahub`
+
+## regenerate
+
+```bash
+cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql \
+  --out /tmp/infrahub-generated --infrahub-path /path/to/infrahub.rs
+cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql \
+  --out /tmp/infrahub-generated --infrahub-path /path/to/infrahub.rs \
+  --crate-name infrahub-generated
+```
+
+after the quick start, the first command rewrites `src/` but keeps
+`/tmp/infrahub-generated/Cargo.toml` as it is: its `infrahub` pin stays, even
+one from an older codegen, and `--infrahub-path` has no effect. the second also
+passes `--crate-name`, which rewrites `Cargo.toml`, here with the path
+dependency.
 
 ## add the generated crate
 

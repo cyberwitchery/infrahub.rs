@@ -28,6 +28,10 @@ infrahub = "0.5"
 tokio = { version = "1", features = ["full"] }
 ```
 
+## version compatibility
+
+CI is pinned to Infrahub 1.11.7. see [`docs/compat.md`](docs/compat.md) for release compatibility.
+
 ## quick start
 
 ```rust

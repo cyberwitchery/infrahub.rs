@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- ci: bump pinned Infrahub version from 1.11.5 to 1.11.7 (refs #83). the parsed GraphQL schema has the same types, fields, arguments, descriptions and deprecations as the snapshot, so `schema/infrahub.graphql` and `test-client` are unchanged
+
 - codegen: `generated()`'s `account_profile`, `infrahub_task`, `infrahub_task_branch_status` and `infrahub_event` now send queries Infrahub accepts, instead of failing every call with "must have a selection of subfields". a root field whose type is an interface, and an interface-typed `node` with no `node_metadata` beside it, are now selected and typed like relationship peers since 0.5.0: `AccountProfileResponse.account_profile` is `Option<Box<CoreGenericAccount>>`, `TaskNodes.node` is `Option<Box<TaskNodeInterface>>` and `EventNodes.node` is `Option<Box<EventNodeInterface>>`, instead of `Option<serde_json::Value>`. for other schemas, an object with nothing to select is selected as `{ __typename }` instead of with an empty selection, and a non-null field the generated query leaves out is an `Option`
 - codegen: without `--crate-name`, codegen now writes `Cargo.toml` when `--out` has none yet, naming the package after the last component of `--out`, so the documented `--out /tmp/infrahub-generated` gives a crate that `infrahub-generated = { path = "/tmp/infrahub-generated" }` can use instead of one cargo cannot read. an existing `Cargo.toml` is left alone, and codegen fails and asks for `--crate-name` when that component is not a valid package name. `--crate-name` still writes `Cargo.toml` every time, and `--infrahub-path` now applies whenever one is written
 

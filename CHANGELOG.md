@@ -1,6 +1,6 @@
 # changelog
 
-## Unreleased
+## 0.5.1 - 2026-10-25
 
 - ci: bump pinned Infrahub version from 1.11.5 to 1.11.7 (refs #83). the parsed GraphQL schema has the same types, fields, arguments, descriptions and deprecations as the snapshot, so `schema/infrahub.graphql` and `test-client` are unchanged
 

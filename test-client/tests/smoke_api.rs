@@ -458,6 +458,8 @@ async fn group_without_parent_list_and_get_by_id() {
         .expect("get_by_id")
         .expect("group should be found");
     assert_eq!(group.id, group_id);
+    assert!(group.parent.node.is_none());
+    assert!(group.parent.node_metadata.is_none());
     let name_val = group.name.as_ref().and_then(|n| n.value.as_deref());
     assert_eq!(name_val, Some("smoke-parentless-group"));
 
@@ -484,6 +486,10 @@ async fn group_parent_comes_back_with_its_peer() {
         .as_ref()
         .expect("create returns the parent");
     assert_eq!(created.id.as_deref(), Some(parent.id.as_str()));
+    assert!(
+        child.parent.node_metadata.is_some(),
+        "create returns the parent's metadata"
+    );
 
     let groups = client
         .api()
@@ -503,6 +509,10 @@ async fn group_parent_comes_back_with_its_peer() {
         .expect("list returns the parent");
     assert_eq!(peer.id.as_deref(), Some(parent.id.as_str()));
     assert_eq!(peer.typename.as_deref(), Some("CoreStandardGroup"));
+    assert!(
+        listed.parent.node_metadata.is_some(),
+        "list returns the parent's metadata"
+    );
 
     let found = client
         .api()
@@ -518,6 +528,11 @@ async fn group_parent_comes_back_with_its_peer() {
         .as_ref()
         .expect("get_by_id returns the parent");
     assert_eq!(peer.id.as_deref(), Some(parent.id.as_str()));
+
+    assert!(
+        found.parent.node_metadata.is_some(),
+        "get_by_id returns the parent's metadata"
+    );
 
     let generic = client
         .api()

@@ -14,6 +14,19 @@ fn empty_generic_edge_deserializes_without_node_metadata() {
 }
 
 #[test]
+fn empty_generic_edge_deserializes_null_node_metadata() {
+    let edge: NestedEdgedCoreGroup = serde_json::from_value(serde_json::json!({
+        "node": null,
+        "node_metadata": null,
+        "properties": { "is_protected": null, "updated_at": null },
+        "relationship_metadata": null
+    }))
+    .expect("empty edge with null metadata");
+    assert!(edge.node.is_none());
+    assert!(edge.node_metadata.is_none());
+}
+
+#[test]
 fn set_generic_edge_deserializes_its_peer() {
     let edge: NestedEdgedCoreGroup = serde_json::from_value(serde_json::json!({
         "node": {

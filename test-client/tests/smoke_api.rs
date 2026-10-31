@@ -7,10 +7,11 @@
 use infrahub::{Client, ClientConfig};
 use infrahub_test_client::api::ApiClient;
 use infrahub_test_client::inputs::{
-    BuiltinTagCreateInput, BuiltinTagUpdateInput, CoreStandardGroupCreateInput, DeleteInput,
-    RelatedNodeInput, TextAttributeCreate, TextAttributeUpdate,
+    BuiltinTagCreateInput, BuiltinTagUpdateInput, CoreGraphQLQueryGroupCreateInput,
+    CoreStandardGroupCreateInput, DeleteInput, RelatedNodeInput, TextAttributeCreate,
+    TextAttributeUpdate,
 };
-use infrahub_test_client::types::CoreStandardGroup;
+use infrahub_test_client::types::{CoreGraphQLQueryGroup, CoreStandardGroup};
 use infrahub_test_client::GeneratedClient;
 
 // ---------------------------------------------------------------------------
@@ -112,6 +113,26 @@ async fn create_group(
         .create(None, data, branch().as_deref())
         .await
         .expect("create group")
+}
+
+/// create a CoreGraphQLQuery over raw graphql and return its id
+async fn create_graphql_query(client: &Client, name: &str) -> String {
+    let mutation = r#"mutation($name: String!, $query: String!) {
+        CoreGraphQLQueryCreate(data: { name: { value: $name }, query: { value: $query } }) {
+            object { id }
+        }
+    }"#;
+    let vars =
+        serde_json::json!({ "name": name, "query": "query SmokePeer { BuiltinTag { count } }" });
+    let response = client
+        .execute_raw(mutation, Some(vars), branch().as_deref())
+        .await
+        .expect("create graphql query");
+    let data = response.data.expect("data");
+    data["CoreGraphQLQueryCreate"]["object"]["id"]
+        .as_str()
+        .expect("graphql query id")
+        .to_string()
 }
 
 /// delete a CoreStandardGroup by id
@@ -547,6 +568,75 @@ async fn group_parent_comes_back_with_its_peer() {
 
     delete_group(&client, &child.id).await;
     delete_group(&client, &parent.id).await;
+}
+
+#[cfg_attr(miri, ignore)]
+#[tokio::test]
+async fn query_group_comes_back_with_its_query() {
+    let Some(client) = make_client() else {
+        return;
+    };
+    let query_id = create_graphql_query(&client, "smoke-peer-query").await;
+    let groups = client.api().core().graph_ql_query_group();
+    let data = CoreGraphQLQueryGroupCreateInput {
+        id: None,
+        parameters: None,
+        name: Some(TextAttributeCreate {
+            is_protected: None,
+            source: None,
+            owner: None,
+            value: Some("smoke-peer-query-group".to_string()),
+        }),
+        label: None,
+        description: None,
+        group_type: None,
+        query: Some(related(&query_id)),
+        members: None,
+        subscribers: None,
+        parent: None,
+        children: None,
+    };
+    let created = groups
+        .create(None, data, branch().as_deref())
+        .await
+        .expect("create query group");
+    let peer_id = |group: &CoreGraphQLQueryGroup| group.query.node.as_ref()?.id.clone();
+    assert_eq!(peer_id(&created), Some(query_id.clone()), "create");
+
+    let listed = groups
+        .list(None, branch().as_deref())
+        .await
+        .expect("list query groups");
+    let listed = listed
+        .iter()
+        .find(|g| g.id == created.id)
+        .expect("group should appear in list");
+    assert_eq!(peer_id(listed), Some(query_id.clone()), "list");
+
+    let found = groups
+        .get_by_id(&created.id, branch().as_deref())
+        .await
+        .expect("get_by_id")
+        .expect("group should be found");
+    assert_eq!(peer_id(&found), Some(query_id.clone()), "get_by_id");
+
+    let delete = |id: &str| DeleteInput {
+        id: Some(id.to_string()),
+        hfid: None,
+    };
+    let deleted = groups
+        .delete(None, delete(&created.id), branch().as_deref())
+        .await
+        .expect("delete query group");
+    assert!(deleted, "delete should report ok");
+    let deleted = client
+        .api()
+        .core()
+        .graph_ql_query()
+        .delete(None, delete(&query_id), branch().as_deref())
+        .await
+        .expect("delete graphql query");
+    assert!(deleted, "delete should report ok");
 }
 
 #[cfg_attr(miri, ignore)]

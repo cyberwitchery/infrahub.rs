@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- codegen: a set relationship whose peer is a concrete model, such as an artifact's `definition` or a query group's `query`, no longer makes `list`, `get_by_id`, `paginate`, `create`, `update` and `upsert` fail with `missing field`. the edge's `node` now selects the peer's `__typename`, `id`, `hfid` and `display_label` at any depth, like an interface peer, and is typed with a new struct per peer kind whose fields are all optional, e.g. `NestedEdgedCoreArtifactDefinition.node: Option<Box<CoreArtifactDefinitionPeer>>`; use the peer model's `get_by_id` for the rest
 - ci: bump pinned Infrahub version from 1.11.7 to 1.11.9 (refs #89)
 - schema: make `node_metadata` nullable on 31 generic `NestedEdged*` types to match Infrahub 1.11.9. regenerate `test-client`: the existing codegen now selects this metadata, so populated generic relationships return it and empty relationships accept null. generated Rust types are unchanged; codegen retains the workaround for older schemas that declare this metadata non-null
 - docs: move the compat table and local quickstart to 1.11.9

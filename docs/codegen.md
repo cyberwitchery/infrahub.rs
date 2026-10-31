@@ -92,8 +92,12 @@ let _all = paginator.collect_all().await?;
   struct; use the concrete model's `get_by_id` for the rest of the peer.
   other interface-typed fields, such as an attribute's `source` and `owner`, are
   not selected and stay `serde_json::Value`.
+- **relationship peers**: a relationship edge (one with `properties`) whose `node`
+  is a concrete model selects the same identity fields and returns the peer as a
+  `<Kind>Peer` struct, e.g. `NestedEdgedCoreArtifactDefinition.node` is
+  `Option<Box<CoreArtifactDefinitionPeer>>`.
 - **selection depth**: objects more than three levels below the root field are
-  selected as `{ __typename }` only; interface peers are exempt. in `list`,
+  selected as `{ __typename }` only; relationship peers are exempt. in `list`,
   `get_by_id` and `paginate` that leaves a cardinality-many relationship with its
   `count` and empty `edges`. an object with no field to select (all deprecated or
   taking required arguments) is selected as `{ __typename }` too, and a non-null

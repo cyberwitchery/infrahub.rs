@@ -4761,7 +4761,7 @@ pub struct NestedEdgedBuiltinIPPrefix {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedBuiltinTag {
-    pub node: Option<Box<BuiltinTag>>,
+    pub node: Option<Box<BuiltinTagPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4769,7 +4769,7 @@ pub struct NestedEdgedBuiltinTag {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreAccount {
-    pub node: Option<Box<CoreAccount>>,
+    pub node: Option<Box<CoreAccountPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4777,7 +4777,7 @@ pub struct NestedEdgedCoreAccount {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreAccountGroup {
-    pub node: Option<Box<CoreAccountGroup>>,
+    pub node: Option<Box<CoreAccountGroupPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4785,7 +4785,7 @@ pub struct NestedEdgedCoreAccountGroup {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreAccountRole {
-    pub node: Option<Box<CoreAccountRole>>,
+    pub node: Option<Box<CoreAccountRolePeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4801,7 +4801,7 @@ pub struct NestedEdgedCoreAction {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreArtifact {
-    pub node: Option<Box<CoreArtifact>>,
+    pub node: Option<Box<CoreArtifactPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4809,7 +4809,7 @@ pub struct NestedEdgedCoreArtifact {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreArtifactCheck {
-    pub node: Option<Box<CoreArtifactCheck>>,
+    pub node: Option<Box<CoreArtifactCheckPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4817,7 +4817,7 @@ pub struct NestedEdgedCoreArtifactCheck {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreArtifactDefinition {
-    pub node: Option<Box<CoreArtifactDefinition>>,
+    pub node: Option<Box<CoreArtifactDefinitionPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4833,7 +4833,7 @@ pub struct NestedEdgedCoreArtifactTarget {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreArtifactThread {
-    pub node: Option<Box<CoreArtifactThread>>,
+    pub node: Option<Box<CoreArtifactThreadPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4841,7 +4841,7 @@ pub struct NestedEdgedCoreArtifactThread {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreArtifactValidator {
-    pub node: Option<Box<CoreArtifactValidator>>,
+    pub node: Option<Box<CoreArtifactValidatorPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4857,7 +4857,7 @@ pub struct NestedEdgedCoreBasePermission {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreChangeComment {
-    pub node: Option<Box<CoreChangeComment>>,
+    pub node: Option<Box<CoreChangeCommentPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4865,7 +4865,7 @@ pub struct NestedEdgedCoreChangeComment {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreChangeThread {
-    pub node: Option<Box<CoreChangeThread>>,
+    pub node: Option<Box<CoreChangeThreadPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4881,7 +4881,7 @@ pub struct NestedEdgedCoreCheck {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreCheckDefinition {
-    pub node: Option<Box<CoreCheckDefinition>>,
+    pub node: Option<Box<CoreCheckDefinitionPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4905,7 +4905,7 @@ pub struct NestedEdgedCoreCredential {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreCustomWebhook {
-    pub node: Option<Box<CoreCustomWebhook>>,
+    pub node: Option<Box<CoreCustomWebhookPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4913,7 +4913,7 @@ pub struct NestedEdgedCoreCustomWebhook {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreDataCheck {
-    pub node: Option<Box<CoreDataCheck>>,
+    pub node: Option<Box<CoreDataCheckPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4921,7 +4921,7 @@ pub struct NestedEdgedCoreDataCheck {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreDataValidator {
-    pub node: Option<Box<CoreDataValidator>>,
+    pub node: Option<Box<CoreDataValidatorPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4929,7 +4929,7 @@ pub struct NestedEdgedCoreDataValidator {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreEnvKeyValue {
-    pub node: Option<Box<CoreEnvKeyValue>>,
+    pub node: Option<Box<CoreEnvKeyValuePeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4937,7 +4937,7 @@ pub struct NestedEdgedCoreEnvKeyValue {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreFileCheck {
-    pub node: Option<Box<CoreFileCheck>>,
+    pub node: Option<Box<CoreFileCheckPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4953,7 +4953,7 @@ pub struct NestedEdgedCoreFileObject {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreFileThread {
-    pub node: Option<Box<CoreFileThread>>,
+    pub node: Option<Box<CoreFileThreadPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4961,7 +4961,7 @@ pub struct NestedEdgedCoreFileThread {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGeneratorAction {
-    pub node: Option<Box<CoreGeneratorAction>>,
+    pub node: Option<Box<CoreGeneratorActionPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4969,7 +4969,7 @@ pub struct NestedEdgedCoreGeneratorAction {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGeneratorAwareGroup {
-    pub node: Option<Box<CoreGeneratorAwareGroup>>,
+    pub node: Option<Box<CoreGeneratorAwareGroupPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4977,7 +4977,7 @@ pub struct NestedEdgedCoreGeneratorAwareGroup {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGeneratorCheck {
-    pub node: Option<Box<CoreGeneratorCheck>>,
+    pub node: Option<Box<CoreGeneratorCheckPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4985,7 +4985,7 @@ pub struct NestedEdgedCoreGeneratorCheck {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGeneratorDefinition {
-    pub node: Option<Box<CoreGeneratorDefinition>>,
+    pub node: Option<Box<CoreGeneratorDefinitionPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -4993,7 +4993,7 @@ pub struct NestedEdgedCoreGeneratorDefinition {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGeneratorGroup {
-    pub node: Option<Box<CoreGeneratorGroup>>,
+    pub node: Option<Box<CoreGeneratorGroupPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5001,7 +5001,7 @@ pub struct NestedEdgedCoreGeneratorGroup {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGeneratorInstance {
-    pub node: Option<Box<CoreGeneratorInstance>>,
+    pub node: Option<Box<CoreGeneratorInstancePeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5009,7 +5009,7 @@ pub struct NestedEdgedCoreGeneratorInstance {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGeneratorValidator {
-    pub node: Option<Box<CoreGeneratorValidator>>,
+    pub node: Option<Box<CoreGeneratorValidatorPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5033,7 +5033,7 @@ pub struct NestedEdgedCoreGenericRepository {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGlobalPermission {
-    pub node: Option<Box<CoreGlobalPermission>>,
+    pub node: Option<Box<CoreGlobalPermissionPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5041,7 +5041,7 @@ pub struct NestedEdgedCoreGlobalPermission {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGraphQLQuery {
-    pub node: Option<Box<CoreGraphQLQuery>>,
+    pub node: Option<Box<CoreGraphQLQueryPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5049,7 +5049,7 @@ pub struct NestedEdgedCoreGraphQLQuery {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGraphQLQueryGroup {
-    pub node: Option<Box<CoreGraphQLQueryGroup>>,
+    pub node: Option<Box<CoreGraphQLQueryGroupPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5065,7 +5065,7 @@ pub struct NestedEdgedCoreGroup {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGroupAction {
-    pub node: Option<Box<CoreGroupAction>>,
+    pub node: Option<Box<CoreGroupActionPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5073,7 +5073,7 @@ pub struct NestedEdgedCoreGroupAction {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreGroupTriggerRule {
-    pub node: Option<Box<CoreGroupTriggerRule>>,
+    pub node: Option<Box<CoreGroupTriggerRulePeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5081,7 +5081,7 @@ pub struct NestedEdgedCoreGroupTriggerRule {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreIPAddressPool {
-    pub node: Option<Box<CoreIPAddressPool>>,
+    pub node: Option<Box<CoreIPAddressPoolPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5097,7 +5097,7 @@ pub struct NestedEdgedCoreIPPool {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreIPPrefixPool {
-    pub node: Option<Box<CoreIPPrefixPool>>,
+    pub node: Option<Box<CoreIPPrefixPoolPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5121,7 +5121,7 @@ pub struct NestedEdgedCoreMenu {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreMenuItem {
-    pub node: Option<Box<CoreMenuItem>>,
+    pub node: Option<Box<CoreMenuItemPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5137,7 +5137,7 @@ pub struct NestedEdgedCoreNode {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreNodeTriggerAttributeMatch {
-    pub node: Option<Box<CoreNodeTriggerAttributeMatch>>,
+    pub node: Option<Box<CoreNodeTriggerAttributeMatchPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5153,7 +5153,7 @@ pub struct NestedEdgedCoreNodeTriggerMatch {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreNodeTriggerRelationshipMatch {
-    pub node: Option<Box<CoreNodeTriggerRelationshipMatch>>,
+    pub node: Option<Box<CoreNodeTriggerRelationshipMatchPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5161,7 +5161,7 @@ pub struct NestedEdgedCoreNodeTriggerRelationshipMatch {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreNodeTriggerRule {
-    pub node: Option<Box<CoreNodeTriggerRule>>,
+    pub node: Option<Box<CoreNodeTriggerRulePeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5169,7 +5169,7 @@ pub struct NestedEdgedCoreNodeTriggerRule {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreNumberPool {
-    pub node: Option<Box<CoreNumberPool>>,
+    pub node: Option<Box<CoreNumberPoolPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5185,7 +5185,7 @@ pub struct NestedEdgedCoreObjectComponentTemplate {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreObjectPermission {
-    pub node: Option<Box<CoreObjectPermission>>,
+    pub node: Option<Box<CoreObjectPermissionPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5201,7 +5201,7 @@ pub struct NestedEdgedCoreObjectTemplate {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreObjectThread {
-    pub node: Option<Box<CoreObjectThread>>,
+    pub node: Option<Box<CoreObjectThreadPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5209,7 +5209,7 @@ pub struct NestedEdgedCoreObjectThread {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCorePasswordCredential {
-    pub node: Option<Box<CorePasswordCredential>>,
+    pub node: Option<Box<CorePasswordCredentialPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5225,7 +5225,7 @@ pub struct NestedEdgedCoreProfile {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreProposedChange {
-    pub node: Option<Box<CoreProposedChange>>,
+    pub node: Option<Box<CoreProposedChangePeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5233,7 +5233,7 @@ pub struct NestedEdgedCoreProposedChange {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreReadOnlyRepository {
-    pub node: Option<Box<CoreReadOnlyRepository>>,
+    pub node: Option<Box<CoreReadOnlyRepositoryPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5241,7 +5241,7 @@ pub struct NestedEdgedCoreReadOnlyRepository {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreRepository {
-    pub node: Option<Box<CoreRepository>>,
+    pub node: Option<Box<CoreRepositoryPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5249,7 +5249,7 @@ pub struct NestedEdgedCoreRepository {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreRepositoryGroup {
-    pub node: Option<Box<CoreRepositoryGroup>>,
+    pub node: Option<Box<CoreRepositoryGroupPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5257,7 +5257,7 @@ pub struct NestedEdgedCoreRepositoryGroup {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreRepositoryValidator {
-    pub node: Option<Box<CoreRepositoryValidator>>,
+    pub node: Option<Box<CoreRepositoryValidatorPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5273,7 +5273,7 @@ pub struct NestedEdgedCoreResourcePool {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreSchemaCheck {
-    pub node: Option<Box<CoreSchemaCheck>>,
+    pub node: Option<Box<CoreSchemaCheckPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5281,7 +5281,7 @@ pub struct NestedEdgedCoreSchemaCheck {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreSchemaValidator {
-    pub node: Option<Box<CoreSchemaValidator>>,
+    pub node: Option<Box<CoreSchemaValidatorPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5289,7 +5289,7 @@ pub struct NestedEdgedCoreSchemaValidator {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreStandardCheck {
-    pub node: Option<Box<CoreStandardCheck>>,
+    pub node: Option<Box<CoreStandardCheckPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5297,7 +5297,7 @@ pub struct NestedEdgedCoreStandardCheck {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreStandardGroup {
-    pub node: Option<Box<CoreStandardGroup>>,
+    pub node: Option<Box<CoreStandardGroupPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5305,7 +5305,7 @@ pub struct NestedEdgedCoreStandardGroup {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreStandardWebhook {
-    pub node: Option<Box<CoreStandardWebhook>>,
+    pub node: Option<Box<CoreStandardWebhookPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5313,7 +5313,7 @@ pub struct NestedEdgedCoreStandardWebhook {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreStaticKeyValue {
-    pub node: Option<Box<CoreStaticKeyValue>>,
+    pub node: Option<Box<CoreStaticKeyValuePeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5337,7 +5337,7 @@ pub struct NestedEdgedCoreThread {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreThreadComment {
-    pub node: Option<Box<CoreThreadComment>>,
+    pub node: Option<Box<CoreThreadCommentPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5345,7 +5345,7 @@ pub struct NestedEdgedCoreThreadComment {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreTransformJinja2 {
-    pub node: Option<Box<CoreTransformJinja2>>,
+    pub node: Option<Box<CoreTransformJinja2Peer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5353,7 +5353,7 @@ pub struct NestedEdgedCoreTransformJinja2 {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreTransformPython {
-    pub node: Option<Box<CoreTransformPython>>,
+    pub node: Option<Box<CoreTransformPythonPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5377,7 +5377,7 @@ pub struct NestedEdgedCoreTriggerRule {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedCoreUserValidator {
-    pub node: Option<Box<CoreUserValidator>>,
+    pub node: Option<Box<CoreUserValidatorPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5409,7 +5409,7 @@ pub struct NestedEdgedCoreWeightedPoolResource {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedInternalAccountToken {
-    pub node: Option<Box<InternalAccountToken>>,
+    pub node: Option<Box<InternalAccountTokenPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5417,7 +5417,7 @@ pub struct NestedEdgedInternalAccountToken {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedInternalExternalIdentity {
-    pub node: Option<Box<InternalExternalIdentity>>,
+    pub node: Option<Box<InternalExternalIdentityPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5425,7 +5425,7 @@ pub struct NestedEdgedInternalExternalIdentity {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedInternalIPPrefixAvailable {
-    pub node: Option<Box<InternalIPPrefixAvailable>>,
+    pub node: Option<Box<InternalIPPrefixAvailablePeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5433,7 +5433,7 @@ pub struct NestedEdgedInternalIPPrefixAvailable {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedInternalIPRangeAvailable {
-    pub node: Option<Box<InternalIPRangeAvailable>>,
+    pub node: Option<Box<InternalIPRangeAvailablePeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5441,7 +5441,7 @@ pub struct NestedEdgedInternalIPRangeAvailable {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedInternalRefreshToken {
-    pub node: Option<Box<InternalRefreshToken>>,
+    pub node: Option<Box<InternalRefreshTokenPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5449,7 +5449,7 @@ pub struct NestedEdgedInternalRefreshToken {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedIpamNamespace {
-    pub node: Option<Box<IpamNamespace>>,
+    pub node: Option<Box<IpamNamespacePeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5473,7 +5473,7 @@ pub struct NestedEdgedLineageSource {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedProfileBuiltinIPAddress {
-    pub node: Option<Box<ProfileBuiltinIPAddress>>,
+    pub node: Option<Box<ProfileBuiltinIPAddressPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5481,7 +5481,7 @@ pub struct NestedEdgedProfileBuiltinIPAddress {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedProfileBuiltinIPPrefix {
-    pub node: Option<Box<ProfileBuiltinIPPrefix>>,
+    pub node: Option<Box<ProfileBuiltinIPPrefixPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5489,7 +5489,7 @@ pub struct NestedEdgedProfileBuiltinIPPrefix {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedProfileBuiltinTag {
-    pub node: Option<Box<ProfileBuiltinTag>>,
+    pub node: Option<Box<ProfileBuiltinTagPeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -5497,7 +5497,7 @@ pub struct NestedEdgedProfileBuiltinTag {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedEdgedProfileIpamNamespace {
-    pub node: Option<Box<ProfileIpamNamespace>>,
+    pub node: Option<Box<ProfileIpamNamespacePeer>>,
     pub node_metadata: Option<Box<InfrahubNodeMetadata>>,
     pub properties: Option<Box<RelationshipProperty>>,
     pub relationship_metadata: Option<Box<InfrahubRelationshipMetadata>>,
@@ -7875,5 +7875,591 @@ pub struct TaskNodeInterface {
     pub parameters: Option<serde_json::Value>,
     pub tags: Option<Vec<String>>,
     pub start_time: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BuiltinTagPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreAccountPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+    pub is_externally_managed: Option<bool>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreAccountGroupPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreAccountRolePeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreArtifactPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreArtifactCheckPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreArtifactDefinitionPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreArtifactThreadPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreArtifactValidatorPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreChangeCommentPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreChangeThreadPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreCheckDefinitionPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreCustomWebhookPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreDataCheckPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreDataValidatorPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreEnvKeyValuePeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreFileCheckPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreFileThreadPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGeneratorActionPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGeneratorAwareGroupPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGeneratorCheckPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGeneratorDefinitionPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGeneratorGroupPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGeneratorInstancePeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGeneratorValidatorPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGlobalPermissionPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGraphQLQueryPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGraphQLQueryGroupPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGroupActionPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreGroupTriggerRulePeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreIPAddressPoolPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreIPPrefixPoolPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreMenuItemPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreNodeTriggerAttributeMatchPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreNodeTriggerRelationshipMatchPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreNodeTriggerRulePeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreNumberPoolPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreObjectPermissionPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreObjectThreadPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CorePasswordCredentialPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreProposedChangePeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreReadOnlyRepositoryPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreRepositoryPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreRepositoryGroupPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreRepositoryValidatorPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreSchemaCheckPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreSchemaValidatorPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreStandardCheckPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreStandardGroupPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreStandardWebhookPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreStaticKeyValuePeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreThreadCommentPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreTransformJinja2Peer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreTransformPythonPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CoreUserValidatorPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InternalAccountTokenPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InternalExternalIdentityPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InternalIPPrefixAvailablePeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InternalIPRangeAvailablePeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InternalRefreshTokenPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct IpamNamespacePeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileBuiltinIPAddressPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileBuiltinIPPrefixPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileBuiltinTagPeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ProfileIpamNamespacePeer {
+    #[serde(rename = "__typename")]
+    pub typename: Option<String>,
+    pub id: Option<String>,
+    pub hfid: Option<Vec<String>>,
+    pub display_label: Option<String>,
 }
 

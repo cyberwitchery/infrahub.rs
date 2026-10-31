@@ -1,6 +1,8 @@
 //! offline checks that generated types accept the payloads infrahub sends
 
-use infrahub_test_client::types::{CoreGenericAccount, NestedEdgedCoreGroup};
+use infrahub_test_client::types::{
+    CoreGenericAccount, NestedEdgedCoreArtifactDefinition, NestedEdgedCoreGroup,
+};
 
 #[test]
 fn empty_generic_edge_deserializes_without_node_metadata() {
@@ -58,5 +60,23 @@ fn generic_peer_deserializes_from_a_capped_selection() {
     ] {
         let account: CoreGenericAccount = serde_json::from_value(node).expect("capped peer");
         assert!(account.is_externally_managed.is_none());
+    }
+}
+
+#[test]
+fn concrete_peer_deserializes_from_its_identity_selection() {
+    for node in [
+        serde_json::json!({ "__typename": "CoreArtifactDefinition" }),
+        serde_json::json!({
+            "__typename": "CoreArtifactDefinition",
+            "id": "18a7d1c2-5b3e-4f1a-9c6d-0e2f4a6b8c9d",
+            "hfid": ["smoke-definition"],
+            "display_label": "smoke-definition"
+        }),
+    ] {
+        let edge: NestedEdgedCoreArtifactDefinition =
+            serde_json::from_value(serde_json::json!({ "node": node })).expect("concrete peer");
+        let peer = edge.node.expect("peer");
+        assert_eq!(peer.typename.as_deref(), Some("CoreArtifactDefinition"));
     }
 }

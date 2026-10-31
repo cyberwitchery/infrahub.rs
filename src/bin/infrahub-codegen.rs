@@ -321,6 +321,9 @@ impl<'a> SchemaContext<'a> {
             helpers.push(format!("{model}Client"));
             helpers.push(format!("{model}Filters"));
         }
+        for kind in object_peer_kinds(self) {
+            helpers.push(format!("{kind}Peer"));
+        }
         let mut root_fields = Vec::new();
         for (is_mutation, root) in [
             (false, Some(&self.query_type)),
@@ -515,32 +518,26 @@ fn render_types(ctx: &SchemaContext) -> String {
         }
     }
 
-    for iface_name in &ctx.interfaces {
-        if let Some(TypeDefinition::Interface(iface)) = ctx.types.get(iface_name) {
-            out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
-            out.push_str(&format!("pub struct {} {{\n", ctx.type_ident(iface_name)));
-            out.push_str("    #[serde(rename = \"__typename\")]\n");
-            out.push_str("    pub typename: Option<String>,\n");
-            let fields: Vec<_> = iface
-                .fields
-                .iter()
-                .filter(|field| identifies_peer(field, ctx))
-                .collect();
-            let names = scope_names(
-                fields.iter().map(|field| field.name.as_str()),
-                &["typename"],
+    for name in ctx.interfaces.iter().chain(&object_peer_kinds(ctx)) {
+        out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
+        out.push_str(&format!("pub struct {} {{\n", peer_ident(name, ctx)));
+        out.push_str("    #[serde(rename = \"__typename\")]\n");
+        out.push_str("    pub typename: Option<String>,\n");
+        let fields = peer_fields(name, ctx);
+        let names = scope_names(
+            fields.iter().map(|field| field.name.as_str()),
+            &["typename"],
+        );
+        for (field, rust_name) in fields.iter().zip(&names) {
+            let ty = rust_type_nonnull(&field.field_type, ctx, false, false);
+            push_named_field(
+                &mut out,
+                rust_name,
+                field.name.as_str(),
+                &format!("Option<{ty}>"),
             );
-            for (field, rust_name) in fields.iter().zip(&names) {
-                let ty = rust_type_nonnull(&field.field_type, ctx, false, false);
-                push_named_field(
-                    &mut out,
-                    rust_name,
-                    field.name.as_str(),
-                    &format!("Option<{ty}>"),
-                );
-            }
-            out.push_str("}\n\n");
         }
+        out.push_str("}\n\n");
     }
 
     for union_name in &ctx.unions {
@@ -1418,15 +1415,15 @@ fn selection_for_type(
                 continue;
             }
 
-            if ctx.objects.contains(&field_base) {
-                let nested = selection_for_type(&field_base, ctx, stack, depth + 1);
-                fields.push(format!("{} {}", field.name, nested));
+            if is_peer(obj, field, ctx) {
+                let peer = peer_selection(&field_base, ctx);
+                fields.push(format!("{} {}", field.name, peer));
                 continue;
             }
 
-            if ctx.interfaces.contains(&field_base) {
-                let peer = peer_selection(&field_base, ctx);
-                fields.push(format!("{} {}", field.name, peer));
+            if ctx.objects.contains(&field_base) {
+                let nested = selection_for_type(&field_base, ctx, stack, depth + 1);
+                fields.push(format!("{} {}", field.name, nested));
                 continue;
             }
 
@@ -1460,12 +1457,61 @@ fn is_selected(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaCont
         || is_interface_peer(field, ctx)
 }
 
-/// an edge's `node` whose peer is an interface, which is selected and typed by its identity fields.
+/// an edge's `node` that is selected and typed by its peer's identity fields.
+fn is_peer(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaContext) -> bool {
+    is_interface_peer(field, ctx)
+        || (field.name == "node"
+            && ctx.objects.contains(&base_type_name(&field.field_type))
+            && obj.fields.iter().any(|f| f.name == "properties"))
+}
+
+/// an edge's `node` whose peer is an interface.
 fn is_interface_peer(field: &Field<String>, ctx: &SchemaContext) -> bool {
     field.name == "node" && ctx.interfaces.contains(&base_type_name(&field.field_type))
 }
 
-/// whether a field of an interface goes into the struct and selection of its peers.
+/// the object types that a selected relationship edge returns as its peer.
+fn object_peer_kinds(ctx: &SchemaContext) -> BTreeSet<String> {
+    let mut kinds = BTreeSet::new();
+    for ty in ctx.types.values() {
+        if let TypeDefinition::Object(obj) = ty {
+            for field in &obj.fields {
+                let base = base_type_name(&field.field_type);
+                if ctx.objects.contains(&base)
+                    && is_selected(obj, field, ctx)
+                    && is_peer(obj, field, ctx)
+                {
+                    kinds.insert(base);
+                }
+            }
+        }
+    }
+    kinds
+}
+
+/// the struct a peer of type `name` is read into.
+fn peer_ident<'c>(name: &str, ctx: &'c SchemaContext) -> &'c str {
+    if ctx.objects.contains(name) {
+        ctx.helper_ident(&format!("{name}Peer"))
+    } else {
+        ctx.type_ident(name)
+    }
+}
+
+/// the fields of a peer's type that go into its struct and selection.
+fn peer_fields<'c, 'a>(name: &str, ctx: &'c SchemaContext<'a>) -> Vec<&'c Field<'a, String>> {
+    let fields = match ctx.types.get(name) {
+        Some(TypeDefinition::Interface(iface)) => &iface.fields,
+        Some(TypeDefinition::Object(obj)) => &obj.fields,
+        _ => return Vec::new(),
+    };
+    fields
+        .iter()
+        .filter(|field| identifies_peer(field, ctx))
+        .collect()
+}
+
+/// whether a field of a peer's type identifies the peer.
 fn identifies_peer(field: &Field<String>, ctx: &SchemaContext) -> bool {
     let base = base_type_name(&field.field_type);
     !has_required_args(field)
@@ -1473,15 +1519,13 @@ fn identifies_peer(field: &Field<String>, ctx: &SchemaContext) -> bool {
         && (is_scalar_type(&base) || ctx.enums.contains(&base) || ctx.scalars.contains(&base))
 }
 
-fn peer_selection(iface_name: &str, ctx: &SchemaContext) -> String {
-    let mut fields = vec!["__typename".to_string()];
-    if let Some(TypeDefinition::Interface(iface)) = ctx.types.get(iface_name) {
-        for field in &iface.fields {
-            if identifies_peer(field, ctx) {
-                fields.push(field.name.clone());
-            }
-        }
-    }
+fn peer_selection(name: &str, ctx: &SchemaContext) -> String {
+    let mut fields = vec!["__typename"];
+    fields.extend(
+        peer_fields(name, ctx)
+            .iter()
+            .map(|field| field.name.as_str()),
+    );
     format!("{{ {} }}", fields.join(" "))
 }
 
@@ -1551,7 +1595,7 @@ fn field_rust_type(obj: &ObjectType<String>, field: &Field<String>, ctx: &Schema
         } else {
             format!("Option<{ty}>")
         }
-    } else if is_interface_peer(field, ctx) {
+    } else if is_peer(obj, field, ctx) {
         peer_rust_type(&field.field_type, ctx)
     } else {
         ty
@@ -1567,7 +1611,7 @@ fn root_rust_type(field: &Field<String>, ctx: &SchemaContext) -> String {
     }
 }
 
-/// `rust_type` for an interface peer, which is typed by the interface's struct.
+/// `rust_type` for a peer, which is typed by its peer struct.
 fn peer_rust_type(ty: &Type<String>, ctx: &SchemaContext) -> String {
     let peer = peer_rust_type_nonnull(ty, ctx, false);
     if is_optional(ty) {
@@ -1577,13 +1621,13 @@ fn peer_rust_type(ty: &Type<String>, ctx: &SchemaContext) -> String {
     }
 }
 
-/// `rust_type_nonnull` for an interface peer, which is boxed like an object.
+/// `rust_type_nonnull` for a peer, which is boxed like an object.
 fn peer_rust_type_nonnull(ty: &Type<String>, ctx: &SchemaContext, in_list: bool) -> String {
     match ty {
         Type::ListType(inner) => format!("Vec<{}>", peer_rust_type_nonnull(inner, ctx, true)),
         Type::NonNullType(inner) => peer_rust_type_nonnull(inner, ctx, in_list),
-        Type::NamedType(name) if in_list => ctx.type_ident(name).to_string(),
-        Type::NamedType(name) => format!("Box<{}>", ctx.type_ident(name)),
+        Type::NamedType(name) if in_list => peer_ident(name, ctx).to_string(),
+        Type::NamedType(name) => format!("Box<{}>", peer_ident(name, ctx)),
     }
 }
 
@@ -2620,7 +2664,7 @@ mod codegen_name_tests {
         );
         assert_eq!(
             select("NestedEdgedGadget"),
-            "{ node { id } node_metadata { created_at } properties { is_protected } }"
+            "{ node { __typename id } node_metadata { created_at } properties { is_protected } }"
         );
         assert_eq!(
             select("BranchEdge"),
@@ -2630,7 +2674,7 @@ mod codegen_name_tests {
             select("WidgetCreate"),
             "{ ok object { id name node_metadata { created_at } \
              parent { cursor node { __typename id } properties { is_protected } } \
-             gadget { node { id } node_metadata { created_at } properties { is_protected } } \
+             gadget { node { __typename id } node_metadata { created_at } properties { is_protected } } \
              branch { node { id } node_metadata { created_at } } } }"
         );
 
@@ -2911,15 +2955,62 @@ mod codegen_name_tests {
         }
     }
 
-    #[test]
-    fn test_every_generated_document_selects_exactly_its_composite_fields() {
-        use graphql_parser::query::{parse_query, Definition, OperationDefinition};
-        let doc = parse_schema::<String>(include_str!("../../schema/infrahub.graphql")).unwrap();
-        let ctx = SchemaContext::new(&doc);
-        let mut sources = vec![render_client(&ctx)];
-        sources.extend(render_api_modules(&ctx).into_values());
+    /// asserts that every struct a document's selection lands in gets each of its non-`Option` fields.
+    fn assert_selections_fill_their_structs(
+        structs: &BTreeMap<String, Vec<(String, String)>>,
+        name: &str,
+        set: &graphql_parser::query::SelectionSet<String>,
+        path: &str,
+    ) {
+        use graphql_parser::query::Selection;
+        for (wire, ty) in structs.get(name).into_iter().flatten() {
+            let selected = set.items.iter().find_map(|item| match item {
+                Selection::Field(field) if field.name == *wire => Some(&field.selection_set),
+                _ => None,
+            });
+            let Some(selected) = selected else {
+                assert!(
+                    ty.starts_with("Option<"),
+                    "{path}: {name}.{wire} is required"
+                );
+                continue;
+            };
+            let inner = ty.split(['<', '>']).rfind(|s| !s.is_empty());
+            let path = format!("{path}.{wire}");
+            assert_selections_fill_their_structs(structs, inner.unwrap(), selected, &path);
+        }
+    }
 
-        let mut operations = BTreeSet::new();
+    /// the wire name and type of each field of each struct in generated `source`.
+    fn struct_fields(source: &str) -> BTreeMap<String, Vec<(String, String)>> {
+        let (mut structs, mut current, mut rename) = (BTreeMap::new(), None, None);
+        for line in source.lines().map(str::trim) {
+            let field = line.strip_prefix("pub ").and_then(|l| l.split_once(": "));
+            if let Some(name) = line
+                .strip_prefix("pub struct ")
+                .and_then(|l| l.strip_suffix(" {"))
+            {
+                current = Some((name.to_string(), Vec::new()));
+            } else if let (Some((_, fields)), Some((name, ty))) = (current.as_mut(), field) {
+                let wire = rename.unwrap_or(name).to_string();
+                fields.push((wire, ty.trim_end_matches(',').to_string()));
+            } else if line == "}" {
+                structs.extend(current.take());
+            }
+            rename = line
+                .strip_prefix("#[serde(rename = \"")
+                .and_then(|l| l.strip_suffix("\")]"));
+        }
+        structs
+    }
+
+    fn for_each_operation(
+        ctx: &SchemaContext,
+        mut check: impl FnMut(&str, &str, &graphql_parser::query::SelectionSet<String>),
+    ) {
+        use graphql_parser::query::{parse_query, Definition, OperationDefinition};
+        let mut sources = vec![render_client(ctx)];
+        sources.extend(render_api_modules(ctx).into_values());
         for source in &sources {
             for literal in source.split("r#\"").skip(1) {
                 let text = &literal[..literal.find("\"#").unwrap()];
@@ -2936,12 +3027,21 @@ mod codegen_name_tests {
                         ),
                         _ => panic!("unexpected definition in {text}"),
                     };
-                    let name = name.clone().unwrap();
-                    assert_selections_match_the_schema(&ctx, root, set, &name);
-                    operations.insert(name);
+                    check(root, name.as_deref().unwrap(), set);
                 }
             }
         }
+    }
+
+    #[test]
+    fn test_every_generated_document_selects_exactly_its_composite_fields() {
+        let doc = parse_schema::<String>(include_str!("../../schema/infrahub.graphql")).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let mut operations = BTreeSet::new();
+        for_each_operation(&ctx, |root, name, set| {
+            assert_selections_match_the_schema(&ctx, root, set, name);
+            operations.insert(name.to_string());
+        });
         for name in [
             "AccountProfile",
             "InfrahubTask",
@@ -2952,6 +3052,80 @@ mod codegen_name_tests {
         ] {
             assert!(operations.contains(name), "{name}");
         }
+    }
+
+    #[test]
+    fn test_object_peer_edges_select_and_type_the_peer_identity() {
+        use graphql_parser::query::Selection;
+        let schema = r#"
+            type Query { InfraArtifact(ids: [ID]): PaginatedInfraArtifact! }
+            type Mutation { InfraArtifactCreate(data: String!): InfraArtifactCreate }
+            type Props { is_protected: Boolean }
+            type InfraArtifact {
+                id: String!
+                definition: NestedEdgedInfraDefinition!
+                tags(offset: Int): NestedPaginatedInfraTag!
+            }
+            type InfraDefinition {
+                id: String!
+                hfid: [String!]
+                display_label: String
+                artifacts(offset: Int): NestedPaginatedInfraArtifact!
+            }
+            type InfraTag { id: String! }
+            type NestedEdgedInfraDefinition { node: InfraDefinition properties: Props }
+            type NestedEdgedInfraArtifact { node: InfraArtifact properties: Props }
+            type NestedPaginatedInfraArtifact { count: Int! edges: [NestedEdgedInfraArtifact!]! }
+            type NestedEdgedInfraTag { node: InfraTag properties: Props }
+            type NestedPaginatedInfraTag { count: Int! edges: [NestedEdgedInfraTag!]! }
+            type EdgedInfraArtifact { node: InfraArtifact }
+            type PaginatedInfraArtifact { count: Int! edges: [EdgedInfraArtifact!]! }
+            type InfraArtifactCreate { ok: Boolean object: InfraArtifact }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        let infra_rs = &render_api_modules(&ctx)["infra"];
+        for selection in [
+            "{ count edges { node { id \
+             definition { node { __typename id hfid display_label } properties { __typename } } \
+             tags { count edges { __typename } } } } }",
+            "{ ok object { id \
+             definition { node { __typename id hfid display_label } properties { is_protected } } \
+             tags { count edges { node { __typename id } properties { __typename } } } } }",
+        ] {
+            assert!(infra_rs.contains(selection), "{selection}");
+        }
+
+        let types = render_types(&ctx);
+        assert_eq!(
+            struct_field(&types, "NestedEdgedInfraDefinition", "node"),
+            "pub node: Option<Box<InfraDefinitionPeer>>,"
+        );
+        assert_eq!(
+            struct_field(&types, "EdgedInfraArtifact", "node"),
+            "pub node: Option<Box<InfraArtifact>>,"
+        );
+        let mut structs = struct_fields(&types);
+        assert_eq!(
+            structs["InfraDefinitionPeer"],
+            [
+                ("__typename", "Option<String>"),
+                ("id", "Option<String>"),
+                ("hfid", "Option<Vec<String>>"),
+                ("display_label", "Option<String>"),
+            ]
+            .map(|(wire, ty)| (wire.to_string(), ty.to_string()))
+        );
+
+        structs.extend(struct_fields(&render_responses(&ctx)));
+        for_each_operation(&ctx, |root, name, set| {
+            let Selection::Field(field) = &set.items[0] else {
+                panic!("{name}: unexpected fragment");
+            };
+            let is_mutation = ctx.mutation_type.as_deref() == Some(root);
+            let response = ctx.response_ident(is_mutation, &field.name);
+            assert_selections_fill_their_structs(&structs, response, set, name);
+        });
     }
 
     #[test]

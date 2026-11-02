@@ -3295,7 +3295,7 @@ mod codegen_name_tests {
             type A { b: B }
             type B { c: C }
             type C { d: D }
-            type D { full: Full loose: Loose }
+            type D { full: Full! loose: Loose }
             type Full { count: Int! }
             type Loose { count: Int }
         "#;

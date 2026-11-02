@@ -128,6 +128,11 @@ async fn create_graphql_query(client: &Client, name: &str) -> String {
         .execute_raw(mutation, Some(vars), branch().as_deref())
         .await
         .expect("create graphql query");
+    assert!(
+        response.errors.is_empty(),
+        "create graphql query: {:?}",
+        response.errors
+    );
     let data = response.data.expect("data");
     data["CoreGraphQLQueryCreate"]["object"]["id"]
         .as_str()
@@ -596,47 +601,54 @@ async fn query_group_comes_back_with_its_query() {
         parent: None,
         children: None,
     };
-    let created = groups
-        .create(None, data, branch().as_deref())
-        .await
-        .expect("create query group");
+    let delete = |id: &str| DeleteInput {
+        id: Some(id.to_string()),
+        hfid: None,
+    };
+    let created = groups.create(None, data, branch().as_deref()).await;
+    let (mut reads, mut group_deleted) = (None, None);
+    if let Ok(created) = &created {
+        reads = Some((
+            groups.list(None, branch().as_deref()).await,
+            groups.get_by_id(&created.id, branch().as_deref()).await,
+        ));
+        group_deleted = Some(
+            groups
+                .delete(None, delete(&created.id), branch().as_deref())
+                .await,
+        );
+    }
+    let query_deleted = client
+        .api()
+        .core()
+        .graph_ql_query()
+        .delete(None, delete(&query_id), branch().as_deref())
+        .await;
+
+    let created = created.expect("create query group");
+    let (listed, found) = reads.expect("reads follow a create");
     let peer_id = |group: &CoreGraphQLQueryGroup| group.query.node.as_ref()?.id.clone();
     assert_eq!(peer_id(&created), Some(query_id.clone()), "create");
 
-    let listed = groups
-        .list(None, branch().as_deref())
-        .await
-        .expect("list query groups");
+    let listed = listed.expect("list query groups");
     let listed = listed
         .iter()
         .find(|g| g.id == created.id)
         .expect("group should appear in list");
     assert_eq!(peer_id(listed), Some(query_id.clone()), "list");
 
-    let found = groups
-        .get_by_id(&created.id, branch().as_deref())
-        .await
-        .expect("get_by_id")
-        .expect("group should be found");
+    let found = found.expect("get_by_id").expect("group should be found");
     assert_eq!(peer_id(&found), Some(query_id.clone()), "get_by_id");
 
-    let delete = |id: &str| DeleteInput {
-        id: Some(id.to_string()),
-        hfid: None,
-    };
-    let deleted = groups
-        .delete(None, delete(&created.id), branch().as_deref())
-        .await
-        .expect("delete query group");
-    assert!(deleted, "delete should report ok");
-    let deleted = client
-        .api()
-        .core()
-        .graph_ql_query()
-        .delete(None, delete(&query_id), branch().as_deref())
-        .await
-        .expect("delete graphql query");
-    assert!(deleted, "delete should report ok");
+    let deleted = group_deleted.expect("delete follows a create");
+    assert!(
+        deleted.expect("delete query group"),
+        "delete should report ok"
+    );
+    assert!(
+        query_deleted.expect("delete graphql query"),
+        "delete should report ok"
+    );
 }
 
 #[cfg_attr(miri, ignore)]

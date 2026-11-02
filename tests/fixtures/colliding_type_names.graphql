@@ -52,3 +52,6 @@ type EdgedError { node: Error }
 type ModThing { id: ID! }
 type PaginatedModThing { edges: [EdgedModThing!]! }
 type EdgedModThing { node: ModThing }
+
+type InfraDevicePeer { id: ID! }
+type NestedEdgedInfraDevice { node: InfraDevice properties: InfraApi }

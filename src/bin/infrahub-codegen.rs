@@ -1500,15 +1500,19 @@ fn peer_ident<'c>(name: &str, ctx: &'c SchemaContext) -> &'c str {
 
 /// the fields of a peer's type that go into its struct and selection.
 fn peer_fields<'c, 'a>(name: &str, ctx: &'c SchemaContext<'a>) -> Vec<&'c Field<'a, String>> {
-    let fields = match ctx.types.get(name) {
-        Some(TypeDefinition::Interface(iface)) => &iface.fields,
-        Some(TypeDefinition::Object(obj)) => &obj.fields,
-        _ => return Vec::new(),
-    };
-    fields
-        .iter()
-        .filter(|field| identifies_peer(field, ctx))
-        .collect()
+    match ctx.types.get(name) {
+        Some(TypeDefinition::Interface(iface)) => iface
+            .fields
+            .iter()
+            .filter(|field| identifies_peer(field, ctx))
+            .collect(),
+        Some(TypeDefinition::Object(obj)) => obj
+            .fields
+            .iter()
+            .filter(|field| field.name == "id" && identifies_peer(field, ctx))
+            .collect(),
+        _ => Vec::new(),
+    }
 }
 
 /// whether a field of a peer's type identifies the peer.
@@ -2062,6 +2066,13 @@ mod type_name_tests {
                 "request_branch: Option<&str>) -> Result<Vec<InfraApi>> {",
                 "request_branch: Option<&str>) -> Result<Vec<InfraDeviceClient>> {",
                 "request_branch: Option<&str>) -> Result<Vec<InfraDeviceFilters>> {",
+            ],
+        );
+        assert_contains(
+            &render_types(&ctx),
+            &[
+                "pub struct InfraDevicePeer_ {",
+                "    pub node: Option<Box<InfraDevicePeer_>>,",
             ],
         );
     }
@@ -3064,6 +3075,7 @@ mod codegen_name_tests {
             type InfraArtifact {
                 id: String!
                 definition: NestedEdgedInfraDefinition!
+                group: NestedEdgedInfraGroup!
                 tags(offset: Int): NestedPaginatedInfraTag!
             }
             type InfraDefinition {
@@ -3072,8 +3084,10 @@ mod codegen_name_tests {
                 display_label: String
                 artifacts(offset: Int): NestedPaginatedInfraArtifact!
             }
+            interface InfraGroup { id: String! hfid: [String!] display_label: String }
             type InfraTag { id: String! }
             type NestedEdgedInfraDefinition { node: InfraDefinition properties: Props }
+            type NestedEdgedInfraGroup { node: InfraGroup properties: Props }
             type NestedEdgedInfraArtifact { node: InfraArtifact properties: Props }
             type NestedPaginatedInfraArtifact { count: Int! edges: [NestedEdgedInfraArtifact!]! }
             type NestedEdgedInfraTag { node: InfraTag properties: Props }
@@ -3087,10 +3101,12 @@ mod codegen_name_tests {
         let infra_rs = &render_api_modules(&ctx)["infra"];
         for selection in [
             "{ count edges { node { id \
-             definition { node { __typename id hfid display_label } properties { __typename } } \
+             definition { node { __typename id } properties { __typename } } \
+             group { node { __typename id hfid display_label } properties { __typename } } \
              tags { count edges { __typename } } } } }",
             "{ ok object { id \
-             definition { node { __typename id hfid display_label } properties { is_protected } } \
+             definition { node { __typename id } properties { is_protected } } \
+             group { node { __typename id hfid display_label } properties { is_protected } } \
              tags { count edges { node { __typename id } properties { __typename } } } } }",
         ] {
             assert!(infra_rs.contains(selection), "{selection}");
@@ -3108,13 +3124,8 @@ mod codegen_name_tests {
         let mut structs = struct_fields(&types);
         assert_eq!(
             structs["InfraDefinitionPeer"],
-            [
-                ("__typename", "Option<String>"),
-                ("id", "Option<String>"),
-                ("hfid", "Option<Vec<String>>"),
-                ("display_label", "Option<String>"),
-            ]
-            .map(|(wire, ty)| (wire.to_string(), ty.to_string()))
+            [("__typename", "Option<String>"), ("id", "Option<String>")]
+                .map(|(wire, ty)| (wire.to_string(), ty.to_string()))
         );
 
         structs.extend(struct_fields(&render_responses(&ctx)));

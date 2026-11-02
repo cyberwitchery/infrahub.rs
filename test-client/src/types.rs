@@ -7882,8 +7882,6 @@ pub struct BuiltinTagPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7891,9 +7889,6 @@ pub struct CoreAccountPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
-    pub is_externally_managed: Option<bool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7901,8 +7896,6 @@ pub struct CoreAccountGroupPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7910,8 +7903,6 @@ pub struct CoreAccountRolePeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7919,8 +7910,6 @@ pub struct CoreArtifactPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7928,8 +7917,6 @@ pub struct CoreArtifactCheckPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7937,8 +7924,6 @@ pub struct CoreArtifactDefinitionPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7946,8 +7931,6 @@ pub struct CoreArtifactThreadPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7955,8 +7938,6 @@ pub struct CoreArtifactValidatorPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7964,8 +7945,6 @@ pub struct CoreChangeCommentPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7973,8 +7952,6 @@ pub struct CoreChangeThreadPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7982,8 +7959,6 @@ pub struct CoreCheckDefinitionPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -7991,8 +7966,6 @@ pub struct CoreCustomWebhookPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8000,8 +7973,6 @@ pub struct CoreDataCheckPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8009,8 +7980,6 @@ pub struct CoreDataValidatorPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8018,8 +7987,6 @@ pub struct CoreEnvKeyValuePeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8027,8 +7994,6 @@ pub struct CoreFileCheckPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8036,8 +8001,6 @@ pub struct CoreFileThreadPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8045,8 +8008,6 @@ pub struct CoreGeneratorActionPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8054,8 +8015,6 @@ pub struct CoreGeneratorAwareGroupPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8063,8 +8022,6 @@ pub struct CoreGeneratorCheckPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8072,8 +8029,6 @@ pub struct CoreGeneratorDefinitionPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8081,8 +8036,6 @@ pub struct CoreGeneratorGroupPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8090,8 +8043,6 @@ pub struct CoreGeneratorInstancePeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8099,8 +8050,6 @@ pub struct CoreGeneratorValidatorPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8108,8 +8057,6 @@ pub struct CoreGlobalPermissionPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8117,8 +8064,6 @@ pub struct CoreGraphQLQueryPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8126,8 +8071,6 @@ pub struct CoreGraphQLQueryGroupPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8135,8 +8078,6 @@ pub struct CoreGroupActionPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8144,8 +8085,6 @@ pub struct CoreGroupTriggerRulePeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8153,8 +8092,6 @@ pub struct CoreIPAddressPoolPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8162,8 +8099,6 @@ pub struct CoreIPPrefixPoolPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8171,8 +8106,6 @@ pub struct CoreMenuItemPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8180,8 +8113,6 @@ pub struct CoreNodeTriggerAttributeMatchPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8189,8 +8120,6 @@ pub struct CoreNodeTriggerRelationshipMatchPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8198,8 +8127,6 @@ pub struct CoreNodeTriggerRulePeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8207,8 +8134,6 @@ pub struct CoreNumberPoolPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8216,8 +8141,6 @@ pub struct CoreObjectPermissionPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8225,8 +8148,6 @@ pub struct CoreObjectThreadPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8234,8 +8155,6 @@ pub struct CorePasswordCredentialPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8243,8 +8162,6 @@ pub struct CoreProposedChangePeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8252,8 +8169,6 @@ pub struct CoreReadOnlyRepositoryPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8261,8 +8176,6 @@ pub struct CoreRepositoryPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8270,8 +8183,6 @@ pub struct CoreRepositoryGroupPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8279,8 +8190,6 @@ pub struct CoreRepositoryValidatorPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8288,8 +8197,6 @@ pub struct CoreSchemaCheckPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8297,8 +8204,6 @@ pub struct CoreSchemaValidatorPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8306,8 +8211,6 @@ pub struct CoreStandardCheckPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8315,8 +8218,6 @@ pub struct CoreStandardGroupPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8324,8 +8225,6 @@ pub struct CoreStandardWebhookPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8333,8 +8232,6 @@ pub struct CoreStaticKeyValuePeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8342,8 +8239,6 @@ pub struct CoreThreadCommentPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8351,8 +8246,6 @@ pub struct CoreTransformJinja2Peer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8360,8 +8253,6 @@ pub struct CoreTransformPythonPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8369,8 +8260,6 @@ pub struct CoreUserValidatorPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8378,8 +8267,6 @@ pub struct InternalAccountTokenPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8387,8 +8274,6 @@ pub struct InternalExternalIdentityPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8396,8 +8281,6 @@ pub struct InternalIPPrefixAvailablePeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8405,8 +8288,6 @@ pub struct InternalIPRangeAvailablePeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8414,8 +8295,6 @@ pub struct InternalRefreshTokenPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8423,8 +8302,6 @@ pub struct IpamNamespacePeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8432,8 +8309,6 @@ pub struct ProfileBuiltinIPAddressPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8441,8 +8316,6 @@ pub struct ProfileBuiltinIPPrefixPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8450,8 +8323,6 @@ pub struct ProfileBuiltinTagPeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -8459,7 +8330,5 @@ pub struct ProfileIpamNamespacePeer {
     #[serde(rename = "__typename")]
     pub typename: Option<String>,
     pub id: Option<String>,
-    pub hfid: Option<Vec<String>>,
-    pub display_label: Option<String>,
 }
 

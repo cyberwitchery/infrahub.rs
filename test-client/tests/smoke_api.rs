@@ -583,6 +583,7 @@ async fn query_group_comes_back_with_its_query() {
     };
     let query_id = create_graphql_query(&client, "smoke-peer-query").await;
     let groups = client.api().core().graph_ql_query_group();
+    let name = "smoke-peer-query-group";
     let data = CoreGraphQLQueryGroupCreateInput {
         id: None,
         parameters: None,
@@ -590,7 +591,7 @@ async fn query_group_comes_back_with_its_query() {
             is_protected: None,
             source: None,
             owner: None,
-            value: Some("smoke-peer-query-group".to_string()),
+            value: Some(name.to_string()),
         }),
         label: None,
         description: None,
@@ -606,18 +607,22 @@ async fn query_group_comes_back_with_its_query() {
         hfid: None,
     };
     let created = groups.create(None, data, branch().as_deref()).await;
-    let (mut reads, mut group_deleted) = (None, None);
+    let mut reads = None;
     if let Ok(created) = &created {
         reads = Some((
             groups.list(None, branch().as_deref()).await,
             groups.get_by_id(&created.id, branch().as_deref()).await,
         ));
-        group_deleted = Some(
-            groups
-                .delete(None, delete(&created.id), branch().as_deref())
-                .await,
-        );
     }
+    let group = match &created {
+        Ok(created) => delete(&created.id),
+        // the create can fail after Infrahub has made the group
+        Err(_) => DeleteInput {
+            id: None,
+            hfid: Some(vec![name.to_string()]),
+        },
+    };
+    let group_deleted = groups.delete(None, group, branch().as_deref()).await;
     let query_deleted = client
         .api()
         .core()
@@ -640,9 +645,8 @@ async fn query_group_comes_back_with_its_query() {
     let found = found.expect("get_by_id").expect("group should be found");
     assert_eq!(peer_id(&found), Some(query_id.clone()), "get_by_id");
 
-    let deleted = group_deleted.expect("delete follows a create");
     assert!(
-        deleted.expect("delete query group"),
+        group_deleted.expect("delete query group"),
         "delete should report ok"
     );
     assert!(

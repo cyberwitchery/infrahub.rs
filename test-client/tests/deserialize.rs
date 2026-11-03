@@ -75,12 +75,24 @@ fn concrete_peer_deserializes_from_its_identity_selection() {
 }
 
 #[test]
-fn capped_relationship_deserializes_without_permissions() {
+fn capped_relationship_deserializes_its_permissions() {
     let tags: NestedPaginatedBuiltinTag = serde_json::from_value(serde_json::json!({
         "count": 1,
-        "edges": [{ "__typename": "NestedEdgedBuiltinTag" }]
+        "edges": [{ "__typename": "NestedEdgedBuiltinTag" }],
+        "permissions": {
+            "count": 1,
+            "edges": [{
+                "node": {
+                    "kind": "BuiltinTag",
+                    "view": "ALLOW",
+                    "create": "ALLOW",
+                    "update": "ALLOW",
+                    "delete": "ALLOW"
+                }
+            }]
+        }
     }))
     .expect("capped relationship");
     assert_eq!(tags.edges.len(), 1);
-    assert!(tags.permissions.is_none());
+    assert_eq!(tags.permissions.edges[0].node.kind, "BuiltinTag");
 }

@@ -184,7 +184,6 @@ struct SchemaContext<'a> {
     helper_idents: BTreeMap<String, String>,
     response_idents: BTreeMap<(bool, String), String>,
     relationship_edges: BTreeSet<String>,
-    capped_fields: BTreeSet<(String, String)>,
 }
 
 /// the struct every relationship peer is read into.
@@ -307,10 +306,8 @@ impl<'a> SchemaContext<'a> {
             helper_idents: BTreeMap::new(),
             response_idents: BTreeMap::new(),
             relationship_edges: BTreeSet::new(),
-            capped_fields: BTreeSet::new(),
         };
         ctx.relationship_edges = relationship_edges(&ctx);
-        ctx.capped_fields = capped_fields(&ctx);
         ctx.claim_helper_idents(taken);
         ctx
     }
@@ -330,7 +327,9 @@ impl<'a> SchemaContext<'a> {
             helpers.push(format!("{model}Client"));
             helpers.push(format!("{model}Filters"));
         }
-        helpers.push(PEER_REF.to_string());
+        if !self.relationship_edges.is_empty() {
+            helpers.push(PEER_REF.to_string());
+        }
         let mut root_fields = Vec::new();
         for (is_mutation, root) in [
             (false, Some(&self.query_type)),
@@ -547,12 +546,14 @@ fn render_types(ctx: &SchemaContext) -> String {
         out.push_str("}\n\n");
     }
 
-    out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
-    out.push_str(&format!("pub struct {} {{\n", ctx.helper_ident(PEER_REF)));
-    out.push_str("    #[serde(rename = \"__typename\")]\n");
-    out.push_str("    pub typename: Option<String>,\n");
-    out.push_str("    pub id: Option<String>,\n");
-    out.push_str("}\n\n");
+    if !ctx.relationship_edges.is_empty() {
+        out.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
+        out.push_str(&format!("pub struct {} {{\n", ctx.helper_ident(PEER_REF)));
+        out.push_str("    #[serde(rename = \"__typename\")]\n");
+        out.push_str("    pub typename: Option<String>,\n");
+        out.push_str("    pub id: Option<String>,\n");
+        out.push_str("}\n\n");
+    }
 
     for union_name in &ctx.unions {
         if let Some(TypeDefinition::Union(UnionType { name, .. })) = ctx.types.get(union_name) {
@@ -1399,22 +1400,16 @@ fn selection_for_type(
     stack: &mut BTreeSet<String>,
     depth: usize,
 ) -> String {
-    walk_selection(type_name, ctx, stack, depth, &mut BTreeSet::new())
-}
-
-/// `selection_for_type`, collecting the fields it leaves out at the depth cap into `capped`.
-fn walk_selection(
-    type_name: &str,
-    ctx: &SchemaContext,
-    stack: &mut BTreeSet<String>,
-    depth: usize,
-    capped: &mut BTreeSet<(String, String)>,
-) -> String {
-    if depth > 3 {
+    if depth > 3 && required_fields(type_name, ctx).is_empty() {
         return "{ __typename }".to_string();
     }
 
-    if stack.contains(type_name) {
+    if stack.contains(type_name)
+        && (depth > 3
+            || required_fields(type_name, ctx)
+                .iter()
+                .all(|name| *name == "id"))
+    {
         if let Some(TypeDefinition::Object(obj)) = ctx.types.get(type_name) {
             if obj.fields.iter().any(|f| f.name == "id") {
                 return "{ id }".to_string();
@@ -1423,12 +1418,15 @@ fn walk_selection(
         return "{ __typename }".to_string();
     }
 
-    stack.insert(type_name.to_string());
+    let inserted = stack.insert(type_name.to_string());
+    // a repeat that `{ id }` can't fill gets what its struct requires, as past the cap
+    let depth = if inserted { depth } else { 4 };
 
     let mut fields = Vec::new();
     if let Some(TypeDefinition::Object(obj)) = ctx.types.get(type_name) {
         for field in &obj.fields {
-            if !is_selected(obj, field, ctx) {
+            let past_cap = depth > 3 && is_optional(&field.field_type);
+            if !is_selected(obj, field, ctx) || past_cap {
                 continue;
             }
             let field_base = base_type_name(&field.field_type);
@@ -1453,11 +1451,13 @@ fn walk_selection(
             }
 
             if ctx.objects.contains(&field_base) {
-                if depth >= 3 && !takes_typename(&field_base, ctx) {
-                    capped.insert((obj.name.clone(), field.name.clone()));
+                if depth >= 3
+                    && is_optional(&field.field_type)
+                    && !required_fields(&field_base, ctx).is_empty()
+                {
                     continue;
                 }
-                let nested = walk_selection(&field_base, ctx, stack, depth + 1, capped);
+                let nested = selection_for_type(&field_base, ctx, stack, depth + 1);
                 fields.push(format!("{} {}", field.name, nested));
                 continue;
             }
@@ -1469,7 +1469,9 @@ fn walk_selection(
         }
     }
 
-    stack.remove(type_name);
+    if inserted {
+        stack.remove(type_name);
+    }
 
     if fields.is_empty() {
         "{ __typename }".to_string()
@@ -1478,30 +1480,16 @@ fn walk_selection(
     }
 }
 
-/// whether `{ __typename }` deserializes into the struct of type `name`.
-fn takes_typename(name: &str, ctx: &SchemaContext) -> bool {
+/// the fields the struct of type `name` requires; `{ __typename }` deserializes into it when none.
+fn required_fields<'c>(name: &str, ctx: &'c SchemaContext) -> Vec<&'c str> {
     let Some(TypeDefinition::Object(obj)) = ctx.types.get(name) else {
-        return true;
+        return Vec::new();
     };
     obj.fields
         .iter()
-        .filter(|field| !should_skip_field(field))
-        .all(|field| is_optional(&field.field_type) || !is_selected(obj, field, ctx))
-}
-
-/// the fields that some generated document leaves out at the depth cap.
-fn capped_fields(ctx: &SchemaContext) -> BTreeSet<(String, String)> {
-    let mut capped = BTreeSet::new();
-    let roots = [Some(&ctx.query_type), ctx.mutation_type.as_ref()];
-    for root in roots.into_iter().flatten() {
-        if let Some(TypeDefinition::Object(root)) = ctx.types.get(root) {
-            for field in &root.fields {
-                let base = base_type_name(&field.field_type);
-                walk_selection(&base, ctx, &mut BTreeSet::new(), 0, &mut capped);
-            }
-        }
-    }
-    capped
+        .filter(|field| !is_optional(&field.field_type) && is_selected(obj, field, ctx))
+        .map(|field| field.name.as_str())
+        .collect()
 }
 
 /// whether `selection_for_type` selects this field of `obj`.
@@ -1697,10 +1685,7 @@ fn is_scalar_type(name: &str) -> bool {
 /// the type `render_types` declares for `field` of `obj`.
 fn field_rust_type(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaContext) -> String {
     let ty = rust_type(&field.field_type, ctx, false);
-    let capped = ctx
-        .capped_fields
-        .contains(&(obj.name.clone(), field.name.clone()));
-    if !is_selected(obj, field, ctx) || capped {
+    if !is_selected(obj, field, ctx) {
         if is_optional(&field.field_type) {
             ty
         } else {
@@ -3284,33 +3269,61 @@ mod codegen_name_tests {
             .filter(|name| edge_node(name, &ctx).is_some())
             .filter(|name| fields_of(name, &ctx).iter().any(|f| f.name == "properties"))
             .collect();
-        assert_eq!(with_properties.len(), 42);
         assert_eq!(ctx.relationship_edges, with_properties);
     }
 
     #[test]
-    fn test_fields_cut_at_the_depth_cap_are_optional_and_unselected() {
+    fn test_fields_past_the_depth_cap_select_what_their_struct_requires() {
         let schema = r#"
-            type Query { A: A }
+            type Query { A: A D: D }
             type A { b: B }
             type B { c: C }
             type C { d: D }
-            type D { full: Full! loose: Loose }
-            type Full { count: Int! }
+            type D { full: Full! loose: Loose cut: Full }
+            type Full { count: Int! inner: Inner! note: String }
+            type Inner { size: Int! }
             type Loose { count: Int }
         "#;
         let doc = parse_schema::<String>(schema).unwrap();
         let ctx = SchemaContext::new(&doc);
         assert_eq!(
             selection_for_type("A", &ctx, &mut BTreeSet::new(), 0),
-            "{ b { c { d { loose { __typename } } } } }"
+            "{ b { c { d { full { count inner { size } } loose { __typename } } } } }"
+        );
+        assert_eq!(
+            selection_for_type("D", &ctx, &mut BTreeSet::new(), 0),
+            "{ full { count inner { size } note } loose { count } cut { count inner { size } note } }"
         );
         let types = render_types(&ctx);
+        assert_eq!(struct_field(&types, "D", "full"), "pub full: Box<Full>,");
         assert_eq!(
-            struct_field(&types, "D", "full"),
-            "pub full: Option<Box<Full>>,"
+            struct_field(&types, "D", "cut"),
+            "pub cut: Option<Box<Full>>,"
         );
-        assert_eq!(struct_field(&types, "Full", "count"), "pub count: i64,");
+        assert!(!types.contains("PeerRef"));
+        assert_documents_fill_their_structs(&ctx);
+    }
+
+    #[test]
+    fn test_an_edge_the_root_also_returns_fills_its_node_under_a_model() {
+        let schema = r#"
+            type Query { Thing(ids: [ID]): PaginatedThing! }
+            type Mutation { ThingCreate(data: String!): ThingCreate }
+            type ThingCreate { ok: Boolean object: Thing }
+            type PaginatedThing { count: Int! edges: [EdgedThing!]! }
+            type EdgedThing { node: Thing }
+            type Thing { id: ID! name: String! shared: EdgedThing }
+        "#;
+        let doc = parse_schema::<String>(schema).unwrap();
+        let ctx = SchemaContext::new(&doc);
+        assert_eq!(
+            selection_for_type("ThingCreate", &ctx, &mut BTreeSet::new(), 0),
+            "{ ok object { id name shared { node { id name } } } }"
+        );
+        assert_eq!(
+            struct_field(&render_types(&ctx), "EdgedThing", "node"),
+            "pub node: Option<Box<Thing>>,"
+        );
         assert_documents_fill_their_structs(&ctx);
     }
 

@@ -97,19 +97,21 @@ let _all = paginator.collect_all().await?;
   returns, directly or in a list field of the field's type such as `edges`, and
   that no query root field returns) selects only the peer's `__typename` and
   `id`, whether the peer is a concrete model or an interface, and returns the
-  peer as the shared `PeerRef` struct with `typename` and `id`, both optional,
+  peer as the shared `PeerRef` struct (`PeerRef_` if the schema has its own
+  `PeerRef` type) with `typename` and `id`, both optional,
   e.g. `NestedEdgedCoreArtifactDefinition.node` and `NestedEdgedCoreGroup.node`
   are `Option<Box<PeerRef>>`. use the peer model's `get_by_id` for the rest of
   the peer.
 - **selection depth**: objects more than three levels below the root field are
-  selected as `{ __typename }` only; relationship peers are exempt. in `list`,
-  `get_by_id` and `paginate` that leaves a cardinality-many relationship with its
-  `count` and empty `edges`. a field the cap would select as `{ __typename }`
-  although its struct has a required field, such as that relationship's
-  `permissions`, is left out instead and typed `Option`. an object with no field
-  to select (all deprecated or taking required arguments) is selected as
-  `{ __typename }` too, and a non-null field the query leaves out is typed
-  `Option`.
+  selected with only the fields their struct requires (its non-null fields,
+  recursively), so a struct without one is selected as `{ __typename }`;
+  relationship peers are exempt. in `list`, `get_by_id` and `paginate` that
+  leaves a cardinality-many relationship with its `count`, empty `edges` and the
+  `count` and `edges` of its `permissions`. a nullable field whose struct has a
+  required field is left out at that depth, so the cap never changes a type. an
+  object with no field to select (all deprecated or taking required arguments)
+  is selected as `{ __typename }` too, and a non-null field the query leaves out
+  is typed `Option`.
 
 for a full generated `api()` walkthrough, see:
 - [`examples/generated_api.md`](../examples/generated_api.md)

@@ -1498,12 +1498,28 @@ fn is_selected(obj: &ObjectType<String>, field: &Field<String>, ctx: &SchemaCont
         return false;
     }
     let base = base_type_name(&field.field_type);
+    if ctx.objects.contains(&base)
+        && !ctx.relationship_edges.contains(&base)
+        && is_relationship_wrapper(obj, ctx)
+    {
+        return false;
+    }
     is_scalar_type(&base)
         || ctx.enums.contains(&base)
         || ctx.scalars.contains(&base)
         || ctx.objects.contains(&base)
         || ctx.unions.contains(&base)
         || is_interface_peer(field, ctx)
+}
+
+/// a type that lists relationship edges, of which infrahub resolves only the scalars and that list.
+fn is_relationship_wrapper(obj: &ObjectType<String>, ctx: &SchemaContext) -> bool {
+    obj.fields.iter().any(|field| {
+        is_list(&field.field_type)
+            && ctx
+                .relationship_edges
+                .contains(&base_type_name(&field.field_type))
+    })
 }
 
 /// an edge's `node` whose peer is an interface.
@@ -3188,7 +3204,12 @@ mod codegen_name_tests {
             type NestedEdgedInfraArtifact { node: InfraArtifact properties: Props }
             type NestedPaginatedInfraArtifact { count: Int! edges: [NestedEdgedInfraArtifact!]! }
             type NestedEdgedInfraTag { node: InfraTag properties: Props }
-            type NestedPaginatedInfraTag { count: Int! edges: [NestedEdgedInfraTag!]! }
+            type NestedPaginatedInfraTag {
+                count: Int!
+                edges: [NestedEdgedInfraTag!]!
+                permissions: Perms!
+            }
+            type Perms { count: Int! }
             type EdgedInfraArtifact { node: InfraArtifact }
             type PaginatedInfraArtifact { count: Int! edges: [EdgedInfraArtifact!]! }
             type InfraArtifactCreate { ok: Boolean object: InfraArtifact }
@@ -3220,6 +3241,10 @@ mod codegen_name_tests {
                 format!("pub node: {ty},")
             );
         }
+        assert_eq!(
+            struct_field(&types, "NestedPaginatedInfraTag", "permissions"),
+            "pub permissions: Option<Box<Perms>>,"
+        );
         assert_eq!(
             struct_fields(&types)["PeerRef"],
             [("__typename", "Option<String>"), ("id", "Option<String>")]

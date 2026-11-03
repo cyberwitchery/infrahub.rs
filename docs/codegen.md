@@ -102,16 +102,19 @@ let _all = paginator.collect_all().await?;
   e.g. `NestedEdgedCoreArtifactDefinition.node` and `NestedEdgedCoreGroup.node`
   are `Option<Box<PeerRef>>`. use the peer model's `get_by_id` for the rest of
   the peer.
+- **relationship wrappers**: the type holding a cardinality-many relationship's
+  edges, such as `NestedPaginatedBuiltinTag`, selects only its scalars and those
+  edges, the only fields infrahub resolves there. its `permissions` is left out
+  and typed `Option`.
 - **selection depth**: objects more than three levels below the root field are
   selected with only the fields their struct requires (its non-null fields,
   recursively), so a struct without one is selected as `{ __typename }`;
   relationship peers are exempt. in `list`, `get_by_id` and `paginate` that
-  leaves a cardinality-many relationship with its `count`, empty `edges` and the
-  `count` and `edges` of its `permissions`. a nullable field whose struct has a
-  required field is left out at that depth, so the cap never changes a type. an
-  object with no field to select (all deprecated or taking required arguments)
-  is selected as `{ __typename }` too, and a non-null field the query leaves out
-  is typed `Option`.
+  leaves a cardinality-many relationship with its `count` and empty `edges`. a
+  nullable field whose struct has a required field is left out at that depth,
+  so the cap never changes a type. an object with no field to select (all
+  deprecated or taking required arguments) is selected as `{ __typename }` too,
+  and a non-null field the query leaves out is typed `Option`.
 
 for a full generated `api()` walkthrough, see:
 - [`examples/generated_api.md`](../examples/generated_api.md)

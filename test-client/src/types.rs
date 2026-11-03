@@ -5525,7 +5525,7 @@ pub struct NestedPaginatedBuiltinIPPrefix {
 pub struct NestedPaginatedBuiltinTag {
     pub count: i64,
     pub edges: Vec<NestedEdgedBuiltinTag>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5539,14 +5539,14 @@ pub struct NestedPaginatedCoreAccount {
 pub struct NestedPaginatedCoreAccountGroup {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreAccountGroup>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedPaginatedCoreAccountRole {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreAccountRole>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5559,7 +5559,7 @@ pub struct NestedPaginatedCoreAction {
 pub struct NestedPaginatedCoreArtifact {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreArtifact>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5573,7 +5573,7 @@ pub struct NestedPaginatedCoreArtifactCheck {
 pub struct NestedPaginatedCoreArtifactDefinition {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreArtifactDefinition>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5593,7 +5593,7 @@ pub struct NestedPaginatedCoreArtifactThread {
 pub struct NestedPaginatedCoreArtifactValidator {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreArtifactValidator>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5606,7 +5606,7 @@ pub struct NestedPaginatedCoreBasePermission {
 pub struct NestedPaginatedCoreChangeComment {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreChangeComment>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5626,7 +5626,7 @@ pub struct NestedPaginatedCoreCheck {
 pub struct NestedPaginatedCoreCheckDefinition {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreCheckDefinition>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5714,7 +5714,7 @@ pub struct NestedPaginatedCoreGeneratorCheck {
 pub struct NestedPaginatedCoreGeneratorDefinition {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreGeneratorDefinition>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5728,14 +5728,14 @@ pub struct NestedPaginatedCoreGeneratorGroup {
 pub struct NestedPaginatedCoreGeneratorInstance {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreGeneratorInstance>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedPaginatedCoreGeneratorValidator {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreGeneratorValidator>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5761,14 +5761,14 @@ pub struct NestedPaginatedCoreGlobalPermission {
 pub struct NestedPaginatedCoreGraphQLQuery {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreGraphQLQuery>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedPaginatedCoreGraphQLQueryGroup {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreGraphQLQueryGroup>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5860,7 +5860,7 @@ pub struct NestedPaginatedCoreNodeTriggerRelationshipMatch {
 pub struct NestedPaginatedCoreNodeTriggerRule {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreNodeTriggerRule>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5913,7 +5913,7 @@ pub struct NestedPaginatedCoreProfile {
 pub struct NestedPaginatedCoreProposedChange {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreProposedChange>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5927,14 +5927,14 @@ pub struct NestedPaginatedCoreReadOnlyRepository {
 pub struct NestedPaginatedCoreRepository {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreRepository>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NestedPaginatedCoreRepositoryGroup {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreRepositoryGroup>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -6008,7 +6008,7 @@ pub struct NestedPaginatedCoreThread {
 pub struct NestedPaginatedCoreThreadComment {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreThreadComment>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -6022,7 +6022,7 @@ pub struct NestedPaginatedCoreTransformJinja2 {
 pub struct NestedPaginatedCoreTransformPython {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreTransformPython>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -6041,7 +6041,7 @@ pub struct NestedPaginatedCoreTriggerRule {
 pub struct NestedPaginatedCoreUserValidator {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreUserValidator>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -6101,7 +6101,7 @@ pub struct NestedPaginatedInternalRefreshToken {
 pub struct NestedPaginatedIpamNamespace {
     pub count: i64,
     pub edges: Vec<NestedEdgedIpamNamespace>,
-    pub permissions: Box<PaginatedObjectPermission>,
+    pub permissions: Option<Box<PaginatedObjectPermission>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

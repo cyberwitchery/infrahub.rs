@@ -4,12 +4,14 @@
 //! flows through the generated client crate. they require a live infrahub
 //! instance and are skipped when INFRAHUB_TOKEN is not set.
 
+use std::time::{SystemTime, UNIX_EPOCH};
+
 use infrahub::{Client, ClientConfig};
 use infrahub_test_client::api::ApiClient;
 use infrahub_test_client::inputs::{
-    BuiltinTagCreateInput, BuiltinTagUpdateInput, CoreGraphQLQueryGroupCreateInput,
-    CoreStandardGroupCreateInput, DeleteInput, RelatedNodeInput, TextAttributeCreate,
-    TextAttributeUpdate,
+    BuiltinTagCreateInput, BuiltinTagUpdateInput, CoreGraphQLQueryCreateInput,
+    CoreGraphQLQueryGroupCreateInput, CoreStandardGroupCreateInput, DeleteInput, RelatedNodeInput,
+    TextAttributeCreate, TextAttributeUpdate,
 };
 use infrahub_test_client::types::{CoreGraphQLQueryGroup, CoreStandardGroup};
 use infrahub_test_client::GeneratedClient;
@@ -83,6 +85,21 @@ fn related(id: &str) -> RelatedNodeInput {
     }
 }
 
+fn text(value: &str) -> TextAttributeCreate {
+    TextAttributeCreate {
+        is_protected: None,
+        source: None,
+        owner: None,
+        value: Some(value.to_string()),
+    }
+}
+
+/// a suffix unique to this run
+fn run_suffix() -> String {
+    let now = SystemTime::now().duration_since(UNIX_EPOCH).expect("clock");
+    now.as_nanos().to_string()
+}
+
 /// create a CoreStandardGroup
 async fn create_group(
     client: &Client,
@@ -113,31 +130,6 @@ async fn create_group(
         .create(None, data, branch().as_deref())
         .await
         .expect("create group")
-}
-
-/// create a CoreGraphQLQuery over raw graphql and return its id
-async fn create_graphql_query(client: &Client, name: &str) -> String {
-    let mutation = r#"mutation($name: String!, $query: String!) {
-        CoreGraphQLQueryCreate(data: { name: { value: $name }, query: { value: $query } }) {
-            object { id }
-        }
-    }"#;
-    let vars =
-        serde_json::json!({ "name": name, "query": "query SmokePeer { BuiltinTag { count } }" });
-    let response = client
-        .execute_raw(mutation, Some(vars), branch().as_deref())
-        .await
-        .expect("create graphql query");
-    assert!(
-        response.errors.is_empty(),
-        "create graphql query: {:?}",
-        response.errors
-    );
-    let data = response.data.expect("data");
-    data["CoreGraphQLQueryCreate"]["object"]["id"]
-        .as_str()
-        .expect("graphql query id")
-        .to_string()
 }
 
 /// delete a CoreStandardGroup by id
@@ -581,55 +573,73 @@ async fn query_group_comes_back_with_its_query() {
     let Some(client) = make_client() else {
         return;
     };
-    let query_id = create_graphql_query(&client, "smoke-peer-query").await;
-    let groups = client.api().core().graph_ql_query_group();
-    let name = "smoke-peer-query-group";
-    let data = CoreGraphQLQueryGroupCreateInput {
-        id: None,
-        parameters: None,
-        name: Some(TextAttributeCreate {
-            is_protected: None,
-            source: None,
-            owner: None,
-            value: Some(name.to_string()),
-        }),
-        label: None,
-        description: None,
-        group_type: None,
-        query: Some(related(&query_id)),
-        members: None,
-        subscribers: None,
-        parent: None,
-        children: None,
-    };
-    let delete = |id: &str| DeleteInput {
+    let run = run_suffix();
+    let query_name = format!("smoke-peer-query-{run}");
+    let name = format!("smoke-peer-query-group-{run}");
+    let by_id = |id: &str| DeleteInput {
         id: Some(id.to_string()),
         hfid: None,
     };
-    let created = groups.create(None, data, branch().as_deref()).await;
-    let mut reads = None;
-    if let Ok(created) = &created {
-        reads = Some((
-            groups.list(None, branch().as_deref()).await,
-            groups.get_by_id(&created.id, branch().as_deref()).await,
-        ));
-    }
-    let group = match &created {
-        Ok(created) => delete(&created.id),
-        // the create can fail after Infrahub has made the group
-        Err(_) => DeleteInput {
-            id: None,
-            hfid: Some(vec![name.to_string()]),
-        },
+    // a create can fail after Infrahub has made the object
+    let by_name = |name: &str| DeleteInput {
+        id: None,
+        hfid: Some(vec![name.to_string()]),
     };
-    let group_deleted = groups.delete(None, group, branch().as_deref()).await;
-    let query_deleted = client
-        .api()
-        .core()
-        .graph_ql_query()
-        .delete(None, delete(&query_id), branch().as_deref())
-        .await;
 
+    let queries = client.api().core().graph_ql_query();
+    let data = CoreGraphQLQueryCreateInput {
+        id: None,
+        name: Some(text(&query_name)),
+        description: None,
+        query: Some(text("query SmokePeer { BuiltinTag { count } }")),
+        fingerprint: None,
+        repository: None,
+        tags: None,
+        query_groups: None,
+        member_of_groups: None,
+        subscriber_of_groups: None,
+    };
+    let query = queries.create(None, data, branch().as_deref()).await;
+
+    let groups = client.api().core().graph_ql_query_group();
+    let mut group = None;
+    if let Ok(query) = &query {
+        let data = CoreGraphQLQueryGroupCreateInput {
+            id: None,
+            parameters: None,
+            name: Some(text(&name)),
+            label: None,
+            description: None,
+            group_type: None,
+            query: Some(related(&query.id)),
+            members: None,
+            subscribers: None,
+            parent: None,
+            children: None,
+        };
+        let created = groups.create(None, data, branch().as_deref()).await;
+        let mut reads = None;
+        if let Ok(created) = &created {
+            reads = Some((
+                groups.list(None, branch().as_deref()).await,
+                groups.get_by_id(&created.id, branch().as_deref()).await,
+            ));
+        }
+        let target = match &created {
+            Ok(created) => by_id(&created.id),
+            Err(_) => by_name(&name),
+        };
+        let deleted = groups.delete(None, target, branch().as_deref()).await;
+        group = Some((created, reads, deleted));
+    }
+    let target = match &query {
+        Ok(query) => by_id(&query.id),
+        Err(_) => by_name(&query_name),
+    };
+    let query_deleted = queries.delete(None, target, branch().as_deref()).await;
+
+    let query_id = query.expect("create graphql query").id;
+    let (created, reads, group_deleted) = group.expect("a group follows the query");
     let created = created.expect("create query group");
     let (listed, found) = reads.expect("reads follow a create");
     let peer_id = |group: &CoreGraphQLQueryGroup| group.query.node.as_ref()?.id.clone();

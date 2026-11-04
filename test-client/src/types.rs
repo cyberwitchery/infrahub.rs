@@ -5860,7 +5860,7 @@ pub struct NestedPaginatedCoreNodeTriggerRelationshipMatch {
 pub struct NestedPaginatedCoreNodeTriggerRule {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreNodeTriggerRule>,
-    pub permissions: Option<Box<PaginatedObjectPermission>>,
+    pub permissions: Box<PaginatedObjectPermission>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5913,7 +5913,7 @@ pub struct NestedPaginatedCoreProfile {
 pub struct NestedPaginatedCoreProposedChange {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreProposedChange>,
-    pub permissions: Option<Box<PaginatedObjectPermission>>,
+    pub permissions: Box<PaginatedObjectPermission>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -5927,7 +5927,7 @@ pub struct NestedPaginatedCoreReadOnlyRepository {
 pub struct NestedPaginatedCoreRepository {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreRepository>,
-    pub permissions: Option<Box<PaginatedObjectPermission>>,
+    pub permissions: Box<PaginatedObjectPermission>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -6022,7 +6022,7 @@ pub struct NestedPaginatedCoreTransformJinja2 {
 pub struct NestedPaginatedCoreTransformPython {
     pub count: i64,
     pub edges: Vec<NestedEdgedCoreTransformPython>,
-    pub permissions: Option<Box<PaginatedObjectPermission>>,
+    pub permissions: Box<PaginatedObjectPermission>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

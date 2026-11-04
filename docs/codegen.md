@@ -102,19 +102,24 @@ let _all = paginator.collect_all().await?;
   e.g. `NestedEdgedCoreArtifactDefinition.node` and `NestedEdgedCoreGroup.node`
   are `Option<Box<PeerRef>>`. use the peer model's `get_by_id` for the rest of
   the peer.
-- **relationship wrappers**: the type holding a cardinality-many relationship's
-  edges, such as `NestedPaginatedBuiltinTag`, selects only its scalars and those
-  edges, the only fields infrahub resolves there. its `permissions` is left out
-  and typed `Option`.
+- **relationship wrappers**: the type a model's field returns to hold a
+  cardinality-many relationship's edges, such as `NestedPaginatedBuiltinTag`,
+  selects only its scalars and those edges, the only fields infrahub resolves
+  there. its `permissions` is left out and typed `Option`. this holds even when
+  the query root returns the same type.
 - **selection depth**: objects more than three levels below the root field are
   selected with only the fields their struct requires (its non-null fields,
   recursively), so a struct without one is selected as `{ __typename }`;
   relationship peers are exempt. in `list`, `get_by_id` and `paginate` that
   leaves a cardinality-many relationship with its `count` and empty `edges`. a
   nullable field whose struct has a required field is left out at that depth,
-  so the cap never changes a type. an object with no field to select (all
-  deprecated or taking required arguments) is selected as `{ __typename }` too,
-  and a non-null field the query leaves out is typed `Option`.
+  so the cap never changes a type. a type repeated on its own path is selected
+  the same way. an object with no field to select (all deprecated or taking
+  required arguments) is selected as `{ __typename }` too, and a non-null field
+  the query leaves out is typed `Option`.
+- **required cycles**: a non-null object field whose type leads back to its own
+  type through non-null object fields can't be filled by any finite query, so it
+  is typed `Option`. it is still selected where the query reaches it.
 
 for a full generated `api()` walkthrough, see:
 - [`examples/generated_api.md`](../examples/generated_api.md)

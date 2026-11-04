@@ -86,18 +86,40 @@ let _all = paginator.collect_all().await?;
   accept `Upload` arguments should be called via `Client::execute_multipart`.
 - **interfaces**: each interface (an infrahub generic such as `CoreGroup`) gets a
   struct named after it that holds its scalar and enum fields plus `typename`
-  (the peer's concrete type, from `__typename`), all optional. an edge whose
-  `node` is an interface, and a root field whose type is an interface (such as
-  `AccountProfile`), select exactly those fields and return the peer as that
-  struct; use the concrete model's `get_by_id` for the rest of the peer.
+  (the node's concrete type, from `__typename`), all optional. an edge whose
+  `node` is an interface and that is not a relationship edge, such as a row of a
+  generic model's own `list`, and a root field whose type is an interface (such as
+  `AccountProfile`), select exactly those fields and return the node as that
+  struct; use the concrete model's `get_by_id` for the rest of the node.
   other interface-typed fields, such as an attribute's `source` and `owner`, are
   not selected and stay `serde_json::Value`.
+- **relationship peers**: a relationship edge (an edge that a model's field
+  returns, directly or in a list field of the field's type such as `edges`, and
+  that no query root field returns) selects only the peer's `__typename` and
+  `id`, whether the peer is a concrete model or an interface, and returns the
+  peer as the shared `PeerRef` struct (`PeerRef_` if the schema has its own
+  `PeerRef` type) with `typename` and `id`, both optional,
+  e.g. `NestedEdgedCoreArtifactDefinition.node` and `NestedEdgedCoreGroup.node`
+  are `Option<Box<PeerRef>>`. use the peer model's `get_by_id` for the rest of
+  the peer.
+- **relationship wrappers**: the type a model's field returns to hold a
+  cardinality-many relationship's edges, such as `NestedPaginatedBuiltinTag`,
+  selects only its scalars and those edges, the only fields infrahub resolves
+  there. its `permissions` is left out and typed `Option`. this holds even when
+  the query root returns the same type.
 - **selection depth**: objects more than three levels below the root field are
-  selected as `{ __typename }` only; interface peers are exempt. in `list`,
-  `get_by_id` and `paginate` that leaves a cardinality-many relationship with its
-  `count` and empty `edges`. an object with no field to select (all deprecated or
-  taking required arguments) is selected as `{ __typename }` too, and a non-null
-  field the query leaves out is typed `Option`.
+  selected with only the fields their struct requires (its non-null fields,
+  recursively), so a struct without one is selected as `{ __typename }`;
+  relationship peers are exempt. in `list`, `get_by_id` and `paginate` that
+  leaves a cardinality-many relationship with its `count` and empty `edges`. a
+  nullable field whose struct has a required field is left out at that depth,
+  so the cap never changes a type. a type repeated on its own path is selected
+  the same way. an object with no field to select (all deprecated or taking
+  required arguments) is selected as `{ __typename }` too, and a non-null field
+  the query leaves out is typed `Option`.
+- **required cycles**: a non-null object field whose type leads back to its own
+  type through non-null object fields can't be filled by any finite query, so it
+  is typed `Option`. it is still selected where the query reaches it.
 
 for a full generated `api()` walkthrough, see:
 - [`examples/generated_api.md`](../examples/generated_api.md)

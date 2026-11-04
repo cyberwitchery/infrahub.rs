@@ -1,6 +1,9 @@
 //! offline checks that generated types accept the payloads infrahub sends
 
-use infrahub_test_client::types::{CoreGenericAccount, NestedEdgedCoreGroup};
+use infrahub_test_client::types::{
+    CoreGenericAccount, NestedEdgedCoreArtifactDefinition, NestedEdgedCoreGroup,
+    NestedPaginatedBuiltinTag, PeerRef,
+};
 
 #[test]
 fn empty_generic_edge_deserializes_without_node_metadata() {
@@ -31,22 +34,15 @@ fn set_generic_edge_deserializes_its_peer() {
     let edge: NestedEdgedCoreGroup = serde_json::from_value(serde_json::json!({
         "node": {
             "__typename": "CoreStandardGroup",
-            "id": "18a7d1c2-5b3e-4f1a-9c6d-0e2f4a6b8c9d",
-            "hfid": ["smoke-parent-group"],
-            "display_label": "smoke-parent-group"
+            "id": "18a7d1c2-5b3e-4f1a-9c6d-0e2f4a6b8c9d"
         },
         "properties": { "__typename": "RelationshipProperty" },
         "relationship_metadata": { "__typename": "InfrahubRelationshipMetadata" }
     }))
     .expect("set edge");
-    let peer = edge.node.expect("peer");
-    assert_eq!(peer.typename.as_deref(), Some("CoreStandardGroup"));
-    assert_eq!(
-        peer.id.as_deref(),
-        Some("18a7d1c2-5b3e-4f1a-9c6d-0e2f4a6b8c9d")
-    );
-    assert_eq!(peer.hfid, Some(vec!["smoke-parent-group".to_string()]));
-    assert_eq!(peer.display_label.as_deref(), Some("smoke-parent-group"));
+    let PeerRef { typename, id } = *edge.node.expect("peer");
+    assert_eq!(typename.as_deref(), Some("CoreStandardGroup"));
+    assert_eq!(id.as_deref(), Some("18a7d1c2-5b3e-4f1a-9c6d-0e2f4a6b8c9d"));
     assert!(edge.node_metadata.is_none());
 }
 
@@ -59,4 +55,32 @@ fn generic_peer_deserializes_from_a_capped_selection() {
         let account: CoreGenericAccount = serde_json::from_value(node).expect("capped peer");
         assert!(account.is_externally_managed.is_none());
     }
+}
+
+#[test]
+fn concrete_peer_deserializes_from_its_identity_selection() {
+    for node in [
+        serde_json::json!({ "__typename": "CoreArtifactDefinition" }),
+        serde_json::json!({
+            "__typename": "CoreArtifactDefinition",
+            "id": "18a7d1c2-5b3e-4f1a-9c6d-0e2f4a6b8c9d"
+        }),
+    ] {
+        let edge: NestedEdgedCoreArtifactDefinition =
+            serde_json::from_value(serde_json::json!({ "node": node })).expect("concrete peer");
+        let PeerRef { typename, id } = *edge.node.expect("peer");
+        assert_eq!(typename.as_deref(), Some("CoreArtifactDefinition"));
+        assert_eq!(id.as_deref(), node["id"].as_str());
+    }
+}
+
+#[test]
+fn capped_relationship_deserializes_without_permissions() {
+    let tags: NestedPaginatedBuiltinTag = serde_json::from_value(serde_json::json!({
+        "count": 1,
+        "edges": [{ "__typename": "NestedEdgedBuiltinTag" }]
+    }))
+    .expect("capped relationship");
+    assert_eq!(tags.edges.len(), 1);
+    assert!(tags.permissions.is_none());
 }

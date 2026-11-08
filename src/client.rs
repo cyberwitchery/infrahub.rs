@@ -27,7 +27,9 @@ const RETRY_MAX_BACKOFF: Duration = Duration::from_secs(30);
 /// graphql client for infrahub
 ///
 /// all requests go through a retry loop (transient network errors, 429,
-/// and retryable 5xx, with backoff).
+/// and retryable 5xx, with backoff). mutations and file uploads are retried
+/// only after a connect error or a 429 unless
+/// [`ClientConfig::with_mutation_retries`] is set.
 #[derive(Clone)]
 pub struct Client {
     config: Arc<ClientConfig>,
@@ -99,7 +101,8 @@ impl Client {
             "query": query,
             "variables": variables.unwrap_or_else(|| serde_json::json!({})),
         });
-        self.retry_loop(|| {
+        let resend = self.config.retry_mutations || only_queries(query);
+        self.retry_loop(resend, || {
             let url = url.clone();
             let body = body.clone();
             async move {
@@ -128,7 +131,7 @@ impl Client {
     /// fetch the graphql schema as text
     pub async fn fetch_schema(&self, branch: Option<&str>) -> Result<String> {
         let url = self.config.schema_url(branch)?;
-        self.retry_loop(|| {
+        self.retry_loop(true, || {
             let url = url.clone();
             async move {
                 let response = self.http.get(url).send().await?;
@@ -150,7 +153,7 @@ impl Client {
         branch: Option<&str>,
     ) -> Result<T> {
         let url = self.config.schema_snapshot_url(branch)?;
-        self.retry_loop(|| {
+        self.retry_loop(true, || {
             let url = url.clone();
             async move {
                 let response = self.http.get(url).send().await?;
@@ -180,7 +183,7 @@ impl Client {
         let url = self.config.graphql_url(branch)?;
         let owned_files: Vec<(String, FileUpload)> =
             files.into_iter().map(|(k, v)| (k.to_owned(), v)).collect();
-        self.retry_loop(|| {
+        self.retry_loop(self.config.retry_mutations, || {
             let url = url.clone();
             let variables = variables.clone();
             let files_for_attempt: Vec<(&str, FileUpload)> = owned_files
@@ -231,7 +234,7 @@ impl Client {
 
     /// shared download helper — GET the given url and return response bytes
     async fn download_bytes(&self, url: Url) -> Result<Vec<u8>> {
-        self.retry_loop(|| {
+        self.retry_loop(true, || {
             let url = url.clone();
             async move {
                 let response = self.http.get(url).send().await?;
@@ -257,7 +260,8 @@ impl Client {
 }
 
 impl Client {
-    async fn retry_loop<T, F, Fut>(&self, mut operation: F) -> Result<T>
+    /// `resend` allows retrying a request that may already have reached the server
+    async fn retry_loop<T, F, Fut>(&self, resend: bool, mut operation: F) -> Result<T>
     where
         F: FnMut() -> Fut,
         Fut: Future<Output = std::result::Result<T, RetryError>>,
@@ -267,7 +271,9 @@ impl Client {
             match operation().await {
                 Ok(value) => return Ok(value),
                 Err(retry_err) => {
-                    if attempts >= self.config.max_retries || !retry_err.inner.is_retryable() {
+                    if attempts >= self.config.max_retries
+                        || !should_retry(&retry_err.inner, resend)
+                    {
                         return Err(retry_err.inner);
                     }
                     attempts += 1;
@@ -279,9 +285,9 @@ impl Client {
     }
 
     fn next_delay(attempt: u32, hint: Option<Duration>) -> Duration {
-        // clamp a server hint to the backoff ceiling so a huge Retry-After can't stall the client
-        hint.map(|d| d.min(RETRY_MAX_BACKOFF))
-            .unwrap_or_else(|| Self::retry_delay(attempt))
+        let backoff = Self::retry_delay(attempt);
+        hint.map_or(backoff, |hint| hint.max(backoff))
+            .min(RETRY_MAX_BACKOFF)
     }
 
     fn retry_delay(attempt: u32) -> Duration {
@@ -308,6 +314,104 @@ impl Client {
             .unwrap_or_else(|_| std::process::id() as u64);
         nanos.wrapping_mul(31).wrapping_add(attempt as u64)
     }
+}
+
+fn should_retry(err: &Error, resend: bool) -> bool {
+    match err {
+        _ if resend => err.is_retryable(),
+        Error::Http(err) => err.is_connect(),
+        Error::GraphQl { status, .. } => *status == Some(429),
+        _ => false,
+    }
+}
+
+/// true only if every operation in the document is a query
+fn only_queries(document: &str) -> bool {
+    let src = document.as_bytes();
+    let mut i = 0;
+    let mut open = Vec::new();
+    let mut at_definition = true;
+    let mut queries = 0;
+    while i < src.len() {
+        let start = i;
+        match src[i] {
+            b' ' | b'\t' | b'\n' | b'\r' | b',' => {
+                i += 1;
+                continue;
+            }
+            b'#' => {
+                while i < src.len() && !matches!(src[i], b'\n' | b'\r') {
+                    i += 1;
+                }
+                continue;
+            }
+            _ if src[i..].starts_with("\u{feff}".as_bytes()) => {
+                i += 3;
+                continue;
+            }
+            b'"' => match string_end(src, i) {
+                Some(end) => i = end,
+                None => return false,
+            },
+            b'_' | b'A'..=b'Z' | b'a'..=b'z' => {
+                while i < src.len() && (src[i] == b'_' || src[i].is_ascii_alphanumeric()) {
+                    i += 1;
+                }
+            }
+            _ => i += 1,
+        }
+        let token = &src[start..i];
+        if at_definition {
+            match token {
+                b"{" | b"query" => queries += 1,
+                b"fragment" => {}
+                _ => return false,
+            }
+            at_definition = false;
+        }
+        let opener = match token {
+            b"{" | b"(" | b"[" => {
+                open.push(token[0]);
+                continue;
+            }
+            b"}" => b'{',
+            b")" => b'(',
+            b"]" => b'[',
+            _ => continue,
+        };
+        if open.pop() != Some(opener) {
+            return false;
+        }
+        at_definition = open.is_empty() && opener == b'{';
+    }
+    at_definition && queries > 0
+}
+
+/// index just past the string or block string starting at `start`
+fn string_end(src: &[u8], start: usize) -> Option<usize> {
+    if src[start..].starts_with(b"\"\"\"") {
+        let mut i = start + 3;
+        while i < src.len() {
+            if src[i..].starts_with(b"\\\"\"\"") {
+                i += 4;
+            } else if src[i..].starts_with(b"\"\"\"") {
+                return Some(i + 3);
+            } else {
+                i += 1;
+            }
+        }
+        return None;
+    }
+    let mut i = start + 1;
+    while i < src.len() {
+        match src[i] {
+            b'"' => return Some(i + 1),
+            b'\\' => i += 2,
+            b'\n' | b'\r' => return None,
+            _ => i += 1,
+        }
+    }
+    None
 }
 
 struct RetryError {
@@ -824,43 +928,61 @@ mod tests {
 
     #[test]
     fn test_next_delay() {
-        // (attempt, retry-after hint, expected delay)
+        let cap = RETRY_MAX_BACKOFF.as_millis();
+        // (attempt, retry-after hint in seconds, expected delay in ms)
         for (attempt, hint, expected) in [
-            (1, Some(Duration::from_secs(5)), Duration::from_secs(5)),
-            (1, Some(Duration::from_secs(100_000)), RETRY_MAX_BACKOFF),
-            (20, Some(Duration::from_secs(1)), Duration::from_secs(1)),
-            (0, None, Duration::from_millis(0)),
+            (0, None, 0..=0),
+            (1, None, 200..=250),
+            (1, Some(0), 200..=250),
+            (3, Some(0), 800..=1000),
+            (3, Some(1), 1000..=1000),
+            (1, Some(5), 5000..=5000),
+            (1, Some(100_000), cap..=cap),
+            (20, Some(1), cap..=cap),
         ] {
-            assert_eq!(
-                Client::next_delay(attempt, hint),
-                expected,
-                "attempt {attempt}, hint {hint:?}"
+            let delay = Client::next_delay(attempt, hint.map(Duration::from_secs)).as_millis();
+            assert!(
+                expected.contains(&delay),
+                "attempt {attempt}, hint {hint:?}: {delay}ms"
             );
         }
-
-        let delay1 = Client::next_delay(1, None).as_millis();
-        assert!(
-            (200..=250).contains(&delay1),
-            "attempt 1 backoff {delay1}ms outside expected 200..=250"
-        );
     }
 
     #[cfg_attr(miri, ignore)]
     #[tokio::test]
     async fn test_retry_loop() {
-        // (label, max_retries, status, failures before success, succeeds, expected calls)
-        for (label, max_retries, status, failures, succeeds, expected_calls) in [
-            ("transient errors then success", 3, 503, 2, true, 3),
-            ("gives up after max_retries", 2, 500, u32::MAX, false, 3),
+        // (label, resend, max_retries, status, failures before success, succeeds, expected calls)
+        for (label, resend, max_retries, status, failures, succeeds, expected_calls) in [
+            ("transient errors then success", true, 3, 503, 2, true, 3),
+            (
+                "gives up after max_retries",
+                true,
+                2,
+                500,
+                u32::MAX,
+                false,
+                3,
+            ),
             (
                 "permanent errors are not retried",
+                true,
                 3,
                 400,
                 u32::MAX,
                 false,
                 1,
             ),
-            ("max_retries=0 disables retries", 0, 503, u32::MAX, false, 1),
+            (
+                "max_retries=0 disables retries",
+                true,
+                0,
+                503,
+                u32::MAX,
+                false,
+                1,
+            ),
+            ("no resend after a 503", false, 3, 503, u32::MAX, false, 1),
+            ("429 is resent anyway", false, 3, 429, 2, true, 3),
         ] {
             let config = ClientConfig::new("http://localhost:1234", "test-token")
                 .with_max_retries(max_retries);
@@ -868,7 +990,7 @@ mod tests {
             let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
             let count = call_count.clone();
             let result: Result<String> = client
-                .retry_loop(|| {
+                .retry_loop(resend, || {
                     let count = count.clone();
                     async move {
                         let n = count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
@@ -910,7 +1032,7 @@ mod tests {
         let call_count = std::sync::Arc::new(std::sync::atomic::AtomicU32::new(0));
         let count = call_count.clone();
         let result = client
-            .retry_loop(|| {
+            .retry_loop(true, || {
                 let count = count.clone();
                 async move {
                     count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
@@ -964,5 +1086,159 @@ mod tests {
             11,
             "one attempt of 1 request + 10 redirects"
         );
+    }
+    #[test]
+    fn test_only_queries() {
+        // (document, every operation is a query)
+        for (document, expected) in [
+            ("{ ok }", true),
+            ("query { ok }", true),
+            ("query Get($id: ID!) { node(id: $id) { id } }", true),
+            ("query Q($i: I = {a: 1}) @d(b: [{c: 2}]) { ok }", true),
+            ("mutation { create { ok } }", false),
+            ("mutation Create { create { ok } }", false),
+            ("fragment F on T { a } query { ...F }", true),
+            ("fragment F on T { a } mutation { ...F }", false),
+            ("query A { a } mutation B { b }", false),
+            ("# mutation { b }\nquery { ok }", true),
+            (r#"query { a(s: "mutation { b }") }"#, true),
+            (r#"query { a(s: "\" } mutation { b }") }"#, true),
+            ("query { a(s: \"\"\"\n} mutation { b }\n\"\"\") }", true),
+            (r#"query { a(s: """\""" } mutation { b }""") }"#, true),
+            ("\u{feff},query { mutation }", true),
+            ("subscription { ok }", false),
+            ("fragment F on T { a }", false),
+            ("", false),
+            ("query { ok", false),
+            ("query { ok ) }", false),
+            (r#"query { a(s: "unterminated) }"#, false),
+        ] {
+            assert_eq!(only_queries(document), expected, "{document:?}");
+        }
+    }
+
+    /// answers every request except the first, which it reads and drops; counts POSTs
+    fn drop_first_response() -> (std::net::SocketAddr, Arc<std::sync::atomic::AtomicU32>) {
+        use std::io::{BufRead, Read, Write};
+
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let addr = listener.local_addr().unwrap();
+        let posts = Arc::new(std::sync::atomic::AtomicU32::new(0));
+        let seen = posts.clone();
+        std::thread::spawn(move || {
+            for stream in listener.incoming().flatten() {
+                let mut reader = std::io::BufReader::new(&stream);
+                let mut head = String::new();
+                while reader.read_line(&mut head).is_ok_and(|n| n > 2) {}
+                let length = head
+                    .lines()
+                    .find_map(|line| {
+                        let (name, value) = line.split_once(':')?;
+                        name.eq_ignore_ascii_case("content-length")
+                            .then(|| value.trim().parse::<usize>().unwrap())
+                    })
+                    .unwrap_or(0);
+                let mut body = vec![0; length];
+                if reader.read_exact(&mut body).is_err() {
+                    continue;
+                }
+                if head.starts_with("POST ")
+                    && seen.fetch_add(1, std::sync::atomic::Ordering::SeqCst) == 0
+                {
+                    continue;
+                }
+                let data = r#"{"data": {"ok": true}}"#;
+                let _ = write!(
+                    &stream,
+                    "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{data}",
+                    data.len()
+                );
+            }
+        });
+        (addr, posts)
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_mutation_not_resent_after_dropped_response() {
+        let upload = "mutation($file: Upload!) { upload(file: $file) { ok } }";
+        // (label, document, opt in, multipart, expected POSTs)
+        for (label, document, opt_in, multipart, expected) in [
+            ("query", "query { ok }", false, false, 2),
+            ("mutation", "mutation { create { ok } }", false, false, 1),
+            (
+                "mutation, opted in",
+                "mutation { create { ok } }",
+                true,
+                false,
+                2,
+            ),
+            ("upload", upload, false, true, 1),
+            ("upload, opted in", upload, true, true, 2),
+        ] {
+            let (addr, posts) = drop_first_response();
+            let config = ClientConfig::new(format!("http://{addr}"), "test-token")
+                .with_mutation_retries(opt_in);
+            let client = test_client(config);
+            let result = if multipart {
+                let file = FileUpload::new("a.txt", "text/plain", b"a".to_vec());
+                client
+                    .execute_multipart::<serde_json::Value>(
+                        document,
+                        None,
+                        vec![("file", file)],
+                        None,
+                    )
+                    .await
+            } else {
+                client.execute_raw(document, None, None).await
+            };
+            assert_eq!(result.is_ok(), expected == 2, "{label}: {result:?}");
+            assert_eq!(
+                posts.load(std::sync::atomic::Ordering::SeqCst),
+                expected,
+                "{label}: POSTs"
+            );
+        }
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_mutation_resent_after_connect_error() {
+        struct CountingResolver(std::net::SocketAddr, Arc<std::sync::atomic::AtomicU32>);
+
+        impl reqwest::dns::Resolve for CountingResolver {
+            fn resolve(&self, _: reqwest::dns::Name) -> reqwest::dns::Resolving {
+                self.1.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                let addrs: reqwest::dns::Addrs = Box::new(std::iter::once(self.0));
+                Box::pin(async move { Ok(addrs) })
+            }
+        }
+
+        let closed = std::net::TcpListener::bind("127.0.0.1:0")
+            .unwrap()
+            .local_addr()
+            .unwrap();
+        let connects = Arc::new(std::sync::atomic::AtomicU32::new(0));
+        let http = reqwest::Client::builder()
+            .no_proxy()
+            .dns_resolver(CountingResolver(closed, connects.clone()))
+            .build()
+            .unwrap();
+        let config = ClientConfig::new(
+            format!("http://infrahub.test:{}", closed.port()),
+            "test-token",
+        )
+        .with_max_retries(1);
+        let client = Client {
+            config: Arc::new(config),
+            http,
+        };
+        let err = client
+            .execute_raw("mutation { create { ok } }", None, None)
+            .await
+            .unwrap_err();
+        assert!(matches!(err, Error::Http(ref e) if e.is_connect()), "{err}");
+        assert_eq!(connects.load(std::sync::atomic::Ordering::SeqCst), 2);
     }
 }

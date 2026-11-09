@@ -101,7 +101,7 @@ impl Client {
             "query": query,
             "variables": variables.unwrap_or_else(|| serde_json::json!({})),
         });
-        let resend = self.config.retry_mutations || only_queries(query);
+        let resend = self.config.retry_mutations || !mentions_mutation(query);
         self.retry_loop(resend, || {
             let url = url.clone();
             let body = body.clone();
@@ -325,93 +325,11 @@ fn should_retry(err: &Error, resend: bool) -> bool {
     }
 }
 
-/// true only if every operation in the document is a query
-fn only_queries(document: &str) -> bool {
-    let src = document.as_bytes();
-    let mut i = 0;
-    let mut open = Vec::new();
-    let mut at_definition = true;
-    let mut queries = 0;
-    while i < src.len() {
-        let start = i;
-        match src[i] {
-            b' ' | b'\t' | b'\n' | b'\r' | b',' => {
-                i += 1;
-                continue;
-            }
-            b'#' => {
-                while i < src.len() && !matches!(src[i], b'\n' | b'\r') {
-                    i += 1;
-                }
-                continue;
-            }
-            _ if src[i..].starts_with("\u{feff}".as_bytes()) => {
-                i += 3;
-                continue;
-            }
-            b'"' => match string_end(src, i) {
-                Some(end) => i = end,
-                None => return false,
-            },
-            b'_' | b'A'..=b'Z' | b'a'..=b'z' => {
-                while i < src.len() && (src[i] == b'_' || src[i].is_ascii_alphanumeric()) {
-                    i += 1;
-                }
-            }
-            _ => i += 1,
-        }
-        let token = &src[start..i];
-        if at_definition {
-            match token {
-                b"{" | b"query" => queries += 1,
-                b"fragment" => {}
-                _ => return false,
-            }
-            at_definition = false;
-        }
-        let opener = match token {
-            b"{" | b"(" | b"[" => {
-                open.push(token[0]);
-                continue;
-            }
-            b"}" => b'{',
-            b")" => b'(',
-            b"]" => b'[',
-            _ => continue,
-        };
-        if open.pop() != Some(opener) {
-            return false;
-        }
-        at_definition = open.is_empty() && opener == b'{';
-    }
-    at_definition && queries > 0
-}
-
-/// index just past the string or block string starting at `start`
-fn string_end(src: &[u8], start: usize) -> Option<usize> {
-    if src[start..].starts_with(b"\"\"\"") {
-        let mut i = start + 3;
-        while i < src.len() {
-            if src[i..].starts_with(b"\\\"\"\"") {
-                i += 4;
-            } else if src[i..].starts_with(b"\"\"\"") {
-                return Some(i + 3);
-            } else {
-                i += 1;
-            }
-        }
-        return None;
-    }
-    let mut i = start + 1;
-    while i < src.len() {
-        match src[i] {
-            b'"' => return Some(i + 1),
-            b'\\' => i += 2,
-            b'\n' | b'\r' => return None,
-            _ => i += 1,
-        }
-    }
-    None
+/// whether `mutation` appears as a whole word anywhere in the document
+fn mentions_mutation(document: &str) -> bool {
+    document
+        .split(|c: char| c != '_' && !c.is_ascii_alphanumeric())
+        .any(|word| word == "mutation")
 }
 
 struct RetryError {
@@ -1088,32 +1006,18 @@ mod tests {
         );
     }
     #[test]
-    fn test_only_queries() {
-        // (document, every operation is a query)
+    fn test_mentions_mutation() {
         for (document, expected) in [
-            ("{ ok }", true),
-            ("query { ok }", true),
-            ("query Get($id: ID!) { node(id: $id) { id } }", true),
-            ("query Q($i: I = {a: 1}) @d(b: [{c: 2}]) { ok }", true),
-            ("mutation { create { ok } }", false),
-            ("mutation Create { create { ok } }", false),
-            ("fragment F on T { a } query { ...F }", true),
-            ("fragment F on T { a } mutation { ...F }", false),
-            ("query A { a } mutation B { b }", false),
-            ("# mutation { b }\nquery { ok }", true),
-            (r#"query { a(s: "mutation { b }") }"#, true),
-            (r#"query { a(s: "\" } mutation { b }") }"#, true),
-            ("query { a(s: \"\"\"\n} mutation { b }\n\"\"\") }", true),
-            (r#"query { a(s: """\""" } mutation { b }""") }"#, true),
-            ("\u{feff},query { mutation }", true),
-            ("subscription { ok }", false),
-            ("fragment F on T { a }", false),
-            ("", false),
-            ("query { ok", false),
-            ("query { ok ) }", false),
-            (r#"query { a(s: "unterminated) }"#, false),
+            ("mutation { create { ok } }", true),
+            ("{ ok }", false),
+            ("query Get($id: ID!) { node(id: $id) { id } }", false),
+            ("fragment F on T { a } mutation { ...F }", true),
+            ("query { mutation_count }", false),
+            ("query{a}mutation{b}", true),
+            ("query { ok } # x\rmutation { b }", true),
+            (r#"query { a(s: "mutation") }"#, true),
         ] {
-            assert_eq!(only_queries(document), expected, "{document:?}");
+            assert_eq!(mentions_mutation(document), expected, "{document:?}");
         }
     }
 

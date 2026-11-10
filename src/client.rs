@@ -101,7 +101,7 @@ impl Client {
             "query": query,
             "variables": variables.unwrap_or_else(|| serde_json::json!({})),
         });
-        let resend = self.config.retry_mutations || !mentions_mutation(query);
+        let resend = self.config.retry_mutations || may_resend(query);
         self.retry_loop(resend, || {
             let url = url.clone();
             let body = body.clone();
@@ -277,15 +277,15 @@ impl Client {
                         return Err(retry_err.inner);
                     }
                     attempts += 1;
-                    let delay = Self::next_delay(attempts, retry_err.retry_after);
+                    let delay =
+                        Self::next_delay(Self::retry_delay(attempts), retry_err.retry_after);
                     sleep(delay).await;
                 }
             }
         }
     }
 
-    fn next_delay(attempt: u32, hint: Option<Duration>) -> Duration {
-        let backoff = Self::retry_delay(attempt);
+    fn next_delay(backoff: Duration, hint: Option<Duration>) -> Duration {
         hint.map_or(backoff, |hint| hint.max(backoff))
             .min(RETRY_MAX_BACKOFF)
     }
@@ -325,11 +325,18 @@ fn should_retry(err: &Error, resend: bool) -> bool {
     }
 }
 
-/// whether `mutation` appears as a whole word anywhere in the document
-fn mentions_mutation(document: &str) -> bool {
-    document
-        .split(|c: char| c != '_' && !c.is_ascii_alphanumeric())
-        .any(|word| word == "mutation")
+/// whether the document parses and has no mutation, so a resend can't apply anything twice
+fn may_resend(document: &str) -> bool {
+    use graphql_parser::query::{Definition, OperationDefinition};
+
+    graphql_parser::parse_query::<&str>(document).is_ok_and(|doc| {
+        !doc.definitions.iter().any(|definition| {
+            matches!(
+                definition,
+                Definition::Operation(OperationDefinition::Mutation(_))
+            )
+        })
+    })
 }
 
 struct RetryError {
@@ -846,22 +853,20 @@ mod tests {
 
     #[test]
     fn test_next_delay() {
-        let cap = RETRY_MAX_BACKOFF.as_millis();
-        // (attempt, retry-after hint in seconds, expected delay in ms)
-        for (attempt, hint, expected) in [
-            (0, None, 0..=0),
-            (1, None, 200..=250),
-            (1, Some(0), 200..=250),
-            (3, Some(0), 800..=1000),
-            (3, Some(1), 1000..=1000),
-            (1, Some(5), 5000..=5000),
-            (1, Some(100_000), cap..=cap),
-            (20, Some(1), cap..=cap),
+        let base = Duration::from_millis(RETRY_BASE_MS);
+        let cap = RETRY_MAX_BACKOFF;
+        // (backoff, retry-after hint, expected delay)
+        for (backoff, hint, expected) in [
+            (base, None, base),
+            (base, Some(Duration::ZERO), base),
+            (base, Some(base * 5), base * 5),
+            (base, Some(cap * 2), cap),
+            (cap, Some(base), cap),
         ] {
-            let delay = Client::next_delay(attempt, hint.map(Duration::from_secs)).as_millis();
-            assert!(
-                expected.contains(&delay),
-                "attempt {attempt}, hint {hint:?}: {delay}ms"
+            assert_eq!(
+                Client::next_delay(backoff, hint),
+                expected,
+                "backoff {backoff:?}, hint {hint:?}"
             );
         }
     }
@@ -1006,18 +1011,29 @@ mod tests {
         );
     }
     #[test]
-    fn test_mentions_mutation() {
+    fn test_may_resend() {
         for (document, expected) in [
-            ("mutation { create { ok } }", true),
-            ("{ ok }", false),
-            ("query Get($id: ID!) { node(id: $id) { id } }", false),
-            ("fragment F on T { a } mutation { ...F }", true),
-            ("query { mutation_count }", false),
-            ("query{a}mutation{b}", true),
-            ("query { ok } # x\rmutation { b }", true),
-            (r#"query { a(s: "mutation") }"#, true),
+            ("{ ok }", true),
+            ("query { ok }", true),
+            ("query Get($id: ID!) { node(id: $id) { id } }", true),
+            ("query A { a } query B { b }", true),
+            ("subscription { ok }", true),
+            ("fragment F on T { a }", true),
+            (r#"query { a(s: "mutation { b }") }"#, true),
+            ("# mutation { b }\nquery { ok }", true),
+            ("query { mutation: ok mutation }", true),
+            ("mutation { create { ok } }", false),
+            (
+                "mutation Delete($id: ID!) { delete(id: $id) { ok } }",
+                false,
+            ),
+            ("fragment F on T { a } mutation { ...F }", false),
+            ("query { a } mutation { b }", false),
+            ("query { ok } # x\rmutation { b }", false),
+            ("query { ok", false),
+            (r#""creates a tag" mutation { create { ok } }"#, false),
         ] {
-            assert_eq!(mentions_mutation(document), expected, "{document:?}");
+            assert_eq!(may_resend(document), expected, "{document:?}");
         }
     }
 

@@ -260,7 +260,7 @@ impl Client {
 }
 
 impl Client {
-    /// `resend` allows retrying a request that may already have reached the server
+    /// retries `operation` after a retryable error; with `resend` false it runs once
     async fn retry_loop<T, F, Fut>(&self, resend: bool, mut operation: F) -> Result<T>
     where
         F: FnMut() -> Fut,
@@ -271,8 +271,9 @@ impl Client {
             match operation().await {
                 Ok(value) => return Ok(value),
                 Err(retry_err) => {
-                    if attempts >= self.config.max_retries
-                        || !should_retry(&retry_err.inner, resend)
+                    if !resend
+                        || attempts >= self.config.max_retries
+                        || !retry_err.inner.is_retryable()
                     {
                         return Err(retry_err.inner);
                     }
@@ -313,15 +314,6 @@ impl Client {
             .map(|d| d.subsec_nanos() as u64)
             .unwrap_or_else(|_| std::process::id() as u64);
         nanos.wrapping_mul(31).wrapping_add(attempt as u64)
-    }
-}
-
-fn should_retry(err: &Error, resend: bool) -> bool {
-    match err {
-        _ if resend => err.is_retryable(),
-        Error::Http(err) => err.is_connect(),
-        Error::GraphQl { status, .. } => *status == Some(429),
-        _ => false,
     }
 }
 
@@ -905,7 +897,7 @@ mod tests {
                 1,
             ),
             ("no resend after a 503", false, 3, 503, u32::MAX, false, 1),
-            ("429 is resent anyway", false, 3, 429, 2, true, 3),
+            ("no resend after a 429", false, 3, 429, u32::MAX, false, 1),
         ] {
             let config = ClientConfig::new("http://localhost:1234", "test-token")
                 .with_max_retries(max_retries);
@@ -1037,9 +1029,28 @@ mod tests {
         }
     }
 
+    /// reads a request in full and returns its head, or `None` if the connection ends first
+    fn read_request(stream: &std::net::TcpStream) -> Option<String> {
+        use std::io::{BufRead, Read};
+
+        let mut reader = std::io::BufReader::new(stream);
+        let mut head = String::new();
+        while reader.read_line(&mut head).is_ok_and(|n| n > 2) {}
+        let length = head
+            .lines()
+            .find_map(|line| {
+                let (name, value) = line.split_once(':')?;
+                name.eq_ignore_ascii_case("content-length")
+                    .then(|| value.trim().parse::<usize>().unwrap())
+            })
+            .unwrap_or(0);
+        let mut body = vec![0; length];
+        reader.read_exact(&mut body).ok().map(|()| head)
+    }
+
     /// answers every request except the first, which it reads and drops; counts POSTs
     fn drop_first_response() -> (std::net::SocketAddr, Arc<std::sync::atomic::AtomicU32>) {
-        use std::io::{BufRead, Read, Write};
+        use std::io::Write;
 
         let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
         let addr = listener.local_addr().unwrap();
@@ -1047,21 +1058,9 @@ mod tests {
         let seen = posts.clone();
         std::thread::spawn(move || {
             for stream in listener.incoming().flatten() {
-                let mut reader = std::io::BufReader::new(&stream);
-                let mut head = String::new();
-                while reader.read_line(&mut head).is_ok_and(|n| n > 2) {}
-                let length = head
-                    .lines()
-                    .find_map(|line| {
-                        let (name, value) = line.split_once(':')?;
-                        name.eq_ignore_ascii_case("content-length")
-                            .then(|| value.trim().parse::<usize>().unwrap())
-                    })
-                    .unwrap_or(0);
-                let mut body = vec![0; length];
-                if reader.read_exact(&mut body).is_err() {
+                let Some(head) = read_request(&stream) else {
                     continue;
-                }
+                };
                 if head.starts_with("POST ")
                     && seen.fetch_add(1, std::sync::atomic::Ordering::SeqCst) == 0
                 {
@@ -1122,43 +1121,160 @@ mod tests {
         }
     }
 
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_mutation_resent_after_connect_error() {
-        struct CountingResolver(std::net::SocketAddr, Arc<std::sync::atomic::AtomicU32>);
+    /// resolves lookup `n` to `addrs[n % addrs.len()]` and counts lookups
+    struct CyclingResolver(Vec<std::net::SocketAddr>, Arc<std::sync::atomic::AtomicU32>);
 
-        impl reqwest::dns::Resolve for CountingResolver {
-            fn resolve(&self, _: reqwest::dns::Name) -> reqwest::dns::Resolving {
-                self.1.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
-                let addrs: reqwest::dns::Addrs = Box::new(std::iter::once(self.0));
-                Box::pin(async move { Ok(addrs) })
-            }
+    impl reqwest::dns::Resolve for CyclingResolver {
+        fn resolve(&self, _: reqwest::dns::Name) -> reqwest::dns::Resolving {
+            let n = self.1.fetch_add(1, std::sync::atomic::Ordering::SeqCst) as usize;
+            let addrs: reqwest::dns::Addrs = Box::new(std::iter::once(self.0[n % self.0.len()]));
+            Box::pin(async move { Ok(addrs) })
         }
+    }
 
-        let closed = std::net::TcpListener::bind("127.0.0.1:0")
-            .unwrap()
-            .local_addr()
-            .unwrap();
-        let connects = Arc::new(std::sync::atomic::AtomicU32::new(0));
+    fn resolving_client(
+        lookups: Vec<std::net::SocketAddr>,
+    ) -> (Client, Arc<std::sync::atomic::AtomicU32>) {
+        let count = Arc::new(std::sync::atomic::AtomicU32::new(0));
         let http = reqwest::Client::builder()
             .no_proxy()
-            .dns_resolver(CountingResolver(closed, connects.clone()))
+            .dns_resolver(CyclingResolver(lookups, count.clone()))
             .build()
             .unwrap();
-        let config = ClientConfig::new(
-            format!("http://infrahub.test:{}", closed.port()),
-            "test-token",
-        )
-        .with_max_retries(1);
+        let config = ClientConfig::new("http://infrahub.test", "test-token").with_max_retries(1);
         let client = Client {
             config: Arc::new(config),
             http,
         };
-        let err = client
-            .execute_raw("mutation { create { ok } }", None, None)
-            .await
-            .unwrap_err();
-        assert!(matches!(err, Error::Http(ref e) if e.is_connect()), "{err}");
-        assert_eq!(connects.load(std::sync::atomic::Ordering::SeqCst), 2);
+        (client, count)
+    }
+
+    fn closed_addr() -> std::net::SocketAddr {
+        std::net::TcpListener::bind("127.0.0.1:0")
+            .unwrap()
+            .local_addr()
+            .unwrap()
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_connect_error_resends_only_queries() {
+        for (document, expected) in [("query { ok }", 2), ("mutation { create { ok } }", 1)] {
+            let (client, connects) = resolving_client(vec![closed_addr()]);
+            let err = client.execute_raw(document, None, None).await.unwrap_err();
+            assert!(matches!(err, Error::Http(ref e) if e.is_connect()), "{err}");
+            assert_eq!(
+                connects.load(std::sync::atomic::Ordering::SeqCst),
+                expected,
+                "{document}: connects"
+            );
+        }
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_mutation_not_resent_after_redirect() {
+        use std::io::Write;
+
+        let mutation = "mutation { create { ok } }";
+        let upload = "mutation($file: Upload!) { upload(file: $file) { ok } }";
+        let to_closed = "http://{closed}/graphql";
+        // (label, document, multipart, status, location, expected POSTs)
+        for (label, document, multipart, status, location, expected) in [
+            (
+                "query, 303 to a closed port",
+                "query { ok }",
+                false,
+                303,
+                to_closed,
+                2,
+            ),
+            ("303 to a closed port", mutation, false, 303, to_closed, 1),
+            ("307 to a closed port", mutation, false, 307, to_closed, 1),
+            ("308 to a closed port", mutation, false, 308, to_closed, 1),
+            (
+                "307 to the same url",
+                mutation,
+                false,
+                307,
+                "http://infrahub.test/graphql",
+                1,
+            ),
+            (
+                "303 to a 429",
+                mutation,
+                false,
+                303,
+                "http://{listener}/limited",
+                1,
+            ),
+            (
+                "upload, 303 to a closed port",
+                upload,
+                true,
+                303,
+                to_closed,
+                1,
+            ),
+        ] {
+            let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+            let addr = listener.local_addr().unwrap();
+            let closed = closed_addr();
+            let location = location
+                .replace("{closed}", &closed.to_string())
+                .replace("{listener}", &addr.to_string());
+            let posts = Arc::new(std::sync::atomic::AtomicU32::new(0));
+            let seen = posts.clone();
+            std::thread::spawn(move || {
+                for stream in listener.incoming().flatten() {
+                    let Some(head) = read_request(&stream) else {
+                        continue;
+                    };
+                    let _ = if head.starts_with("POST ") {
+                        seen.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                        write!(&stream, "HTTP/1.1 {status} Redirect\r\nLocation: {location}\r\nContent-Length: 0\r\nConnection: close\r\n\r\n")
+                    } else {
+                        write!(&stream, "HTTP/1.1 429 Too Many Requests\r\nRetry-After: 0\r\nContent-Length: 0\r\nConnection: close\r\n\r\n")
+                    };
+                }
+            });
+            // in the same-url row, every second lookup (the redirect hop) gets the closed port
+            let lookups = if label.ends_with("same url") {
+                vec![addr, closed]
+            } else {
+                vec![addr]
+            };
+            let (client, _) = resolving_client(lookups);
+            let result = if multipart {
+                let file = FileUpload::new("a.txt", "text/plain", b"a".to_vec());
+                client
+                    .execute_multipart::<serde_json::Value>(
+                        document,
+                        None,
+                        vec![("file", file)],
+                        None,
+                    )
+                    .await
+            } else {
+                client.execute_raw(document, None, None).await
+            };
+            let err = result.unwrap_err();
+            assert!(
+                matches!(err, Error::Http(ref e) if e.is_connect())
+                    || matches!(
+                        err,
+                        Error::GraphQl {
+                            status: Some(429),
+                            ..
+                        }
+                    ),
+                "{label}: {err}"
+            );
+            assert_eq!(
+                posts.load(std::sync::atomic::Ordering::SeqCst),
+                expected,
+                "{label}: POSTs"
+            );
+        }
     }
 }

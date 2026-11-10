@@ -182,9 +182,9 @@ impl ClientConfig {
 
     /// also retry mutations and file uploads that may have reached the server
     ///
-    /// by default these are retried only after a connect error or a 429, so a
-    /// timeout, dropped connection or 5xx cannot apply a mutation twice. enable
-    /// this only if your mutations are safe to repeat.
+    /// by default these are sent once and never retried, so a failed request
+    /// cannot apply a mutation twice. enable this only if your mutations are
+    /// safe to repeat.
     ///
     /// default: disabled
     pub fn with_mutation_retries(mut self, enabled: bool) -> Self {

@@ -26,5 +26,5 @@ INFRAHUB_URL=http://localhost:8000 INFRAHUB_TOKEN=... cargo run -p infrahub --ex
 codegen:
 
 ```bash
-cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
+cargo run --features codegen --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
 ```

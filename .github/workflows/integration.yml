@@ -85,7 +85,7 @@ jobs:
 
       - name: Verify generated test client is up to date
         run: |
-          cargo run --bin infrahub-codegen -- \
+          cargo run --features codegen --bin infrahub-codegen -- \
             --schema schema/infrahub.graphql \
             --out /tmp/test-client-check \
             --crate-name infrahub-test-client \

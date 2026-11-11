@@ -13,13 +13,11 @@ use graphql_parser::schema::{
     parse_schema, Definition, Document, EnumValue, Field, InputObjectType, InputValue, ObjectType,
     Type, TypeDefinition, UnionType,
 };
-use reqwest::blocking::Client as BlockingClient;
-use reqwest::header::{HeaderMap, HeaderValue};
+use infrahub::{Client, ClientConfig};
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::Duration;
-use url::Url;
 
 #[derive(Debug)]
 struct Args {
@@ -129,45 +127,38 @@ fn load_schema(args: &Args) -> Result<String, String> {
         .as_ref()
         .ok_or_else(|| "--url is required when --schema not provided".to_string())?;
 
-    let base = url.trim_end_matches('/');
-    let mut schema_url = Url::parse(&format!("{base}/schema.graphql"))
-        .map_err(|err| format!("invalid url: {err}"))?;
-    if let Some(branch) = &args.branch {
-        schema_url.query_pairs_mut().append_pair("branch", branch);
-    }
-
-    let mut headers = HeaderMap::new();
-    if let Some(token) = &args.token {
-        headers.insert(
-            "X-INFRAHUB-KEY",
-            HeaderValue::from_str(token).map_err(|err| err.to_string())?,
-        );
-    }
-
-    let client = BlockingClient::builder()
-        .timeout(Duration::from_secs(30))
+    let client = schema_client(url, args.token.as_deref()).map_err(|err| err.to_string())?;
+    let runtime = tokio::runtime::Builder::new_current_thread()
+        .enable_all()
         .build()
         .map_err(|err| err.to_string())?;
-    let response = client
-        .get(schema_url)
-        .headers(headers)
-        .send()
-        .map_err(|err| err.to_string())?;
+    runtime
+        .block_on(client.fetch_schema(args.branch.as_deref()))
+        .map_err(describe_fetch_error)
+}
 
-    let status = response.status();
-    if !status.is_success() {
-        let body = response.text().unwrap_or_default();
-        let detail = if body.is_empty() {
-            String::new()
-        } else {
-            format!(": {}", body.chars().take(200).collect::<String>())
-        };
-        return Err(format!("HTTP {}{}", status, detail));
+/// without a token, fetch anonymously with `Client::new`'s user agent and timeout
+fn schema_client(url: &str, token: Option<&str>) -> infrahub::Result<Client> {
+    let config = match token.filter(|token| !token.is_empty()) {
+        Some(token) => ClientConfig::new(url, token),
+        None => {
+            let http = reqwest::Client::builder()
+                .user_agent(format!("infrahub-rs/{} (Rust)", env!("CARGO_PKG_VERSION")))
+                .timeout(Duration::from_secs(30))
+                .build()?;
+            ClientConfig::new(url, "").with_http_client(http)
+        }
+    };
+    Client::new(config)
+}
+
+fn describe_fetch_error(err: infrahub::Error) -> String {
+    match &err {
+        infrahub::Error::GraphQl { body, .. } if !body.is_empty() => {
+            format!("{err}: {}", body.chars().take(200).collect::<String>())
+        }
+        _ => err.to_string(),
     }
-
-    response
-        .text()
-        .map_err(|err| format!("failed to read schema response: {err}"))
 }
 
 struct SchemaContext<'a> {
@@ -2005,6 +1996,33 @@ fn is_rust_keyword(name: &str) -> bool {
             | "virtual"
             | "yield"
     )
+}
+
+#[cfg(test)]
+mod fetch_tests {
+    use super::*;
+
+    #[test]
+    fn missing_or_empty_token_fetches_anonymously() {
+        assert!(schema_client("http://localhost:8000", None).is_ok());
+        assert!(schema_client("http://localhost:8000", Some("")).is_ok());
+        assert!(schema_client("http://localhost:8000", Some("token")).is_ok());
+    }
+
+    #[test]
+    fn fetch_error_keeps_the_start_of_the_body() {
+        let err = infrahub::Error::GraphQl {
+            status: Some(404),
+            errors: Vec::new(),
+            body: "x".repeat(300),
+            message: "schema http error: 404 Not Found".to_string(),
+        };
+        let expected = format!(
+            "graphql error: schema http error: 404 Not Found: {}",
+            "x".repeat(200)
+        );
+        assert_eq!(describe_fetch_error(err), expected);
+    }
 }
 
 #[cfg(test)]

@@ -43,5 +43,5 @@ INFRAHUB_URL=http://localhost:8000 INFRAHUB_TOKEN=token ./scripts/update_schema.
 generate a full typed client from a schema snapshot:
 
 ```bash
-cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
+cargo run --features codegen --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
 ```

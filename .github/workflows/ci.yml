@@ -43,7 +43,7 @@ jobs:
       - uses: kunobi-ninja/kache-action@ad7317540dcdd71c904f7a60a87b620a0c0e67ed # v1
         with:
           cache-key-prefix: kache-clippy
-      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
 
   test:
     name: test
@@ -56,7 +56,7 @@ jobs:
       - uses: kunobi-ninja/kache-action@ad7317540dcdd71c904f7a60a87b620a0c0e67ed # v1
         with:
           cache-key-prefix: kache-test
-      - run: cargo test --workspace
+      - run: cargo test --workspace --all-features
 
   doc:
     name: doc
@@ -71,7 +71,7 @@ jobs:
       - uses: kunobi-ninja/kache-action@ad7317540dcdd71c904f7a60a87b620a0c0e67ed # v1
         with:
           cache-key-prefix: kache-doc
-      - run: cargo doc --workspace --no-deps
+      - run: cargo doc --workspace --all-features --no-deps
 
   deny:
     name: deny

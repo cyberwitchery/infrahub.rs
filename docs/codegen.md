@@ -6,20 +6,23 @@ helpers.
 
 ## quick start
 
+the binary is behind the `codegen` feature, so library users do not compile its
+dependencies:
+
 ```bash
-cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
+cargo run --features codegen --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
 ```
 
 full CLI reference:
 
 ```bash
-cargo run --bin infrahub-codegen -- --help
+cargo run --features codegen --bin infrahub-codegen -- --help
 ```
 
 ## fetch schema from a running infrahub
 
 ```bash
-INFRAHUB_TOKEN=... cargo run --bin infrahub-codegen -- \
+INFRAHUB_TOKEN=... cargo run --features codegen --bin infrahub-codegen -- \
   --url http://localhost:8000 \
   --token $INFRAHUB_TOKEN \
   --out /tmp/infrahub-generated
@@ -38,9 +41,9 @@ INFRAHUB_TOKEN=... cargo run --bin infrahub-codegen -- \
 ## regenerate
 
 ```bash
-cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql \
+cargo run --features codegen --bin infrahub-codegen -- --schema /path/to/schema.graphql \
   --out /tmp/infrahub-generated --infrahub-path /path/to/infrahub.rs
-cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql \
+cargo run --features codegen --bin infrahub-codegen -- --schema /path/to/schema.graphql \
   --out /tmp/infrahub-generated --infrahub-path /path/to/infrahub.rs \
   --crate-name infrahub-generated
 ```

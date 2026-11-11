@@ -135,4 +135,92 @@ mod fetch_tests {
         );
         assert_eq!(describe_fetch_error(err), expected);
     }
+
+    /// runs `load_schema` against a one-shot server on 127.0.0.1 and returns the lowercased request head
+    fn fetch_once(
+        token: Option<&str>,
+        branch: Option<&str>,
+        reply: &'static str,
+    ) -> (String, Result<String, String>) {
+        use std::io::{BufRead, BufReader, Write};
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        listener.set_nonblocking(true).unwrap();
+        let url = format!("http://{}", listener.local_addr().unwrap());
+        let server = std::thread::spawn(move || {
+            let deadline = std::time::Instant::now() + Duration::from_secs(10);
+            let (stream, _) = loop {
+                match listener.accept() {
+                    Ok(conn) => break conn,
+                    Err(_) if std::time::Instant::now() < deadline => {
+                        std::thread::sleep(Duration::from_millis(10))
+                    }
+                    Err(_) => return String::new(),
+                }
+            };
+            stream.set_nonblocking(false).unwrap();
+            let (mut head, mut line) = (String::new(), String::new());
+            let mut reader = BufReader::new(&stream);
+            while reader.read_line(&mut line).unwrap() > 2 {
+                head.push_str(&line.to_ascii_lowercase());
+                line.clear();
+            }
+            (&stream).write_all(reply.as_bytes()).unwrap();
+            head
+        });
+        let args = Args {
+            url: Some(url),
+            token: token.map(str::to_string),
+            branch: branch.map(str::to_string),
+            schema_path: None,
+            out_dir: PathBuf::new(),
+            crate_name: None,
+            infrahub_path: None,
+        };
+        let got = load_schema(&args);
+        (server.join().unwrap(), got)
+    }
+
+    #[test]
+    fn url_fetch_sends_the_token_and_branch_and_keeps_the_body() {
+        const OK: &str = "HTTP/1.1 200 OK\r\ncontent-length: 6\r\nconnection: close\r\n\r\nschema";
+        const GONE: &str =
+            "HTTP/1.1 404 Not Found\r\ncontent-length: 4\r\nconnection: close\r\n\r\ngone";
+        const EMPTY: &str =
+            "HTTP/1.1 404 Not Found\r\ncontent-length: 0\r\nconnection: close\r\n\r\n";
+        let key = |head: &str| {
+            head.lines()
+                .find_map(|l| l.strip_prefix("x-infrahub-key: "))
+                .map(str::to_string)
+        };
+        let cases = [
+            (
+                Some("secret"),
+                None,
+                "get /schema.graphql http/1.1",
+                Some("secret"),
+            ),
+            (None, Some(""), "get /schema.graphql http/1.1", None),
+            (
+                Some(""),
+                Some("b"),
+                "get /schema.graphql?branch=b http/1.1",
+                None,
+            ),
+        ];
+        for (token, branch, line, want_key) in cases {
+            let (head, got) = fetch_once(token, branch, OK);
+            assert!(head.starts_with(line), "{head}");
+            assert_eq!(key(&head).as_deref(), want_key, "{head}");
+            assert!(head.contains("user-agent: infrahub-rs/"), "{head}");
+            assert_eq!(got.as_deref(), Ok("schema"));
+        }
+        assert!(fetch_once(None, None, GONE)
+            .1
+            .unwrap_err()
+            .ends_with("404 Not Found: gone"));
+        assert!(fetch_once(None, None, EMPTY)
+            .1
+            .unwrap_err()
+            .ends_with("404 Not Found"));
+    }
 }

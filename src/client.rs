@@ -27,8 +27,8 @@ const RETRY_MAX_BACKOFF: Duration = Duration::from_secs(30);
 /// graphql client for infrahub
 ///
 /// all requests go through a retry loop (transient network errors, 429,
-/// and retryable 5xx, with backoff). mutations and file uploads are retried
-/// only after a connect error or a 429 unless
+/// and retryable 5xx, with backoff). mutations, documents that don't parse
+/// and file uploads are sent once and never retried unless
 /// [`ClientConfig::with_mutation_retries`] is set.
 #[derive(Clone)]
 pub struct Client {
@@ -1093,6 +1093,13 @@ mod tests {
                 2,
             ),
             ("upload", upload, false, true, 1),
+            (
+                "upload, query document",
+                "query($file: Upload!) { check(file: $file) { ok } }",
+                false,
+                true,
+                1,
+            ),
             ("upload, opted in", upload, true, true, 2),
         ] {
             let (addr, posts) = drop_first_response();

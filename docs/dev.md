@@ -5,8 +5,8 @@ this section covers contributor workflows and local validation steps.
 ## build and test
 
 ```bash
-cargo build
-cargo test
+cargo build --all-features
+cargo test --all-features
 ```
 
 ## lint and format

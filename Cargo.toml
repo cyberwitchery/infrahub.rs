@@ -30,5 +30,5 @@ codegen = ["dep:graphql-parser"]
 
 [[bin]]
 name = "infrahub-codegen"
-path = "src/bin/infrahub-codegen.rs"
+path = "src/bin/infrahub-codegen/main.rs"
 required-features = ["codegen"]

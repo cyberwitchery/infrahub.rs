@@ -105,7 +105,7 @@ jobs:
       - uses: kunobi-ninja/kache-action@ad7317540dcdd71c904f7a60a87b620a0c0e67ed # v1
         with:
           cache-key-prefix: kache-coverage
-      - run: cargo llvm-cov --workspace --all-features --ignore-filename-regex 'src/bin/infrahub-codegen.rs|test-client/' --fail-under-lines 80 --lcov --output-path lcov.info
+      - run: cargo llvm-cov --workspace --all-features --ignore-filename-regex 'test-client/' --fail-under-lines 80 --lcov --output-path lcov.info
 
   unsafe-budget:
     name: unsafe-budget

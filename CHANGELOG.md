@@ -9,6 +9,7 @@
 - schema: make `node_metadata` nullable on 31 generic `NestedEdged*` types to match Infrahub 1.11.9. regenerate `test-client`: the existing codegen now selects this metadata, so populated generic relationships return it and empty relationships accept null. generated Rust types are unchanged; codegen retains the workaround for older schemas that declare this metadata non-null
 - docs: move the compat table and local quickstart to 1.11.9
 - ci: bump pinned Infrahub version from 1.11.9 to 1.11.10 (refs #96). the parsed GraphQL schema has the same types, fields, arguments, descriptions and deprecations as the snapshot, so `schema/infrahub.graphql` and `test-client` are unchanged
+- ci: bump pinned Infrahub version from 1.11.10 to 1.11.12 (closes #103). upstream's GraphQL schema export is identical at 1.11.10, 1.11.11 and 1.11.12, so `schema/infrahub.graphql` and `test-client` are unchanged
 
 ## 0.5.1 - 2026-10-25
 

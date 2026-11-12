@@ -62,10 +62,11 @@ use `infrahub-codegen` to generate a schema-specific crate. this base crate
 stays stable and talks graphql directly; the generated crate adds typed,
 topic-grouped helpers for your schema.
 
-generate a schema-specific client with `infrahub-codegen`:
+generate a schema-specific client with `infrahub-codegen`, which is behind the
+`codegen` feature:
 
 ```bash
-cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
+cargo run --features codegen --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
 ```
 
 ## development
@@ -79,5 +80,5 @@ INFRAHUB_URL=http://localhost:8000 INFRAHUB_TOKEN=token ./scripts/update_schema.
 generate a schema-specific client:
 
 ```bash
-cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
+cargo run --features codegen --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
 ```

@@ -5,8 +5,8 @@ this section covers contributor workflows and local validation steps.
 ## build and test
 
 ```bash
-cargo build
-cargo test
+cargo build --all-features
+cargo test --all-features
 ```
 
 ## lint and format
@@ -43,5 +43,5 @@ INFRAHUB_URL=http://localhost:8000 INFRAHUB_TOKEN=token ./scripts/update_schema.
 generate a full typed client from a schema snapshot:
 
 ```bash
-cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
+cargo run --features codegen --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
 ```

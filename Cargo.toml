@@ -14,15 +14,21 @@ documentation = "https://docs.rs/infrahub"
 exclude = ["sbom/", "unsafe-budget.lock"]
 
 [dependencies]
-reqwest = { version = "0.13", features = ["json", "blocking", "multipart"] }
+reqwest = { version = "0.13", features = ["json", "multipart"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 thiserror = "2"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "time"] }
 url = "2"
-graphql-parser = "0.4"
+graphql-parser = { version = "0.4", optional = true }
 
 [dev-dependencies]
 
 [features]
 default = []
+codegen = ["dep:graphql-parser"]
+
+[[bin]]
+name = "infrahub-codegen"
+path = "src/bin/infrahub-codegen/main.rs"
+required-features = ["codegen"]

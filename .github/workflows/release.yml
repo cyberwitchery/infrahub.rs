@@ -52,7 +52,7 @@ jobs:
         run: cargo doc --workspace --all-features --no-deps
 
       - name: run tests
-        run: cargo test
+        run: cargo test --all-features
 
       - name: download sbom
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2

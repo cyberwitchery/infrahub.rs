@@ -14,7 +14,7 @@ else
 fi
 
 echo "running coverage"
-cargo llvm-cov --workspace --all-features --ignore-filename-regex 'src/bin/infrahub-codegen.rs' --fail-under-lines 80
+cargo llvm-cov --workspace --all-features --fail-under-lines 80
 
 if [[ -n "${INFRAHUB_TOKEN:-}" ]]; then
   echo "running client smoke tests"

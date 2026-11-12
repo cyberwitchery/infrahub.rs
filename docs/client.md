@@ -280,7 +280,7 @@ such a walk, failing with `Error::PaginationLimit` once more than `n` pages are 
 generate a full typed client from a schema snapshot:
 
 ```bash
-cargo run --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
+cargo run --features codegen --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated
 ```
 
 then add it as a path dependency:

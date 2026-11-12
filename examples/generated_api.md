@@ -6,7 +6,7 @@ it demonstrates list/get/paginate on a generated model client.
 generate the client first:
 
 ```bash
-cargo run --bin infrahub-codegen -- --schema schema/infrahub.graphql --out /tmp/infrahub-generated
+cargo run --features codegen --bin infrahub-codegen -- --schema schema/infrahub.graphql --out /tmp/infrahub-generated
 ```
 
 add the generated crate as a path dependency:

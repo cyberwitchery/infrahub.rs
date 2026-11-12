@@ -102,20 +102,12 @@ impl Client {
             "variables": variables.unwrap_or_else(|| serde_json::json!({})),
         });
         let resend = self.config.retry_mutations || may_resend(query);
-        self.retry_loop(resend, || {
-            let url = url.clone();
-            let body = body.clone();
-            async move {
-                let response = self.http.post(url).json(&body).send().await?;
-                let status = response.status();
-                let retry_after = parse_retry_after(response.headers());
-                let text = response.text().await?;
-                parse_graphql_response(status, text).map_err(|e| RetryError {
-                    inner: e,
-                    retry_after,
-                })
-            }
-        })
+        self.request(
+            resend,
+            || Ok(self.http.post(url.clone()).json(&body)),
+            reqwest::Response::text,
+            parse_graphql_response,
+        )
         .await
     }
 
@@ -131,19 +123,12 @@ impl Client {
     /// fetch the graphql schema as text
     pub async fn fetch_schema(&self, branch: Option<&str>) -> Result<String> {
         let url = self.config.schema_url(branch)?;
-        self.retry_loop(true, || {
-            let url = url.clone();
-            async move {
-                let response = self.http.get(url).send().await?;
-                let status = response.status();
-                let retry_after = parse_retry_after(response.headers());
-                let text = response.text().await?;
-                parse_schema_response(status, text).map_err(|e| RetryError {
-                    inner: e,
-                    retry_after,
-                })
-            }
-        })
+        self.request(
+            true,
+            || Ok(self.http.get(url.clone())),
+            reqwest::Response::text,
+            parse_schema_response,
+        )
         .await
     }
 
@@ -153,19 +138,12 @@ impl Client {
         branch: Option<&str>,
     ) -> Result<T> {
         let url = self.config.schema_snapshot_url(branch)?;
-        self.retry_loop(true, || {
-            let url = url.clone();
-            async move {
-                let response = self.http.get(url).send().await?;
-                let status = response.status();
-                let retry_after = parse_retry_after(response.headers());
-                let text = response.text().await?;
-                parse_schema_snapshot_response(status, text).map_err(|e| RetryError {
-                    inner: e,
-                    retry_after,
-                })
-            }
-        })
+        self.request(
+            true,
+            || Ok(self.http.get(url.clone())),
+            reqwest::Response::text,
+            parse_schema_snapshot_response,
+        )
         .await
     }
 
@@ -181,27 +159,16 @@ impl Client {
         branch: Option<&str>,
     ) -> Result<GraphQlResponse<T>> {
         let url = self.config.graphql_url(branch)?;
-        let owned_files: Vec<(String, FileUpload)> =
-            files.into_iter().map(|(k, v)| (k.to_owned(), v)).collect();
-        self.retry_loop(self.config.retry_mutations, || {
-            let url = url.clone();
-            let variables = variables.clone();
-            let files_for_attempt: Vec<(&str, FileUpload)> = owned_files
-                .iter()
-                .map(|(k, v)| (k.as_str(), v.clone()))
-                .collect();
-            async move {
-                let form = build_multipart_form(query, variables, files_for_attempt)?;
-                let response = self.http.post(url).multipart(form).send().await?;
-                let status = response.status();
-                let retry_after = parse_retry_after(response.headers());
-                let text = response.text().await?;
-                parse_graphql_response(status, text).map_err(|e| RetryError {
-                    inner: e,
-                    retry_after,
-                })
-            }
-        })
+        self.request(
+            self.config.retry_mutations,
+            || {
+                let files = files.iter().map(|(name, file)| (*name, file.clone()));
+                let form = build_multipart_form(query, variables.clone(), files.collect())?;
+                Ok(self.http.post(url.clone()).multipart(form))
+            },
+            reqwest::Response::text,
+            parse_graphql_response,
+        )
         .await
     }
 
@@ -234,32 +201,40 @@ impl Client {
 
     /// shared download helper — GET the given url and return response bytes
     async fn download_bytes(&self, url: Url) -> Result<Vec<u8>> {
-        self.retry_loop(true, || {
-            let url = url.clone();
-            async move {
-                let response = self.http.get(url).send().await?;
-                if !response.status().is_success() {
-                    let status = response.status();
-                    let retry_after = parse_retry_after(response.headers());
-                    let body = response.text().await?;
-                    return Err(RetryError {
-                        inner: Error::GraphQl {
-                            status: Some(status.as_u16()),
-                            errors: Vec::new(),
-                            body,
-                            message: format!("file download error: {status}"),
-                        },
-                        retry_after,
-                    });
-                }
-                Ok(response.bytes().await?.to_vec())
-            }
-        })
+        self.request(
+            true,
+            || Ok(self.http.get(url.clone())),
+            read_download,
+            parse_download,
+        )
         .await
     }
 }
 
 impl Client {
+    /// sends what `build` returns through the retry loop and hands the status and the body `read` returns to `parse`
+    async fn request<B, T, R, Fut>(
+        &self,
+        resend: bool,
+        build: impl Fn() -> Result<reqwest::RequestBuilder>,
+        read: R,
+        parse: impl Fn(StatusCode, B) -> Result<T>,
+    ) -> Result<T>
+    where
+        R: Fn(reqwest::Response) -> Fut,
+        Fut: Future<Output = reqwest::Result<B>>,
+    {
+        let (build, read, parse) = (&build, &read, &parse);
+        self.retry_loop(resend, || async move {
+            let response = build()?.send().await?;
+            let status = response.status();
+            let retry_after = parse_retry_after(response.headers());
+            let body = read(response).await?;
+            parse(status, body).map_err(|inner| RetryError { inner, retry_after })
+        })
+        .await
+    }
+
     /// retries `operation` after a retryable error; with `resend` false it runs once
     async fn retry_loop<T, F, Fut>(&self, resend: bool, mut operation: F) -> Result<T>
     where
@@ -477,38 +452,27 @@ fn parse_schema_snapshot_response<T: DeserializeOwned>(
     Ok(serde_json::from_str(&text)?)
 }
 
-#[cfg(test)]
-impl Client {
-    async fn execute_with<T: DeserializeOwned, F, Fut>(
-        &self,
-        query: &str,
-        variables: Option<serde_json::Value>,
-        branch: Option<&str>,
-        send: F,
-    ) -> Result<GraphQlResponse<T>>
-    where
-        F: FnOnce(Url, serde_json::Value) -> Fut,
-        Fut: Future<Output = Result<(StatusCode, String)>>,
-    {
-        let url = self.config.graphql_url(branch)?;
-        let body = serde_json::json!({
-            "query": query,
-            "variables": variables.unwrap_or_else(|| serde_json::json!({})),
-        });
-
-        let (status, text) = send(url, body).await?;
-        parse_graphql_response(status, text)
+/// the raw bytes of a successful download, the text of any other response
+async fn read_download(
+    response: reqwest::Response,
+) -> reqwest::Result<std::result::Result<Vec<u8>, String>> {
+    if response.status().is_success() {
+        Ok(Ok(response.bytes().await?.to_vec()))
+    } else {
+        response.text().await.map(Err)
     }
+}
 
-    async fn fetch_schema_with<F, Fut>(&self, branch: Option<&str>, send: F) -> Result<String>
-    where
-        F: FnOnce(Url) -> Fut,
-        Fut: Future<Output = Result<(StatusCode, String)>>,
-    {
-        let url = self.config.schema_url(branch)?;
-        let (status, text) = send(url).await?;
-        parse_schema_response(status, text)
-    }
+fn parse_download(
+    status: StatusCode,
+    body: std::result::Result<Vec<u8>, String>,
+) -> Result<Vec<u8>> {
+    body.map_err(|body| Error::GraphQl {
+        status: Some(status.as_u16()),
+        errors: Vec::new(),
+        body,
+        message: format!("file download error: {status}"),
+    })
 }
 
 #[cfg(test)]
@@ -526,38 +490,6 @@ mod tests {
             config: Arc::new(config),
             http,
         }
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_fetch_schema_success_and_error() {
-        let config = ClientConfig::new("http://localhost:1234", "test-token");
-        let client = test_client(config);
-
-        let schema = client
-            .fetch_schema_with(None, |url| async move {
-                assert_eq!(url.path(), "/schema.graphql");
-                Ok((StatusCode::OK, "schema { query: Query }".to_string()))
-            })
-            .await
-            .unwrap();
-        assert_eq!(schema, "schema { query: Query }");
-
-        let err = client
-            .fetch_schema_with(Some("bad"), |url| async move {
-                assert_eq!(url.path(), "/schema.graphql");
-                assert_eq!(url.query(), Some("branch=bad"));
-                Ok((StatusCode::NOT_FOUND, "not found".to_string()))
-            })
-            .await
-            .unwrap_err();
-        assert!(matches!(
-            err,
-            Error::GraphQl {
-                status: Some(404),
-                ..
-            }
-        ));
     }
 
     #[test]
@@ -586,28 +518,6 @@ mod tests {
                 ..
             }
         ));
-    }
-
-    #[cfg_attr(miri, ignore)]
-    #[tokio::test]
-    async fn test_execute_raw_uses_default_branch() {
-        let config =
-            ClientConfig::new("http://localhost:1234", "test-token").with_default_branch("main");
-        let client = test_client(config);
-        let response = client
-            .execute_with::<serde_json::Value, _, _>(
-                "query { ok }",
-                None,
-                None,
-                |url, _body| async move {
-                    assert_eq!(url.path(), "/graphql/main");
-                    Ok((StatusCode::OK, "{\"data\": {\"ok\": true}}".to_string()))
-                },
-            )
-            .await
-            .unwrap();
-
-        assert_eq!(response.data.unwrap()["ok"], true);
     }
 
     #[test]
@@ -1029,7 +939,7 @@ mod tests {
         }
     }
 
-    /// reads a request in full and returns its head, or `None` if the connection ends first
+    /// reads a request in full and returns it, or `None` if the connection ends first
     fn read_request(stream: &std::net::TcpStream) -> Option<String> {
         use std::io::{BufRead, Read};
 
@@ -1045,7 +955,248 @@ mod tests {
             })
             .unwrap_or(0);
         let mut body = vec![0; length];
-        reader.read_exact(&mut body).ok().map(|()| head)
+        reader.read_exact(&mut body).ok()?;
+        Some(head + &String::from_utf8_lossy(&body))
+    }
+
+    /// answers the nth request with `replies[n]`, or the last reply once they run out, and records every request
+    fn serve(replies: Vec<String>) -> (std::net::SocketAddr, Arc<std::sync::Mutex<Vec<String>>>) {
+        use std::io::Write;
+
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let addr = listener.local_addr().unwrap();
+        let requests = Arc::new(std::sync::Mutex::new(Vec::new()));
+        let seen = requests.clone();
+        std::thread::spawn(move || {
+            for mut stream in listener.incoming().flatten() {
+                let Some(request) = read_request(&stream) else {
+                    continue;
+                };
+                let n = {
+                    let mut seen = seen.lock().unwrap();
+                    seen.push(request);
+                    seen.len().min(replies.len())
+                };
+                let _ = stream.write_all(replies[n - 1].as_bytes());
+            }
+        });
+        (addr, requests)
+    }
+
+    fn reply(status: u16, headers: &str, body: &str) -> String {
+        format!(
+            "HTTP/1.1 {status} Reply\r\n{headers}Content-Length: {}\r\nConnection: close\r\n\r\n{body}",
+            body.len()
+        )
+    }
+
+    #[derive(Clone, Copy, Debug)]
+    enum Call {
+        Execute,
+        Schema,
+        Snapshot,
+        Upload,
+        File,
+        FileByHfid,
+        FileByStorageId,
+    }
+
+    /// runs `call` and renders what it returned
+    async fn run(client: &Client, call: Call) -> Result<String> {
+        let data = |response: GraphQlResponse<serde_json::Value>| {
+            response.data.unwrap_or_default().to_string()
+        };
+        let text = |bytes: Vec<u8>| String::from_utf8(bytes).unwrap();
+        match call {
+            Call::Execute => client
+                .execute_raw("query { ok }", None, None)
+                .await
+                .map(data),
+            Call::Schema => client.fetch_schema(Some("dev")).await,
+            Call::Snapshot => client
+                .fetch_schema_snapshot::<serde_json::Value>(None)
+                .await
+                .map(|snapshot| snapshot.to_string()),
+            Call::Upload => {
+                let file = FileUpload::new("a.txt", "text/plain", b"hello".to_vec());
+                let upload = "mutation($file: Upload!) { upload(file: $file) { ok } }";
+                client
+                    .execute_multipart(upload, None, vec![("file", file)], None)
+                    .await
+                    .map(data)
+            }
+            Call::File => client.download_file("f1", None).await.map(text),
+            Call::FileByHfid => client
+                .download_file_by_hfid("CoreFile", &["a", "b"], None)
+                .await
+                .map(text),
+            Call::FileByStorageId => client
+                .download_file_by_storage_id("s1", None)
+                .await
+                .map(text),
+        }
+    }
+
+    type Case<'a> = (
+        Call,
+        u16,
+        &'a str,
+        &'a str,
+        &'a [&'a str],
+        std::result::Result<&'a str, (u16, &'a str)>,
+    );
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_public_methods_end_to_end() {
+        let query = r#"{"query":"query { ok }","variables":{}}"#;
+        let operations = r#"{"query":"mutation($file: Upload!) { upload(file: $file) { ok } }","variables":{"file":null}}"#;
+        let graphql = "POST /graphql/main HTTP/1.1";
+        let file = "GET /api/files/f1?branch=main HTTP/1.1";
+        // (call, status, response body, request line, request body parts, result or (status, message))
+        let cases: [Case; 11] = [
+            (
+                Call::Execute,
+                200,
+                r#"{"data":{"ok":true}}"#,
+                graphql,
+                &[query],
+                Ok(r#"{"ok":true}"#),
+            ),
+            (
+                Call::Execute,
+                400,
+                r#"{"errors":[{"message":"boom"}]}"#,
+                graphql,
+                &[query],
+                Err((400, "boom")),
+            ),
+            (
+                Call::Schema,
+                200,
+                "type Query",
+                "GET /schema.graphql?branch=dev HTTP/1.1",
+                &[],
+                Ok("type Query"),
+            ),
+            (
+                Call::Schema,
+                404,
+                "nope",
+                "GET /schema.graphql?branch=dev HTTP/1.1",
+                &[],
+                Err((404, "schema http error: 404 Not Found")),
+            ),
+            (
+                Call::Snapshot,
+                200,
+                r#"{"version":1}"#,
+                "GET /api/schema?branch=main HTTP/1.1",
+                &[],
+                Ok(r#"{"version":1}"#),
+            ),
+            (
+                Call::Snapshot,
+                404,
+                "nope",
+                "GET /api/schema?branch=main HTTP/1.1",
+                &[],
+                Err((404, "schema snapshot http error: 404 Not Found")),
+            ),
+            (
+                Call::Upload,
+                200,
+                r#"{"data":{"upload":{"ok":true}}}"#,
+                graphql,
+                &[operations, r#"{"0":["variables.file"]}"#, "hello"],
+                Ok(r#"{"upload":{"ok":true}}"#),
+            ),
+            (Call::File, 200, "bytes", file, &[], Ok("bytes")),
+            (
+                Call::File,
+                404,
+                "nope",
+                file,
+                &[],
+                Err((404, "file download error: 404 Not Found")),
+            ),
+            (
+                Call::FileByHfid,
+                200,
+                "bytes",
+                "GET /api/files/by-hfid/CoreFile/a/b?branch=main HTTP/1.1",
+                &[],
+                Ok("bytes"),
+            ),
+            (
+                Call::FileByStorageId,
+                200,
+                "bytes",
+                "GET /api/files/by-storage-id/s1?branch=main HTTP/1.1",
+                &[],
+                Ok("bytes"),
+            ),
+        ];
+        for (call, status, response, line, parts, expected) in cases {
+            let (addr, requests) = serve(vec![reply(status, "", response)]);
+            let config = ClientConfig::new(format!("http://{addr}"), "test-token")
+                .with_default_branch("main");
+            let result = run(&test_client(config), call)
+                .await
+                .map_err(|err| match err {
+                    Error::GraphQl {
+                        status: Some(status),
+                        body,
+                        message,
+                        ..
+                    } => {
+                        assert_eq!(body, response, "{call:?} {status}: error body");
+                        (status, message)
+                    }
+                    other => panic!("{call:?} {status}: {other}"),
+                });
+            let expected = expected
+                .map(str::to_owned)
+                .map_err(|(status, message)| (status, message.to_owned()));
+            assert_eq!(result, expected, "{call:?} {status}");
+            let requests = requests.lock().unwrap();
+            assert_eq!(requests.len(), 1, "{call:?} {status}: requests");
+            let (head, body) = requests[0].split_once("\r\n\r\n").unwrap();
+            assert_eq!(head.lines().next(), Some(line), "{call:?} {status}");
+            for part in parts {
+                assert!(
+                    body.contains(part),
+                    "{call:?} {status}: {part} not in {body}"
+                );
+            }
+        }
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_retry_after_from_response() {
+        // (document, first status, requests, succeeds)
+        for (document, status, requests, succeeds) in [
+            ("query { ok }", 429, 2, true),
+            ("mutation { create { ok } }", 503, 1, false),
+        ] {
+            let (addr, seen) = serve(vec![
+                reply(status, "Retry-After: 1\r\n", ""),
+                reply(200, "", r#"{"data":{"ok":true}}"#),
+            ]);
+            let client = test_client(ClientConfig::new(format!("http://{addr}"), "test-token"));
+            let start = std::time::Instant::now();
+            let result = client.execute_raw(document, None, None).await;
+            let waited = start.elapsed();
+            assert_eq!(result.is_ok(), succeeds, "{document}: {result:?}");
+            assert_eq!(seen.lock().unwrap().len(), requests, "{document}: requests");
+            if succeeds {
+                assert!(
+                    waited >= Duration::from_secs(1),
+                    "{document}: waited {waited:?}"
+                );
+            }
+        }
     }
 
     /// answers every request except the first, which it reads and drops; counts POSTs

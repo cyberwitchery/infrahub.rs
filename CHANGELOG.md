@@ -9,6 +9,8 @@
 - schema: make `node_metadata` nullable on 31 generic `NestedEdged*` types to match Infrahub 1.11.9. regenerate `test-client`: the existing codegen now selects this metadata, so populated generic relationships return it and empty relationships accept null. generated Rust types are unchanged; codegen retains the workaround for older schemas that declare this metadata non-null
 - docs: move the compat table and local quickstart to 1.11.9
 - ci: bump pinned Infrahub version from 1.11.9 to 1.11.10 (refs #96). the parsed GraphQL schema has the same types, fields, arguments, descriptions and deprecations as the snapshot, so `schema/infrahub.graphql` and `test-client` are unchanged
+- client: a mutation sent with `execute`, `execute_raw` or `execute_operation`, and any `execute_multipart` upload, is no longer retried, since the server may already have applied it and a resend could create an object twice. that includes connect errors and 429s, which can come from a later hop after the server answered with a redirect. queries, schema fetches and downloads retry as before, and `ClientConfig::with_mutation_retries(true)` resends mutations and uploads as before. a document counts as a mutation if it has a `mutation` operation or does not parse
+- client: a `Retry-After` hint now only lengthens the backoff instead of replacing it, so `Retry-After: 0` no longer makes repeated 429s and 503s retry back to back. the delay is still capped at 30 seconds
 
 ## 0.5.1 - 2026-10-25
 

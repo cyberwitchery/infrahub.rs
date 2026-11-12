@@ -6,8 +6,7 @@ helpers.
 
 ## quick start
 
-the binary is behind the `codegen` feature, so library users do not compile its
-dependencies:
+the binary is behind the `codegen` feature:
 
 ```bash
 cargo run --features codegen --bin infrahub-codegen -- --schema /path/to/schema.graphql --out /tmp/infrahub-generated

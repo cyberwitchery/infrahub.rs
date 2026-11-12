@@ -20,13 +20,13 @@ serde_json = "1"
 thiserror = "2"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "time"] }
 url = "2"
-graphql-parser = { version = "0.4", optional = true }
+graphql-parser = "0.4"
 
 [dev-dependencies]
 
 [features]
 default = []
-codegen = ["dep:graphql-parser"]
+codegen = []
 
 [[bin]]
 name = "infrahub-codegen"

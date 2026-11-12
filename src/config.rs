@@ -48,6 +48,9 @@ pub struct ClientConfig {
 
     /// maximum number of retries for failed requests
     pub(crate) max_retries: u32,
+
+    /// whether mutations and uploads may be resent after they may have reached the server
+    pub(crate) retry_mutations: bool,
 }
 
 impl ClientConfig {
@@ -90,6 +93,7 @@ impl ClientConfig {
             http_client: None,
             http_client_builder: None,
             max_retries: 3,
+            retry_mutations: false,
         }
     }
 
@@ -173,6 +177,18 @@ impl ClientConfig {
     /// default: 3. set to 0 to disable retries.
     pub fn with_max_retries(mut self, max_retries: u32) -> Self {
         self.max_retries = max_retries;
+        self
+    }
+
+    /// also retry mutations and file uploads that may have reached the server
+    ///
+    /// by default these are sent once and never retried, so a failed request
+    /// cannot apply a mutation twice. enable this only if your mutations are
+    /// safe to repeat.
+    ///
+    /// default: disabled
+    pub fn with_mutation_retries(mut self, enabled: bool) -> Self {
+        self.retry_mutations = enabled;
         self
     }
 
@@ -307,6 +323,7 @@ impl std::fmt::Debug for ClientConfig {
             .field("http_client", &self.http_client.is_some())
             .field("http_client_builder", &self.http_client_builder.is_some())
             .field("max_retries", &self.max_retries)
+            .field("retry_mutations", &self.retry_mutations)
             .field("token", &"<redacted>")
             .finish()
     }

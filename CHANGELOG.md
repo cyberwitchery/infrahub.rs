@@ -13,6 +13,7 @@
 - ci: bump pinned Infrahub version from 1.11.9 to 1.11.10 (refs #96). the parsed GraphQL schema has the same types, fields, arguments, descriptions and deprecations as the snapshot, so `schema/infrahub.graphql` and `test-client` are unchanged
 - client: a mutation sent with `execute`, `execute_raw` or `execute_operation`, and any `execute_multipart` upload, is no longer retried, since the server may already have applied it and a resend could create an object twice. that includes connect errors and 429s, which can come from a later hop after the server answered with a redirect. queries, schema fetches and downloads retry as before, and `ClientConfig::with_mutation_retries(true)` resends mutations and uploads as before. a document counts as a mutation if it has a `mutation` operation or does not parse
 - client: a `Retry-After` hint now only lengthens the backoff instead of replacing it, so `Retry-After: 0` no longer makes repeated 429s and 503s retry back to back. the delay is still capped at 30 seconds
+- ci: bump pinned Infrahub version from 1.11.10 to 1.11.12 (closes #103). upstream's GraphQL schema export is identical at 1.11.10, 1.11.11 and 1.11.12, so `schema/infrahub.graphql` and `test-client` are unchanged
 
 ## 0.5.1 - 2026-10-25
 

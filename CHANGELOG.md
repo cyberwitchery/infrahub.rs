@@ -1,6 +1,6 @@
 # changelog
 
-## Unreleased
+## 0.6.0 - 2026-11-13
 
 - codegen: `infrahub-codegen` is now behind the `codegen` feature. run it with `cargo run --features codegen --bin infrahub-codegen -- …`. the crate no longer enables reqwest's `blocking` feature, so library users no longer compile its blocking client
 - codegen: `--url` now fetches the schema through `Client`, so a transient failure such as a 503 is retried and the request carries the client's user agent and timeout. `--branch ""` now means no branch, as in the library, instead of sending `?branch=`. without `--token`, or with an empty one, the fetch stays anonymous

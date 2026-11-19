@@ -24,6 +24,33 @@ const RETRY_MAX_JITTER_MS: u64 = 500;
 /// hard ceiling for any single retry delay (prevents unbounded growth)
 const RETRY_MAX_BACKOFF: Duration = Duration::from_secs(30);
 
+/// hops a request may follow, reqwest's default
+const REDIRECT_LIMIT: usize = 10;
+
+/// follow a redirect only while it stays on the origin that issued it.
+/// reqwest's default policy strips `authorization` and its kin when the host
+/// changes, but not the `X-INFRAHUB-KEY` token header, and a 307 or 308 also
+/// resends the request body.
+fn same_origin_redirects() -> reqwest::redirect::Policy {
+    reqwest::redirect::Policy::custom(|attempt| {
+        if let Some(origin) = attempt.previous().last().map(Url::origin) {
+            if origin != attempt.url().origin() {
+                let refused = format!(
+                    "redirect to {} leaves the origin {}; refusing to send the api token to another host",
+                    attempt.url(),
+                    origin.ascii_serialization()
+                );
+                return attempt.error(refused);
+            }
+        }
+        // a custom policy does not get reqwest's default hop limit.
+        if attempt.previous().len() > REDIRECT_LIMIT {
+            return attempt.error(format!("too many redirects (limit {REDIRECT_LIMIT})"));
+        }
+        attempt.follow()
+    })
+}
+
 /// graphql client for infrahub
 ///
 /// all requests go through a retry loop (transient network errors, 429,
@@ -57,6 +84,7 @@ impl Client {
                 .default_headers(headers)
                 .user_agent(config.user_agent.clone())
                 .timeout(config.timeout)
+                .redirect(same_origin_redirects())
                 .danger_accept_invalid_certs(!config.verify_ssl);
 
             let builder = if let Some(customize) = &config.http_client_builder {
@@ -912,6 +940,62 @@ mod tests {
             "one attempt of 1 request + 10 redirects"
         );
     }
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_redirect_stays_on_origin() {
+        let ok = reply(200, "", r#"{"data":{"ok":true}}"#);
+        let (other, other_seen) = serve(vec![ok.clone()]);
+        for (label, location) in [
+            ("same origin", "/graphql/next".to_string()),
+            ("other port", format!("http://{other}/graphql")),
+            (
+                "other host",
+                format!("http://localhost:{}/graphql", other.port()),
+            ),
+        ] {
+            let redirect = reply(307, &format!("Location: {location}\r\n"), "");
+            let (addr, seen) = serve(vec![redirect, ok.clone()]);
+            let config = ClientConfig::new(format!("http://{addr}"), "secret-token")
+                .with_max_retries(0)
+                .with_http_client_builder(|builder| builder.no_proxy());
+            let client = Client::new(config).unwrap();
+            let result = client
+                .execute_raw("mutation { create { ok } }", None, None)
+                .await;
+            assert_eq!(
+                other_seen.lock().unwrap().len(),
+                0,
+                "{label}: requests sent to another origin"
+            );
+            if location.starts_with('/') {
+                assert!(result.is_ok(), "{label}: {result:?}");
+                assert_eq!(seen.lock().unwrap().len(), 2, "{label}");
+            } else {
+                let err = result.unwrap_err();
+                assert!(
+                    matches!(err, Error::Http(ref e) if e.is_redirect()),
+                    "{label}: {err}"
+                );
+            }
+        }
+    }
+
+    #[cfg_attr(miri, ignore)]
+    #[tokio::test]
+    async fn test_redirect_hop_limit() {
+        let (addr, seen) = serve(vec![reply(302, "Location: /\r\n", "")]);
+        let config = ClientConfig::new(format!("http://{addr}"), "secret-token")
+            .with_max_retries(0)
+            .with_http_client_builder(|builder| builder.no_proxy());
+        let client = Client::new(config).unwrap();
+        let err = client.fetch_schema(None).await.unwrap_err();
+        assert!(
+            matches!(err, Error::Http(ref e) if e.is_redirect()),
+            "{err}"
+        );
+        assert_eq!(seen.lock().unwrap().len(), 11, "1 request + 10 redirects");
+    }
+
     #[test]
     fn test_may_resend() {
         for (document, expected) in [

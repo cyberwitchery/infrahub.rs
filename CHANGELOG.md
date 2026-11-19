@@ -1,5 +1,9 @@
 # changelog
 
+## Unreleased
+
+- client: a client built by `Client::new` now follows a redirect only while it stays on the same origin (scheme, host and port), and fails with a redirect error otherwise. before, reqwest's default policy followed it to any host and sent the `X-INFRAHUB-KEY` token along, since it strips only headers it knows, such as `authorization`; on a 307 or 308 it also resent the request body. this covers `infrahub-codegen --url`. the limit of 10 hops stays. a client passed with `with_http_client` keeps its own policy, and `with_http_client_builder` can still set one
+
 ## 0.6.0 - 2026-11-13
 
 - codegen: `infrahub-codegen` is now behind the `codegen` feature. run it with `cargo run --features codegen --bin infrahub-codegen -- …`. the crate no longer enables reqwest's `blocking` feature, so library users no longer compile its blocking client

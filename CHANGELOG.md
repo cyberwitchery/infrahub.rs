@@ -1,5 +1,9 @@
 # changelog
 
+## Unreleased
+
+- docs: `docs/codegen.md` now says that generated queries select inline, so a schema whose types each hold several non-null object fields of the next type makes codegen run for a very long time, and that codegen assumes a schema from your own infrahub or a file you trust
+
 ## 0.6.0 - 2026-11-13
 
 - codegen: `infrahub-codegen` is now behind the `codegen` feature. run it with `cargo run --features codegen --bin infrahub-codegen -- …`. the crate no longer enables reqwest's `blocking` feature, so library users no longer compile its blocking client

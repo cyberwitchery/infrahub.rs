@@ -122,6 +122,15 @@ let _all = paginator.collect_all().await?;
 - **required cycles**: a non-null object field whose type leads back to its own
   type through non-null object fields can't be filled by any finite query, so it
   is typed `Option`. it is still selected where the query reaches it.
+- **query size**: selections are written inline, with no fragments, so a type
+  is selected again at every place the query reaches it. past the depth cap,
+  where only required fields are selected, a chain of types that each hold two
+  or more non-null object fields of the next type grows the query exponentially
+  with the length of the chain. the schema infrahub serves doesn't do this,
+  since a relationship edge selects only its peer's `__typename` and `id`. codegen
+  assumes the schema comes from your own infrahub (`--url`) or a file you
+  trust (`--schema`); a hand-written schema shaped like that can make it run
+  for a very long time and write a very large crate.
 
 for a full generated `api()` walkthrough, see:
 - [`examples/generated_api.md`](../examples/generated_api.md)

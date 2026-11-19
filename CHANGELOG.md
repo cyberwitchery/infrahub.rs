@@ -1,5 +1,9 @@
 # changelog
 
+## Unreleased
+
+- client: a branch, node id, storage id, kind or hfid segment of `.` or `..` now fails with a config error. the url crate drops those path segments, so branch `..` was sent to `POST {base}/graphql`, the default branch, and `download_file("..")` to `GET {base}/api/files`
+
 ## 0.6.0 - 2026-11-13
 
 - codegen: `infrahub-codegen` is now behind the `codegen` feature. run it with `cargo run --features codegen --bin infrahub-codegen -- …`. the crate no longer enables reqwest's `blocking` feature, so library users no longer compile its blocking client

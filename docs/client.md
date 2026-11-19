@@ -164,7 +164,7 @@ the generated crate provides:
 
 ## branches
 
-branches are routed by url: `POST {base}/graphql/{branch}` and `GET {base}/schema.graphql?branch=foo`.
+branches are routed by url: `POST {base}/graphql/{branch}` and `GET {base}/schema.graphql?branch=foo`. a branch named `.` or `..` cannot go in a url path, so `execute`, `execute_raw` and the generated helpers fail with a config error instead of sending it.
 
 ```rust,no_run
 use infrahub::{Client, ClientConfig};

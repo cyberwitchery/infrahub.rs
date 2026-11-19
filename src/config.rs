@@ -234,9 +234,7 @@ impl ClientConfig {
     pub(crate) fn graphql_url(&self, branch: Option<&str>) -> Result<Url> {
         let mut url = self.base_url_with_path("/graphql")?;
         if let Some(branch) = self.resolve_branch(branch) {
-            url.path_segments_mut()
-                .map_err(|()| Error::Config("base URL cannot have path segments".into()))?
-                .push(&branch);
+            push_segments(&mut url, &[&branch])?;
         }
         Ok(url)
     }
@@ -244,9 +242,7 @@ impl ClientConfig {
     /// build a file download url by node id
     pub(crate) fn file_url(&self, node_id: &str, branch: Option<&str>) -> Result<Url> {
         let mut url = self.base_url_with_path("/api/files")?;
-        url.path_segments_mut()
-            .map_err(|()| Error::Config("base URL cannot have path segments".into()))?
-            .push(node_id);
+        push_segments(&mut url, &[node_id])?;
         if let Some(branch) = self.resolve_branch(branch) {
             url.query_pairs_mut().append_pair("branch", &branch);
         }
@@ -261,15 +257,8 @@ impl ClientConfig {
         branch: Option<&str>,
     ) -> Result<Url> {
         let mut url = self.base_url_with_path("/api/files/by-hfid")?;
-        {
-            let mut segments = url
-                .path_segments_mut()
-                .map_err(|()| Error::Config("base URL cannot have path segments".into()))?;
-            segments.push(kind);
-            for segment in hfid {
-                segments.push(segment);
-            }
-        }
+        push_segments(&mut url, &[kind])?;
+        push_segments(&mut url, hfid)?;
         if let Some(branch) = self.resolve_branch(branch) {
             url.query_pairs_mut().append_pair("branch", &branch);
         }
@@ -283,9 +272,7 @@ impl ClientConfig {
         branch: Option<&str>,
     ) -> Result<Url> {
         let mut url = self.base_url_with_path("/api/files/by-storage-id")?;
-        url.path_segments_mut()
-            .map_err(|()| Error::Config("base URL cannot have path segments".into()))?
-            .push(storage_id);
+        push_segments(&mut url, &[storage_id])?;
         if let Some(branch) = self.resolve_branch(branch) {
             url.query_pairs_mut().append_pair("branch", &branch);
         }
@@ -327,6 +314,23 @@ impl std::fmt::Debug for ClientConfig {
             .field("token", &"<redacted>")
             .finish()
     }
+}
+
+/// append percent-encoded path segments to a url.
+///
+/// `url` drops a pushed `.` or `..` instead of encoding it, which would send
+/// the request to a different path (`/graphql` instead of `/graphql/..`), so
+/// those are rejected.
+fn push_segments(url: &mut Url, segments: &[&str]) -> Result<()> {
+    if let Some(dots) = segments.iter().find(|s| matches!(**s, "." | "..")) {
+        return Err(Error::Config(format!(
+            "invalid path segment {dots:?}: \".\" and \"..\" cannot be sent in a url path"
+        )));
+    }
+    url.path_segments_mut()
+        .map_err(|()| Error::Config("base URL cannot have path segments".into()))?
+        .extend(segments);
+    Ok(())
 }
 
 #[cfg(test)]
@@ -544,6 +548,42 @@ mod tests {
             url.as_str(),
             "https://infrahub.example.com/api/files/by-storage-id/store%2Fid%231"
         );
+    }
+
+    #[test]
+    fn test_dot_path_segments_are_rejected() {
+        // url drops "." and ".." pushed as path segments, so they would
+        // silently route to the default branch or another file
+        for dots in [".", ".."] {
+            let config = ClientConfig::new("https://infrahub.example.com", "token");
+            assert!(
+                config.graphql_url(Some(dots)).is_err(),
+                "graphql_url accepted branch {dots:?}"
+            );
+            let config = config.with_default_branch(dots);
+            assert!(
+                config.graphql_url(None).is_err(),
+                "graphql_url accepted default branch {dots:?}"
+            );
+            assert!(
+                config.file_url(dots, None).is_err(),
+                "file_url accepted node id {dots:?}"
+            );
+            assert!(
+                config
+                    .file_by_hfid_url("CoreFile", &[dots, "other"], None)
+                    .is_err(),
+                "file_by_hfid_url accepted hfid {dots:?}"
+            );
+            assert!(
+                config.file_by_hfid_url(dots, &["other"], None).is_err(),
+                "file_by_hfid_url accepted kind {dots:?}"
+            );
+            assert!(
+                config.file_by_storage_id_url(dots, None).is_err(),
+                "file_by_storage_id_url accepted storage id {dots:?}"
+            );
+        }
     }
 
     #[test]
